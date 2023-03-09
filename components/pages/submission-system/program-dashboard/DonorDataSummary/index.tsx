@@ -23,9 +23,9 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { Col, Row } from 'react-grid-system';
 import ContentError from '../../../../placeholders/ContentError';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
-import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from './common';
+import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout, formatSortingRequest } from './common';
 import DonorSummaryTable from './DonorSummaryTable';
-import DonorSummaryTableV8, { SortingState, formatSortingRequest } from './DonorSummaryTableV8';
+import DonorSummaryTableV8 from './DonorSummaryTableV8';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
@@ -36,6 +36,7 @@ import {
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   ProgramDonorSummaryFilter,
+  SortingState,
 } from './types';
 
 export const useProgramDonorsSummaryQuery = ({
@@ -84,7 +85,7 @@ const DonorDataSummary = () => {
       order: 'desc' as DonorSummaryEntrySortOrder,
     },
   ];
-  const DEFAULT_SORTS: SortingState = [
+  const DEFAULT_SORTING: SortingState[] = [
     {
       id: 'updatedAt',
       desc: true,
@@ -103,7 +104,7 @@ const DonorDataSummary = () => {
     programShortName,
     first: DEFAULT_PAGE_SIZE,
     offset: DEFAULT_OFFSET,
-    sorts: formatSortingRequest(DEFAULT_SORTS),
+    sorts: formatSortingRequest(DEFAULT_SORTING),
   });
 
   const isDonorSummaryEntriesEmpty =
@@ -160,11 +161,10 @@ const DonorDataSummary = () => {
           <br />
           <br />
           <DonorSummaryTableV8
-            programShortName={programShortName}
-            initialPages={initialPages}
-            initialPageSize={DEFAULT_PAGE_SIZE}
-            initialSorts={DEFAULT_SORTS}
+            initialPaging={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
+            initialSorting={DEFAULT_SORTING}
             isCardLoading={isCardLoading}
+            programShortName={programShortName}
           />
         </>
       )}
