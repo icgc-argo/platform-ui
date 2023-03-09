@@ -39,6 +39,9 @@ const DesignationEntry = styled('div')`
   line-height: 28px;
   flex: 1;
   background: ${({ background }: { background: string }) => background};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const DesignationCell = ({

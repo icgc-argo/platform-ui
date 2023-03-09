@@ -376,7 +376,7 @@ const DonorSummaryTableV8 = ({
                     )}
                   />
                 ),
-
+                meta: { customCell: true },
                 id: REGISTERED_SAMPLE_COLUMN_ID,
                 cell: ({ row: { original } }: CellProps) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
