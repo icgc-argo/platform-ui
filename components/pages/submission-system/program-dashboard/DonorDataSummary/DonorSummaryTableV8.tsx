@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PropsWithChildren, Ref, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
@@ -29,12 +29,12 @@ import {
   ListFilterHeader,
   NextTablePaginationRule,
   PercentageCell,
-  TableColumnConfig,
   TableHeaderWrapper,
   TablePaginationRule,
   TableV8,
   TextFilterHeader,
   ThemeColorNames,
+  useTableTabs,
   useTheme,
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
@@ -61,10 +61,19 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import { useProgramDonorsSummaryQuery } from '.';
-import { PipelineNames, PIPELINE_COLORS, usePipelines, PipelineTabs } from './PipelineTabs';
 import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { ContentError } from 'components/placeholders';
+
+enum PipelineNames {
+  DNA = 'DNA',
+  RNA = 'RNA',
+}
+
+const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
+  [PipelineNames.DNA]: 'warning_4',
+  [PipelineNames.RNA]: 'accent3_4',
+};
 
 // These are used to sort columns with multiple fields
 // the order of the fields is how its is order in asc or desc
@@ -95,7 +104,8 @@ const DonorSummaryTableV8 = ({
   const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
 
   // state
-  const { activePipeline, setActivePipeline } = usePipelines();
+  const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
+    useTableTabs(PipelineNames.DNA);
   const [pagingState, setPagingState] = useState<TablePaginationRule>(initialPaging);
   const handlePagingState = (nextPagingState: NextTablePaginationRule) => {
     setPagingState({ ...pagingState, ...nextPagingState });
@@ -328,7 +338,29 @@ const DonorSummaryTableV8 = ({
         </HeaderWithBackground>
       ),
       id: 'dnaRnaSeqPipeline',
-      meta: { customHeader: true },
+      meta: {
+        customHeader: true,
+        ...(FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+          ? {
+              columnTabs: {
+                activeTab: activePipeline,
+                handleTabs: handleActivePipeline,
+                tabs: [
+                  {
+                    label: 'DNA-SEQ',
+                    value: PipelineNames.DNA,
+                    color: theme.colors[PIPELINE_COLORS[PipelineNames.DNA]],
+                  },
+                  {
+                    label: 'RNA-SEQ',
+                    value: PipelineNames.RNA,
+                    color: theme.colors[PIPELINE_COLORS[PipelineNames.RNA]],
+                  },
+                ],
+              },
+            }
+          : {}),
+      },
       columns: [
         ...(activePipeline === PipelineNames.DNA
           ? [
@@ -630,6 +662,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('rnaRegisteredSample')}
                   />
                 ),
+                meta: { customCell: true },
                 id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
                 cell: ({ row: { original } }: CellProps) => (
                   <DesignationCell
@@ -661,6 +694,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('rnaRawReads')}
                   />
                 ),
+                meta: { customCell: true },
                 id: RNA_RAW_READS_COLUMN_ID,
                 cell: ({ row: { original } }: CellProps) => (
                   <DesignationCell
@@ -799,14 +833,6 @@ const DonorSummaryTableV8 = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
-          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && (
-            <PipelineTabs
-              activePipeline={activePipeline}
-              handlePipelineTabs={(e, value) => {
-                setActivePipeline(value);
-              }}
-            />
-          )}
           <TableV8
             columns={tableColumns}
             data={programDonorSummaryEntries}
@@ -818,6 +844,7 @@ const DonorSummaryTableV8 = ({
             state={{ sorting: sortingState }}
             withHeaders
             withStripes
+            withTabs
           />
         </>
       )}
