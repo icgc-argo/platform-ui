@@ -28,7 +28,6 @@ import {
   Link,
   ListFilterHeader,
   NextTablePaginationRule,
-  PercentageCell,
   TableHeaderWrapper,
   TablePaginationRule,
   TableV8,
@@ -47,11 +46,11 @@ import {
 } from 'components/pages/submission-system/program-submitted-data/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 import {
+  CellProps,
   DonorDataReleaseState,
+  FilterState,
   ProgramDonorSummaryEntryField,
   SortingState,
-  FilterState,
-  CellProps,
 } from './types';
 import {
   EMPTY_PROGRAM_SUMMARY_STATS,
@@ -196,17 +195,48 @@ const DonorSummaryTableV8 = ({
   const HeaderWithBackground = ({
     children,
     fill,
-  }: PropsWithChildren<{ fill: keyof ThemeColorNames }>) => (
-    <TableHeaderWrapper
-      css={css`
-        background: ${theme.colors[fill]};
-        justify-content: center;
-        text-transform: uppercase;
-      `}
-    >
-      {children}
-    </TableHeaderWrapper>
-  );
+  }: PropsWithChildren<{ fill: keyof ThemeColorNames }>) => {
+    const theme = useTheme();
+    return (
+      <TableHeaderWrapper
+        css={css`
+          background: ${theme.colors[fill]};
+          justify-content: center;
+          text-transform: uppercase;
+        `}
+      >
+        {children}
+      </TableHeaderWrapper>
+    );
+  };
+
+  const PercentageCell = ({
+    original,
+    fieldName,
+  }: {
+    original: any;
+    fieldName: 'submittedCoreDataPercent' | 'submittedExtendedDataPercent';
+  }) => {
+    // original[fieldName] value is expected to be a fraction in decimal form
+    const percentageVal = Math.round(original[fieldName] * 100);
+    const cellContent =
+      percentageVal === 100 ? (
+        <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+      ) : percentageVal === 0 ? (
+        ''
+      ) : (
+        `${percentageVal}%`
+      );
+    return (
+      <div
+        css={css`
+          padding-left: 4px;
+        `}
+      >
+        {cellContent}
+      </div>
+    );
+  };
 
   const donorsWithErrors = programDonorSummaryEntries
     .filter((entry) => !entry.validWithCurrentDictionary)
