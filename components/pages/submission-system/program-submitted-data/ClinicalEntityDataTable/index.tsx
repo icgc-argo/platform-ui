@@ -498,6 +498,7 @@ const ClinicalEntityDataTable = ({
       );
 
     const errorState =
+      // Completion Stats >1 indicate Incorrect Sample / Specimen Ratio
       (isCompletionCell && (original[id] === 0 || original[id] > 1)) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;

@@ -115,6 +115,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
+          entityTypes: [currentEntity],
           donorIds: searchDonorIds,
           submitterDonorIds: searchSubmitterIds,
         },
