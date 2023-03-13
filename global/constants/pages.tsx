@@ -55,6 +55,10 @@ export const FILE_ENTITY_PATH = `file/${FILE_ENTITY_ID_PATH}`;
 export const DONOR_ENTITY_ID_PATH = '[donorId]';
 export const DONOR_ENTITY_PATH = `donor/${DONOR_ENTITY_ID_PATH}`;
 
+// program entity
+export const PROGRAM_ENTITY_ID_PATH = '[programId]';
+export const PROGRAM_ENTITY_PATH = `program/${PROGRAM_ENTITY_ID_PATH}`;
+
 // rdpc path
 export const RDPC_PATH = '/rdpc';
 

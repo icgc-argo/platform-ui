@@ -96,20 +96,12 @@ const SubmissionSummaryTable = ({
       accessor: FIRST_COLUMN_ACCESSOR,
       width: 100,
     },
-    ...clinicalSubmissions.clinicalEntities.map(
-      (entity) =>
-        ({
-          accessor: entity.clinicalType,
-          Header: capitalize(entity.clinicalType.split('_').join(' ')),
-        } as TableColumnConfig<Entry>),
-    ),
+    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+      accessor: entity.clinicalType,
+      Header: capitalize(entity.clinicalType.split('_').join(' ')),
+    })),
   ];
   const containerRef = createRef<HTMLDivElement>();
-
-  const BACKGROUND_COLORS = {
-    NEW: theme.colors.accent3_3,
-    UPDATED: theme.colors.accent2_4,
-  };
 
   // for react table v8
   const tableColumns = [
@@ -120,7 +112,7 @@ const SubmissionSummaryTable = ({
       cell: ({ cell, row }) => (
         <TableCellWrapper
           css={css`
-            background: ${!!row.index ? BACKGROUND_COLORS.NEW : BACKGROUND_COLORS.UPDATED};
+            background: ${row.index ? theme.colors.accent3_3 : theme.colors.accent2_4};
           `}
         >
           {cell.getValue()}
@@ -130,29 +122,26 @@ const SubmissionSummaryTable = ({
         customCell: true,
       },
     },
-    ...clinicalSubmissions.clinicalEntities.map(
-      (entity) =>
-        ({
-          accessorKey: entity.clinicalType,
-          header: capitalize(entity.clinicalType.split('_').join(' ')),
-          cell: ({ cell, row }) => (
-            <TableCellWrapper
-              css={css`
-                background: ${!!Number(cell.getValue())
-                  ? !!row.index
-                    ? BACKGROUND_COLORS.NEW
-                    : BACKGROUND_COLORS.UPDATED
-                  : 'transparent'};
-              `}
-            >
-              {cell.getValue()}
-            </TableCellWrapper>
-          ),
-          meta: {
-            customCell: true,
-          },
-        } as TableColumnConfig<Entry>),
-    ),
+    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+      accessorKey: entity.clinicalType,
+      header: capitalize(entity.clinicalType.split('_').join(' ')),
+      cell: ({ cell, row }) => (
+        <TableCellWrapper
+          css={css`
+            background: ${Number(cell.getValue())
+              ? row.index
+                ? theme.colors.accent3_3
+                : theme.colors.accent2_4
+              : 'transparent'};
+          `}
+        >
+          {cell.getValue()}
+        </TableCellWrapper>
+      ),
+      meta: {
+        customCell: true,
+      },
+    })),
   ];
 
   return (
