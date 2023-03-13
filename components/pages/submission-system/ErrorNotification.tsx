@@ -26,7 +26,6 @@ import {
   NOTIFICATION_VARIANTS,
   Table,
   TableV8,
-  TableColumnConfig,
 } from '@icgc-argo/uikit';
 import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
@@ -44,18 +43,22 @@ export const getDefaultColumns = (level: NotificationVariant) => {
     {
       accessorKey: 'row' as 'row',
       header: 'Line #',
+      maxSize: 70,
     },
     {
       accessorKey: 'donorId' as 'donorId',
       header: 'Submitter Donor ID',
+      maxSize: 160,
     },
     {
       accessorKey: 'field' as 'field',
       header: `Field with ${variant}`,
+      maxSize: 200,
     },
     {
       accessorKey: 'value' as 'value',
       header: `${variant} Value`,
+      maxSize: 130,
     },
     {
       accessorKey: 'message' as 'message',
