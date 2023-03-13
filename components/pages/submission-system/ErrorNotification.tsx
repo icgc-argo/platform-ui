@@ -90,7 +90,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   level: NotificationVariant;
   title: string;
   subtitle: ReactNode;
-  tableColumns: ColumnDef<any> & { accessorKey: string; header: string }[];
+  tableColumns: ColumnDef<any> & { accessorKey: string; header: string; size: number }[];
   errors: Array<Error>;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
@@ -187,7 +187,6 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
                   ...col,
                   style: {
                     whiteSpace: 'pre-line',
-                    ...(col.style || {}),
                   },
                   // react table v6 property name conversion
                   accessor: col.accessorKey,
