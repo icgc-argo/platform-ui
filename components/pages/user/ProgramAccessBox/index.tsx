@@ -100,27 +100,27 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
   const tableColumns = [
     {
       accessorKey: 'shortName',
-      cell: (info) => (
+      cell: ({ getValue }) => (
         <NextLink
           href={
             !isDccMember(permissions)
               ? PROGRAMS_LIST_PATH
-              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, info.getValue())
+              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, getValue())
           }
         >
-          <Link>{info.getValue()}</Link>
+          <Link>{getValue()}</Link>
         </NextLink>
       ),
       header: () => 'Program Name',
       id: 'shortName',
-      // maxWidth: 150,
+      size: 150,
     },
     ...(isDccMember
       ? []
       : [
           {
             accessorKey: 'membershipType',
-            cell: (info) => capitalize(info.renderValue()),
+            cell: ({ renderValue }) => capitalize(renderValue()),
             header: () => 'Membership Type',
           },
         ]),
@@ -128,7 +128,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
       accessorKey: 'role',
       header: () => 'Role',
       id: 'role',
-      // maxWidth: 170
+      size: 170,
     },
     { accessorKey: 'permissions', header: () => 'Permissions', id: 'permissions' },
   ];
@@ -146,6 +146,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           data={props.programs}
           withHeaders
           withSideBorders
+          withResize
           withRowHighlight
           withStripes
         />

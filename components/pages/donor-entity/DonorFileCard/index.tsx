@@ -135,7 +135,7 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
               accessorKey: 'id',
               id: 'id',
               header,
-              cell: (info) => info.renderValue(),
+              cell: ({ renderValue }) => renderValue(),
             },
           ]}
           withHeaders

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table } from '@icgc-argo/uikit';
+import { css, Table, TableV8 } from '@icgc-argo/uikit';
 
 import { format as formatDate, formatDistance } from 'date-fns';
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
@@ -28,11 +28,15 @@ import { useQuery } from '@apollo/client';
 import { createRef } from 'react';
 import PROGRAM_DONOR_INDEX_STATS_QUERY from './gql/PROGRAM_DONOR_INDEX_STATS_QUERY';
 
-const columns = [
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
+// for react table v6
+const tableColumns_legacy = [
   {
     Header: 'Program',
     accessor: 'shortName',
-
     Cell: ({ original }) => <ProgramDashboardLink program={original.shortName} />,
   },
   {
@@ -64,6 +68,43 @@ const columns = [
   },
 ];
 
+// for react table v8
+const tableColumns = [
+  {
+    header: 'Program',
+    accessorKey: 'shortName',
+    cell: ({ getValue }) => <ProgramDashboardLink program={getValue()} />,
+  },
+  {
+    header: 'Last Index Release',
+    accessorKey: 'lastUpdate',
+    cell: ({ getValue }) => {
+      const lastUpdate = getValue();
+      if (!lastUpdate) {
+        return null;
+      }
+      const date = new Date(lastUpdate);
+      const formattedDate = formatDate(date, 'yyyy MMM d HH:mm');
+      const relativeDate = formatDistance(date, new Date(), { addSuffix: true });
+      return `${formattedDate} (${relativeDate})`;
+    },
+  },
+  {
+    header: 'Total Donors',
+    accessorKey: 'donors',
+  },
+  {
+    header: 'Total Files',
+    accessorKey: 'files',
+  },
+  {
+    header: 'Sync Donor Index',
+    accessorKey: 'action',
+    enableSorting: false,
+    cell: ({ row }) => <SyncIndexButton program={row.original.shortName} />,
+  },
+];
+
 const DonorAggregationIndexTable = ({
   loading,
   programs,
@@ -78,12 +119,11 @@ const DonorAggregationIndexTable = ({
     }),
   }));
 
-  const data = (queries || []).map(({ shortName, query: { loading, data } }) => ({
-    loading: '' + loading,
-    shortName,
+  const tableData = (queries || []).map(({ shortName, query: { data } }) => ({
     donors: data?.programDonorSummary?.stats?.registeredDonorsCount,
     files: data?.programDonorSummary?.stats?.allFilesCount,
     lastUpdate: data?.programDonorSummary?.stats?.lastUpdate,
+    shortName,
   }));
 
   const someQueriesLoading = queries.some((query) => query.query.loading);
@@ -96,17 +136,30 @@ const DonorAggregationIndexTable = ({
         margin-top: 15px;
       `}
     >
-      <Table
-        loading={loading || someQueriesLoading}
-        highlight={false}
-        parentRef={containerRef}
-        showPagination={false}
-        withOutsideBorder
-        data={data}
-        columns={columns}
-        pageSize={programs.length}
-        defaultSorted={[{ id: 'shortName', desc: false }]}
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          loading={loading || someQueriesLoading}
+          withHeaders
+          withResize
+          withSideBorders
+          withSorting
+          withStripes
+        />
+      ) : (
+        <Table
+          loading={loading || someQueriesLoading}
+          highlight={false}
+          parentRef={containerRef}
+          showPagination={false}
+          withOutsideBorder
+          data={tableData}
+          columns={tableColumns_legacy}
+          pageSize={programs.length}
+          defaultSorted={[{ id: 'shortName', desc: false }]}
+        />
+      )}
     </div>
   );
 };

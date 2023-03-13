@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Table, useTheme } from '@icgc-argo/uikit';
+import { css, Icon, Table, TableV8 } from '@icgc-argo/uikit';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
@@ -30,6 +30,10 @@ import {
   SubmissionInfoArea,
   TableInfoHeaderContainer,
 } from '../../common';
+
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW: 'row',
@@ -92,17 +96,89 @@ const FileTable = (props: {
   stats?: FileStats;
   submissionInfo?: ComponentProps<typeof SubmissionInfoArea>;
 }) => {
-  const theme = useTheme();
-  const { records, stats, submissionInfo } = props;
+  const { records: tableData, stats, submissionInfo } = props;
 
   const filteredFirstRecord = omit(
-    records[0],
+    tableData[0],
     ...Object.entries(REQUIRED_FILE_ENTRY_FIELDS).map(([_, value]) => {
       return typeof value === 'string' ? value : '';
     }),
   );
 
   const containerRef = createRef<HTMLDivElement>();
+
+  // for react table v6
+  const tableColumns_legacy = [
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      Cell: ({ original }) => (
+        <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
+      ),
+      Header: 'Line #',
+      resizable: false,
+      width: 70,
+    },
+    {
+      id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+      Cell: ({ original }) => (
+        <CellContentCenter>
+          <StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
+        </CellContentCenter>
+      ),
+      width: 48,
+      Header: (
+        <div
+          css={css`
+            display: flex;
+          `}
+        >
+          <StarIcon fill="grey_1" />
+        </div>
+      ),
+    },
+    ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
+      id: key,
+      accessor: key,
+      Header: key,
+      minWidth: getColumnWidth(key),
+    })),
+  ];
+
+  // for react table v8
+  const tableColumns = [
+    {
+      cell: ({ row: { original } }) => (
+        <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
+      ),
+      header: 'Line #',
+      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      size: 90,
+    },
+    {
+      cell: ({ row: { original } }) => (
+        <CellContentCenter>
+          <StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
+        </CellContentCenter>
+      ),
+      header: () => (
+        <div
+          css={css`
+            display: flex;
+          `}
+        >
+          <StarIcon fill="grey_1" />
+        </div>
+      ),
+      id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+      size: 48,
+    },
+    ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
+      accessorKey: key,
+      header: key,
+      id: key,
+      minSize: getColumnWidth(key),
+    })),
+  ];
 
   return (
     <div
@@ -114,48 +190,25 @@ const FileTable = (props: {
       <TableInfoHeaderContainer
         left={<StatsArea stats={stats} />}
         right={<SubmissionInfoArea {...submissionInfo} />}
-      />{' '}
-      <Table
-        parentRef={containerRef}
-        showPagination={false}
-        pageSize={Number.MAX_SAFE_INTEGER}
-        columns={[
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-            Cell: ({ original }) => (
-              <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
-            ),
-            Header: 'Line #',
-            resizable: false,
-            width: 70,
-          },
-          {
-            id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
-            Cell: ({ original }) => (
-              <CellContentCenter>
-                <StarIcon fill={original.isNew ? 'accent2' : 'grey_1'} />
-              </CellContentCenter>
-            ),
-            width: 48,
-            Header: (
-              <div
-                css={css`
-                  display: flex;
-                `}
-              >
-                <StarIcon fill="grey_1" />
-              </div>
-            ),
-          },
-          ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
-            id: key,
-            accessor: key,
-            Header: key,
-            minWidth: getColumnWidth(key),
-          })),
-        ]}
-        data={records}
       />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          withHeaders
+          withResize
+          withSorting
+          withStripes
+        />
+      ) : (
+        <Table
+          parentRef={containerRef}
+          showPagination={false}
+          pageSize={Number.MAX_SAFE_INTEGER}
+          columns={tableColumns_legacy}
+          data={tableData}
+        />
+      )}
     </div>
   );
 };

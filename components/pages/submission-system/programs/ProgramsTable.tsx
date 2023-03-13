@@ -24,11 +24,16 @@ import {
   PercentageBar,
   Table,
   TableColumnConfig,
+  TableV8,
 } from '@icgc-argo/uikit';
 import { PROGRAM_DASHBOARD_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import get from 'lodash/get';
 import NextLink from 'next/link';
 import { ComponentType, createRef, ElementType, useMemo } from 'react';
+
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 type ArgoMembershipKey = 'FULL' | 'ASSOCIATE';
 type ProgramsTableProgram = {
@@ -78,11 +83,13 @@ export default function ProgramsTable(tableProps: {
   loadingUser: boolean;
   LoadingComponent: ElementType;
 }) {
-  const data: Array<TableProgramInternal> = tableProps.programs.map((p) => ({
+  const tableData: Array<TableProgramInternal> = tableProps.programs.map((p) => ({
     ...p,
     donorPercentage: (p.submittedDonors || 0) / (p.commitmentDonors || 1),
   }));
-  const columns: Array<TableColumnConfig<TableProgramInternal>> = [
+
+  // for react table v6
+  const tableColumns_legacy: Array<TableColumnConfig<TableProgramInternal>> = [
     {
       Header: 'Short Name',
       accessor: 'shortName',
@@ -100,7 +107,9 @@ export default function ProgramsTable(tableProps: {
     {
       Header: 'Program Name',
       accessor: 'name',
-      Cell: ({ original }) => <FormattedCell cellInfo={original}>{original.name}</FormattedCell>,
+      Cell: ({ original }) => (
+        <FormattedCell cellInfo={original}>{original.name || ''}</FormattedCell>
+      ),
     },
     {
       Header: 'Cancer Types',
@@ -222,11 +231,168 @@ export default function ProgramsTable(tableProps: {
       ),
     },
   ];
-  return (
+
+  // for react table v8
+  const tableColumns = [
+    {
+      header: 'Short Name',
+      accessorKey: 'shortName',
+      cell: ({ row: { original } }) => (
+        <FormattedCell cellInfo={original}>
+          <NextLink
+            href={PROGRAM_DASHBOARD_PATH}
+            as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, original.shortName)}
+          >
+            <Link>{original.shortName}</Link>
+          </NextLink>
+        </FormattedCell>
+      ),
+    },
+    {
+      header: 'Program Name',
+      accessorKey: 'name',
+      cell: ({ row: { original } }) => (
+        <FormattedCell cellInfo={original}>{original.name || ''}</FormattedCell>
+      ),
+    },
+    {
+      header: 'Cancer Types',
+      accessorKey: 'cancerTypes',
+      cell: ({ row: { original } }) => (
+        <FormattedCell cellInfo={original}>
+          {original.cancerTypes.map((cancerType, i) => (
+            <div key={cancerType}>
+              {cancerType}
+              {i < original.cancerTypes.length - 1 && ','}
+            </div>
+          ))}
+        </FormattedCell>
+      ),
+    },
+    {
+      header: 'Countries',
+      accessorKey: 'countries',
+      cell: ({ row: { original } }) => {
+        const countryList = original.countries || [];
+        return (
+          <FormattedCell cellInfo={original}>
+            {countryList.map((country, i) => (
+              <div key={country}>
+                {country}
+                {i < countryList.length - 1 && ','}
+              </div>
+            ))}
+          </FormattedCell>
+        );
+      },
+    },
+    {
+      header: 'Membership',
+      accessorKey: 'membershipType',
+      cell: ({ row: { original } }) => (
+        <FormattedCell cellInfo={original}>
+          {original.membershipType ? MembershipDisplayName[original.membershipType] : ''}
+        </FormattedCell>
+      ),
+    },
+    {
+      header: 'Administrators',
+      accessorKey: 'administrators',
+      cell: ({ row: { original } }) => {
+        const adminLinks = (original.administrators || []).map((admin, idx, src) => (
+          <Link
+            key={admin.email}
+            href={`mailto: ${admin.email}`}
+            css={css`
+              margin-right: 0.5em;
+            `}
+          >
+            {admin.firstName + ' ' + admin.lastName}
+            {idx != src.length - 1 && ','}
+          </Link>
+        ));
+
+        const cellContent = tableProps.loadingUser ? <>Loading</> : adminLinks;
+
+        return <FormattedCell cellInfo={original}>{cellContent}</FormattedCell>;
+      },
+    },
+    {
+      header: 'Donor Status',
+      accessorKey: 'donorPercentage',
+      size: 200,
+      cell: ({ row: { original } }) => (
+        <FormattedCell cellInfo={original}>
+          <PercentageBar
+            nom={original.submittedDonors}
+            denom={original.commitmentDonors}
+            css={css`
+              display: flex;
+              justify-content: flex-start;
+            `}
+          />
+        </FormattedCell>
+      ),
+    },
+    {
+      header: 'Actions',
+      enableSorting: false,
+      size: 100,
+      cell: ({ row: { original } }) => (
+        <FormattedCell
+          cellInfo={original}
+          css={css`
+            width: 100%;
+          `}
+        >
+          <div
+            css={css`
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              flex: 1;
+            `}
+          >
+            <InteractiveIcon
+              position="bottom"
+              html={<span>Manage users</span>}
+              height="20px"
+              width="20px"
+              name="users"
+              onClick={() => tableProps.onProgramUsersClick({ program: original })}
+            />
+            <InteractiveIcon
+              position="bottom"
+              html={<span>Edit program</span>}
+              height="20px"
+              width="20px"
+              name="edit"
+              onClick={() => tableProps.onProgramEditClick({ program: original })}
+            />
+          </div>
+        </FormattedCell>
+      ),
+    },
+  ];
+
+  return FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8
+      columns={tableColumns}
+      data={tableData}
+      LoaderComponent={tableProps.LoadingComponent}
+      loading={tableProps.loading}
+      withHeaders
+      withResize
+      withRowHighlight
+      withSorting
+      withStripes
+    />
+  ) : (
     <Table
       parentRef={createRef()}
-      data={data}
-      columns={columns}
+      data={tableData}
+      columns={tableColumns_legacy}
       showPagination={false}
       loading={tableProps.loading}
       pageSize={tableProps.programs.length}

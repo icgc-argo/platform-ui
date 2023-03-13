@@ -25,6 +25,8 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
 
+type TableDataValue = string | number | React.ReactNode;
+
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
   return {
@@ -316,8 +318,8 @@ export const formatTimelineEntityData = (donorData) => {
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
-export const formatTableData = (key: string, value: string | number | React.ReactNode) => {
-  let displayValue: any;
+export const formatTableData = (key: string, value: TableDataValue) => {
+  let displayValue: TableDataValue;
   switch (key) {
     case 'age_at_diagnosis':
       displayValue = `${value} years`;

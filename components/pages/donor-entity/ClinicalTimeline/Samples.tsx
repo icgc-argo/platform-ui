@@ -84,6 +84,7 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
+            withResize
             withSideBorders
             withStripes
           />

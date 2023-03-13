@@ -17,13 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, TableColumnConfig, useTheme } from '@icgc-argo/uikit';
+import {
+  css,
+  Table,
+  TableCellWrapper,
+  TableColumnConfig,
+  TableV8,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { capitalize } from 'global/utils/stringUtils';
 import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
   errorsFound: [],
@@ -65,7 +75,7 @@ const SubmissionSummaryTable = ({
     [FIRST_COLUMN_ACCESSOR]: (
       <>
         <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-        Updated
+        &nbsp;Updated
       </>
     ),
     ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
@@ -77,21 +87,63 @@ const SubmissionSummaryTable = ({
     ),
   };
 
-  const columns: TableColumnConfig<Entry>[] = [
+  const tableData = [newDataRow, updatedDataRow];
+
+  // for react table v6
+  const tableColumns_legacy: TableColumnConfig<Entry>[] = [
     // this is the first column
     {
       accessor: FIRST_COLUMN_ACCESSOR,
       width: 100,
     },
-    ...clinicalSubmissions.clinicalEntities.map(
-      (entity) =>
-        ({
-          accessor: entity.clinicalType,
-          Header: capitalize(entity.clinicalType.split('_').join(' ')),
-        } as TableColumnConfig<Entry>),
-    ),
+    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+      accessor: entity.clinicalType,
+      Header: capitalize(entity.clinicalType.split('_').join(' ')),
+    })),
   ];
   const containerRef = createRef<HTMLDivElement>();
+
+  // for react table v8
+  const tableColumns = [
+    {
+      header: '',
+      accessorKey: FIRST_COLUMN_ACCESSOR,
+      size: 100,
+      cell: ({ cell, row }) => (
+        <TableCellWrapper
+          css={css`
+            background: ${row.index ? theme.colors.accent3_3 : theme.colors.accent2_4};
+          `}
+        >
+          {cell.getValue()}
+        </TableCellWrapper>
+      ),
+      meta: {
+        customCell: true,
+      },
+    },
+    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+      accessorKey: entity.clinicalType,
+      header: capitalize(entity.clinicalType.split('_').join(' ')),
+      cell: ({ cell, row }) => (
+        <TableCellWrapper
+          css={css`
+            background: ${Number(cell.getValue())
+              ? row.index
+                ? theme.colors.accent3_3
+                : theme.colors.accent2_4
+              : 'transparent'};
+          `}
+        >
+          {cell.getValue()}
+        </TableCellWrapper>
+      ),
+      meta: {
+        customCell: true,
+      },
+    })),
+  ];
+
   return (
     <div
       css={css`
@@ -99,27 +151,31 @@ const SubmissionSummaryTable = ({
       `}
       ref={containerRef}
     >
-      <Table
-        parentRef={containerRef}
-        variant="STATIC"
-        getTdProps={(_, row, column) => {
-          const isUpdateRow = row.index === 1;
-          const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
-          return {
-            style: {
-              background:
-                row.original[column.id] > 0 || isFirstColumn
-                  ? isUpdateRow
-                    ? theme.colors.accent3_3
-                    : theme.colors.accent2_4
-                  : null,
-            } as CSSProperties,
-          };
-        }}
-        columns={columns}
-        data={[newDataRow, updatedDataRow]}
-        resizable
-      />
+      {FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
+      ) : (
+        <Table
+          parentRef={containerRef}
+          variant="STATIC"
+          getTdProps={(_, row, column) => {
+            const isUpdateRow = row.index === 1;
+            const isFirstColumn = column.id === FIRST_COLUMN_ACCESSOR;
+            return {
+              style: {
+                background:
+                  row.original[column.id] > 0 || isFirstColumn
+                    ? isUpdateRow
+                      ? theme.colors.accent3_3
+                      : theme.colors.accent2_4
+                    : null,
+              } as CSSProperties,
+            };
+          }}
+          columns={tableColumns_legacy}
+          data={tableData}
+          resizable
+        />
+      )}
     </div>
   );
 };
