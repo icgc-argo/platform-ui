@@ -19,7 +19,7 @@
 
 import { css, TitleBar, useTheme } from '@icgc-argo/uikit';
 
-export const ProgramTitleBar = () => {
+export const ProgramTitleBar = ({ programId }: { programId: string }) => {
   const theme = useTheme();
 
   return (
@@ -44,7 +44,7 @@ export const ProgramTitleBar = () => {
             padding-right: 18px;
           `}
         >
-          <div>ProgramId</div>
+          <div>{programId}</div>
           <div>Overview</div>
         </TitleBar>
       </div>

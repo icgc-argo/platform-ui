@@ -25,6 +25,8 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DiagnosisNode, EntityType, SpecimenNode, TableDataValue } from '../types';
 
+type TableDataValue = string | number | React.ReactNode;
+
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
   return {
