@@ -27,7 +27,7 @@ import clsx from 'clsx';
 import ProgramCardsLayout from './ProgramCardsLayout';
 import { ProgramTitleBar } from './ProgramTitleBar';
 
-const ProgramEntity = () => {
+const ProgramEntity = ({ programId }: { programId: string }) => {
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -35,7 +35,7 @@ const ProgramEntity = () => {
       <PageBody className={clsx({ noSidebar: true })}>
         <PageContent>
           <ContentHeader>
-            <ProgramTitleBar />
+            <ProgramTitleBar programId={programId} />
           </ContentHeader>
           <ContentBody>
             <ProgramCardsLayout />
