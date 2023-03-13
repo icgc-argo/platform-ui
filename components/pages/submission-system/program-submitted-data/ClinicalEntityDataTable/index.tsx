@@ -20,6 +20,7 @@
 import { useQuery } from '@apollo/client';
 import {
   ContentPlaceholder,
+  createColumnHelper,
   css,
   DnaLoader,
   Icon,
@@ -65,25 +66,29 @@ export type DonorEntry = {
   [k: string]: string | number | boolean;
 };
 
-const errorColumns = [
-  {
-    accessorKey: 'entries',
-    header: '# Affected Records',
-    id: 'entries',
-    maxSize: 135,
-  },
-  {
-    accessorKey: 'fieldName',
-    header: `Field with Error`,
-    id: 'fieldName',
-    maxSize: 215,
-  },
-  {
-    accessorKey: 'errorMessage',
-    header: `Error Description`,
-    id: 'errorMessage',
-  },
-];
+type TableColumns = {
+  entries: number;
+  errorMessage: string;
+  fieldName: string;
+};
+
+const getTableColumns = () => {
+  const columnHelper = createColumnHelper<TableColumns>();
+  const columns = [
+    columnHelper.accessor<'entries', number>('entries', {
+      header: '# Affected Records',
+      maxSize: 135,
+    }),
+    columnHelper.accessor<'fieldName', string>('fieldName', {
+      header: `Field with Error`,
+      maxSize: 215,
+    }),
+    columnHelper.accessor<'errorMessage', string>('errorMessage', {
+      header: `Error Description`,
+    }),
+  ];
+  return columns;
+};
 
 const NoDataCell = () => (
   <div
@@ -656,7 +661,7 @@ const ClinicalEntityDataTable = ({
             ].toLowerCase()} table`}
             subtitle={<Subtitle program={program} />}
             errors={tableErrors}
-            tableColumns={errorColumns}
+            tableColumns={getTableColumns()}
             tableProps={{
               page: errorPage,
               pages: numErrorPages,

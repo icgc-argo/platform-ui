@@ -19,11 +19,13 @@
 
 import {
   Button,
+  ColumnDef,
+  createColumnHelper,
   css,
   Icon,
+  NOTIFICATION_VARIANTS,
   Notification,
   NotificationVariant,
-  NOTIFICATION_VARIANTS,
   Table,
   TableV8,
 } from '@icgc-argo/uikit';
@@ -37,34 +39,42 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
+export type ErrorNotificationDefaultColumns = {
+  donorId: string;
+  field: string;
+  message: string;
+  row: number;
+  type: string;
+  value: string;
+};
+
 export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
-  return [
-    {
-      accessorKey: 'row',
+  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
+
+  const columns: ColumnDef<ErrorNotificationDefaultColumns>[] = [
+    columnHelper.accessor<'row', number>('row', {
       header: 'Line #',
       maxSize: 70,
-    },
-    {
-      accessorKey: 'donorId',
+    }),
+    columnHelper.accessor<'donorId', string>('donorId', {
       header: 'Submitter Donor ID',
       maxSize: 160,
-    },
-    {
-      accessorKey: 'field',
+    }),
+    columnHelper.accessor<'field', string>('field', {
       header: `Field with ${variant}`,
       maxSize: 200,
-    },
-    {
-      accessorKey: 'value',
+    }),
+    columnHelper.accessor<'value', string>('value', {
       header: `${variant} Value`,
       maxSize: 130,
-    },
-    {
-      accessorKey: 'message',
+    }),
+    columnHelper.accessor<'message', string>('message', {
       header: `${variant} Description`,
-    },
+    }),
   ];
+
+  return columns;
 };
 
 const ErrorNotification = <Error extends { [k: string]: any }>({
@@ -80,7 +90,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   level: NotificationVariant;
   title: string;
   subtitle: ReactNode;
-  tableColumns: any;
+  tableColumns: ColumnDef<any> & { accessorKey: string; header: string }[];
   errors: Array<Error>;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
@@ -89,12 +99,12 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   const onDownloadClick = () => {
     exportToTsv(errors, {
       exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
-      order: tableColumns.map((entry) => entry['accessorkey']),
+      order: tableColumns.map((entry) => entry.accessorKey),
       fileName: `${level}_report.tsv`,
       headerDisplays: tableColumns.reduce(
         (acc, { accessorKey, header }) => ({
           ...acc,
-          [accessorKey]: header as string,
+          [accessorKey]: header,
         }),
         {},
       ),

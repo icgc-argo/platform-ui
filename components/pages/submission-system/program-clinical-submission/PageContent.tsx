@@ -20,9 +20,11 @@
 import { useMutation } from '@apollo/client';
 import {
   Container,
+  createColumnHelper,
   css,
   DnaLoader,
   Notification,
+  NotificationVariant,
   NOTIFICATION_VARIANTS,
   Typography,
 } from '@icgc-argo/uikit';
@@ -45,7 +47,10 @@ import { useState, useEffect, useMemo, ComponentProps } from 'react';
 
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import ErrorNotification, {
+  ErrorNotificationDefaultColumns,
+  getDefaultColumns,
+} from '../ErrorNotification';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
@@ -68,6 +73,10 @@ import {
   ValidateSubmissionMutationVariables,
 } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
+
+type TableColumns = ErrorNotificationDefaultColumns & {
+  fileName: string;
+};
 
 const CLINICAL_FILE_ORDER = [
   'donor',
@@ -138,6 +147,18 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
     ),
     gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
   );
+
+const getTableColumns = (level: NotificationVariant) => {
+  const columnHelper = createColumnHelper<TableColumns>();
+  const columns = [
+    ...getDefaultColumns(level),
+    columnHelper.accessor<'fileName', string>('fileName', {
+      header: 'File',
+      maxSize: 150,
+    }),
+  ];
+  return columns;
+};
 
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -530,14 +551,7 @@ const PageContent = () => {
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             errors={allDataErrors.map(toDisplayError)}
-            tableColumns={[
-              {
-                accessorKey: 'fileName',
-                header: 'File',
-                maxSize: 150,
-              },
-              ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
-            ]}
+            tableColumns={getTableColumns(NOTIFICATION_VARIANTS.ERROR)}
           />
         </div>
       )}
@@ -553,14 +567,7 @@ const PageContent = () => {
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
             errors={allDataWarnings.map(toDisplayError)}
-            tableColumns={[
-              {
-                accessorKey: 'fileName',
-                header: 'File',
-                maxSize: 150,
-              },
-              ...getDefaultColumns(NOTIFICATION_VARIANTS.WARNING),
-            ]}
+            tableColumns={getTableColumns(NOTIFICATION_VARIANTS.WARNING)}
           />
         </div>
       )}
