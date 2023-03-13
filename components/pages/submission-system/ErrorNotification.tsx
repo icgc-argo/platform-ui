@@ -77,11 +77,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
   level: NotificationVariant;
   title: string;
   subtitle: ReactNode;
-  tableColumns: Array<
-    TableColumnConfig<Error> & {
-      accessorKey: keyof Error | string;
-    }
-  >;
+  tableColumns: any;
   errors: Array<Error>;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
   tsvExcludeCols?: Array<keyof Error>;
@@ -92,7 +88,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
       exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
       order: tableColumns.map((entry) => entry['accessorkey']),
       fileName: `${level}_report.tsv`,
-      headerDisplays: tableColumns.reduce<{}>(
+      headerDisplays: tableColumns.reduce(
         (acc, { accessorKey, header }) => ({
           ...acc,
           [accessorKey]: header as string,

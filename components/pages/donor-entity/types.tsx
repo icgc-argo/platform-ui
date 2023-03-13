@@ -267,3 +267,5 @@ export type Entity = {
 };
 
 export interface DonorEntityData extends Entity {}
+
+export type TableDataValue = string | number | React.ReactNode;
