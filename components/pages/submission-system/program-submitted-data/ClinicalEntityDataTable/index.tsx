@@ -499,8 +499,8 @@ const ClinicalEntityDataTable = ({
 
     const errorState =
       // Completion Stats === 1 indicates Complete
-      // 0 is Incomplete, >1 Incorrect Sample / Specimen Ratio
-      (isCompletionCell && original[id] !== 1) ||
+      // 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
+      (isCompletionCell && original[id] < 1) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;
 
