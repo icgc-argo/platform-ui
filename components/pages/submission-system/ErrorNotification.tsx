@@ -41,27 +41,27 @@ export const getDefaultColumns = (level: NotificationVariant) => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
   return [
     {
-      accessorKey: 'row' as 'row',
+      accessorKey: 'row',
       header: 'Line #',
       maxSize: 70,
     },
     {
-      accessorKey: 'donorId' as 'donorId',
+      accessorKey: 'donorId',
       header: 'Submitter Donor ID',
       maxSize: 160,
     },
     {
-      accessorKey: 'field' as 'field',
+      accessorKey: 'field',
       header: `Field with ${variant}`,
       maxSize: 200,
     },
     {
-      accessorKey: 'value' as 'value',
+      accessorKey: 'value',
       header: `${variant} Value`,
       maxSize: 130,
     },
     {
-      accessorKey: 'message' as 'message',
+      accessorKey: 'message',
       header: `${variant} Description`,
     },
   ];
