@@ -27,6 +27,8 @@ import {
   Notification,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
+  Table,
+  TableV8,
   Typography,
 } from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
@@ -39,17 +41,19 @@ import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { displayDateAndTime, sleep } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
+import { omit } from 'lodash';
 import head from 'lodash/head';
 import map from 'lodash/map';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import Router from 'next/router';
-import { useState, useEffect, useMemo, ComponentProps } from 'react';
+import { useState, useEffect, useMemo, ComponentProps, createRef } from 'react';
 
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
 import ErrorNotification, {
   ErrorNotificationDefaultColumns,
+  errorNotificationTableProps,
   getDefaultColumns,
 } from '../ErrorNotification';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
@@ -74,6 +78,9 @@ import {
   ValidateSubmissionMutationVariables,
 } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 type TableColumns = ErrorNotificationDefaultColumns & {
   fileName: string;
@@ -149,16 +156,28 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
     gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
   );
 
-const getTableColumns = (level: NotificationVariant) => {
+const getColumns = (level: NotificationVariant) => {
   const columnHelper = createColumnHelper<TableColumns>();
-  const columns = [
+  const columns: {
+    accessor: keyof TableColumns;
+    header: string;
+    maxSize?: number;
+  }[] = [
     ...getDefaultColumns(level),
-    columnHelper.accessor<'fileName', string>('fileName', {
+    {
+      accessor: 'fileName',
       header: 'File',
       maxSize: 150,
-    }),
+    },
   ];
-  return columns;
+
+  const dataColumns = columns.map(({ accessor, header }) => ({ header, id: accessor }));
+
+  const tableColumns: ColumnDef<TableColumns>[] = columns.map((column) =>
+    columnHelper.accessor(column.accessor, omit(column, 'accessor')),
+  );
+
+  return { dataColumns, tableColumns };
 };
 
 const PageContent = () => {
@@ -448,6 +467,77 @@ const PageContent = () => {
     }
   };
 
+  const { dataColumns: errorDataColumns, tableColumns: errorTableColumns } = getColumns(
+    NOTIFICATION_VARIANTS.ERROR,
+  );
+  const { dataColumns: warningDataColumns, tableColumns: warningTableColumns } = getColumns(
+    NOTIFICATION_VARIANTS.WARNING,
+  );
+  const errorData = allDataErrors.map(toDisplayError);
+  const warningData = allDataWarnings.map(toDisplayError);
+
+  const containerRef_legacy = createRef<HTMLDivElement>();
+
+  const ErrorTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8 columns={errorTableColumns} data={errorData} {...errorNotificationTableProps} />
+  ) : (
+    <div ref={containerRef_legacy}>
+      <Table
+        parentRef={containerRef_legacy}
+        columns={errorTableColumns.map(
+          ({
+            accessorKey,
+            header,
+            size,
+          }: {
+            accessorKey: string;
+            header: string;
+            size: number;
+          }) => ({
+            style: {
+              whiteSpace: 'pre-line',
+            },
+            // react table v6 property name conversion
+            accessor: accessorKey,
+            Header: header,
+            width: size,
+          }),
+        )}
+        data={errorData}
+      />
+    </div>
+  );
+
+  const WarningTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8 columns={warningTableColumns} data={warningData} {...errorNotificationTableProps} />
+  ) : (
+    <div ref={containerRef_legacy}>
+      <Table
+        parentRef={containerRef_legacy}
+        columns={warningTableColumns.map(
+          ({
+            accessorKey,
+            header,
+            size,
+          }: {
+            accessorKey: string;
+            header: string;
+            size: number;
+          }) => ({
+            style: {
+              whiteSpace: 'pre-line',
+            },
+            // react table v6 property name conversion
+            accessor: accessorKey,
+            Header: header,
+            width: size,
+          }),
+        )}
+        data={warningData}
+      />
+    </div>
+  );
+
   return (
     <div
       css={css`
@@ -547,12 +637,13 @@ const PageContent = () => {
             margin-top: 20px;
           `}
         >
-          <ErrorNotification<ClinicalSubmissionError & { fileName: string }>
+          <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
-            tableData={allDataErrors.map(toDisplayError)}
-            tableColumns={getTableColumns(NOTIFICATION_VARIANTS.ERROR)}
+            reportData={allDataErrors.map(toDisplayError)}
+            reportColumns={errorDataColumns}
+            TableComponent={ErrorTable}
           />
         </div>
       )}
@@ -567,8 +658,9 @@ const PageContent = () => {
             level={NOTIFICATION_VARIANTS.WARNING}
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
-            tableData={allDataWarnings.map(toDisplayError)}
-            tableColumns={getTableColumns(NOTIFICATION_VARIANTS.WARNING)}
+            reportData={allDataWarnings.map(toDisplayError)}
+            reportColumns={warningDataColumns}
+            TableComponent={WarningTable}
           />
         </div>
       )}

@@ -48,60 +48,71 @@ export type ErrorNotificationDefaultColumns = {
   value: string;
 };
 
-export const getDefaultColumns = (level: NotificationVariant) => {
+export const getDefaultColumns = (
+  level: NotificationVariant,
+): {
+  accessor: keyof ErrorNotificationDefaultColumns;
+  header: string;
+  maxSize?: number;
+}[] => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
-  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
-
-  const columns: ColumnDef<ErrorNotificationDefaultColumns>[] = [
-    columnHelper.accessor('row', {
-      header: 'Line #',
-      maxSize: 70,
-    }),
-    columnHelper.accessor('donorId', {
+  return [
+    { accessor: 'row', header: 'Line #', maxSize: 70 },
+    {
+      accessor: 'donorId',
       header: 'Submitter Donor ID',
       maxSize: 160,
-    }),
-    columnHelper.accessor('field', {
+    },
+    {
+      accessor: 'field',
       header: `Field with ${variant}`,
       maxSize: 200,
-    }),
-    columnHelper.accessor('value', {
+    },
+    {
+      accessor: 'value',
       header: `${variant} Value`,
       maxSize: 130,
-    }),
-    columnHelper.accessor('message', {
+    },
+    {
+      accessor: 'message',
       header: `${variant} Description`,
-    }),
+    },
   ];
+};
 
-  return columns;
+export const errorNotificationTableProps = {
+  withHeaders: true,
+  withResize: true,
+  withSorting: true,
+  withStripes: true,
+  withRowHighlight: true,
 };
 
 const ErrorNotification = <T extends { [k: string]: any }>({
   level,
-  title,
-  tableData,
-  subtitle,
-  tableColumns,
   onClearClick,
+  reportColumns = [],
+  reportData = [],
+  subtitle,
+  TableComponent = <></>,
+  title,
   tsvExcludeCols = [],
-  tableProps,
 }: {
   level: NotificationVariant;
-  title: string;
-  subtitle: ReactNode;
-  tableColumns: ColumnDef<T>[];
-  tableData: Array<T>;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
+  reportColumns: { header: string; id: string }[];
+  reportData: Array<T>;
+  subtitle: ReactNode;
+  TableComponent?: JSX.Element;
+  title: string;
   tsvExcludeCols?: Array<keyof T>;
-  tableProps?: Partial<TableProps>;
 }) => {
   const onDownloadClick = () => {
-    exportToTsv(tableData, {
+    exportToTsv(reportData, {
       exclude: union(tsvExcludeCols, ['__typename']),
-      order: tableColumns.map((entry) => entry.id),
+      order: reportColumns.map((entry) => entry.id),
       fileName: `${level}_report.tsv`,
-      headerDisplays: tableColumns.reduce(
+      headerDisplays: reportColumns.reduce(
         (acc, { id, header }) => ({
           ...acc,
           [id]: header,
@@ -169,34 +180,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
             `}
           >
             <div>{subtitle}</div>
-            {FEATURE_REACT_TABLE_V8_ENABLED ? (
-              <TableV8
-                columns={tableColumns}
-                data={tableData}
-                withHeaders
-                withResize
-                withSorting
-                withStripes
-                withRowHighlight
-              />
-            ) : (
-              <Table
-                parentRef={containerRef}
-                NoDataComponent={() => null}
-                columns={tableColumns.map((col) => ({
-                  ...col,
-                  style: {
-                    whiteSpace: 'pre-line',
-                  },
-                  // react table v6 property name conversion
-                  Header: col.header,
-                  width: col.size,
-                }))}
-                data={tableData}
-                showPagination
-                {...tableProps}
-              />
-            )}
+            {TableComponent}
           </div>
         );
       })()}
