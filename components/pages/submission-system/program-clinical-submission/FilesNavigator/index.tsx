@@ -21,9 +21,12 @@ import { useMutation } from '@apollo/client';
 import {
   Button,
   ContentPlaceholder,
+  createColumnHelper,
   css,
   Icon,
   NOTIFICATION_VARIANTS,
+  Table,
+  TableV8,
   Typography,
   VerticalTabs,
 } from '@icgc-argo/uikit';
@@ -32,7 +35,11 @@ import { useToaster } from 'global/hooks/toaster';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { Col } from 'react-grid-system';
 import { useClinicalSubmissionQuery } from '..';
-import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
+import ErrorNotification, {
+  ErrorNotificationDefaultColumns,
+  errorNotificationTableProps,
+  getDefaultColumns,
+} from '../../ErrorNotification';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION';
 import {
@@ -41,6 +48,17 @@ import {
   ClinicalSubmissionQueryData,
 } from '../types';
 import FileRecordTable from './FileRecordTable';
+import { getConfig } from 'global/config';
+import { createRef } from 'react';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
+const getColumns = () => {
+  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
+  const reportColumns = getDefaultColumns(NOTIFICATION_VARIANTS.ERROR);
+  const tableColumns = reportColumns.map((column) => columnHelper.accessor(column.id, column));
+  return { reportColumns, tableColumns };
+};
 
 const FilesNavigator = ({
   fileStates,
@@ -106,6 +124,42 @@ const FilesNavigator = ({
   const isSubmissionValidated = (
     ['INVALID', 'VALID', 'PENDING_APPROVAL'] as typeof submissionState[]
   ).includes(submissionState);
+
+  const errorData = selectedFile.schemaErrors.map(toDisplayError);
+  const { reportColumns, tableColumns } = getColumns();
+
+  const containerRef_legacy = createRef<HTMLDivElement>();
+
+  const TableComponent = FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8 columns={tableColumns} data={errorData} {...errorNotificationTableProps} />
+  ) : (
+    <div ref={containerRef_legacy}>
+      <Table
+        parentRef={containerRef_legacy}
+        columns={tableColumns.map(
+          ({
+            accessorKey,
+            header,
+            size,
+          }: {
+            accessorKey: string;
+            header: string;
+            size: number;
+          }) => ({
+            style: {
+              whiteSpace: 'pre-line',
+            },
+            // react table v6 property name conversion
+            accessor: accessorKey,
+            Header: header,
+            width: size,
+          }),
+        )}
+        data={errorData}
+      />
+    </div>
+  );
+
   return !selectedFile ? (
     <ContentPlaceholder
       css={css`
@@ -173,14 +227,15 @@ const FilesNavigator = ({
             <ErrorNotification
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}
-              title={`${
-                selectedFile.schemaErrors.length
-              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              reportData={selectedFile.schemaErrors.map(toDisplayError)}
+              reportColumns={reportColumns}
+              reportData={errorData}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              TableComponent={TableComponent}
+              title={`${
+                selectedFile.schemaErrors.length
+              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
             />
           </div>
         ) : !!selectedFile.records.length ? (
