@@ -179,7 +179,6 @@ const FilesNavigator = ({
               padding: 16px;
             `}
           >
-            HELLO
             <ErrorNotification
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}

@@ -29,6 +29,7 @@ import {
   noDataSvg,
   NOTIFICATION_VARIANTS,
   Table,
+  TableV8,
   Tooltip,
   Typography,
   useTheme,
@@ -60,6 +61,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRef, useState, useEffect } from 'react';
+import { errorNotificationTableProps } from '../../program-clinical-submission/ErrorNotification/ErrorNotificationDefaultTable';
 
 export type DonorEntry = {
   row: string;
@@ -73,21 +75,21 @@ type TableColumns = {
   fieldName: string;
 };
 
+const reportColumns: {
+  header: string;
+  id: keyof TableColumns;
+  maxSize?: number;
+}[] = [
+  { id: 'entries', header: '# Affected Records', maxSize: 135 },
+  { id: 'fieldName', header: `Field with Error`, maxSize: 215 },
+  { id: 'errorMessage', header: `Error Description` },
+];
+
 const getTableColumns = () => {
   const columnHelper = createColumnHelper<TableColumns>();
-  const columns: ColumnDef<TableColumns>[] = [
-    columnHelper.accessor('entries', {
-      header: '# Affected Records',
-      maxSize: 135,
-    }),
-    columnHelper.accessor('fieldName', {
-      header: `Field with Error`,
-      maxSize: 215,
-    }),
-    columnHelper.accessor('errorMessage', {
-      header: `Error Description`,
-    }),
-  ];
+  const columns: ColumnDef<TableColumns>[] = reportColumns.map((column) =>
+    columnHelper.accessor(column.id, column),
+  );
   return columns;
 };
 
@@ -657,24 +659,19 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
+            subtitle={<Subtitle program={program} />}
+            reportData={tableErrors}
+            reportColumns={reportColumns}
+            TableComponent={
+              <TableV8
+                {...errorNotificationTableProps}
+                columns={getTableColumns()}
+                data={tableErrors}
+              />
+            }
             title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
               entityType
             ].toLowerCase()} table`}
-            subtitle={<Subtitle program={program} />}
-            errors={tableErrors}
-            tableColumns={getTableColumns()}
-            tableProps={{
-              page: errorPage,
-              pages: numErrorPages,
-              pageSize: errorPageSize,
-              sorted: errorSorted,
-              onPageChange: (value) => updatePageSettings('page', value),
-              onPageSizeChange: (value) => updatePageSettings('pageSize', value),
-              onSortedChange: (value) => updatePageSettings('sorted', value),
-              // TODO: Test + Update Pagination in #2267
-              // https://github.com/icgc-argo/platform-ui/issues/2267
-              showPagination: false,
-            }}
           />
         </div>
       )}
