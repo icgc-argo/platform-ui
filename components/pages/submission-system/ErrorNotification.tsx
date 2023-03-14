@@ -19,28 +19,19 @@
 
 import {
   Button,
-  ColumnDef,
-  createColumnHelper,
   css,
   Icon,
   NOTIFICATION_VARIANTS,
   Notification,
   NotificationVariant,
-  Table,
-  TableV8,
 } from '@icgc-argo/uikit';
-import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
 import { ReactNode, ComponentProps, createRef } from 'react';
 
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
-import { getConfig } from 'global/config';
-
-const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 export type ErrorNotificationDefaultColumns = {
-  // type?: string;
   donorId: string;
   field: string;
   message: string;
