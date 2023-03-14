@@ -35,11 +35,7 @@ import { useToaster } from 'global/hooks/toaster';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { Col } from 'react-grid-system';
 import { useClinicalSubmissionQuery } from '..';
-import ErrorNotification, {
-  ErrorNotificationDefaultColumns,
-  errorNotificationTableProps,
-  getDefaultColumns,
-} from '../../ErrorNotification';
+import ErrorNotification from '../ErrorNotification';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION';
 import {
@@ -48,17 +44,9 @@ import {
   ClinicalSubmissionQueryData,
 } from '../types';
 import FileRecordTable from './FileRecordTable';
-import { getConfig } from 'global/config';
-import { createRef } from 'react';
-
-const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
-
-const getColumns = () => {
-  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
-  const reportColumns = getDefaultColumns(NOTIFICATION_VARIANTS.ERROR);
-  const tableColumns = reportColumns.map((column) => columnHelper.accessor(column.id, column));
-  return { reportColumns, tableColumns };
-};
+import ErrorNotificationDefaultTable, {
+  getDefaultColumns,
+} from '../ErrorNotification/ErrorNotificationDefaultTable';
 
 const FilesNavigator = ({
   fileStates,
@@ -126,39 +114,6 @@ const FilesNavigator = ({
   ).includes(submissionState);
 
   const errorData = selectedFile.schemaErrors.map(toDisplayError);
-  const { reportColumns, tableColumns } = getColumns();
-
-  const containerRef_legacy = createRef<HTMLDivElement>();
-
-  const TableComponent = FEATURE_REACT_TABLE_V8_ENABLED ? (
-    <TableV8 columns={tableColumns} data={errorData} {...errorNotificationTableProps} />
-  ) : (
-    <div ref={containerRef_legacy}>
-      <Table
-        parentRef={containerRef_legacy}
-        columns={tableColumns.map(
-          ({
-            accessorKey,
-            header,
-            size,
-          }: {
-            accessorKey: string;
-            header: string;
-            size: number;
-          }) => ({
-            style: {
-              whiteSpace: 'pre-line',
-            },
-            // react table v6 property name conversion
-            accessor: accessorKey,
-            Header: header,
-            width: size,
-          }),
-        )}
-        data={errorData}
-      />
-    </div>
-  );
 
   return !selectedFile ? (
     <ContentPlaceholder
@@ -224,15 +179,21 @@ const FilesNavigator = ({
               padding: 16px;
             `}
           >
+            HELLO
             <ErrorNotification
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}
-              reportColumns={reportColumns}
+              reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
               reportData={errorData}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              TableComponent={TableComponent}
+              TableComponent={
+                <ErrorNotificationDefaultTable
+                  data={errorData}
+                  level={NOTIFICATION_VARIANTS.ERROR}
+                />
+              }
               title={`${
                 selectedFile.schemaErrors.length
               } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}

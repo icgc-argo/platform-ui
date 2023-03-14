@@ -39,7 +39,9 @@ import union from 'lodash/union';
 
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import ErrorNotification, {
+  getDefaultColumns,
+} from '../program-clinical-submission/ErrorNotification';
 import SubmissionLayout from '../layout';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import {

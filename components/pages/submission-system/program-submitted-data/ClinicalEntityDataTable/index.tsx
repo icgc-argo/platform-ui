@@ -36,7 +36,7 @@ import {
 import memoize from 'lodash/memoize';
 
 import { TableInfoHeaderContainer } from '../../common';
-import ErrorNotification from '../../ErrorNotification';
+import ErrorNotification from '../../program-clinical-submission/ErrorNotification';
 import {
   aliasedEntityFields,
   aliasedEntityNames,

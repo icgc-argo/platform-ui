@@ -29,55 +29,7 @@ import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
 import { ReactNode, ComponentProps, createRef } from 'react';
 
-import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
-
-export type ErrorNotificationDefaultColumns = {
-  donorId: string;
-  field: string;
-  message: string;
-  row: number;
-  value: string;
-};
-
-export const getDefaultColumns = (
-  level: NotificationVariant,
-): {
-  id: keyof ErrorNotificationDefaultColumns;
-  header: string;
-  maxSize?: number;
-}[] => {
-  const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
-  return [
-    { id: 'row', header: 'Line #', maxSize: 70 },
-    {
-      id: 'donorId',
-      header: 'Submitter Donor ID',
-      maxSize: 160,
-    },
-    {
-      id: 'field',
-      header: `Field with ${variant}`,
-      maxSize: 200,
-    },
-    {
-      id: 'value',
-      header: `${variant} Value`,
-      maxSize: 130,
-    },
-    {
-      id: 'message',
-      header: `${variant} Description`,
-    },
-  ];
-};
-
-export const errorNotificationTableProps = {
-  withHeaders: true,
-  withResize: true,
-  withSorting: true,
-  withStripes: true,
-  withRowHighlight: true,
-};
+import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from '../../common';
 
 const ErrorNotification = <T extends { [k: string]: any }>({
   level,
