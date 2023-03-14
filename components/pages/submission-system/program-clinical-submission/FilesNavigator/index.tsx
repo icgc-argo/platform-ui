@@ -176,11 +176,11 @@ const FilesNavigator = ({
               title={`${
                 selectedFile.schemaErrors.length
               } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              errors={selectedFile.schemaErrors.map(toDisplayError)}
+              reportData={selectedFile.schemaErrors.map(toDisplayError)}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              tableColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
             />
           </div>
         ) : !!selectedFile.records.length ? (

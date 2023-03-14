@@ -159,22 +159,25 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
 const getColumns = (level: NotificationVariant) => {
   const columnHelper = createColumnHelper<TableColumns>();
   const columns: {
-    accessor: keyof TableColumns;
     header: string;
+    id: keyof TableColumns;
     maxSize?: number;
   }[] = [
     ...getDefaultColumns(level),
     {
-      accessor: 'fileName',
       header: 'File',
+      id: 'fileName',
       maxSize: 150,
     },
   ];
 
-  const reportColumns = columns.map(({ accessor, header }) => ({ header, id: accessor }));
+  const reportColumns = columns.map(({ header, id }) => ({
+    header,
+    id,
+  }));
 
   const tableColumns: ColumnDef<TableColumns>[] = columns.map((column) =>
-    columnHelper.accessor(column.accessor, omit(column, 'accessor')),
+    columnHelper.accessor(column.id, column),
   );
 
   return { reportColumns, tableColumns };

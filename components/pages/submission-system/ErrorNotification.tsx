@@ -42,30 +42,30 @@ export type ErrorNotificationDefaultColumns = {
 export const getDefaultColumns = (
   level: NotificationVariant,
 ): {
-  accessor: keyof ErrorNotificationDefaultColumns;
+  id: keyof ErrorNotificationDefaultColumns;
   header: string;
   maxSize?: number;
 }[] => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
   return [
-    { accessor: 'row', header: 'Line #', maxSize: 70 },
+    { id: 'row', header: 'Line #', maxSize: 70 },
     {
-      accessor: 'donorId',
+      id: 'donorId',
       header: 'Submitter Donor ID',
       maxSize: 160,
     },
     {
-      accessor: 'field',
+      id: 'field',
       header: `Field with ${variant}`,
       maxSize: 200,
     },
     {
-      accessor: 'value',
+      id: 'value',
       header: `${variant} Value`,
       maxSize: 130,
     },
     {
-      accessor: 'message',
+      id: 'message',
       header: `${variant} Description`,
     },
   ];
