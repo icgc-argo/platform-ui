@@ -122,14 +122,8 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
-  const searchResultIds =
-    searchResultData?.clinicalSearchResults.searchResults.map((result) => result.donorId) || [];
-
-  const sideMenuQueryDonorIds = urlDonorQueryStrings.length
-    ? currentDonors
-    : searchResultIds.length
-    ? searchResultIds
-    : [];
+  // Only filter Side Menu by ID when specific donors are selected
+  const sideMenuQueryDonorIds = urlDonorQueryStrings.length ? currentDonors : [];
 
   // Side Menu Query
   // Populates Clinical Entity Table, Side Menu, Title Bar
