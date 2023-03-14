@@ -171,13 +171,13 @@ const getColumns = (level: NotificationVariant) => {
     },
   ];
 
-  const dataColumns = columns.map(({ accessor, header }) => ({ header, id: accessor }));
+  const reportColumns = columns.map(({ accessor, header }) => ({ header, id: accessor }));
 
   const tableColumns: ColumnDef<TableColumns>[] = columns.map((column) =>
     columnHelper.accessor(column.accessor, omit(column, 'accessor')),
   );
 
-  return { dataColumns, tableColumns };
+  return { reportColumns, tableColumns };
 };
 
 const PageContent = () => {
@@ -467,10 +467,10 @@ const PageContent = () => {
     }
   };
 
-  const { dataColumns: errorDataColumns, tableColumns: errorTableColumns } = getColumns(
+  const { reportColumns: errorReportColumns, tableColumns: errorTableColumns } = getColumns(
     NOTIFICATION_VARIANTS.ERROR,
   );
-  const { dataColumns: warningDataColumns, tableColumns: warningTableColumns } = getColumns(
+  const { reportColumns: warningReportColumns, tableColumns: warningTableColumns } = getColumns(
     NOTIFICATION_VARIANTS.WARNING,
   );
   const errorData = allDataErrors.map(toDisplayError);
@@ -642,7 +642,7 @@ const PageContent = () => {
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             reportData={allDataErrors.map(toDisplayError)}
-            reportColumns={errorDataColumns}
+            reportColumns={errorReportColumns}
             TableComponent={ErrorTable}
           />
         </div>
@@ -659,7 +659,7 @@ const PageContent = () => {
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
             reportData={allDataWarnings.map(toDisplayError)}
-            reportColumns={warningDataColumns}
+            reportColumns={warningReportColumns}
             TableComponent={WarningTable}
           />
         </div>
