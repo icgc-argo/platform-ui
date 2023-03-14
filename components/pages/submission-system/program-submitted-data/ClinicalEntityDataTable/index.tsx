@@ -19,6 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import {
+  ColumnDef,
   ContentPlaceholder,
   createColumnHelper,
   css,
@@ -74,16 +75,16 @@ type TableColumns = {
 
 const getTableColumns = () => {
   const columnHelper = createColumnHelper<TableColumns>();
-  const columns = [
-    columnHelper.accessor<'entries', number>('entries', {
+  const columns: ColumnDef<TableColumns>[] = [
+    columnHelper.accessor('entries', {
       header: '# Affected Records',
       maxSize: 135,
     }),
-    columnHelper.accessor<'fieldName', string>('fieldName', {
+    columnHelper.accessor('fieldName', {
       header: `Field with Error`,
       maxSize: 215,
     }),
-    columnHelper.accessor<'errorMessage', string>('errorMessage', {
+    columnHelper.accessor('errorMessage', {
       header: `Error Description`,
     }),
   ];

@@ -19,6 +19,7 @@
 
 import { useMutation } from '@apollo/client';
 import {
+  ColumnDef,
   Container,
   createColumnHelper,
   css,
@@ -546,11 +547,11 @@ const PageContent = () => {
             margin-top: 20px;
           `}
         >
-          <ErrorNotification
+          <ErrorNotification<ClinicalSubmissionError & { fileName: string }>
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
-            errors={allDataErrors.map(toDisplayError)}
+            tableData={allDataErrors.map(toDisplayError)}
             tableColumns={getTableColumns(NOTIFICATION_VARIANTS.ERROR)}
           />
         </div>
@@ -566,7 +567,7 @@ const PageContent = () => {
             level={NOTIFICATION_VARIANTS.WARNING}
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
-            errors={allDataWarnings.map(toDisplayError)}
+            tableData={allDataWarnings.map(toDisplayError)}
             tableColumns={getTableColumns(NOTIFICATION_VARIANTS.WARNING)}
           />
         </div>

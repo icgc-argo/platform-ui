@@ -278,6 +278,8 @@ export const formatTimelineEntityData = (donorData) => {
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
 
     const samples = node.samples.hits.edges.map((sample) => {
+      // remove the samples.node spread and the JSX
+
       const { donorId } = usePageQuery<{ donorId: string }>();
       const sampleFilter = sqonBuilder
         .has('donor_id', donorId)
@@ -289,12 +291,14 @@ export const formatTimelineEntityData = (donorData) => {
         `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
       );
 
+      // TO DO remove jsx and just pass SQON
+
       const available_files = (
         <Link variant="INLINE" href={sampleFilterUrl}>
           {sample.node['available_files']}
         </Link>
       );
-      return { ...sample.node, available_files };
+      return { ...sample, available_files };
     });
 
     return {
