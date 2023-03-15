@@ -187,7 +187,15 @@ export type SampleNodeNode = {
 };
 
 export type SampleNode = {
-  node: SampleNodeNode;
+  node: {
+    sample_id?: string;
+    sample_type: string;
+    submitter_sample_id: string;
+    experimental_strategies?: string;
+    workflow_names?: string;
+    matched_normal_submitter_sample_id?: string;
+    available_files?: number;
+  };
 };
 
 export type SpecimenNode = {
@@ -269,5 +277,3 @@ export type Entity = {
 };
 
 export interface DonorEntityData extends Entity {}
-
-export type TableDataValue = string | number | React.ReactNode;

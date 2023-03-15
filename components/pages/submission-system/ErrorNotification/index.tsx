@@ -29,7 +29,7 @@ import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
 import { ReactNode, ComponentProps, createRef } from 'react';
 
-import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from '../../common';
+import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from '../common';
 
 const ErrorNotification = <T extends { [k: string]: any }>({
   level,

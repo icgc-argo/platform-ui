@@ -37,7 +37,7 @@ import {
 import memoize from 'lodash/memoize';
 
 import { TableInfoHeaderContainer } from '../../common';
-import ErrorNotification from '../../program-clinical-submission/ErrorNotification';
+import ErrorNotification from '../../ErrorNotification';
 import {
   aliasedEntityFields,
   aliasedEntityNames,
@@ -61,7 +61,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRef, useState, useEffect } from 'react';
-import { errorNotificationTableProps } from '../../program-clinical-submission/ErrorNotification/ErrorNotificationDefaultTable';
+import { errorNotificationTableProps } from '../../ErrorNotification/ErrorNotificationDefaultTable';
 
 export type DonorEntry = {
   row: string;

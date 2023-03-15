@@ -23,7 +23,7 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { chunk, isEmpty } from 'lodash';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
-import { DiagnosisNode, EntityType, SpecimenNode, TableDataValue } from '../types';
+import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
 
 type TableDataValue = string | number | React.ReactNode;
 
@@ -278,8 +278,6 @@ export const formatTimelineEntityData = (donorData) => {
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
 
     const samples = node.samples.hits.edges.map((sample) => {
-      // remove the samples.node spread and the JSX
-
       const { donorId } = usePageQuery<{ donorId: string }>();
       const sampleFilter = sqonBuilder
         .has('donor_id', donorId)
@@ -291,14 +289,12 @@ export const formatTimelineEntityData = (donorData) => {
         `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
       );
 
-      // TO DO remove jsx and just pass SQON
-
       const available_files = (
         <Link variant="INLINE" href={sampleFilterUrl}>
           {sample.node['available_files']}
         </Link>
       );
-      return { ...sample, available_files };
+      return { ...sample.node, available_files };
     });
 
     return {
@@ -319,7 +315,6 @@ export const formatTimelineEntityData = (donorData) => {
 };
 
 // react table v8
-
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 

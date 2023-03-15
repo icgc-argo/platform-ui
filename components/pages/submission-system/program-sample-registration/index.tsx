@@ -39,10 +39,10 @@ import union from 'lodash/union';
 
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
-import ErrorNotification from '../program-clinical-submission/ErrorNotification';
+import ErrorNotification from '../ErrorNotification';
 import ErrorNotificationDefaultTable, {
   getDefaultColumns,
-} from '../program-clinical-submission/ErrorNotification/ErrorNotificationDefaultTable';
+} from '../ErrorNotification/ErrorNotificationDefaultTable';
 import SubmissionLayout from '../layout';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import {

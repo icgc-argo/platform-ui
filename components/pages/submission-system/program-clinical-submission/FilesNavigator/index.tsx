@@ -35,7 +35,7 @@ import { useToaster } from 'global/hooks/toaster';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { Col } from 'react-grid-system';
 import { useClinicalSubmissionQuery } from '..';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification from '../../ErrorNotification';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION';
 import {
@@ -46,7 +46,7 @@ import {
 import FileRecordTable from './FileRecordTable';
 import ErrorNotificationDefaultTable, {
   getDefaultColumns,
-} from '../ErrorNotification/ErrorNotificationDefaultTable';
+} from '../../ErrorNotification/ErrorNotificationDefaultTable';
 
 const FilesNavigator = ({
   fileStates,

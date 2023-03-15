@@ -51,12 +51,12 @@ import { useState, useEffect, useMemo, ComponentProps, createRef } from 'react';
 
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
-import ErrorNotification from './ErrorNotification';
+import ErrorNotification from '../ErrorNotification';
 import {
   ErrorNotificationDefaultColumns,
   errorNotificationTableProps,
   getDefaultColumns,
-} from './ErrorNotification/ErrorNotificationDefaultTable';
+} from '../ErrorNotification/ErrorNotificationDefaultTable';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
