@@ -69,7 +69,7 @@ export type DonorEntry = {
   [k: string]: string | number | boolean;
 };
 
-type TableColumns = {
+type ErrorTableColumns = {
   entries: number;
   errorMessage: string;
   fieldName: string;
@@ -77,7 +77,7 @@ type TableColumns = {
 
 const reportColumns: {
   header: string;
-  id: keyof TableColumns;
+  id: keyof ErrorTableColumns;
   maxSize?: number;
 }[] = [
   { id: 'entries', header: '# Affected Records', maxSize: 135 },
@@ -85,9 +85,9 @@ const reportColumns: {
   { id: 'errorMessage', header: `Error Description` },
 ];
 
-const getTableColumns = () => {
-  const columnHelper = createColumnHelper<TableColumns>();
-  const columns: ColumnDef<TableColumns>[] = reportColumns.map((column) =>
+const getErrorTableColumns = () => {
+  const columnHelper = createColumnHelper<ErrorTableColumns>();
+  const columns: ColumnDef<ErrorTableColumns>[] = reportColumns.map((column) =>
     columnHelper.accessor(column.id, column),
   );
   return columns;
@@ -331,7 +331,7 @@ const ClinicalEntityDataTable = ({
     });
   });
 
-  const tableErrors = tableErrorGroups.map((errorGroup) => {
+  const errorData = tableErrorGroups.map((errorGroup) => {
     // Counts Number of Records affected for each Error Object
     const { fieldName, entityName, message, errorType } = errorGroup[0];
 
@@ -350,7 +350,7 @@ const ClinicalEntityDataTable = ({
     };
   });
 
-  const totalErrors = tableErrors.reduce(
+  const totalErrors = errorData.reduce(
     (errorCount, errorGroup) => errorCount + errorGroup.entries,
     0,
   );
@@ -660,13 +660,13 @@ const ClinicalEntityDataTable = ({
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             subtitle={<Subtitle program={program} />}
-            reportData={tableErrors}
+            reportData={errorData}
             reportColumns={reportColumns}
             TableComponent={
               <TableV8
                 {...errorNotificationTableProps}
-                columns={getTableColumns()}
-                data={tableErrors}
+                columns={getErrorTableColumns()}
+                data={errorData}
               />
             }
             title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[

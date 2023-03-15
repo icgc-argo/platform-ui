@@ -83,7 +83,7 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-type TableColumns = ErrorNotificationDefaultColumns & {
+type ErrorTableColumns = ErrorNotificationDefaultColumns & {
   fileName: string;
 };
 
@@ -157,11 +157,11 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
     gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
   );
 
-const getColumns = (level: NotificationVariant) => {
-  const columnHelper = createColumnHelper<TableColumns>();
+const getErrorColumns = (level: NotificationVariant) => {
+  const columnHelper = createColumnHelper<ErrorTableColumns>();
   const reportColumns: {
     header: string;
-    id: keyof TableColumns;
+    id: keyof ErrorTableColumns;
     maxSize?: number;
   }[] = [
     ...getDefaultColumns(level),
@@ -172,11 +172,11 @@ const getColumns = (level: NotificationVariant) => {
     },
   ];
 
-  const tableColumns: ColumnDef<TableColumns>[] = reportColumns.map((column) =>
+  const errorTableColumns: ColumnDef<ErrorTableColumns>[] = reportColumns.map((column) =>
     columnHelper.accessor(column.id, column),
   );
 
-  return { reportColumns, tableColumns };
+  return { reportColumns, errorTableColumns };
 };
 
 const PageContent = () => {
@@ -466,12 +466,11 @@ const PageContent = () => {
     }
   };
 
-  const { reportColumns: errorReportColumns, tableColumns: errorTableColumns } = getColumns(
+  const { reportColumns: errorReportColumns, errorTableColumns } = getErrorColumns(
     NOTIFICATION_VARIANTS.ERROR,
   );
-  const { reportColumns: warningReportColumns, tableColumns: warningTableColumns } = getColumns(
-    NOTIFICATION_VARIANTS.WARNING,
-  );
+  const { reportColumns: warningReportColumns, errorTableColumns: warningTableColumns } =
+    getErrorColumns(NOTIFICATION_VARIANTS.WARNING);
   const errorData = allDataErrors.map(toDisplayError);
   const warningData = allDataWarnings.map(toDisplayError);
 
@@ -484,20 +483,12 @@ const PageContent = () => {
       <Table
         parentRef={containerRef_legacy}
         columns={errorTableColumns.map(
-          ({
-            accessorKey,
-            header,
-            size,
-          }: {
-            accessorKey: string;
-            header: string;
-            size: number;
-          }) => ({
+          ({ id, header, size }: { id: string; header: string; size: number }) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: accessorKey,
+            accessor: id,
             Header: header,
             width: size,
           }),
@@ -514,20 +505,12 @@ const PageContent = () => {
       <Table
         parentRef={containerRef_legacy}
         columns={warningTableColumns.map(
-          ({
-            accessorKey,
-            header,
-            size,
-          }: {
-            accessorKey: string;
-            header: string;
-            size: number;
-          }) => ({
+          ({ id, header, size }: { id: string; header: string; size: number }) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: accessorKey,
+            accessor: id,
             Header: header,
             width: size,
           }),

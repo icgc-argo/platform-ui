@@ -18,6 +18,7 @@
  */
 
 import {
+  ColumnDef,
   createColumnHelper,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
@@ -86,7 +87,9 @@ const ErrorNotificationDefaultTable = ({
 }) => {
   const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
   const defaultColumns = getDefaultColumns(level);
-  const tableColumns = defaultColumns.map((column) => columnHelper.accessor(column.id, column));
+  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] = defaultColumns.map((column) =>
+    columnHelper.accessor(column.id, column),
+  );
 
   const containerRef_legacy = createRef<HTMLDivElement>();
 
@@ -97,20 +100,12 @@ const ErrorNotificationDefaultTable = ({
       <Table
         parentRef={containerRef_legacy}
         columns={tableColumns.map(
-          ({
-            accessorKey,
-            header,
-            size,
-          }: {
-            accessorKey: string;
-            header: string;
-            size: number;
-          }) => ({
+          ({ id, header, size }: { id: string; header: string; size: number }) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: accessorKey,
+            accessor: id,
             Header: header,
             width: size,
           }),
