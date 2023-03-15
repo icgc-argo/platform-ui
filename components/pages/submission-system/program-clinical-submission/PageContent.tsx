@@ -490,6 +490,7 @@ const PageContent = () => {
             // react table v6 property name conversion
             accessor: id,
             Header: header,
+            id,
             width: size,
           }),
         )}
@@ -512,6 +513,7 @@ const PageContent = () => {
             // react table v6 property name conversion
             accessor: id,
             Header: header,
+            id,
             width: size,
           }),
         )}
@@ -625,7 +627,7 @@ const PageContent = () => {
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
             reportData={allDataErrors.map(toDisplayError)}
             reportColumns={errorReportColumns}
-            TableComponent={ErrorTable}
+            tableComponent={ErrorTable}
           />
         </div>
       )}
@@ -642,7 +644,7 @@ const PageContent = () => {
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
             reportData={allDataWarnings.map(toDisplayError)}
             reportColumns={warningReportColumns}
-            TableComponent={WarningTable}
+            tableComponent={WarningTable}
           />
         </div>
       )}

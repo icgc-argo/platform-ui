@@ -187,7 +187,7 @@ const FilesNavigator = ({
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              TableComponent={
+              tableComponent={
                 <ErrorNotificationDefaultTable
                   data={errorData}
                   level={NOTIFICATION_VARIANTS.ERROR}

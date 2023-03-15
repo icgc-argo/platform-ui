@@ -37,7 +37,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
   reportColumns = [],
   reportData = [],
   subtitle,
-  TableComponent = <></>,
+  tableComponent = <></>,
   title,
   tsvExcludeCols = [],
 }: {
@@ -46,7 +46,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
   reportColumns: { header: string; id: string }[];
   reportData: Array<T>;
   subtitle: ReactNode;
-  TableComponent?: JSX.Element;
+  tableComponent?: JSX.Element;
   title: string;
   tsvExcludeCols?: Array<keyof T>;
 }) => {
@@ -123,7 +123,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
             `}
           >
             <div>{subtitle}</div>
-            {TableComponent}
+            {tableComponent}
           </div>
         );
       })()}

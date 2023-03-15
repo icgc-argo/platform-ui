@@ -662,7 +662,7 @@ const ClinicalEntityDataTable = ({
             subtitle={<Subtitle program={program} />}
             reportData={errorData}
             reportColumns={reportColumns}
-            TableComponent={
+            tableComponent={
               <TableV8
                 {...errorNotificationTableProps}
                 columns={getErrorTableColumns()}

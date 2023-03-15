@@ -22,6 +22,7 @@ import {
   createColumnHelper,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
+  ReactTableCustomProps,
   Table,
   TableV8,
 } from '@icgc-argo/uikit';
@@ -38,12 +39,13 @@ export type ErrorNotificationDefaultColumns = {
   value: string;
 };
 
-export const errorNotificationTableProps = {
+// use these props for tables used in ErrorNotification
+export const errorNotificationTableProps: ReactTableCustomProps = {
   withHeaders: true,
   withResize: true,
+  withRowHighlight: true,
   withSorting: true,
   withStripes: true,
-  withRowHighlight: true,
 };
 
 export const getDefaultColumns = (
@@ -107,6 +109,7 @@ const ErrorNotificationDefaultTable = ({
             // react table v6 property name conversion
             accessor: id,
             Header: header,
+            id,
             width: size,
           }),
         )}
