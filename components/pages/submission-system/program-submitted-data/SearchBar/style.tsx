@@ -56,7 +56,7 @@ export const searchFilterParentStyle = css`
   display: flex;
   align-items: center;
   width: fit-content;
-  margin: 0 10px;
+  margin: 5px 10px;
 `;
 
 export const searchDropdownStyle = css`
@@ -77,8 +77,14 @@ export const searchBarParentStyle = css`
   border-style: solid;
   border-color: #babcc2;
   border-width: 1px;
-  margin: 0 10px;
+  margin: 5px 10px;
   position: relative;
+`;
+
+export const searchDownloadButtonStyle = css`
+  display: flex;
+  align-items: center;
+  margin: 5px 10px;
 `;
 
 export const searchInputFieldStyle = css`

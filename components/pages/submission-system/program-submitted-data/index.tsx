@@ -115,20 +115,15 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         filters: {
           ...defaultClinicalEntityFilters,
           completionState,
+          entityTypes: [currentEntity],
           donorIds: searchDonorIds,
           submitterDonorIds: searchSubmitterIds,
         },
       },
     });
 
-  const searchResultIds =
-    searchResultData?.clinicalSearchResults.searchResults.map((result) => result.donorId) || [];
-
-  const sideMenuQueryDonorIds = urlDonorQueryStrings.length
-    ? currentDonors
-    : searchResultIds.length
-    ? searchResultIds
-    : [];
+  // Only filter Side Menu by ID when specific donors are selected
+  const sideMenuQueryDonorIds = urlDonorQueryStrings.length ? currentDonors : [];
 
   // Side Menu Query
   // Populates Clinical Entity Table, Side Menu, Title Bar
