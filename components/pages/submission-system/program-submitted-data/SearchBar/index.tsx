@@ -45,6 +45,7 @@ import {
   searchBoldTextStyle,
   searchClearFilterStyle,
   searchDownArrowStyle,
+  searchDownloadButtonStyle,
   searchDropdownStyle,
   searchFilterButtonStyle,
   searchFilterContainerStyle,
@@ -183,7 +184,7 @@ export default function SearchBar({
       <div css={searchRightSideGroupStyle}>
         {/* Second item - filter */}
         <div css={searchFilterParentStyle}>
-          <Typography variant="subtitle2">Quick Filters:</Typography>
+          <Typography variant="label">Quick Filters:</Typography>
           <DropdownButton
             css={searchDropdownStyle}
             disabled={!!currentDonors.length}
@@ -257,13 +258,15 @@ export default function SearchBar({
         </div>
 
         {/* Fourth item - download button*/}
-        <ClinicalDownloadButton
-          tsvDownloadIds={tsvDownloadIds}
-          text="Clinical Data"
-          entityTypes={clinicalEntityFields}
-          completionState={completionState}
-          disabled={noData}
-        />
+        <div css={searchDownloadButtonStyle}>
+          <ClinicalDownloadButton
+            tsvDownloadIds={tsvDownloadIds}
+            text="Clinical Data"
+            entityTypes={clinicalEntityFields}
+            completionState={completionState}
+            disabled={noData}
+          />
+        </div>
       </div>
     </Container>
   );
