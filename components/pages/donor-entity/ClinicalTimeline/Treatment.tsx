@@ -1,14 +1,23 @@
-import { css, Table, TableV8, Typography } from '@icgc-argo/uikit';
+import { ColumnDef, createColumnHelper, css, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
-import { TreatmentNode } from '../types';
 import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => {
-  const {
-    node: { treatment_type: title, data: tableData },
-  } = treatment;
+// NOTE types based on dummy data
+export type TreatmentTableColumns = {
+  drug_rxnormcui: string;
+  drug_name: string;
+  cumulative_drug_dose: string;
+  chemotherapy_dosage_units: string;
+};
+type TreatmentTableInput = {
+  treatment_type: string;
+  data: TreatmentTableColumns[];
+};
+
+const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
+  const { treatment_type, data: tableData } = treatment;
 
   // react table v6
   const tableColumns_legacy = Object.keys(tableData[0]).map((k) => ({
@@ -18,10 +27,16 @@ const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => 
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumns = Object.keys(tableData[0]).map((k) => ({
-    header: () => k,
-    accessorKey: k,
-  }));
+  const tableColumnsSetup = Object.keys(tableData[0]).map(
+    (treatmentKey: keyof TreatmentTableColumns) => ({
+      header: () => treatmentKey,
+      id: treatmentKey,
+    }),
+  );
+  const columnHelper = createColumnHelper<TreatmentTableColumns>();
+  const tableColumns: ColumnDef<TreatmentTableColumns>[] = tableColumnsSetup.map((column) =>
+    columnHelper.accessor(column.id, column),
+  );
 
   return (
     <div
@@ -36,7 +51,7 @@ const Treatment = ({ treatment }: { key: string; treatment: TreatmentNode }) => 
           margin-bottom: 4px;
         `}
       >
-        {title}
+        {treatment_type}
       </Typography>
       <div ref={containerRef}>
         {FEATURE_REACT_TABLE_V8_ENABLED ? (

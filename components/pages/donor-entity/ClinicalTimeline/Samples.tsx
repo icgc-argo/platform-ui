@@ -86,7 +86,7 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
       ...column,
       ...(column.id === 'available_files'
         ? {
-            cell: ({ row, getValue }) => getAvailableFilesLink({ getValue, row }),
+            cell: ({ getValue, row }) => getAvailableFilesLink({ getValue, row }),
           }
         : {}),
     }),
