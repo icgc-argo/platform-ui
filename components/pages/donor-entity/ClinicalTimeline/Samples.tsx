@@ -31,10 +31,35 @@ import { createRef } from 'react';
 import { SampleNode } from '../types';
 import { formatTableHeader, formatTableDisplayNames, formatTableData } from './util';
 import { getConfig } from 'global/config';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import NextLink from 'next/link';
+import { Link } from '@icgc-argo/uikit';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import sqonBuilder from 'sqon-builder';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 export type SamplesTableColumns = SampleNode['node'];
+
+const getAvailableFilesLink = ({ getValue, row }) => {
+  const { donorId } = usePageQuery<{ donorId: string }>();
+  const sampleFilter = sqonBuilder
+    .has('donor_id', donorId)
+    .has('submitter_sample_id', row.original.submitter_sample_id)
+    .build();
+
+  const sampleFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
+  );
+
+  return (
+    <NextLink href={sampleFilterUrl} passHref>
+      <Link variant="INLINE">{getValue()}</Link>
+    </NextLink>
+  );
+};
 
 const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   // react table v6
@@ -57,7 +82,14 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
 
   const columnHelper = createColumnHelper<SamplesTableColumns>();
   const tableColumns: ColumnDef<SamplesTableColumns>[] = tableColumnsSetup.map((column) =>
-    columnHelper.accessor(column.id, column),
+    columnHelper.accessor(column.id, {
+      ...column,
+      ...(column.id === 'available_files'
+        ? {
+            cell: ({ row, getValue }) => getAvailableFilesLink({ getValue, row }),
+          }
+        : {}),
+    }),
   );
 
   const tableData: SamplesTableColumns[] = samples.map((sample) =>
