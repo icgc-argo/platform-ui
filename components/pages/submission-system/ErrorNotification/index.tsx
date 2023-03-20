@@ -31,6 +31,8 @@ import { ReactNode, ComponentProps, createRef } from 'react';
 
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from '../common';
 
+export type ErrorReportColumns = { header: string; id: string };
+
 const ErrorNotification = <T extends { [k: string]: any }>({
   level,
   onClearClick,
@@ -43,7 +45,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
 }: {
   level: NotificationVariant;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
-  reportColumns: { header: string; id: string }[];
+  reportColumns: ErrorReportColumns[];
   reportData: Array<T>;
   subtitle: ReactNode;
   tableComponent?: JSX.Element;
@@ -56,7 +58,7 @@ const ErrorNotification = <T extends { [k: string]: any }>({
       order: reportColumns.map((entry) => entry.id),
       fileName: `${level}_report.tsv`,
       headerDisplays: reportColumns.reduce(
-        (acc, { id, header }) => ({
+        (acc, { header, id }) => ({
           ...acc,
           [id]: header,
         }),

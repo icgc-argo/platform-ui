@@ -19,7 +19,6 @@
 
 import {
   ColumnDef,
-  createColumnHelper,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
   ReactTableCustomProps,
@@ -51,30 +50,30 @@ export const errorNotificationTableProps: ReactTableCustomProps = {
 export const getDefaultColumns = (
   level: NotificationVariant,
 ): {
-  id: keyof ErrorNotificationDefaultColumns;
+  accessorKey: keyof ErrorNotificationDefaultColumns;
   header: string;
   maxSize?: number;
 }[] => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
   return [
-    { id: 'row', header: 'Line #', maxSize: 70 },
+    { accessorKey: 'row', header: 'Line #', maxSize: 70 },
     {
-      id: 'donorId',
+      accessorKey: 'donorId',
       header: 'Submitter Donor ID',
       maxSize: 160,
     },
     {
-      id: 'field',
+      accessorKey: 'field',
       header: `Field with ${variant}`,
       maxSize: 200,
     },
     {
-      id: 'value',
+      accessorKey: 'value',
       header: `${variant} Value`,
       maxSize: 130,
     },
     {
-      id: 'message',
+      accessorKey: 'message',
       header: `${variant} Description`,
     },
   ];
@@ -87,11 +86,7 @@ const ErrorNotificationDefaultTable = ({
   data: ErrorNotificationDefaultColumns[];
   level: NotificationVariant;
 }) => {
-  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
-  const defaultColumns = getDefaultColumns(level);
-  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] = defaultColumns.map((column) =>
-    columnHelper.accessor(column.id, column),
-  );
+  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] = getDefaultColumns(level);
 
   const containerRef_legacy = createRef<HTMLDivElement>();
 
@@ -102,15 +97,22 @@ const ErrorNotificationDefaultTable = ({
       <Table
         parentRef={containerRef_legacy}
         columns={tableColumns.map(
-          ({ id, header, size }: { id: string; header: string; size: number }) => ({
+          ({
+            accessorKey,
+            header,
+            maxSize,
+          }: {
+            accessorKey: string;
+            header: string;
+            maxSize?: number;
+          }) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: id,
+            accessor: accessorKey,
             Header: header,
-            id,
-            width: size,
+            width: maxSize,
           }),
         )}
         data={data}
