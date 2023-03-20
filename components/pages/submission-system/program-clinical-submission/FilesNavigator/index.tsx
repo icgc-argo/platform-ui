@@ -21,9 +21,12 @@ import { useMutation } from '@apollo/client';
 import {
   Button,
   ContentPlaceholder,
+  createColumnHelper,
   css,
   Icon,
   NOTIFICATION_VARIANTS,
+  Table,
+  TableV8,
   Typography,
   VerticalTabs,
 } from '@icgc-argo/uikit';
@@ -32,7 +35,7 @@ import { useToaster } from 'global/hooks/toaster';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { Col } from 'react-grid-system';
 import { useClinicalSubmissionQuery } from '..';
-import ErrorNotification, { getDefaultColumns } from '../../ErrorNotification';
+import ErrorNotification from '../../ErrorNotification';
 import { useSubmissionSystemDisabled } from '../../SubmissionSystemLockedNotification';
 import CLEAR_SUBMISSION_MUTATION from '../gql/CLEAR_SUBMISSION_MUTATION';
 import {
@@ -41,6 +44,9 @@ import {
   ClinicalSubmissionQueryData,
 } from '../types';
 import FileRecordTable from './FileRecordTable';
+import ErrorNotificationDefaultTable, {
+  getDefaultColumns,
+} from '../../ErrorNotification/ErrorNotificationDefaultTable';
 
 const FilesNavigator = ({
   fileStates,
@@ -106,6 +112,9 @@ const FilesNavigator = ({
   const isSubmissionValidated = (
     ['INVALID', 'VALID', 'PENDING_APPROVAL'] as typeof submissionState[]
   ).includes(submissionState);
+
+  const errorData = selectedFile.schemaErrors.map(toDisplayError);
+
   return !selectedFile ? (
     <ContentPlaceholder
       css={css`
@@ -173,14 +182,20 @@ const FilesNavigator = ({
             <ErrorNotification
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}
-              title={`${
-                selectedFile.schemaErrors.length
-              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
-              errors={selectedFile.schemaErrors.map(toDisplayError)}
+              reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              reportData={errorData}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'
               }
-              columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              tableComponent={
+                <ErrorNotificationDefaultTable
+                  data={errorData}
+                  level={NOTIFICATION_VARIANTS.ERROR}
+                />
+              }
+              title={`${
+                selectedFile.schemaErrors.length
+              } error(s) found in uploaded ${selectedFile.displayName.toLowerCase()} file`}
             />
           </div>
         ) : !!selectedFile.records.length ? (
