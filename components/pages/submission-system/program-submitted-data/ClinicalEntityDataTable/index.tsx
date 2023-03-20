@@ -21,7 +21,6 @@ import { useQuery } from '@apollo/client';
 import {
   ColumnDef,
   ContentPlaceholder,
-  createColumnHelper,
   css,
   DnaLoader,
   Icon,
