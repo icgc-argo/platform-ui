@@ -19,7 +19,6 @@
 
 import {
   ColumnDef,
-  createColumnHelper,
   css,
   Table,
   TableColumnConfig,
@@ -73,24 +72,17 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumnsSetup = !!samples.length
+  const tableColumns: ColumnDef<SamplesTableColumns>[] = !!samples.length
     ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableColumns) => ({
-        id: sampleKey,
+        accessorKey: sampleKey,
         header: () => formatTableHeader(sampleKey),
+        ...(sampleKey === 'available_files'
+          ? {
+              cell: ({ getValue, row }) => getAvailableFilesLink({ getValue, row }),
+            }
+          : {}),
       }))
     : [];
-
-  const columnHelper = createColumnHelper<SamplesTableColumns>();
-  const tableColumns: ColumnDef<SamplesTableColumns>[] = tableColumnsSetup.map((column) =>
-    columnHelper.accessor(column.id, {
-      ...column,
-      ...(column.id === 'available_files'
-        ? {
-            cell: ({ getValue, row }) => getAvailableFilesLink({ getValue, row }),
-          }
-        : {}),
-    }),
-  );
 
   const tableData: SamplesTableColumns[] = samples.map((sample) =>
     Object.entries(sample).reduce<SamplesTableColumns>(

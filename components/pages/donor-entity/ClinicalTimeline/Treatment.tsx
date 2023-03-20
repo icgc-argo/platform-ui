@@ -1,4 +1,4 @@
-import { ColumnDef, createColumnHelper, css, Table, TableV8, Typography } from '@icgc-argo/uikit';
+import { ColumnDef, css, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { getConfig } from 'global/config';
 
@@ -27,15 +27,10 @@ const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumnsSetup = Object.keys(tableData[0]).map(
+  const tableColumns: ColumnDef<TreatmentTableColumns>[] = Object.keys(tableData[0]).map(
     (treatmentKey: keyof TreatmentTableColumns) => ({
-      header: () => treatmentKey,
-      id: treatmentKey,
+      accessorKey: treatmentKey,
     }),
-  );
-  const columnHelper = createColumnHelper<TreatmentTableColumns>();
-  const tableColumns: ColumnDef<TreatmentTableColumns>[] = tableColumnsSetup.map((column) =>
-    columnHelper.accessor(column.id, column),
   );
 
   return (
