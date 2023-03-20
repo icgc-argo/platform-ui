@@ -498,7 +498,9 @@ const ClinicalEntityDataTable = ({
       );
 
     const errorState =
-      (isCompletionCell && original[id] === 0) ||
+      // Completion Stats === 1 indicates Complete
+      // 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
+      (isCompletionCell && original[id] < 1) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;
 
@@ -588,8 +590,8 @@ const ClinicalEntityDataTable = ({
                   For clinical completeness, each donor requires: <br />
                   DO: at least one Donor record <br />
                   PD: at least one Primary Diagnosis record <br />
-                  NS: at least one Normal DNA Specimen record <br />
-                  TS: at least one Tumour DNA Specimen record <br />
+                  NS: all the registered Normal DNA Specimen record <br />
+                  TS: all the registered Tumour DNA Specimen record <br />
                   TR: at least one Treatment record <br />
                   FO: at least one Follow Up record <br />
                 </p>
