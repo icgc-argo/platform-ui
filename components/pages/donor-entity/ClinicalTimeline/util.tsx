@@ -24,6 +24,7 @@ import { chunk, isEmpty } from 'lodash';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
+import { SamplesTableColumns } from './Samples';
 
 type TableDataValue = string | number | React.ReactNode;
 
@@ -262,7 +263,16 @@ export const formatTimelineEntityData = (donorData) => {
     },
   )[0];
 
-  const specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
+  type Specimens = {
+    id: string;
+    description: string;
+    type: string;
+    interval: string;
+    data: AliasedDisplayData;
+    samples: SamplesTableColumns;
+  };
+
+  const specimens: Specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
 
     const aliasedKeys = [
@@ -277,7 +287,7 @@ export const formatTimelineEntityData = (donorData) => {
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
 
-    const samples = node.samples.hits.edges.map((sample) => {
+    const samplesUtil = node.samples.hits.edges.map((sample) => {
       const { donorId } = usePageQuery<{ donorId: string }>();
       const sampleFilter = sqonBuilder
         .has('donor_id', donorId)
@@ -296,6 +306,8 @@ export const formatTimelineEntityData = (donorData) => {
       );
       return { ...sample.node, available_files };
     });
+
+    const samples = node.samples.hits.edges.map((sample) => sample.node);
 
     return {
       id: `SPECIMEN ${node.submitter_specimen_id}`,

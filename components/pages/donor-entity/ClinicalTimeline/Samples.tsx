@@ -18,6 +18,8 @@
  */
 
 import {
+  ColumnDef,
+  createColumnHelper,
   css,
   Table,
   TableColumnConfig,
@@ -32,7 +34,9 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-const Samples = ({ samples }: { samples: SampleNode[] }) => {
+export type SamplesTableColumns = SampleNode['node'];
+
+const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   // react table v6
   const tableData_legacy: TableDataBase = formatTableDisplayNames(samples);
   const tableColumns_legacy: TableColumnConfig<TableDataBase>[] = Object.keys(tableData_legacy).map(
@@ -44,21 +48,25 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumns = !!samples.length
-    ? Object.keys(samples[0]).map((sampleKey) => ({
-        accessorKey: sampleKey,
-        header: () => formatTableHeader(sampleKey),
+  const tableColumnsSetup = !!samples.length
+    ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableColumns) => ({
         id: sampleKey,
+        header: () => formatTableHeader(sampleKey),
       }))
     : [];
 
-  const tableData = samples.map((sample) =>
-    Object.entries(sample).reduce(
+  const columnHelper = createColumnHelper<SamplesTableColumns>();
+  const tableColumns: ColumnDef<SamplesTableColumns>[] = tableColumnsSetup.map((column) =>
+    columnHelper.accessor(column.id, column),
+  );
+
+  const tableData: SamplesTableColumns[] = samples.map((sample) =>
+    Object.entries(sample).reduce<SamplesTableColumns>(
       (acc, [key, value]) => ({
         ...acc,
         ...formatTableData(key, value),
       }),
-      {},
+      {} as SamplesTableColumns,
     ),
   );
 
