@@ -17,7 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, InteractiveIcon, MailTo, Table, TableColumnConfig, TableV8 } from '@icgc-argo/uikit';
+import {
+  ColumnDef,
+  css,
+  InteractiveIcon,
+  MailTo,
+  Table,
+  TableColumnConfig,
+  TableV8,
+} from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { displayDate } from 'global/utils/common';
 import { createRef } from 'react';
@@ -160,7 +168,7 @@ const UsersTable = (tableProps: {
   const containerRef = createRef<HTMLDivElement>();
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<UsersTableUser>[] = [
     {
       header: 'Name',
       accessorKey: 'firstName',
@@ -181,7 +189,6 @@ const UsersTable = (tableProps: {
       header: 'Daco Approved',
       accessorKey: 'isDacoApproved',
       cell: ({ row: { original } }) => (original.isDacoApproved ? 'Yes' : 'No'),
-      headerStyle: { wordWrap: 'break-word', whiteSpace: 'pre-line' },
     },
     {
       header: 'Status',
@@ -198,7 +205,7 @@ const UsersTable = (tableProps: {
     {
       header: 'Actions',
       enableSorting: false,
-      width: 125,
+      size: 125,
       cell: ({ row: { original } }) => (
         <div
           css={css`
