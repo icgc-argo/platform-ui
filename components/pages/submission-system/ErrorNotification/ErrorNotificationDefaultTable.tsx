@@ -47,7 +47,7 @@ export const errorNotificationTableProps: ReactTableCustomProps = {
   withStripes: true,
 };
 
-export const getDefaultColumns = (
+export const getDefaultErrorTableColumns = (
   level: NotificationVariant,
 ): {
   accessorKey: keyof ErrorNotificationDefaultColumns;
@@ -79,6 +79,12 @@ export const getDefaultColumns = (
   ];
 };
 
+export const getDefaultErrorReportColumns = (level: NotificationVariant) =>
+  getDefaultErrorTableColumns(level).map(({ accessorKey, header }) => ({
+    id: accessorKey,
+    header,
+  }));
+
 const ErrorNotificationDefaultTable = ({
   data,
   level,
@@ -86,7 +92,8 @@ const ErrorNotificationDefaultTable = ({
   data: ErrorNotificationDefaultColumns[];
   level: NotificationVariant;
 }) => {
-  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] = getDefaultColumns(level);
+  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] =
+    getDefaultErrorTableColumns(level);
 
   const containerRef_legacy = createRef<HTMLDivElement>();
 

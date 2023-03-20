@@ -55,7 +55,7 @@ import ErrorNotification, { ErrorReportColumns } from '../ErrorNotification';
 import {
   ErrorNotificationDefaultColumns,
   errorNotificationTableProps,
-  getDefaultColumns,
+  getDefaultErrorTableColumns,
 } from '../ErrorNotification/ErrorNotificationDefaultTable';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
@@ -170,7 +170,7 @@ const getErrorColumns = (
   errorTableColumns: ColumnDef<ErrorTableColumns>[];
 } => {
   const errorTableColumns: ErrorTableProperties[] = [
-    ...getDefaultColumns(level),
+    ...getDefaultErrorTableColumns(level),
     {
       accessorKey: 'fileName',
       header: 'File',
