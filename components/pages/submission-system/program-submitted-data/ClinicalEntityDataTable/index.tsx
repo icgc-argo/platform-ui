@@ -37,7 +37,7 @@ import {
 import memoize from 'lodash/memoize';
 
 import { TableInfoHeaderContainer } from '../../common';
-import ErrorNotification from '../../ErrorNotification';
+import ErrorNotification, { ErrorReportColumns } from '../../ErrorNotification';
 import {
   aliasedEntityFields,
   aliasedEntityNames,
@@ -75,22 +75,30 @@ type ErrorTableColumns = {
   fieldName: string;
 };
 
-const reportColumns: {
+type ErrorTableProperties = {
+  accessorKey: keyof ErrorTableColumns;
   header: string;
-  id: keyof ErrorTableColumns;
   maxSize?: number;
-}[] = [
-  { id: 'entries', header: '# Affected Records', maxSize: 135 },
-  { id: 'fieldName', header: `Field with Error`, maxSize: 215 },
-  { id: 'errorMessage', header: `Error Description` },
-];
+};
 
-const getErrorTableColumns = () => {
-  const columnHelper = createColumnHelper<ErrorTableColumns>();
-  const columns: ColumnDef<ErrorTableColumns>[] = reportColumns.map((column) =>
-    columnHelper.accessor(column.id, column),
+const getErrorColumns = (): {
+  errorReportColumns: ErrorReportColumns[];
+  errorTableColumns: ColumnDef<ErrorTableColumns>[];
+} => {
+  const errorTableColumns: ErrorTableProperties[] = [
+    { accessorKey: 'entries', header: '# Affected Records', maxSize: 135 },
+    { accessorKey: 'fieldName', header: `Field with Error`, maxSize: 215 },
+    { accessorKey: 'errorMessage', header: `Error Description` },
+  ];
+
+  const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+    ({ accessorKey, header }) => ({
+      header,
+      id: accessorKey,
+    }),
   );
-  return columns;
+
+  return { errorReportColumns, errorTableColumns };
 };
 
 const NoDataCell = () => (
@@ -633,6 +641,8 @@ const ClinicalEntityDataTable = ({
   const numTablePages = Math.ceil(totalDocs / pageSize);
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
+  const { errorReportColumns, errorTableColumns } = getErrorColumns();
+
   return loading ? (
     <DnaLoader
       css={css`
@@ -661,11 +671,11 @@ const ClinicalEntityDataTable = ({
             level={NOTIFICATION_VARIANTS.ERROR}
             subtitle={<Subtitle program={program} />}
             reportData={errorData}
-            reportColumns={reportColumns}
+            reportColumns={errorReportColumns}
             tableComponent={
               <TableV8
                 {...errorNotificationTableProps}
-                columns={getErrorTableColumns()}
+                columns={errorTableColumns}
                 data={errorData}
               />
             }

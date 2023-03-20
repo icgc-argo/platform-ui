@@ -21,7 +21,6 @@ import { useMutation } from '@apollo/client';
 import {
   ColumnDef,
   Container,
-  createColumnHelper,
   css,
   DnaLoader,
   Notification,

@@ -21,12 +21,9 @@ import { useMutation } from '@apollo/client';
 import {
   Button,
   ContentPlaceholder,
-  createColumnHelper,
   css,
   Icon,
   NOTIFICATION_VARIANTS,
-  Table,
-  TableV8,
   Typography,
   VerticalTabs,
 } from '@icgc-argo/uikit';
