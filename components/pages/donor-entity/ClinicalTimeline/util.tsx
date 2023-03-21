@@ -17,14 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Link, UikitTheme } from '@icgc-argo/uikit';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import { usePageQuery } from 'global/hooks/usePageContext';
+import { UikitTheme } from '@icgc-argo/uikit';
 import { chunk, isEmpty } from 'lodash';
-import sqonBuilder from 'sqon-builder';
-import urlJoin from 'url-join';
-import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
-import { SamplesTableColumns } from './Samples';
+import { DiagnosisNode, EntityType, SpecimenNode, Specimens } from '../types';
 
 type TableDataValue = string | number | React.ReactNode;
 
@@ -168,7 +163,7 @@ const donorCentricDisplayNames = {
   workflow_names: 'Workflow Names',
 };
 
-type AliasedDisplayData = {
+export type AliasedDisplayData = {
   [K in keyof typeof donorCentricDisplayNames]?: any;
 };
 
@@ -263,15 +258,6 @@ export const formatTimelineEntityData = (donorData) => {
     },
   )[0];
 
-  type Specimens = {
-    id: string;
-    description: string;
-    type: string;
-    interval: string;
-    data: AliasedDisplayData;
-    samples: SamplesTableColumns;
-  };
-
   const specimens: Specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
 
@@ -286,26 +272,6 @@ export const formatTimelineEntityData = (donorData) => {
 
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
-
-    const samplesUtil = node.samples.hits.edges.map((sample) => {
-      const { donorId } = usePageQuery<{ donorId: string }>();
-      const sampleFilter = sqonBuilder
-        .has('donor_id', donorId)
-        .has('submitter_sample_id', sample.node['submitter_sample_id'])
-        .build();
-
-      const sampleFilterUrl = urlJoin(
-        FILE_REPOSITORY_PATH,
-        `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
-      );
-
-      const available_files = (
-        <Link variant="INLINE" href={sampleFilterUrl}>
-          {sample.node['available_files']}
-        </Link>
-      );
-      return { ...sample.node, available_files };
-    });
 
     const samples = node.samples.hits.edges.map((sample) => sample.node);
 

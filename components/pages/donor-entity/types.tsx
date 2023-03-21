@@ -18,6 +18,8 @@
  */
 
 import { Associations, FileRecord } from '../file-entity/types';
+import { SamplesTableColumns } from './ClinicalTimeline/Samples';
+import { AliasedDisplayData } from './ClinicalTimeline/util';
 
 export interface DonorCentricRecord {
   donor_id: string;
@@ -267,3 +269,12 @@ export type Entity = {
 };
 
 export interface DonorEntityData extends Entity {}
+
+export type Specimens = {
+  id: string;
+  description: string;
+  type: string;
+  interval: string;
+  data: AliasedDisplayData;
+  samples: SamplesTableColumns;
+};
