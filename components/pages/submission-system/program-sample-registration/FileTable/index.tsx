@@ -152,7 +152,7 @@ const FileTable = (props: {
       ),
       header: 'Line #',
       accessorKey: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      minSize: 90,
+      size: 90,
     },
     {
       cell: ({ row: { original } }) => (
