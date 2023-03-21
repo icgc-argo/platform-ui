@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Link, Table, TableV8, Typography } from '@icgc-argo/uikit';
+import { ColumnDef, css, Icon, Link, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -97,18 +97,22 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     : baseColumns;
 
   // react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<T_ProgramTableProgram>[] = [
     {
       accessorKey: 'shortName',
-      cell: ({ getValue }) => (
+      cell: ({
+        row: {
+          original: { shortName },
+        },
+      }) => (
         <NextLink
           href={
             !isDccMember(permissions)
               ? PROGRAMS_LIST_PATH
-              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, getValue())
+              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName)
           }
         >
-          <Link>{getValue()}</Link>
+          <Link>{shortName}</Link>
         </NextLink>
       ),
       header: () => 'Program Name',
