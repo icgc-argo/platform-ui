@@ -19,9 +19,14 @@
 
 import { UikitTheme } from '@icgc-argo/uikit';
 import { chunk, isEmpty } from 'lodash';
-import { DiagnosisNode, EntityType, SpecimenNode, Specimens } from '../types';
-
-type TableDataValue = string | number | React.ReactNode;
+import {
+  AliasedDisplayData,
+  DiagnosisNode,
+  EntityType,
+  SpecimenNode,
+  Specimens,
+  TableDataValue,
+} from '../types';
 
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
@@ -82,7 +87,7 @@ export const splitIntoColumns = (
   }
 };
 
-const donorCentricDisplayNames = {
+export const donorCentricDisplayNames = {
   age_at_diagnosis: 'Age at Diagnosis',
   age_at_menarche: 'Age at Menarche',
   available_files: 'Available Files',
@@ -161,10 +166,6 @@ const donorCentricDisplayNames = {
   weight: 'Weight',
   weight_at_followup: 'Weight at Followup',
   workflow_names: 'Workflow Names',
-};
-
-export type AliasedDisplayData = {
-  [K in keyof typeof donorCentricDisplayNames]?: any;
 };
 
 // format for display

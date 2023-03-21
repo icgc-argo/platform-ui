@@ -19,7 +19,7 @@
 
 import { Associations, FileRecord } from '../file-entity/types';
 import { SamplesTableColumns } from './ClinicalTimeline/Samples';
-import { AliasedDisplayData } from './ClinicalTimeline/util';
+import { donorCentricDisplayNames } from './ClinicalTimeline/util';
 
 export interface DonorCentricRecord {
   donor_id: string;
@@ -270,6 +270,10 @@ export type Entity = {
 
 export interface DonorEntityData extends Entity {}
 
+export type AliasedDisplayData = {
+  [K in keyof typeof donorCentricDisplayNames]?: any;
+};
+
 export type Specimens = {
   id: string;
   description: string;
@@ -278,3 +282,5 @@ export type Specimens = {
   data: AliasedDisplayData;
   samples: SamplesTableColumns;
 };
+
+export type TableDataValue = string | number | React.ReactNode;

@@ -35,10 +35,6 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-type TableColumns = {
-  id: ReactElement;
-};
-
 const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> = ({
   name,
   link,
@@ -121,7 +117,7 @@ const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> 
 const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
   const theme = useTheme();
 
-  const tableColumns: ColumnDef<TableColumns>[] = [
+  const tableColumns: ColumnDef<{ id: ReactElement }>[] = [
     {
       accessorKey: 'id',
       id: 'id',
