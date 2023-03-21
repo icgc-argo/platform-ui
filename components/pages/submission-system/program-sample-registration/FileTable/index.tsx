@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Table, TableV8 } from '@icgc-argo/uikit';
+import { ColumnDef, css, Icon, Table, TableV8 } from '@icgc-argo/uikit';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
@@ -145,14 +145,14 @@ const FileTable = (props: {
   ];
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<FileEntry>[] = [
     {
       cell: ({ row: { original } }) => (
         <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
       ),
       header: 'Line #',
-      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      size: 90,
+      accessorKey: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      minSize: 90,
     },
     {
       cell: ({ row: { original } }) => (
@@ -169,7 +169,7 @@ const FileTable = (props: {
           <StarIcon fill="grey_1" />
         </div>
       ),
-      id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+      accessorKey: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
       size: 48,
     },
     ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
