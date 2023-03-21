@@ -18,6 +18,7 @@
  */
 
 import {
+  ColumnDef,
   css,
   Table,
   TableCellWrapper,
@@ -33,14 +34,19 @@ import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';
 import { getConfig } from 'global/config';
 
+type Entry_legacy = {
+  [k: string]: number | JSX.Element;
+};
+
+type SubmissionSummaryStatus = {
+  submissionSummaryStatus: string;
+};
+
+type SubmissionSummaryColumns = GqlClinicalSubmissionData & SubmissionSummaryStatus;
+
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
-  errorsFound: [],
-  new: [],
-  noUpdate: [],
-  updated: [],
-};
+const FIRST_COLUMN_ACCESSOR = 'submissionSummaryStatus';
 
 const SubmissionSummaryTable = ({
   clinicalSubmissions,
@@ -49,48 +55,26 @@ const SubmissionSummaryTable = ({
 }) => {
   const theme = useTheme();
 
-  const FIRST_COLUMN_ACCESSOR = '__';
+  const newDataRow: SubmissionSummaryColumns = clinicalSubmissions.clinicalEntities.reduce(
+    (acc, entity) => ({
+      ...acc,
+      [entity.clinicalType]: String(entity.stats?.new?.length || 0),
+    }),
+    { [FIRST_COLUMN_ACCESSOR]: 'New' } as SubmissionSummaryColumns,
+  );
 
-  type Entry = {
-    [k: string]: number | JSX.Element;
-  };
+  const updatedDataRow: SubmissionSummaryColumns = clinicalSubmissions.clinicalEntities.reduce(
+    (acc, entity) => ({
+      ...acc,
+      [entity.clinicalType]: String(entity.stats?.updated?.length || 0),
+    }),
+    { [FIRST_COLUMN_ACCESSOR]: 'Updated' } as SubmissionSummaryColumns,
+  );
 
-  const newDataRow: Entry = {
-    [FIRST_COLUMN_ACCESSOR]: (
-      <>
-        <StatArea.StarIcon fill={FILE_STATE_COLORS.NEW} />
-        New
-      </>
-    ),
-    ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
-      (acc, entity) => ({
-        ...acc,
-        [entity.clinicalType]: String((entity.stats || defaultStats).new.length),
-      }),
-      {},
-    ),
-  };
-
-  const updatedDataRow: Entry = {
-    [FIRST_COLUMN_ACCESSOR]: (
-      <>
-        <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-        &nbsp;Updated
-      </>
-    ),
-    ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
-      (acc, entity) => ({
-        ...acc,
-        [entity.clinicalType]: String((entity.stats || defaultStats).updated.length),
-      }),
-      {},
-    ),
-  };
-
-  const tableData = [newDataRow, updatedDataRow];
+  const tableData: SubmissionSummaryColumns[] = [newDataRow, updatedDataRow];
 
   // for react table v6
-  const tableColumns_legacy: TableColumnConfig<Entry>[] = [
+  const tableColumns_legacy: TableColumnConfig<Entry_legacy>[] = [
     // this is the first column
     {
       accessor: FIRST_COLUMN_ACCESSOR,
@@ -104,20 +88,24 @@ const SubmissionSummaryTable = ({
   const containerRef = createRef<HTMLDivElement>();
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<SubmissionSummaryColumns>[] = [
     {
       header: '',
       accessorKey: FIRST_COLUMN_ACCESSOR,
       size: 100,
-      cell: ({ cell, row }) => (
-        <TableCellWrapper
-          css={css`
-            background: ${row.index ? theme.colors.accent3_3 : theme.colors.accent2_4};
-          `}
-        >
-          {cell.getValue()}
-        </TableCellWrapper>
-      ),
+      cell: ({ row: { index, original } }) => {
+        const cellValue = original[FIRST_COLUMN_ACCESSOR];
+        return (
+          <TableCellWrapper
+            css={css`
+              background: ${index ? theme.colors.accent3_3 : theme.colors.accent2_4};
+            `}
+          >
+            <StatArea.StarIcon fill={FILE_STATE_COLORS[cellValue.toUpperCase()]} />
+            &nbsp;{cellValue}
+          </TableCellWrapper>
+        );
+      },
       meta: {
         customCell: true,
       },

@@ -32,6 +32,13 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
+type TableColumns = {
+  donors: number;
+  files: number;
+  lastUpdate?: string;
+  shortName: string;
+};
+
 // for react table v6
 const tableColumns_legacy = [
   {
@@ -67,13 +74,6 @@ const tableColumns_legacy = [
     Cell: ({ original }) => <SyncIndexButton program={original.shortName} />,
   },
 ];
-
-type TableColumns = {
-  donors: number;
-  files: number;
-  lastUpdate?: string;
-  shortName: string;
-};
 
 // for react table v8
 const tableColumns: ColumnDef<TableColumns>[] = [

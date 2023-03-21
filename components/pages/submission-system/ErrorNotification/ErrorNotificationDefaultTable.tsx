@@ -81,8 +81,8 @@ export const getDefaultErrorTableColumns = (
 
 export const getDefaultErrorReportColumns = (level: NotificationVariant) =>
   getDefaultErrorTableColumns(level).map(({ accessorKey, header }) => ({
-    id: accessorKey,
     header,
+    id: accessorKey,
   }));
 
 const ErrorNotificationDefaultTable = ({
