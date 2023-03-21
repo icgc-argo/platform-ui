@@ -73,7 +73,7 @@ const UsersTable = (tableProps: {
     tableProps.isOnlyOneAdminLeft && user.role === 'ADMIN';
 
   // for react table v6
-  const tableColumns_legacy: Array<TableColumnConfig<UsersTableUser>> = [
+  const tableColumns_tableV6: Array<TableColumnConfig<UsersTableUser>> = [
     {
       Header: 'Name',
       accessor: 'firstName',
@@ -283,7 +283,7 @@ const UsersTable = (tableProps: {
           parentRef={containerRef}
           data={tableProps.users}
           loading={tableProps.loading}
-          columns={tableColumns_legacy}
+          columns={tableColumns_tableV6}
           pageSize={Number.MAX_SAFE_INTEGER}
           showPagination={false}
           style={{ maxHeight: '500px' }}

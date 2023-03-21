@@ -34,7 +34,7 @@ import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalSubmissionData } from './types';
 import { getConfig } from 'global/config';
 
-type Entry_legacy = {
+type Entry_tableV6 = {
   [k: string]: number | JSX.Element;
 };
 
@@ -74,7 +74,7 @@ const SubmissionSummaryTable = ({
   const tableData: SubmissionSummaryColumns[] = [newDataRow, updatedDataRow];
 
   // for react table v6
-  const tableColumns_legacy: TableColumnConfig<Entry_legacy>[] = [
+  const tableColumns_tableV6: TableColumnConfig<Entry_tableV6>[] = [
     // this is the first column
     {
       accessor: FIRST_COLUMN_ACCESSOR,
@@ -159,7 +159,7 @@ const SubmissionSummaryTable = ({
               } as CSSProperties,
             };
           }}
-          columns={tableColumns_legacy}
+          columns={tableColumns_tableV6}
           data={tableData}
           resizable
         />

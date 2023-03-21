@@ -62,13 +62,13 @@ const getAvailableFilesLink = ({ getValue, row }) => {
 
 const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   // react table v6
-  const tableData_legacy: TableDataBase = formatTableDisplayNames(samples);
-  const tableColumns_legacy: TableColumnConfig<TableDataBase>[] = Object.keys(tableData_legacy).map(
-    (key) => ({
-      Header: key,
-      Cell: tableData_legacy[key],
-    }),
-  );
+  const tableData_tableV6: TableDataBase = formatTableDisplayNames(samples);
+  const tableColumns_tableV6: TableColumnConfig<TableDataBase>[] = Object.keys(
+    tableData_tableV6,
+  ).map((key) => ({
+    Header: key,
+    Cell: tableData_tableV6[key],
+  }));
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
@@ -123,7 +123,7 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
         ) : (
           <Table
             parentRef={containerRef}
-            columns={tableColumns_legacy}
+            columns={tableColumns_tableV6}
             data={samples}
             withOutsideBorder
             stripped

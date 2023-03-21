@@ -84,7 +84,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     { Header: 'Permissions', accessor: 'permissions' },
   ];
 
-  const tableColumns_legacy = !isDccMember(permissions)
+  const tableColumns_tableV6 = !isDccMember(permissions)
     ? [
         ...baseColumns.slice(0, 1),
         {
@@ -161,7 +161,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           sortable={false}
           showPagination={false}
           data={props.programs}
-          columns={tableColumns_legacy}
+          columns={tableColumns_tableV6}
           getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
         />
       )}

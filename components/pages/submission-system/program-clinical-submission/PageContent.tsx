@@ -480,14 +480,14 @@ const PageContent = () => {
   const errorData = allDataErrors.map(toDisplayError);
   const warningData = allDataWarnings.map(toDisplayError);
 
-  const containerRef_legacy = createRef<HTMLDivElement>();
+  const containerRef_tableV6 = createRef<HTMLDivElement>();
 
   const ErrorTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={errorTableColumns} data={errorData} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_legacy}>
+    <div ref={containerRef_tableV6}>
       <Table
-        parentRef={containerRef_legacy}
+        parentRef={containerRef_tableV6}
         columns={errorTableColumns.map(
           ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {
@@ -507,9 +507,9 @@ const PageContent = () => {
   const WarningTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={warningTableColumns} data={warningData} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_legacy}>
+    <div ref={containerRef_tableV6}>
       <Table
-        parentRef={containerRef_legacy}
+        parentRef={containerRef_tableV6}
         columns={warningTableColumns.map(
           ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {

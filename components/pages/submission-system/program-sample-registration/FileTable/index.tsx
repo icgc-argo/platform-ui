@@ -108,7 +108,7 @@ const FileTable = (props: {
   const containerRef = createRef<HTMLDivElement>();
 
   // for react table v6
-  const tableColumns_legacy = [
+  const tableColumns_tableV6 = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       Cell: ({ original }) => (
@@ -205,7 +205,7 @@ const FileTable = (props: {
           parentRef={containerRef}
           showPagination={false}
           pageSize={Number.MAX_SAFE_INTEGER}
-          columns={tableColumns_legacy}
+          columns={tableColumns_tableV6}
           data={tableData}
         />
       )}

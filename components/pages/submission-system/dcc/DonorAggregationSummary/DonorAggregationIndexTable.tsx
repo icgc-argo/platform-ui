@@ -40,7 +40,7 @@ type TableColumns = {
 };
 
 // for react table v6
-const tableColumns_legacy = [
+const tableColumns_tableV6 = [
   {
     Header: 'Program',
     accessor: 'shortName',
@@ -165,7 +165,7 @@ const DonorAggregationIndexTable = ({
           showPagination={false}
           withOutsideBorder
           data={tableData}
-          columns={tableColumns_legacy}
+          columns={tableColumns_tableV6}
           pageSize={programs.length}
           defaultSorted={[{ id: 'shortName', desc: false }]}
         />
