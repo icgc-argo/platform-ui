@@ -86,7 +86,7 @@ type ErrorTableColumns = ErrorNotificationDefaultColumns & {
   fileName: string;
 };
 
-type ErrorTableProperties = {
+export type ErrorTableColumnProperties = {
   accessorKey: keyof ErrorTableColumns;
   header: string;
   maxSize?: number;
@@ -168,7 +168,7 @@ const getErrorColumns = (
   errorReportColumns: ErrorReportColumns[];
   errorTableColumns: ColumnDef<ErrorTableColumns>[];
 } => {
-  const errorTableColumns: ErrorTableProperties[] = [
+  const errorTableColumns: ErrorTableColumnProperties[] = [
     ...getDefaultErrorTableColumns(level),
     {
       accessorKey: 'fileName',
@@ -489,7 +489,7 @@ const PageContent = () => {
       <Table
         parentRef={containerRef_legacy}
         columns={errorTableColumns.map(
-          ({ accessorKey, header, maxSize }: ErrorTableProperties) => ({
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {
               whiteSpace: 'pre-line',
             },
@@ -511,7 +511,7 @@ const PageContent = () => {
       <Table
         parentRef={containerRef_legacy}
         columns={warningTableColumns.map(
-          ({ accessorKey, header, maxSize }: ErrorTableProperties) => ({
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {
               whiteSpace: 'pre-line',
             },

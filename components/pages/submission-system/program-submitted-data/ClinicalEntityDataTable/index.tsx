@@ -74,7 +74,7 @@ type ErrorTableColumns = {
   fieldName: string;
 };
 
-type ErrorTableProperties = {
+type ErrorTableColumnProperties = {
   accessorKey: keyof ErrorTableColumns;
   header: string;
   maxSize?: number;
@@ -84,7 +84,7 @@ const getErrorColumns = (): {
   errorReportColumns: ErrorReportColumns[];
   errorTableColumns: ColumnDef<ErrorTableColumns>[];
 } => {
-  const errorTableColumns: ErrorTableProperties[] = [
+  const errorTableColumns: ErrorTableColumnProperties[] = [
     { accessorKey: 'entries', header: '# Affected Records', maxSize: 135 },
     { accessorKey: 'fieldName', header: `Field with Error`, maxSize: 215 },
     { accessorKey: 'errorMessage', header: `Error Description` },

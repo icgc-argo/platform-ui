@@ -72,7 +72,7 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumns: ColumnDef<SamplesTableColumns>[] = !!samples.length
+  const tableColumns: ColumnDef<SamplesTableColumns>[] = samples.length
     ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableColumns) => ({
         accessorKey: sampleKey,
         header: () => formatTableHeader(sampleKey),
