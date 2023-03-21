@@ -18,6 +18,7 @@
  */
 
 import {
+  ColumnDef,
   css,
   InteractiveIcon,
   Link,
@@ -233,7 +234,7 @@ export default function ProgramsTable(tableProps: {
   ];
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<TableProgramInternal>[] = [
     {
       header: 'Short Name',
       accessorKey: 'shortName',
