@@ -115,7 +115,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           <Link>{shortName}</Link>
         </NextLink>
       ),
-      header: () => 'Program Name',
+      header: 'Program Name',
       id: 'shortName',
       size: 150,
     },
@@ -125,16 +125,16 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           {
             accessorKey: 'membershipType',
             cell: ({ renderValue }) => capitalize(renderValue()),
-            header: () => 'Membership Type',
+            header: 'Membership Type',
           },
         ]),
     {
       accessorKey: 'role',
-      header: () => 'Role',
+      header: 'Role',
       id: 'role',
       size: 170,
     },
-    { accessorKey: 'permissions', header: () => 'Permissions', id: 'permissions' },
+    { accessorKey: 'permissions', header: 'Permissions', id: 'permissions' },
   ];
 
   return (
