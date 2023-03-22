@@ -41,7 +41,7 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-type T_ProgramTableProgram = {
+type ProgramTableProgram = {
   shortName: string;
   role: string;
   permissions: string;
@@ -55,10 +55,10 @@ interface Column {
   Cell?: any;
 }
 
-const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
+const ProgramTable = (props: { programs: Array<ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
 
-  const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
+  const ProgramNameCell = ({ original }: { original: ProgramTableProgram }) => (
     <NextLink
       href={
         isDccMember(permissions)
@@ -97,7 +97,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     : baseColumns;
 
   // react table v8
-  const tableColumns: ColumnDef<T_ProgramTableProgram>[] = [
+  const tableColumns: ColumnDef<ProgramTableProgram>[] = [
     {
       accessorKey: 'shortName',
       cell: ({
@@ -192,7 +192,7 @@ const MEMBERSHIP_DISPLAY_NAME = {
 const getProgramTableProgramFromEgoJwt = (
   permissions: string[],
   readablePrograms,
-): T_ProgramTableProgram[] => {
+): ProgramTableProgram[] => {
   if (isDccMember(permissions)) {
     return [
       {
