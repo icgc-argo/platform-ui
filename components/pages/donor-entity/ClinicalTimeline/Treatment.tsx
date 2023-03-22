@@ -20,7 +20,7 @@ const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
   const { treatment_type, data: tableData } = treatment;
 
   // react table v6
-  const tableColumns_tableV6 = Object.keys(tableData[0]).map((k) => ({
+  const tableColumnsTableV6 = Object.keys(tableData[0]).map((k) => ({
     Header: k,
     accessor: k,
   }));
@@ -61,7 +61,7 @@ const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
         ) : (
           <Table
             parentRef={containerRef}
-            columns={tableColumns_tableV6}
+            columns={tableColumnsTableV6}
             data={tableData}
             withOutsideBorder
             stripped

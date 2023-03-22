@@ -95,14 +95,14 @@ const ErrorNotificationDefaultTable = ({
   const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] =
     getDefaultErrorTableColumns(level);
 
-  const containerRef_tableV6 = createRef<HTMLDivElement>();
+  const containerRefTableV6 = createRef<HTMLDivElement>();
 
   return FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={tableColumns} data={data} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_tableV6}>
+    <div ref={containerRefTableV6}>
       <Table
-        parentRef={containerRef_tableV6}
+        parentRef={containerRefTableV6}
         columns={tableColumns.map(
           ({
             accessorKey,
