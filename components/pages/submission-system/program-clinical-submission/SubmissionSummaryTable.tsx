@@ -31,11 +31,7 @@ import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
-import {
-  GqlClinicalSubmissionData,
-  GqlClinicalEntityClinicalType,
-  GqlClinicalEntity,
-} from './types';
+import { GqlClinicalEntityClinicalType, GqlClinicalEntity } from './types';
 import { getConfig } from 'global/config';
 
 type EntryTableV6 = {
@@ -46,7 +42,11 @@ type SubmissionSummaryStatus = {
   submissionSummaryStatus: string;
 };
 
-type SubmissionSummaryColumns = GqlClinicalSubmissionData & SubmissionSummaryStatus;
+type SubmissionSummaryColumns = Partial<
+  SubmissionSummaryStatus & {
+    [k in GqlClinicalEntityClinicalType]: string;
+  }
+>;
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
@@ -59,20 +59,20 @@ const SubmissionSummaryTable = ({
 }) => {
   const theme = useTheme();
 
-  const newDataRow: SubmissionSummaryColumns = clinicalEntities.reduce(
+  const newDataRow = clinicalEntities.reduce<SubmissionSummaryColumns>(
     (acc, entity) => ({
       ...acc,
       [entity.clinicalType]: String(entity.stats?.new?.length || 0),
     }),
-    { [FIRST_COLUMN_ACCESSOR]: 'New' } as SubmissionSummaryColumns,
+    { [FIRST_COLUMN_ACCESSOR]: 'New' },
   );
 
-  const updatedDataRow: SubmissionSummaryColumns = clinicalEntities.reduce(
+  const updatedDataRow = clinicalEntities.reduce<SubmissionSummaryColumns>(
     (acc, entity) => ({
       ...acc,
       [entity.clinicalType]: String(entity.stats?.updated?.length || 0),
     }),
-    { [FIRST_COLUMN_ACCESSOR]: 'Updated' } as SubmissionSummaryColumns,
+    { [FIRST_COLUMN_ACCESSOR]: 'Updated' },
   );
 
   const tableData: SubmissionSummaryColumns[] = [newDataRow, updatedDataRow];
