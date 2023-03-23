@@ -31,7 +31,11 @@ import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
-import { GqlClinicalSubmissionData } from './types';
+import {
+  GqlClinicalSubmissionData,
+  GqlClinicalEntityClinicalType,
+  GqlClinicalEntity,
+} from './types';
 import { getConfig } from 'global/config';
 
 type EntryTableV6 = {
@@ -49,13 +53,13 @@ const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 const FIRST_COLUMN_ACCESSOR = 'submissionSummaryStatus';
 
 const SubmissionSummaryTable = ({
-  clinicalSubmissions,
+  clinicalEntities,
 }: {
-  clinicalSubmissions: GqlClinicalSubmissionData;
+  clinicalEntities: GqlClinicalEntity[];
 }) => {
   const theme = useTheme();
 
-  const newDataRow: SubmissionSummaryColumns = clinicalSubmissions.clinicalEntities.reduce(
+  const newDataRow: SubmissionSummaryColumns = clinicalEntities.reduce(
     (acc, entity) => ({
       ...acc,
       [entity.clinicalType]: String(entity.stats?.new?.length || 0),
@@ -63,7 +67,7 @@ const SubmissionSummaryTable = ({
     { [FIRST_COLUMN_ACCESSOR]: 'New' } as SubmissionSummaryColumns,
   );
 
-  const updatedDataRow: SubmissionSummaryColumns = clinicalSubmissions.clinicalEntities.reduce(
+  const updatedDataRow: SubmissionSummaryColumns = clinicalEntities.reduce(
     (acc, entity) => ({
       ...acc,
       [entity.clinicalType]: String(entity.stats?.updated?.length || 0),
@@ -80,7 +84,7 @@ const SubmissionSummaryTable = ({
       accessor: FIRST_COLUMN_ACCESSOR,
       width: 100,
     },
-    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+    ...clinicalEntities.map((entity) => ({
       accessor: entity.clinicalType,
       Header: capitalize(entity.clinicalType.split('_').join(' ')),
     })),
@@ -110,7 +114,7 @@ const SubmissionSummaryTable = ({
         customCell: true,
       },
     },
-    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+    ...clinicalEntities.map((entity) => ({
       accessorKey: entity.clinicalType,
       header: capitalize(entity.clinicalType.split('_').join(' ')),
       cell: ({ cell, row }) => (

@@ -68,8 +68,23 @@ export type ClinicalSubmissionEntityFile = {
   stats: GqlClinicalEntity['stats'];
 };
 
+export type GqlClinicalEntityClinicalType =
+  | 'specimen'
+  | 'primary_diagnosis'
+  | 'treatment'
+  | 'chemotherapy'
+  | 'hormone_therapy'
+  | 'immunotherapy'
+  | 'radiation'
+  | 'surgery'
+  | 'follow_up'
+  | 'family_history'
+  | 'exposure'
+  | 'comorbidity'
+  | 'biomarker';
+
 export type GqlClinicalEntity = {
-  clinicalType: string;
+  clinicalType: GqlClinicalEntityClinicalType;
   batchName?: string;
   creator: string;
   records: ClinicalSubmissionRecord[];

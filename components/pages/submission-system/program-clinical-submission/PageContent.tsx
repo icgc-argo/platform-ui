@@ -592,7 +592,7 @@ const PageContent = () => {
               <strong>{data.clinicalSubmissions.updatedBy}</strong>
             </Typography>
           </div>
-          <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
+          <SubmissionSummaryTable clinicalEntities={data.clinicalSubmissions.clinicalEntities} />
         </Container>
       )}
       {
