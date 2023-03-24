@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -132,7 +132,7 @@ const FileRecordTable = ({
   const recordHasWarning = (record: typeof tableData[0]) =>
     dataWarnings.some((dw) => dw.row === record.row);
 
-  const StatusColumnCell = ({ original }: { original: typeof tableData[0] }) => {
+  const StatusColumnCell = ({ row: { original } }: { row: { original: typeof tableData[0] } }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.row);
@@ -197,9 +197,52 @@ const FileRecordTable = ({
   const tableColumns: ColumnDef<TableColumns>[] = [
     {
       accessorKey: 'row',
+      cell: ({ row: { original } }) => (
+        <CellContentCenter
+          css={
+            rowHasUpdate(original)
+              ? css`
+                  justify-content: flex-start;
+                  padding-top: 5px;
+                `
+              : css``
+          }
+        >
+          {toDisplayRowIndex(original.row)}
+        </CellContentCenter>
+      ),
+      enableResizing: false,
+      header: 'Line #',
+      size: 70,
     },
-    { accessorKey: 'status', size: 50, enableResizing: false },
-    { accessorKey: 'fakeColumn' },
+    {
+      accessorKey: 'status',
+      cell: StatusColumnCell,
+      enableResizing: false,
+      header: () => (
+        <CellContentCenter>
+          <StarIcon fill={FILE_STATE_COLORS.NONE} />
+        </CellContentCenter>
+      ),
+      id: 'status',
+      size: 50,
+      sortingFn: (a, b) => {
+        const sortA = a.original.status;
+        const sortB = b.original.status;
+        const priorities: { [k in TableColumns['status']]: number } = {
+          ERROR: 1,
+          UPDATE: 2,
+          NEW: 3,
+          NONE: 4,
+        };
+        return priorities[sortA] - priorities[sortB];
+      },
+    },
+    ...fields.map(({ name: fieldName }): typeof tableColumnsTableV6[0] => ({
+      accessorKey: fieldName,
+      header: fieldName,
+      cell: ({ row: { original } }) => <DataFieldCell original={original} fieldName={fieldName} />,
+    })),
   ];
 
   const tableColumnsTableV6: TableColumnConfig<typeof tableData[0]>[] = [
@@ -225,7 +268,7 @@ const FileRecordTable = ({
     },
     {
       id: 'status',
-      Cell: StatusColumnCell,
+      // Cell: StatusColumnCell,
       accessor: 'status',
       resizable: false,
       Header: (
@@ -322,7 +365,7 @@ const FileRecordTable = ({
       <br />
       <br />
       <br />
-      <TableV8 data={tableData} columns={tableColumns} withHeaders withStripes />
+      <TableV8 data={tableData} columns={tableColumns} withHeaders withSorting withStripes />
     </div>
   );
 };
