@@ -122,8 +122,15 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
       },
     });
 
-  // Only filter Side Menu by ID when specific donors are selected
-  const sideMenuQueryDonorIds = urlDonorQueryStrings.length ? currentDonors : [];
+  const { searchResults } = searchResultData?.clinicalSearchResults;
+  const searchResultIds = searchResults.map((result) => result.donorId);
+
+  const sideMenuQueryDonorIds =
+    urlDonorQueryStrings.length > 0
+      ? currentDonors
+      : searchResults.length > 0
+      ? searchResultIds
+      : [];
 
   // Side Menu Query
   // Populates Clinical Entity Table, Side Menu, Title Bar
@@ -167,27 +174,24 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   ));
 
   const useDefaultQuery =
-    !currentDonors.length &&
+    currentDonors.length === 0 &&
     (donorPrefixSearch || (searchDonorIds.length === 0 && searchSubmitterIds.length === 0)) &&
     completionState === 'all';
 
   const noSearchData = searchResultData === null || searchResultData === undefined;
   const noData =
-    clinicalData.clinicalEntities.length === 0 && noSearchData && !currentDonors.length;
+    clinicalData.clinicalEntities.length === 0 && noSearchData && currentDonors.length === 0;
 
-  const downloadDonorIds = currentDonors.length
-    ? currentDonors
-    : searchResultData?.clinicalSearchResults?.searchResults.length
-    ? searchResultData.clinicalSearchResults.searchResults.map((result) => result.donorId)
-    : [];
+  const entityTableDonorIds =
+    currentDonors.length > 0 ? currentDonors : searchResults.length > 0 ? searchResultIds : [];
 
-  const downloadSubmitterDonorIds = (searchResultData?.clinicalSearchResults?.searchResults || [])
+  const entityTableSubmitterDonorIds = (searchResults || [])
     .map(({ submitterDonorId }) => submitterDonorId)
     .filter(Boolean);
 
   const tsvDownloadIds: TsvDownloadIds = {
-    donorIds: useDefaultQuery ? [] : downloadDonorIds,
-    submitterDonorIds: useDefaultQuery ? [] : downloadSubmitterDonorIds,
+    donorIds: useDefaultQuery ? [] : entityTableDonorIds,
+    submitterDonorIds: useDefaultQuery ? [] : entityTableSubmitterDonorIds,
   };
 
   return (
@@ -308,7 +312,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                   entityType={currentEntity}
                   program={programShortName}
                   completionState={completionState}
-                  currentDonors={currentDonors}
+                  currentDonors={entityTableDonorIds}
                   donorSearchResults={searchResultData}
                   useDefaultQuery={useDefaultQuery}
                   noData={noData}
