@@ -36,7 +36,6 @@ const CLINICAL_ENTITY_DATA_QUERY = gql`
             donor
             specimens
             primaryDiagnosis
-            familyHistory
             followUps
             treatments
             normalSpecimens
