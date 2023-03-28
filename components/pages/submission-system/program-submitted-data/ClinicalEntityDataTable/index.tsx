@@ -427,7 +427,9 @@ const ClinicalEntityDataTable = ({
 
             CoreCompletionFields.forEach((field) => {
               const completionField = completionColumnHeaders[field];
-              clinicalRecord[completionField] = completion[field] || 0;
+              const completionValue = completion[field];
+
+              clinicalRecord[completionField] = completionValue || 0;
             });
 
             clinicalRecord = { ...clinicalRecord, ...completion };
@@ -606,12 +608,22 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noTableData ? 50 : 250,
           style: noTableData ? noDataCellStyle : {},
-          Cell: ({ value }) =>
-            value === 1 ? (
+          Cell: ({ value }) => {
+            // Specimen Normal / Tumour stats are sent as negative numbers to indicate errors
+            const hasSpecimenError =
+              (column.id === completionColumnHeaders['normalSpecimens'] ||
+                column.id === completionColumnHeaders['tumourSpecimens']) &&
+              value < 1;
+
+            return value === 1 ? (
               <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+            ) : hasSpecimenError ? (
+              // This removes the negative symbol for NS/TS error display
+              -value
             ) : (
               value
-            ),
+            );
+          },
         })),
       },
       {
