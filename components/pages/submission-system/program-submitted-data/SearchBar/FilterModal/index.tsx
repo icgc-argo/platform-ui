@@ -61,7 +61,6 @@ export default function FilterModal({
 
   //make matchID dynamic using useState
   const [numMatched, setNumMatched] = useState(0);
-  const [numUnmatched, setNumUnmatched] = useState(0);
   const [matchedIds, setMatchedIds] = useState('');
 
   // Match text area contents for Donor ID #s
@@ -89,48 +88,31 @@ export default function FilterModal({
       },
     },
   );
-  // console.log('filterDonorIds', filterDonorIds, 'filterSubmitterIds', filterSubmitterIds);
-
-  //number of instances users entered donor id and submitter id that represent the same entry
-  const numOfDoubleCountedId = () => {
-    const doubleCountedResult = searchResultData?.clinicalSearchResults?.searchResults.map(
-      ({ donorId, submitterDonorId }) => ({
-        [donorId]: submitterDonorId,
-      }),
-    ) || [{}];
-
-    const counter = filterDonorIds.filter((donorId) =>
-      filterSubmitterIds.includes(doubleCountedResult[0][donorId]),
-    );
-
-    return counter.length;
-  };
 
   useEffect(() => {
-    //format the string from text area of the modal to create an set of IDs, so we know the total number
+    // This set contain unique ids inputs (no duplicates)
     const filteredTextAreaIDs = new Set();
 
-    const initialIdsCount =
-      filterDonorIds.length + filterSubmitterIds.length - numOfDoubleCountedId();
-
-    // remove the IDs in each result from the set. to then use the set size as the unmatched IDs count
+    // Queried results of ids on current submitted data page
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
 
+    // Adding matching ids of queried and text field results to the Set
     queryResults.forEach((result) => {
       const donorIdMatch = filterDonorIds.includes(result.donorId);
       const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
 
-      if (donorIdMatch || submitterIdMatch) {
+      if (donorIdMatch) {
         filteredTextAreaIDs.add(result.donorId);
+      }
+      if (submitterIdMatch) {
+        filteredTextAreaIDs.add(result.submitterDonorId);
       }
     });
 
-    // Update MatchResults Component with the matched and unmatched number
+    // Update MatchResults Component with the matched number
     const matchedCount = filteredTextAreaIDs.size;
-    const unmatchedCount = initialIdsCount - filteredTextAreaIDs.size;
 
     setNumMatched(matchedCount);
-    setNumUnmatched(unmatchedCount);
     setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
   }, [searchResultData]);
 
@@ -195,7 +177,7 @@ export default function FilterModal({
               Your ID List results in:
             </b>
             {/* section of matched and unmatched ID */}
-            <MatchResults numMatched={numMatched} numUnmatched={numUnmatched} />
+            <MatchResults numMatched={numMatched} />
             {/* <Button> of clear button */}
             {filterTextBox && (
               <Button
@@ -203,6 +185,7 @@ export default function FilterModal({
                   setFilterTextBox('');
                 }}
                 css={css`
+                  margin-top: 0px;
                   border: none;
                   width: fit-content;
                   padding: 2px;

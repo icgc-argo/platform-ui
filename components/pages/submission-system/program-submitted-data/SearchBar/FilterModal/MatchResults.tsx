@@ -20,48 +20,23 @@
 import React from 'react';
 import { css } from '@icgc-argo/uikit';
 
-export default function MatchResults({
-  numMatched,
-  numUnmatched,
-}: {
-  numMatched: number;
-  numUnmatched: number;
-}) {
+export default function MatchResults({ numMatched }: { numMatched: number }) {
   return (
-    <>
-      <div
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+      `}
+    >
+      Matched IDs:
+      <b
         css={css`
-          display: flex;
-          align-items: center;
+          margin-left: 4px;
+          color: #0774d3;
         `}
       >
-        Matched IDs:
-        <b
-          css={css`
-            margin-left: 4px;
-            color: #0774d3;
-          `}
-        >
-          {numMatched}
-        </b>
-      </div>
-      {/* <div> of unmatched ID */}
-      <div
-        css={css`
-          display: flex;
-          align-items: center;
-        `}
-      >
-        Unmatched IDs:
-        <b
-          css={css`
-            margin-left: 4px;
-            color: #0774d3;
-          `}
-        >
-          {numUnmatched}
-        </b>
-      </div>
-    </>
+        {numMatched}
+      </b>
+    </div>
   );
 }
