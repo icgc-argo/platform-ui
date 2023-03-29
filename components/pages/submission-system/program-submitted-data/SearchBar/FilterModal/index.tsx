@@ -26,7 +26,6 @@ import UploadButton from './UploadButton';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import { useQuery } from '@apollo/client';
-import { filter } from 'lodash';
 
 declare global {
   interface Window {
@@ -95,22 +94,24 @@ export default function FilterModal({
 
     // Queried results of ids on current submitted data page
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
-
+    let matchedCount = 0;
     // Adding matching ids of queried and text field results to the Set
     queryResults.forEach((result) => {
       const donorIdMatch = filterDonorIds.includes(result.donorId);
       const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
 
-      if (donorIdMatch) {
-        filteredTextAreaIDs.add(result.donorId);
-      }
       if (submitterIdMatch) {
-        filteredTextAreaIDs.add(result.submitterDonorId);
+        matchedCount++;
+      }
+      if (donorIdMatch) {
+        matchedCount++;
+      }
+      if (donorIdMatch || submitterIdMatch) {
+        filteredTextAreaIDs.add(result.donorId);
       }
     });
 
     // Update MatchResults Component with the matched number
-    const matchedCount = filteredTextAreaIDs.size;
 
     setNumMatched(matchedCount);
     setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
