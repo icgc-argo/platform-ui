@@ -420,19 +420,52 @@ const ClinicalEntityDataTable = ({
         record.forEach((r) => {
           const displayKey = r.name;
           clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
-          if (completionStats && displayKey === 'donor_id') {
-            const completion =
-              completionStats.find((stat) => stat.donorId === parseInt(r.value))?.coreCompletion ||
-              emptyCompletion;
+          if (showCompletionStats && displayKey === 'donor_id') {
+            const completionRecord = completionStats.find(
+              (stat) => stat.donorId === parseInt(r.value),
+            );
 
-            CoreCompletionFields.forEach((field) => {
-              const completionField = completionColumnHeaders[field];
-              const completionValue = completion[field];
+            if (!completionRecord) {
+              clinicalRecord = { ...clinicalRecord, ...emptyCompletion };
+            } else {
+              const { coreCompletion, entityData: completionEntityData } = completionRecord;
 
-              clinicalRecord[completionField] = completionValue || 0;
-            });
+              CoreCompletionFields.forEach((field) => {
+                const completionField = completionColumnHeaders[field];
+                const isSpecimenField =
+                  completionField === completionColumnHeaders['normalSpecimens'] ||
+                  completionField === completionColumnHeaders['tumourSpecimens'];
 
-            clinicalRecord = { ...clinicalRecord, ...completion };
+                if (!isSpecimenField) {
+                  const completionValue = coreCompletion[field];
+                  clinicalRecord[completionField] = completionValue || 0;
+                } else {
+                  const {
+                    specimens: {
+                      coreCompletionPercentage,
+                      normalSpecimensPercentage,
+                      tumourSpecimensPercentage,
+                      normalRegistrations,
+                      tumourRegistrations,
+                    },
+                  } = completionEntityData;
+
+                  if (coreCompletionPercentage === 1) {
+                    clinicalRecord[completionField] = 1;
+                  } else if (completionField === completionColumnHeaders['normalSpecimens']) {
+                    clinicalRecord[completionField] =
+                      normalSpecimensPercentage === 1
+                        ? normalSpecimensPercentage
+                        : -normalRegistrations;
+                  } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
+                    clinicalRecord[completionField] =
+                      tumourSpecimensPercentage === 1
+                        ? tumourSpecimensPercentage
+                        : -tumourRegistrations;
+                  }
+                }
+              });
+            }
           }
         });
 
