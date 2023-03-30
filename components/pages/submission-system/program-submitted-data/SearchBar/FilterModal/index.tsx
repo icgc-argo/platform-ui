@@ -26,7 +26,6 @@ import UploadButton from './UploadButton';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
 import { useQuery } from '@apollo/client';
-import { filter } from 'lodash';
 
 declare global {
   interface Window {
@@ -61,7 +60,6 @@ export default function FilterModal({
 
   //make matchID dynamic using useState
   const [numMatched, setNumMatched] = useState(0);
-  const [numUnmatched, setNumUnmatched] = useState(0);
   const [matchedIds, setMatchedIds] = useState('');
 
   // Match text area contents for Donor ID #s
@@ -89,48 +87,33 @@ export default function FilterModal({
       },
     },
   );
-  // console.log('filterDonorIds', filterDonorIds, 'filterSubmitterIds', filterSubmitterIds);
-
-  //number of instances users entered donor id and submitter id that represent the same entry
-  const numOfDoubleCountedId = () => {
-    const doubleCountedResult = searchResultData?.clinicalSearchResults?.searchResults.map(
-      ({ donorId, submitterDonorId }) => ({
-        [donorId]: submitterDonorId,
-      }),
-    ) || [{}];
-
-    const counter = filterDonorIds.filter((donorId) =>
-      filterSubmitterIds.includes(doubleCountedResult[0][donorId]),
-    );
-
-    return counter.length;
-  };
 
   useEffect(() => {
-    //format the string from text area of the modal to create an set of IDs, so we know the total number
+    // This set contain unique ids inputs (no duplicates)
     const filteredTextAreaIDs = new Set();
 
-    const initialIdsCount =
-      filterDonorIds.length + filterSubmitterIds.length - numOfDoubleCountedId();
-
-    // remove the IDs in each result from the set. to then use the set size as the unmatched IDs count
+    // Queried results of ids on current submitted data page
     const queryResults = searchResultData?.clinicalSearchResults?.searchResults || [];
-
+    let matchedCount = 0;
+    // Adding matching ids of queried and text field results to the Set
     queryResults.forEach((result) => {
       const donorIdMatch = filterDonorIds.includes(result.donorId);
       const submitterIdMatch = filterSubmitterIds.includes(result.submitterDonorId);
 
+      if (submitterIdMatch) {
+        matchedCount++;
+      }
+      if (donorIdMatch) {
+        matchedCount++;
+      }
       if (donorIdMatch || submitterIdMatch) {
         filteredTextAreaIDs.add(result.donorId);
       }
     });
 
-    // Update MatchResults Component with the matched and unmatched number
-    const matchedCount = filteredTextAreaIDs.size;
-    const unmatchedCount = initialIdsCount - filteredTextAreaIDs.size;
+    // Update MatchResults Component with the matched number
 
     setNumMatched(matchedCount);
-    setNumUnmatched(unmatchedCount);
     setMatchedIds(Array.from(filteredTextAreaIDs).join(','));
   }, [searchResultData]);
 
@@ -195,7 +178,7 @@ export default function FilterModal({
               Your ID List results in:
             </b>
             {/* section of matched and unmatched ID */}
-            <MatchResults numMatched={numMatched} numUnmatched={numUnmatched} />
+            <MatchResults numMatched={numMatched} />
             {/* <Button> of clear button */}
             {filterTextBox && (
               <Button
@@ -203,6 +186,7 @@ export default function FilterModal({
                   setFilterTextBox('');
                 }}
                 css={css`
+                  margin-top: 0px;
                   border: none;
                   width: fit-content;
                   padding: 2px;

@@ -36,16 +36,24 @@ const CLINICAL_ENTITY_DATA_QUERY = gql`
             donor
             specimens
             primaryDiagnosis
-            familyHistory
             followUps
             treatments
-            normalSpecimens
-            tumourSpecimens
           }
           coreCompletionDate
           coreCompletionPercentage
           overriddenCoreCompletion
           donorId
+          entityData {
+            specimens {
+              coreCompletionPercentage
+              normalSpecimensPercentage
+              tumourSpecimensPercentage
+              normalRegistrations
+              normalSubmissions
+              tumourRegistrations
+              tumourSubmissions
+            }
+          }
         }
       }
       clinicalErrors {
