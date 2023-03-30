@@ -367,6 +367,12 @@ export type ColumnsStates = {
   states?: Maybe<Array<Maybe<ColumnsState>>>;
 };
 
+/** Display Data For Core Completion Entities */
+export type CompletionEntityData = {
+  __typename?: 'CompletionEntityData';
+  specimens?: Maybe<SpecimenCoreCompletion>;
+};
+
 /** Completion Data for a given Donor */
 export type CompletionStats = {
   __typename?: 'CompletionStats';
@@ -374,6 +380,7 @@ export type CompletionStats = {
   coreCompletionDate?: Maybe<Scalars['String']>;
   coreCompletionPercentage?: Maybe<Scalars['Float']>;
   donorId?: Maybe<Scalars['Int']>;
+  entityData?: Maybe<CompletionEntityData>;
   overriddenCoreCompletion?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
@@ -381,13 +388,10 @@ export type CompletionStats = {
 export type CoreCompletionFields = {
   __typename?: 'CoreCompletionFields';
   donor: Scalars['Float'];
-  familyHistory?: Maybe<Scalars['Float']>;
   followUps: Scalars['Float'];
-  normalSpecimens?: Maybe<Scalars['Float']>;
   primaryDiagnosis: Scalars['Float'];
   specimens: Scalars['Float'];
   treatments: Scalars['Float'];
-  tumourSpecimens?: Maybe<Scalars['Float']>;
 };
 
 export type CoreCompletionStatusCount = {
@@ -1236,6 +1240,17 @@ export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
 }
+
+export type SpecimenCoreCompletion = {
+  __typename?: 'SpecimenCoreCompletion';
+  coreCompletionPercentage: Scalars['Float'];
+  normalRegistrations: Scalars['Float'];
+  normalSpecimensPercentage: Scalars['Float'];
+  normalSubmissions: Scalars['Float'];
+  tumourRegistrations: Scalars['Float'];
+  tumourSpecimensPercentage: Scalars['Float'];
+  tumourSubmissions: Scalars['Float'];
+};
 
 export type Stats = {
   __typename?: 'Stats';

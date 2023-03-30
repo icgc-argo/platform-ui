@@ -38,6 +38,21 @@ export type CompletionStats = {
   coreCompletionPercentage: number;
   donorId: number;
   overriddenCoreCompletion: [CoreCompletionEntities];
+  entityData?: CompletionEntityData;
+};
+
+export type CompletionEntityData = {
+  specimens?: SpecimenCoreCompletion;
+};
+
+export type SpecimenCoreCompletion = {
+  coreCompletionPercentage: number;
+  normalSpecimensPercentage: number;
+  tumourSpecimensPercentage: number;
+  normalRegistrations: number;
+  normalSubmissions: number;
+  tumourRegistrations: number;
+  tumourSubmissions: number;
 };
 
 export enum CompletionStates {
