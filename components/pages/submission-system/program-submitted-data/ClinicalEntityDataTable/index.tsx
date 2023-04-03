@@ -452,6 +452,8 @@ const ClinicalEntityDataTable = ({
 
                   if (coreCompletionPercentage === 1) {
                     clinicalRecord[completionField] = 1;
+                  } else if (coreCompletionPercentage === 0) {
+                    clinicalRecord[completionField] = 0;
                   } else if (completionField === completionColumnHeaders['normalSpecimens']) {
                     clinicalRecord[completionField] =
                       normalSpecimensPercentage === 1
