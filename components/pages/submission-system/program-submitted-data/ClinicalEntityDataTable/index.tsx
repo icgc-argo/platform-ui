@@ -456,12 +456,12 @@ const ClinicalEntityDataTable = ({
                     clinicalRecord[completionField] =
                       normalSpecimensPercentage === 1 || normalSpecimensPercentage === 0
                         ? normalSpecimensPercentage
-                        : -normalRegistrations;
+                        : normalRegistrations;
                   } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
                     clinicalRecord[completionField] =
                       tumourSpecimensPercentage === 1 || tumourSpecimensPercentage === 0
                         ? tumourSpecimensPercentage
-                        : -tumourRegistrations;
+                        : tumourRegistrations;
                   }
                 }
               });
@@ -535,7 +535,7 @@ const ClinicalEntityDataTable = ({
     const errorState =
       // Completion Stats === 1 indicates Complete
       // 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
-      (isCompletionCell && original[id] < 1) ||
+      (isCompletionCell && original[id] !== 1) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;
 
@@ -641,22 +641,12 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noTableData ? 50 : 250,
           style: noTableData ? noDataCellStyle : {},
-          Cell: ({ value }) => {
-            // Specimen Normal / Tumour stats are sent as negative numbers to indicate errors
-            const hasSpecimenError =
-              (column.id === completionColumnHeaders['normalSpecimens'] ||
-                column.id === completionColumnHeaders['tumourSpecimens']) &&
-              value < 1;
-
-            return value === 1 ? (
+          Cell: ({ value }) =>
+            value === 1 ? (
               <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
-            ) : hasSpecimenError ? (
-              // This removes the negative symbol for NS/TS error display
-              -value
             ) : (
               value
-            );
-          },
+            ),
         })),
       },
       {
