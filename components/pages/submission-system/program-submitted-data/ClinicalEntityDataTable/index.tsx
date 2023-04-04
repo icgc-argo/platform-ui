@@ -452,16 +452,14 @@ const ClinicalEntityDataTable = ({
 
                   if (coreCompletionPercentage === 1) {
                     clinicalRecord[completionField] = 1;
-                  } else if (coreCompletionPercentage === 0) {
-                    clinicalRecord[completionField] = 0;
                   } else if (completionField === completionColumnHeaders['normalSpecimens']) {
                     clinicalRecord[completionField] =
-                      normalSpecimensPercentage === 1
+                      normalSpecimensPercentage === 1 || normalSpecimensPercentage === 0
                         ? normalSpecimensPercentage
                         : -normalRegistrations;
                   } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
                     clinicalRecord[completionField] =
-                      tumourSpecimensPercentage === 1
+                      tumourSpecimensPercentage === 1 || tumourSpecimensPercentage === 0
                         ? tumourSpecimensPercentage
                         : -tumourRegistrations;
                   }
