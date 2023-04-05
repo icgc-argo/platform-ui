@@ -17,18 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const donorAndFileCountsByDataCategory = [
-  { Category: 'Quality Control Metrics', Donors: 245, Files: 245 },
-  { Category: 'Simple Nucleotide Variation', Donors: 245, Files: 245 },
-  { Category: 'Copy Number Variation', Donors: 245, Files: 245 },
-  { Category: 'Structural Variation', Donors: 245, Files: 245 },
-  { Category: 'Transciptome Profiling', Donors: 245, Files: 245 },
-];
+import { gql } from '@apollo/client';
 
-const donorAndFileCountsByExperimentalStrategy = [
-  { Strategies: 'WXS', Donors: 245, Files: 245 },
-  { Strategies: 'WGS', Donors: 245, Files: 245 },
-  { Strategies: 'RNA-Seq', Donors: 245, Files: 245 },
-];
+const PROGRAM_SUMMARY_QUERY = gql`
+  query Program($shortName: String!) {
+    program(shortName: $shortName) {
+      shortName
+      description
+      name
+      website
+      institutions
+      countries
+      regions
+      cancerTypes
+      primarySites
+    }
+  }
+`;
 
-export { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy };
+export default PROGRAM_SUMMARY_QUERY;

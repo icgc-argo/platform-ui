@@ -137,6 +137,8 @@ export default function SearchBar({
       .filter((result) => !!result)
       .slice(0, 20) || [];
 
+  console.log('searchResultItems', searchResultItems);
+
   const titleText =
     currentDonors.length === 1
       ? `DO${currentDonors[0]}`

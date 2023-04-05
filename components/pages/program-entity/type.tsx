@@ -17,18 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const donorAndFileCountsByDataCategory = [
-  { Category: 'Quality Control Metrics', Donors: 245, Files: 245 },
-  { Category: 'Simple Nucleotide Variation', Donors: 245, Files: 245 },
-  { Category: 'Copy Number Variation', Donors: 245, Files: 245 },
-  { Category: 'Structural Variation', Donors: 245, Files: 245 },
-  { Category: 'Transciptome Profiling', Donors: 245, Files: 245 },
-];
-
-const donorAndFileCountsByExperimentalStrategy = [
-  { Strategies: 'WXS', Donors: 245, Files: 245 },
-  { Strategies: 'WGS', Donors: 245, Files: 245 },
-  { Strategies: 'RNA-Seq', Donors: 245, Files: 245 },
-];
-
-export { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy };
+export type ProgramSummaryQuery = {
+  shortName: string;
+  description: string;
+  name: string;
+  website: string;
+  institutions: string;
+  countries: string;
+  regions: string;
+  cancerTypes: string;
+  primarySites: string;
+};
