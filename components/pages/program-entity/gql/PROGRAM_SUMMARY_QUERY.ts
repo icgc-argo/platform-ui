@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_SUMMARY_QUERY = gql`
-  query Program($shortName: String!) {
+  query ProgramEntitySummary($shortName: String!) {
     program(shortName: $shortName) {
       shortName
       description
