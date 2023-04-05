@@ -21,8 +21,6 @@ export enum CoreCompletionEntities {
   donor = 'donor',
   primaryDiagnosis = 'primaryDiagnosis',
   specimens = 'specimens',
-  normalSpecimens = 'normalSpecimens',
-  tumourSpecimens = 'tumourSpecimens',
   treatments = 'treatments',
   followUps = 'followUps',
 }
