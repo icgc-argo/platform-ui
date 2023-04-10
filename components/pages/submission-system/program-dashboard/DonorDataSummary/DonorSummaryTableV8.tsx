@@ -22,12 +22,14 @@ import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
 import {
+  ColumnDef,
   css,
   FilterClearButton,
   Icon,
   Link,
   ListFilterHeader,
   NextTablePaginationRule,
+  Row,
   TableHeaderWrapper,
   TablePaginationRule,
   TableV8,
@@ -63,6 +65,7 @@ import { useProgramDonorsSummaryQuery } from '.';
 import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { ContentError } from 'components/placeholders';
+import { DonorSummaryEntry } from 'generated/gql_types';
 
 enum PipelineNames {
   DNA = 'DNA',
@@ -270,9 +273,11 @@ const DonorSummaryTableV8 = ({
     : [];
 
   // table info
-  const tableColumns: any = [
+  const tableColumns: ColumnDef<DonorSummaryEntry>[] = [
     {
-      header: <HeaderWithBackground fill="secondary_4">Clinical Data Status</HeaderWithBackground>,
+      header: () => (
+        <HeaderWithBackground fill="secondary_4">Clinical Data Status</HeaderWithBackground>
+      ),
       id: 'clinicalDataStatus',
       meta: {
         customHeader: true,
@@ -288,17 +293,19 @@ const DonorSummaryTableV8 = ({
           accessorKey: 'releaseStatus',
           size: 50,
           enableResizing: false,
-          sortingFn: (a: DonorDataReleaseState, b: DonorDataReleaseState) => {
-            const priorities = {
+          sortingFn: (rowA: Row<DonorSummaryEntry>, rowB: Row<DonorSummaryEntry>) => {
+            const priorities: { [k in DonorDataReleaseState]: number } = {
               [DonorDataReleaseState.NO]: 1,
               [DonorDataReleaseState.PARTIALLY]: 2,
               [DonorDataReleaseState.FULLY]: 3,
-            } as { [k in DonorDataReleaseState]: number };
-            return priorities[a] - priorities[b];
+            };
+            return (
+              priorities[rowA.original.releaseStatus] - priorities[rowB.original.releaseStatus]
+            );
           },
         },
         {
-          header: (
+          header: () => (
             <TextFilterHeader
               header={'Donor ID'}
               onFilter={(text) =>
@@ -331,7 +338,7 @@ const DonorSummaryTableV8 = ({
           size: 135,
         },
         {
-          header: (
+          header: () => (
             <ListFilterHeader
               header={'Core Completion'}
               panelLegend={'Core Completion Status'}
@@ -354,7 +361,7 @@ const DonorSummaryTableV8 = ({
             />
           ),
           accessorKey: 'submittedCoreDataPercent',
-          cell: ({ row: { original } }: CellProps) => (
+          cell: ({ row: { original } }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
           size: 95,
@@ -362,8 +369,10 @@ const DonorSummaryTableV8 = ({
       ],
     },
     {
-      header: (
-        <HeaderWithBackground fill={PIPELINE_COLORS[activePipeline] as keyof ThemeColorNames}>
+      header: () => (
+        <HeaderWithBackground
+          fill={PIPELINE_COLORS[PipelineNames[activePipeline]] as keyof ThemeColorNames}
+        >
           {`${activePipeline}-SEQ PIPELINE`}
         </HeaderWithBackground>
       ),
@@ -395,7 +404,7 @@ const DonorSummaryTableV8 = ({
         ...(activePipeline === PipelineNames.DNA
           ? [
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={`${
@@ -458,7 +467,7 @@ const DonorSummaryTableV8 = ({
                   ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={`${
@@ -508,7 +517,7 @@ const DonorSummaryTableV8 = ({
                 ),
                 meta: { customCell: true },
                 id: RAW_READS_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) =>
+                cell: ({ row: { original } }) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
                       normalCount={original.publishedNormalAnalysis}
@@ -524,7 +533,7 @@ const DonorSummaryTableV8 = ({
                   ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
@@ -551,7 +560,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 id: ALIGNMENT_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.alignmentsCompleted}
                     inProgress={original.alignmentsRunning}
@@ -560,7 +569,7 @@ const DonorSummaryTableV8 = ({
                 ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Sanger VC'}
                     panelLegend={'Sanger VC Status'}
@@ -587,7 +596,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 id: SANGER_VC_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.sangerVcsCompleted}
                     inProgress={original.sangerVcsRunning}
@@ -596,7 +605,7 @@ const DonorSummaryTableV8 = ({
                 ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Mutect2 VC'}
                     panelLegend={'Mutect2 VC Status'}
@@ -623,7 +632,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 id: MUTECT2_VC_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.mutectCompleted}
                     inProgress={original.mutectRunning}
@@ -632,7 +641,7 @@ const DonorSummaryTableV8 = ({
                 ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Open Access VF'}
                     panelLegend={'Open Access VF Status'}
@@ -659,7 +668,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 id: OPEN_ACCESS_VF_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.openAccessCompleted}
                     inProgress={original.openAccessRunning}
@@ -670,7 +679,7 @@ const DonorSummaryTableV8 = ({
             ]
           : [
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={'RNA Registration Status'}
@@ -694,7 +703,7 @@ const DonorSummaryTableV8 = ({
                 ),
                 meta: { customCell: true },
                 id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaRegisteredNormalSamples}
                     tumourCount={original.rnaRegisteredTumourSamples}
@@ -702,7 +711,7 @@ const DonorSummaryTableV8 = ({
                 ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={'RNA Raw Reads Status'}
@@ -726,7 +735,7 @@ const DonorSummaryTableV8 = ({
                 ),
                 meta: { customCell: true },
                 id: RNA_RAW_READS_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaPublishedNormalAnalysis}
                     tumourCount={original.rnaPublishedTumourAnalysis}
@@ -734,7 +743,7 @@ const DonorSummaryTableV8 = ({
                 ),
               },
               {
-                header: (
+                header: () => (
                   <ListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
@@ -761,7 +770,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 id: RNA_ALIGNMENT_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) => (
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.rnaAlignmentsCompleted}
                     inProgress={original.rnaAlignmentsRunning}
@@ -773,68 +782,76 @@ const DonorSummaryTableV8 = ({
       ],
     },
     {
-      header: filterState.length ? (
-        <FilterClearButton
-          size="sm"
-          variant="text"
-          type="button"
-          onClick={() => handleFilterStateChange([])}
-        >
-          Clear Filters
-        </FilterClearButton>
-      ) : (
-        <></>
-      ),
+      header: () =>
+        filterState.length ? (
+          <FilterClearButton
+            size="sm"
+            variant="text"
+            type="button"
+            onClick={() => handleFilterStateChange([])}
+          >
+            Clear Filters
+          </FilterClearButton>
+        ) : (
+          <></>
+        ),
       id: 'updated',
       columns: [
-        FEATURE_SUBMITTED_DATA_ENABLED && {
-          header: (
-            <ListFilterHeader
-              header={'Alerts'}
-              panelLegend={'Filter Alerts'}
-              onFilter={(options) =>
-                updateFilter({
-                  field: 'validWithCurrentDictionary',
-                  values: options.filter((option) => option.isChecked).map((option) => option.key),
-                })
-              }
-              filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
-              filterCounts={{
-                [FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
-                  programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-                [FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
-                  programDonorSummaryStats?.registeredDonorsCount -
-                    programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-              }}
-              activeFilters={getFilterValue('validWithCurrentDictionary')}
-            />
-          ),
-          accessorKey: 'validWithCurrentDictionary',
-          cell: ({ row: { original } }: CellProps) => {
-            const errorTab =
-              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
-                ?.entity || '';
+        ...(FEATURE_SUBMITTED_DATA_ENABLED
+          ? [
+              {
+                header: () => (
+                  <ListFilterHeader
+                    header={'Alerts'}
+                    panelLegend={'Filter Alerts'}
+                    onFilter={(options) =>
+                      updateFilter({
+                        field: 'validWithCurrentDictionary',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
+                    }
+                    filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
+                        programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+                      [FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
+                        programDonorSummaryStats?.registeredDonorsCount -
+                          programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+                    }}
+                    activeFilters={getFilterValue('validWithCurrentDictionary')}
+                  />
+                ),
+                accessorKey: 'validWithCurrentDictionary',
+                cell: ({ row: { original } }) => {
+                  const errorTab =
+                    errorLinkData.find(
+                      (error) => error.donorId === parseDonorIdString(original.donorId),
+                    )?.entity || '';
 
-            const linkUrl = urlJoin(
-              `/submission/program/`,
-              programShortName,
-              `/clinical-data/?donorId=${original.donorId}`,
-              errorTab && `&tab=${errorTab}`,
-            );
+                  const linkUrl = urlJoin(
+                    `/submission/program/`,
+                    programShortName,
+                    `/clinical-data/?donorId=${original.donorId}`,
+                    errorTab && `&tab=${errorTab}`,
+                  );
 
-            return original.validWithCurrentDictionary ? (
-              ''
-            ) : (
-              <NextLink href={linkUrl}>
-                <Link>
-                  <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
-                  Update Clinical
-                </Link>
-              </NextLink>
-            );
-          },
-          size: 125,
-        },
+                  return original.validWithCurrentDictionary ? (
+                    ''
+                  ) : (
+                    <NextLink href={linkUrl}>
+                      <Link>
+                        <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
+                        Update Clinical
+                      </Link>
+                    </NextLink>
+                  );
+                },
+                size: 125,
+              },
+            ]
+          : []),
         {
           header: 'Last Updated',
           accessorKey: 'updatedAt',
@@ -872,6 +889,7 @@ const DonorSummaryTableV8 = ({
             manualSorting
             onSortingChange={setSortingState}
             state={{ sorting: sortingState }}
+            showPageSizeOptions
             withHeaders
             withStripes
             withTabs
