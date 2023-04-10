@@ -25,6 +25,8 @@ export enum CoreCompletionEntities {
   followUps = 'followUps',
 }
 
+export const CoreCompletionFields = Object.values(CoreCompletionEntities);
+
 export type CoreCompletion = {
   [field in CoreCompletionEntities]: number;
 };
