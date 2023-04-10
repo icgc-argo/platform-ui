@@ -20,8 +20,7 @@
 export enum CoreCompletionEntities {
   donor = 'donor',
   primaryDiagnosis = 'primaryDiagnosis',
-  normalSpecimens = 'normalSpecimens',
-  tumourSpecimens = 'tumourSpecimens',
+  specimens = 'specimens',
   treatments = 'treatments',
   followUps = 'followUps',
 }
@@ -29,7 +28,7 @@ export enum CoreCompletionEntities {
 export const CoreCompletionFields = Object.values(CoreCompletionEntities);
 
 export type CoreCompletion = {
-  CoreCompletionEntities: number;
+  [field in CoreCompletionEntities]: number;
 };
 
 export type CompletionStats = {
