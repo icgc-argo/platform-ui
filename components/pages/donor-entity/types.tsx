@@ -18,7 +18,7 @@
  */
 
 import { Associations, FileRecord } from '../file-entity/types';
-import { SamplesTableColumns } from './ClinicalTimeline/Samples';
+import { SamplesTableRecord } from './ClinicalTimeline/Samples';
 import { donorCentricDisplayNames } from './ClinicalTimeline/util';
 
 export interface DonorCentricRecord {
@@ -280,7 +280,7 @@ export type Specimens = {
   type: string;
   interval: string;
   data: AliasedDisplayData;
-  samples: SamplesTableColumns;
+  samples: SamplesTableRecord;
 };
 
 export type TableDataValue = string | number | React.ReactNode;
