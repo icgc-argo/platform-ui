@@ -122,7 +122,7 @@ export enum MolecularProcessingStatus {
 // **** GQL types ****
 export type ProgramDonorsSummaryQueryData = {
   programDonorSummary: {
-    entries: DonorSummaryRecord[];
+    entries: DonorSummaryEntry[];
     stats: ProgramDonorReleaseStats;
   };
 };
