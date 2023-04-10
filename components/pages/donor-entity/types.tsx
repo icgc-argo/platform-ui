@@ -290,5 +290,3 @@ export type Specimens = {
   data: AliasedDisplayData;
   samples: SamplesTableRecord;
 };
-
-export type TableDataValue = string | number | React.ReactNode;

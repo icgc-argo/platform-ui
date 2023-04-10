@@ -297,8 +297,8 @@ export const formatTimelineEntityData = (donorData) => {
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
-export const formatTableData = (key: string, value: TableDataValue) => {
-  let displayValue: TableDataValue;
+export const formatTableData = (key: string, value: React.ReactNode) => {
+  let displayValue: React.ReactNode;
   switch (key) {
     case 'age_at_diagnosis':
       displayValue = `${value} years`;
