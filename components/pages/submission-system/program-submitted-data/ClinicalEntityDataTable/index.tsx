@@ -42,13 +42,11 @@ import {
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
-  CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
   emptySearchResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
-  reverseLookUpEntityAlias,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
@@ -127,6 +125,8 @@ const completionColumnHeaders = {
   treatments: 'TR',
   followUps: 'FO',
 };
+
+const coreCompletionFields = Object.keys(completionColumnHeaders);
 
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
@@ -430,7 +430,7 @@ const ClinicalEntityDataTable = ({
             } else {
               const { coreCompletion, entityData: completionEntityData } = completionRecord;
 
-              CoreCompletionFields.forEach((field) => {
+              coreCompletionFields.forEach((field) => {
                 const completionField = completionColumnHeaders[field];
                 const isSpecimenField =
                   completionField === completionColumnHeaders['normalSpecimens'] ||
