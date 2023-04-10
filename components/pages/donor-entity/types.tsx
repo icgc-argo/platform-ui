@@ -221,10 +221,18 @@ export type SpecimenNode = {
   };
 };
 
+// NOTE: types based on dummy data
+export type TreatmentData = {
+  drug_rxnormcui: string;
+  drug_name: string;
+  cumulative_drug_dose: string;
+  chemotherapy_dosage_units: string;
+};
+
 export type TreatmentNode = {
   node: {
     treatment_type: string;
-    data: Array<{}>;
+    data: Array<TreatmentData>;
     program_id?: string;
     submitter_donor_id?: string;
     submitter_treatment_id?: string;
