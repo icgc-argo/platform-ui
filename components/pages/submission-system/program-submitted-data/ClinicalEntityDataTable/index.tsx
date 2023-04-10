@@ -80,10 +80,11 @@ type ErrorTableColumnProperties = {
   maxSize?: number;
 };
 
-const getErrorColumns = (): {
+type DefaultErrorColumns = {
   errorReportColumns: ErrorReportColumns[];
   errorTableColumns: ColumnDef<ErrorTableColumns>[];
-} => {
+};
+const getErrorColumns = (): DefaultErrorColumns => {
   const errorTableColumns: ErrorTableColumnProperties[] = [
     { accessorKey: 'entries', header: '# Affected Records', maxSize: 135 },
     { accessorKey: 'fieldName', header: `Field with Error`, maxSize: 215 },
