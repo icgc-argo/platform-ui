@@ -42,6 +42,8 @@ type SubmissionSummaryStatus = {
   submissionSummaryStatus: string;
 };
 
+// This type allows us to have a subset of the GqlClinicalEntity properties as columns, but not any other columns.
+//   A SubmissionSummaryStatus column is also allowed.
 type SubmissionSummaryColumns = Partial<
   SubmissionSummaryStatus & {
     [k in GqlClinicalEntityClinicalType]: string;

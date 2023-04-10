@@ -262,7 +262,7 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
                       key={treatment.node.treatment_type}
                       treatment={{
                         treatment_type: treatment.node.treatment_type,
-                        data: treatment.node.data as TreatmentTableColumns[],
+                        data: treatment.node.data,
                       }}
                     />
                   ))}

@@ -73,6 +73,7 @@ import {
   ClinicalSubmissionError,
   ClinicalSubmissionQueryData,
   GqlClinicalEntity,
+  GqlClinicalEntityClinicalType,
   SignOffSubmissionMutationVariables,
   UploadFilesMutationVariables,
   ValidateSubmissionMutationVariables,
@@ -92,7 +93,7 @@ export type ErrorTableColumnProperties = {
   maxSize?: number;
 };
 
-const CLINICAL_FILE_ORDER = [
+const CLINICAL_FILE_ORDER: ReadonlyArray<GqlClinicalEntityClinicalType> = [
   'donor',
   'specimen',
   'primary_diagnosis',
@@ -107,7 +108,7 @@ const CLINICAL_FILE_ORDER = [
   'exposure',
   'comorbidity',
   'biomarker',
-];
+] as const;
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile =
   (submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state']) =>
