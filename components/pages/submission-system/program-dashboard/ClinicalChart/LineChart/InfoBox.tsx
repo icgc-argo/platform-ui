@@ -90,7 +90,7 @@ const InfoBox = ({
             const isHeader = !tooltipItem.color;
             const lineY = yText + idx * lineHeight;
             return (
-              <>
+              <tspan key={tooltipItem.name + lineY}>
                 {!isHeader && (
                   <tspan
                     x={xText}
@@ -111,7 +111,7 @@ const InfoBox = ({
                   {!isOneItem && tooltipItem.name}
                   {!isHeader && `: ${tooltipItem.count}`}
                 </tspan>
-              </>
+              </tspan>
             );
           })}
         </text>
