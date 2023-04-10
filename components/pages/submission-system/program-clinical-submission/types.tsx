@@ -69,6 +69,7 @@ export type ClinicalSubmissionEntityFile = {
 };
 
 export type GqlClinicalEntityClinicalType =
+  | 'donor'
   | 'specimen'
   | 'primary_diagnosis'
   | 'treatment'
