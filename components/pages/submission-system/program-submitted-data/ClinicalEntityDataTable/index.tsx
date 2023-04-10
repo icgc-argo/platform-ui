@@ -445,8 +445,8 @@ const ClinicalEntityDataTable = ({
                       coreCompletionPercentage,
                       normalSpecimensPercentage,
                       tumourSpecimensPercentage,
-                      normalRegistrations,
-                      tumourRegistrations,
+                      normalSubmissions,
+                      tumourSubmissions,
                     },
                   } = completionEntityData;
 
@@ -454,14 +454,14 @@ const ClinicalEntityDataTable = ({
                     clinicalRecord[completionField] = 1;
                   } else if (completionField === completionColumnHeaders['normalSpecimens']) {
                     clinicalRecord[completionField] =
-                      normalSpecimensPercentage === 1
+                      normalSpecimensPercentage === 1 || normalSpecimensPercentage === 0
                         ? normalSpecimensPercentage
-                        : -normalRegistrations;
+                        : normalSubmissions;
                   } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
                     clinicalRecord[completionField] =
-                      tumourSpecimensPercentage === 1
+                      tumourSpecimensPercentage === 1 || tumourSpecimensPercentage === 0
                         ? tumourSpecimensPercentage
-                        : -tumourRegistrations;
+                        : tumourSubmissions;
                   }
                 }
               });
@@ -488,6 +488,11 @@ const ClinicalEntityDataTable = ({
     const isCompletionCell =
       showCompletionStats && Object.values(completionColumnHeaders).includes(id);
 
+    const isSpecimenCell =
+      isCompletionCell &&
+      (id === completionColumnHeaders.normalSpecimens ||
+        id === completionColumnHeaders.tumourSpecimens);
+
     const originalDonorId = original['donor_id'];
     const cellDonorId = parseInt(
       originalDonorId && originalDonorId.includes('DO')
@@ -513,6 +518,24 @@ const ClinicalEntityDataTable = ({
 
     const hasClinicalErrors = columnErrorData && columnErrorData.length >= 1;
 
+    let hasCompletionErrors = isCompletionCell && original[id] !== 1;
+
+    if (isSpecimenCell) {
+      const completionData = clinicalData.clinicalEntities.find(
+        (entity) => entity.entityName === aliasedEntityNames['donor'],
+      ).completionStats;
+
+      const completionRecord =
+        isCompletionCell &&
+        completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
+
+      hasCompletionErrors =
+        !(
+          original[completionColumnHeaders.normalSpecimens] === 1 &&
+          original[completionColumnHeaders.tumourSpecimens] === 1
+        ) || !(completionRecord?.coreCompletion.specimens === 1);
+    }
+
     const specificErrorValue =
       hasClinicalErrors &&
       columnErrorData.filter(
@@ -535,7 +558,7 @@ const ClinicalEntityDataTable = ({
     const errorState =
       // Completion Stats === 1 indicates Complete
       // 0 is Incomplete, <1 Incorrect Sample / Specimen Ratio
-      (isCompletionCell && original[id] < 1) ||
+      (isCompletionCell && hasCompletionErrors) ||
       specificErrorValue?.length > 0 ||
       fieldError?.length > 0;
 
@@ -558,6 +581,8 @@ const ClinicalEntityDataTable = ({
             marginLeft: stickyDonorIDColumnsWidth,
           }),
       },
+      isCompletionCell,
+      errorState,
     };
   };
 
@@ -641,18 +666,12 @@ const ClinicalEntityDataTable = ({
           ...column,
           maxWidth: noTableData ? 50 : 250,
           style: noTableData ? noDataCellStyle : {},
-          Cell: ({ value }) => {
-            // Specimen Normal / Tumour stats are sent as negative numbers to indicate errors
-            const hasSpecimenError =
-              (column.id === completionColumnHeaders['normalSpecimens'] ||
-                column.id === completionColumnHeaders['tumourSpecimens']) &&
-              value < 1;
+          Cell: ({ value, tdProps }) => {
+            const { isCompletionCell, errorState } = tdProps.rest;
+            const showSuccessSvg = isCompletionCell && !errorState;
 
-            return value === 1 ? (
+            return showSuccessSvg ? (
               <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
-            ) : hasSpecimenError ? (
-              // This removes the negative symbol for NS/TS error display
-              -value
             ) : (
               value
             );
