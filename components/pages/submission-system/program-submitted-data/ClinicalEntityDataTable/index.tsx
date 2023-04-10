@@ -452,16 +452,18 @@ const ClinicalEntityDataTable = ({
 
                   if (coreCompletionPercentage === 1) {
                     clinicalRecord[completionField] = 1;
-                  } else if (completionField === completionColumnHeaders['normalSpecimens']) {
-                    clinicalRecord[completionField] =
-                      normalSpecimensPercentage === 1 || normalSpecimensPercentage === 0
+                  } else {
+                    const currentPercentage =
+                      completionField === completionColumnHeaders['normalSpecimens']
                         ? normalSpecimensPercentage
-                        : normalSubmissions;
-                  } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
-                    clinicalRecord[completionField] =
-                      tumourSpecimensPercentage === 1 || tumourSpecimensPercentage === 0
-                        ? tumourSpecimensPercentage
+                        : tumourSpecimensPercentage;
+                    const currentSubmissions =
+                      completionField === completionColumnHeaders['normalSpecimens']
+                        ? normalSubmissions
                         : tumourSubmissions;
+                    const hasErrors = currentPercentage !== 1;
+                    const value = hasErrors ? currentSubmissions : currentPercentage;
+                    clinicalRecord[completionField] = value;
                   }
                 }
               });
@@ -529,11 +531,18 @@ const ClinicalEntityDataTable = ({
         isCompletionCell &&
         completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
 
-      hasCompletionErrors =
-        !(
-          original[completionColumnHeaders.normalSpecimens] === 1 &&
-          original[completionColumnHeaders.tumourSpecimens] === 1
-        ) || !(completionRecord?.coreCompletion.specimens === 1);
+      const { entityData: completionEntityData } = completionRecord;
+
+      const {
+        specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
+      } = completionEntityData;
+
+      const currentPercentage =
+        id === completionColumnHeaders['normalSpecimens']
+          ? normalSpecimensPercentage
+          : tumourSpecimensPercentage;
+
+      hasCompletionErrors = currentPercentage !== 1;
     }
 
     const specificErrorValue =
