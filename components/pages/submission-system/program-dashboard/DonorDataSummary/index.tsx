@@ -161,7 +161,7 @@ const DonorDataSummary = () => {
           <br />
           <br />
           <DonorSummaryTableV8
-            initialPaging={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
+            initialPagination={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
             initialSorting={DEFAULT_SORTING}
             isCardLoading={isCardLoading}
             programShortName={programShortName}

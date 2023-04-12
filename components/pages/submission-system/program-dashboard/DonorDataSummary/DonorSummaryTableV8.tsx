@@ -28,13 +28,13 @@ import {
   Icon,
   Link,
   ListFilterHeader,
-  NextTablePaginationRule,
   Row,
   TableHeaderWrapper,
   TablePaginationRule,
   TableV8,
   TextFilterHeader,
   ThemeColorNames,
+  usePagination,
   useTableTabs,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -91,12 +91,12 @@ const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegistere
 const RNA_ALIGNMENT_COLUMN_ID = 'rnaAlignmentsCompleted-rnaAlignmentsRunning-rnaAlignmentFailed';
 
 const DonorSummaryTableV8 = ({
-  initialPaging,
+  initialPagination,
   initialSorting,
   isCardLoading = true,
   programShortName,
 }: {
-  initialPaging: TablePaginationRule;
+  initialPagination: TablePaginationRule;
   initialSorting: SortingState[];
   isCardLoading?: boolean;
   programShortName: string;
@@ -111,27 +111,32 @@ const DonorSummaryTableV8 = ({
   const [sortingState, setSortingState] = useState(initialSorting);
   const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
 
-  const [pagingState, setPagingState] = useState<TablePaginationRule>(initialPaging);
-  const onPageChange = async (newPageNum: number) => {
-    handlePagingState({ page: newPageNum }); // newPageNum is zero indexed
-  };
-  const onPageSizeChange = async (newPageSize: string | number) => {
-    const pageSizeNumber = typeof newPageSize === 'number' ? newPageSize : parseInt(newPageSize);
-    handlePagingState({
-      page: 0,
-      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pageSizeNumber),
-      pageSize: pageSizeNumber,
-    });
-  };
-  const handlePagingState = (nextPagingState: NextTablePaginationRule) => {
-    setPagingState({ ...pagingState, ...nextPagingState });
-  };
+  const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
+    usePagination(initialPagination);
+
+  console.log({ paginationState, handlePaginationState, onPageChange, onPageSizeChange });
+
+  // const [paginationState, setPagingState] = useState<TablePaginationRule>(initialPagination);
+  // const onPageChange = async (newPageNum: number) => {
+  //   handlePaginationState({ page: newPageNum }); // newPageNum is zero indexed
+  // };
+  // const onPageSizeChange = async (newPageSize: string | number) => {
+  //   const pageSizeNumber = typeof newPageSize === 'number' ? newPageSize : parseInt(newPageSize);
+  //   handlePaginationState({
+  //     page: 0,
+  //     pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pageSizeNumber),
+  //     pageSize: pageSizeNumber,
+  //   });
+  // };
+  // const handlePaginationState = (nextPagingState: NextTablePaginationRule) => {
+  //   setPagingState({ ...paginationState, ...nextPagingState });
+  // };
 
   // filter state handling
   const [filterState, setFilterState] = useState<FilterState[]>([]);
   const handleFilterStateChange = (filters: FilterState[]) => {
     setFilterState(filters);
-    handlePagingState({ page: 0 });
+    handlePaginationState({ page: 0 });
   };
   const updateFilter = ({ field, values }: FilterState) => {
     const newFilters = filterState.filter((filter) => filter.field !== field);
@@ -164,17 +169,17 @@ const DonorSummaryTableV8 = ({
     loading,
   } = useProgramDonorsSummaryQuery({
     programShortName,
-    first: pagingState.pageSize,
-    offset: pagingState.pageSize * pagingState.page,
+    first: paginationState.pageSize,
+    offset: paginationState.pageSize * paginationState.page,
     sorts: formatSortingRequest(sortingState),
     filters: filterState,
     options: {
       onCompleted: (result) => {
         const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
-        const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
-        handlePagingState({
+        const nextPages = Math.ceil(totalDonors / paginationState.pageSize);
+        handlePaginationState({
           // stay on current page, unless that page is no longer available
-          page: pagingState.page < nextPages ? pagingState.page : 0,
+          page: paginationState.page < nextPages ? paginationState.page : 0,
           pages: nextPages,
         });
         setTimeout(() => {
@@ -902,9 +907,9 @@ const DonorSummaryTableV8 = ({
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
             onSortingChange={setSortingState}
-            pagingState={pagingState}
+            paginationState={paginationState}
             showPageSizeOptions
-            state={{ sorting: sortingState }}
+            sortingState={sortingState}
             withFilters
             withHeaders
             withStripes
