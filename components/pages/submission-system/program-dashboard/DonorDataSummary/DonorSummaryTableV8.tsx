@@ -108,12 +108,24 @@ const DonorSummaryTableV8 = ({
   // state
   const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
     useTableTabs(PipelineNames.DNA);
+  const [sortingState, setSortingState] = useState(initialSorting);
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
+
   const [pagingState, setPagingState] = useState<TablePaginationRule>(initialPaging);
+  const onPageChange = async (newPageNum: number) => {
+    handlePagingState({ page: newPageNum }); // newPageNum is zero indexed
+  };
+  const onPageSizeChange = async (newPageSize: string | number) => {
+    const pageSizeNumber = typeof newPageSize === 'number' ? newPageSize : parseInt(newPageSize);
+    handlePagingState({
+      page: 0,
+      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pageSizeNumber),
+      pageSize: pageSizeNumber,
+    });
+  };
   const handlePagingState = (nextPagingState: NextTablePaginationRule) => {
     setPagingState({ ...pagingState, ...nextPagingState });
   };
-  const [sortingState, setSortingState] = useState<SortingState[]>(initialSorting);
-  const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
 
   // filter state handling
   const [filterState, setFilterState] = useState<FilterState[]>([]);
@@ -887,9 +899,13 @@ const DonorSummaryTableV8 = ({
             enableSorting
             loading={isCardLoading || isTableLoading}
             manualSorting
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
             onSortingChange={setSortingState}
-            state={{ sorting: sortingState }}
+            pagingState={pagingState}
             showPageSizeOptions
+            state={{ sorting: sortingState }}
+            withFilters
             withHeaders
             withStripes
             withTabs

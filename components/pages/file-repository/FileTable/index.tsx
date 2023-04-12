@@ -116,10 +116,10 @@ const useFileRepoPaginationState = () => {
     handlePagingStateChange({ ...pagingState, page: newPageNum });
   };
 
-  const onPageSizeChange = (newPageSize: number) => {
+  const onPageSizeChange = (newPageSize: string) => {
     handlePagingStateChange({
       ...pagingState,
-      pageSize: newPageSize,
+      pageSize: parseInt(newPageSize),
     });
   };
   const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
