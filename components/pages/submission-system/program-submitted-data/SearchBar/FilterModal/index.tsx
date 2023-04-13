@@ -89,7 +89,6 @@ export default function FilterModal({
       },
     },
   );
-  // console.log('filterDonorIds', filterDonorIds, 'filterSubmitterIds', filterSubmitterIds);
 
   //number of instances users entered donor id and submitter id that represent the same entry
   const numOfDoubleCountedId = () => {

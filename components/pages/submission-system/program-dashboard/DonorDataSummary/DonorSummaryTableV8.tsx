@@ -114,24 +114,6 @@ const DonorSummaryTableV8 = ({
   const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
     usePagination(initialPagination);
 
-  console.log({ paginationState, handlePaginationState, onPageChange, onPageSizeChange });
-
-  // const [paginationState, setPagingState] = useState<TablePaginationRule>(initialPagination);
-  // const onPageChange = async (newPageNum: number) => {
-  //   handlePaginationState({ page: newPageNum }); // newPageNum is zero indexed
-  // };
-  // const onPageSizeChange = async (newPageSize: string | number) => {
-  //   const pageSizeNumber = typeof newPageSize === 'number' ? newPageSize : parseInt(newPageSize);
-  //   handlePaginationState({
-  //     page: 0,
-  //     pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / pageSizeNumber),
-  //     pageSize: pageSizeNumber,
-  //   });
-  // };
-  // const handlePaginationState = (nextPagingState: NextTablePaginationRule) => {
-  //   setPagingState({ ...paginationState, ...nextPagingState });
-  // };
-
   // filter state handling
   const [filterState, setFilterState] = useState<FilterState[]>([]);
   const handleFilterStateChange = (filters: FilterState[]) => {
