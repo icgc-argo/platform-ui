@@ -19,7 +19,6 @@
 
 import {
   ColumnDef,
-  createColumnHelper,
   NotificationVariant,
   NOTIFICATION_VARIANTS,
   ReactTableCustomProps,
@@ -48,37 +47,43 @@ export const errorNotificationTableProps: ReactTableCustomProps = {
   withStripes: true,
 };
 
-export const getDefaultColumns = (
+export const getDefaultErrorTableColumns = (
   level: NotificationVariant,
 ): {
-  id: keyof ErrorNotificationDefaultColumns;
+  accessorKey: keyof ErrorNotificationDefaultColumns;
   header: string;
   maxSize?: number;
 }[] => {
   const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
   return [
-    { id: 'row', header: 'Line #', maxSize: 70 },
+    { accessorKey: 'row', header: 'Line #', maxSize: 70 },
     {
-      id: 'donorId',
+      accessorKey: 'donorId',
       header: 'Submitter Donor ID',
       maxSize: 160,
     },
     {
-      id: 'field',
+      accessorKey: 'field',
       header: `Field with ${variant}`,
       maxSize: 200,
     },
     {
-      id: 'value',
+      accessorKey: 'value',
       header: `${variant} Value`,
       maxSize: 130,
     },
     {
-      id: 'message',
+      accessorKey: 'message',
       header: `${variant} Description`,
     },
   ];
 };
+
+export const getDefaultErrorReportColumns = (level: NotificationVariant) =>
+  getDefaultErrorTableColumns(level).map(({ accessorKey, header }) => ({
+    header,
+    id: accessorKey,
+  }));
 
 const ErrorNotificationDefaultTable = ({
   data,
@@ -87,30 +92,34 @@ const ErrorNotificationDefaultTable = ({
   data: ErrorNotificationDefaultColumns[];
   level: NotificationVariant;
 }) => {
-  const columnHelper = createColumnHelper<ErrorNotificationDefaultColumns>();
-  const defaultColumns = getDefaultColumns(level);
-  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] = defaultColumns.map((column) =>
-    columnHelper.accessor(column.id, column),
-  );
+  const tableColumns: ColumnDef<ErrorNotificationDefaultColumns>[] =
+    getDefaultErrorTableColumns(level);
 
-  const containerRef_legacy = createRef<HTMLDivElement>();
+  const containerRefTableV6 = createRef<HTMLDivElement>();
 
   return FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={tableColumns} data={data} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_legacy}>
+    <div ref={containerRefTableV6}>
       <Table
-        parentRef={containerRef_legacy}
+        parentRef={containerRefTableV6}
         columns={tableColumns.map(
-          ({ id, header, size }: { id: string; header: string; size: number }) => ({
+          ({
+            accessorKey,
+            header,
+            maxSize,
+          }: {
+            accessorKey: string;
+            header: string;
+            maxSize?: number;
+          }) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: id,
+            accessor: accessorKey,
             Header: header,
-            id,
-            width: size,
+            width: maxSize,
           }),
         )}
         data={data}

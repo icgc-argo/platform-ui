@@ -21,12 +21,9 @@ import { useMutation } from '@apollo/client';
 import {
   Button,
   ContentPlaceholder,
-  createColumnHelper,
   css,
   Icon,
   NOTIFICATION_VARIANTS,
-  Table,
-  TableV8,
   Typography,
   VerticalTabs,
 } from '@icgc-argo/uikit';
@@ -45,7 +42,7 @@ import {
 } from '../types';
 import FileRecordTable from './FileRecordTable';
 import ErrorNotificationDefaultTable, {
-  getDefaultColumns,
+  getDefaultErrorReportColumns,
 } from '../../ErrorNotification/ErrorNotificationDefaultTable';
 
 const FilesNavigator = ({
@@ -182,7 +179,7 @@ const FilesNavigator = ({
             <ErrorNotification
               level={NOTIFICATION_VARIANTS.ERROR}
               onClearClick={onErrorClearClick}
-              reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+              reportColumns={getDefaultErrorReportColumns(NOTIFICATION_VARIANTS.ERROR)}
               reportData={errorData}
               subtitle={
                 'Your file cannot be processed. Please correct the following errors and reupload your file.'

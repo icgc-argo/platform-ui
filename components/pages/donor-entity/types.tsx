@@ -18,6 +18,8 @@
  */
 
 import { Associations, FileRecord } from '../file-entity/types';
+import { SamplesTableRecord } from './ClinicalTimeline/Samples';
+import { donorCentricDisplayNames } from './ClinicalTimeline/util';
 
 export interface DonorCentricRecord {
   donor_id: string;
@@ -219,10 +221,18 @@ export type SpecimenNode = {
   };
 };
 
+// NOTE: types based on dummy data
+export type TreatmentData = {
+  drug_rxnormcui: string;
+  drug_name: string;
+  cumulative_drug_dose: string;
+  chemotherapy_dosage_units: string;
+};
+
 export type TreatmentNode = {
   node: {
     treatment_type: string;
-    data: Array<{}>;
+    data: Array<TreatmentData>;
     program_id?: string;
     submitter_donor_id?: string;
     submitter_treatment_id?: string;
@@ -267,3 +277,16 @@ export type Entity = {
 };
 
 export interface DonorEntityData extends Entity {}
+
+export type AliasedDisplayData = {
+  [K in keyof typeof donorCentricDisplayNames]?: any;
+};
+
+export type Specimens = {
+  id: string;
+  description: string;
+  type: string;
+  interval: string;
+  data: AliasedDisplayData;
+  samples: SamplesTableRecord;
+};

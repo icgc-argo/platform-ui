@@ -40,7 +40,7 @@ import { DonorCentricRecord, Entity, EntityType, SampleNode, TreatmentNode } fro
 import Header from './Header';
 import Samples from './Samples';
 import Timeline from './Timeline';
-import Treatment from './Treatment';
+import Treatment, { TreatmentTableColumns } from './Treatment';
 import { formatTableDisplayNames, formatTimelineEntityData, splitIntoColumns } from './util';
 
 export const ENTITY_DISPLAY = Object.freeze({
@@ -258,7 +258,13 @@ const ClinicalTimeline = ({ data }: { data: DonorCentricRecord }) => {
                   `}
                 >
                   {selectedTreatments.map((treatment, i) => (
-                    <Treatment key={`treatment-${i}`} treatment={treatment} />
+                    <Treatment
+                      key={treatment.node.treatment_type}
+                      treatment={{
+                        treatment_type: treatment.node.treatment_type,
+                        data: treatment.node.data,
+                      }}
+                    />
                   ))}
                 </div>
               )}

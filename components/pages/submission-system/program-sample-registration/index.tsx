@@ -41,7 +41,7 @@ import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
 import ErrorNotification from '../ErrorNotification';
 import ErrorNotificationDefaultTable, {
-  getDefaultColumns,
+  getDefaultErrorReportColumns,
 } from '../ErrorNotification/ErrorNotificationDefaultTable';
 import SubmissionLayout from '../layout';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
@@ -285,7 +285,7 @@ export default function ProgramIDRegistration() {
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             onClearClick={handleClearClick}
-            reportColumns={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+            reportColumns={getDefaultErrorReportColumns(NOTIFICATION_VARIANTS.ERROR)}
             reportData={errorData}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'

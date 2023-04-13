@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, TableV8 } from '@icgc-argo/uikit';
+import { ColumnDef, css, Table, TableV8 } from '@icgc-argo/uikit';
 
 import { format as formatDate, formatDistance } from 'date-fns';
 import ProgramDashboardLink from './table-cell-components/ProgramDashboardLink';
@@ -32,8 +32,15 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
+type TableColumns = {
+  donors: number;
+  files: number;
+  lastUpdate?: string;
+  shortName: string;
+};
+
 // for react table v6
-const tableColumns_legacy = [
+const tableColumnsTableV6 = [
   {
     Header: 'Program',
     accessor: 'shortName',
@@ -69,17 +76,20 @@ const tableColumns_legacy = [
 ];
 
 // for react table v8
-const tableColumns = [
+const tableColumns: ColumnDef<TableColumns>[] = [
   {
     header: 'Program',
     accessorKey: 'shortName',
-    cell: ({ getValue }) => <ProgramDashboardLink program={getValue()} />,
+    cell: ({ row }) => <ProgramDashboardLink program={row.original.shortName} />,
   },
   {
     header: 'Last Index Release',
     accessorKey: 'lastUpdate',
-    cell: ({ getValue }) => {
-      const lastUpdate = getValue();
+    cell: ({
+      row: {
+        original: { lastUpdate = '' },
+      },
+    }) => {
       if (!lastUpdate) {
         return null;
       }
@@ -99,7 +109,7 @@ const tableColumns = [
   },
   {
     header: 'Sync Donor Index',
-    accessorKey: 'action',
+    id: 'action',
     enableSorting: false,
     cell: ({ row }) => <SyncIndexButton program={row.original.shortName} />,
   },
@@ -155,7 +165,7 @@ const DonorAggregationIndexTable = ({
           showPagination={false}
           withOutsideBorder
           data={tableData}
-          columns={tableColumns_legacy}
+          columns={tableColumnsTableV6}
           pageSize={programs.length}
           defaultSorted={[{ id: 'shortName', desc: false }]}
         />

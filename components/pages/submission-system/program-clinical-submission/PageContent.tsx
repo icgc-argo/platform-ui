@@ -21,7 +21,6 @@ import { useMutation } from '@apollo/client';
 import {
   ColumnDef,
   Container,
-  createColumnHelper,
   css,
   DnaLoader,
   Notification,
@@ -51,11 +50,11 @@ import { useState, useEffect, useMemo, ComponentProps, createRef } from 'react';
 
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
-import ErrorNotification from '../ErrorNotification';
+import ErrorNotification, { ErrorReportColumns } from '../ErrorNotification';
 import {
   ErrorNotificationDefaultColumns,
   errorNotificationTableProps,
-  getDefaultColumns,
+  getDefaultErrorTableColumns,
 } from '../ErrorNotification/ErrorNotificationDefaultTable';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
@@ -74,6 +73,7 @@ import {
   ClinicalSubmissionError,
   ClinicalSubmissionQueryData,
   GqlClinicalEntity,
+  GqlClinicalEntityClinicalType,
   SignOffSubmissionMutationVariables,
   UploadFilesMutationVariables,
   ValidateSubmissionMutationVariables,
@@ -87,7 +87,13 @@ type ErrorTableColumns = ErrorNotificationDefaultColumns & {
   fileName: string;
 };
 
-const CLINICAL_FILE_ORDER = [
+export type ErrorTableColumnProperties = {
+  accessorKey: keyof ErrorTableColumns;
+  header: string;
+  maxSize?: number;
+};
+
+const CLINICAL_FILE_ORDER: ReadonlyArray<GqlClinicalEntityClinicalType> = [
   'donor',
   'specimen',
   'primary_diagnosis',
@@ -102,7 +108,7 @@ const CLINICAL_FILE_ORDER = [
   'exposure',
   'comorbidity',
   'biomarker',
-];
+] as const;
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile =
   (submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state']) =>
@@ -157,26 +163,29 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
     gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
   );
 
-const getErrorColumns = (level: NotificationVariant) => {
-  const columnHelper = createColumnHelper<ErrorTableColumns>();
-  const reportColumns: {
-    header: string;
-    id: keyof ErrorTableColumns;
-    maxSize?: number;
-  }[] = [
-    ...getDefaultColumns(level),
+const getErrorColumns = (
+  level: NotificationVariant,
+): {
+  errorReportColumns: ErrorReportColumns[];
+  errorTableColumns: ColumnDef<ErrorTableColumns>[];
+} => {
+  const errorTableColumns: ErrorTableColumnProperties[] = [
+    ...getDefaultErrorTableColumns(level),
     {
+      accessorKey: 'fileName',
       header: 'File',
-      id: 'fileName',
       maxSize: 150,
     },
   ];
 
-  const errorTableColumns: ColumnDef<ErrorTableColumns>[] = reportColumns.map((column) =>
-    columnHelper.accessor(column.id, column),
+  const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+    ({ accessorKey, header }) => ({
+      header,
+      id: accessorKey,
+    }),
   );
 
-  return { reportColumns, errorTableColumns };
+  return { errorReportColumns, errorTableColumns };
 };
 
 const PageContent = () => {
@@ -466,32 +475,29 @@ const PageContent = () => {
     }
   };
 
-  const { reportColumns: errorReportColumns, errorTableColumns } = getErrorColumns(
-    NOTIFICATION_VARIANTS.ERROR,
-  );
-  const { reportColumns: warningReportColumns, errorTableColumns: warningTableColumns } =
+  const { errorReportColumns, errorTableColumns } = getErrorColumns(NOTIFICATION_VARIANTS.ERROR);
+  const { errorReportColumns: warningReportColumns, errorTableColumns: warningTableColumns } =
     getErrorColumns(NOTIFICATION_VARIANTS.WARNING);
   const errorData = allDataErrors.map(toDisplayError);
   const warningData = allDataWarnings.map(toDisplayError);
 
-  const containerRef_legacy = createRef<HTMLDivElement>();
+  const containerRefTableV6 = createRef<HTMLDivElement>();
 
   const ErrorTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={errorTableColumns} data={errorData} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_legacy}>
+    <div ref={containerRefTableV6}>
       <Table
-        parentRef={containerRef_legacy}
+        parentRef={containerRefTableV6}
         columns={errorTableColumns.map(
-          ({ id, header, size }: { id: string; header: string; size: number }) => ({
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: id,
+            accessor: accessorKey,
             Header: header,
-            id,
-            width: size,
+            width: maxSize,
           }),
         )}
         data={errorData}
@@ -502,19 +508,18 @@ const PageContent = () => {
   const WarningTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
     <TableV8 columns={warningTableColumns} data={warningData} {...errorNotificationTableProps} />
   ) : (
-    <div ref={containerRef_legacy}>
+    <div ref={containerRefTableV6}>
       <Table
-        parentRef={containerRef_legacy}
+        parentRef={containerRefTableV6}
         columns={warningTableColumns.map(
-          ({ id, header, size }: { id: string; header: string; size: number }) => ({
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
             style: {
               whiteSpace: 'pre-line',
             },
             // react table v6 property name conversion
-            accessor: id,
+            accessor: accessorKey,
             Header: header,
-            id,
-            width: size,
+            width: maxSize,
           }),
         )}
         data={warningData}
@@ -588,7 +593,7 @@ const PageContent = () => {
               <strong>{data.clinicalSubmissions.updatedBy}</strong>
             </Typography>
           </div>
-          <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
+          <SubmissionSummaryTable clinicalEntities={data.clinicalSubmissions.clinicalEntities} />
         </Container>
       )}
       {

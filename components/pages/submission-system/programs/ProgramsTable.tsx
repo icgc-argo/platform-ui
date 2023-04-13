@@ -18,6 +18,7 @@
  */
 
 import {
+  ColumnDef,
   css,
   InteractiveIcon,
   Link,
@@ -89,7 +90,7 @@ export default function ProgramsTable(tableProps: {
   }));
 
   // for react table v6
-  const tableColumns_legacy: Array<TableColumnConfig<TableProgramInternal>> = [
+  const tableColumnsTableV6: Array<TableColumnConfig<TableProgramInternal>> = [
     {
       Header: 'Short Name',
       accessor: 'shortName',
@@ -233,7 +234,7 @@ export default function ProgramsTable(tableProps: {
   ];
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<TableProgramInternal>[] = [
     {
       header: 'Short Name',
       accessorKey: 'shortName',
@@ -392,7 +393,7 @@ export default function ProgramsTable(tableProps: {
     <Table
       parentRef={createRef()}
       data={tableData}
-      columns={tableColumns_legacy}
+      columns={tableColumnsTableV6}
       showPagination={false}
       loading={tableProps.loading}
       pageSize={tableProps.programs.length}

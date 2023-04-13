@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Table, TableV8 } from '@icgc-argo/uikit';
+import { ColumnDef, css, Icon, Table, TableV8 } from '@icgc-argo/uikit';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
@@ -108,7 +108,7 @@ const FileTable = (props: {
   const containerRef = createRef<HTMLDivElement>();
 
   // for react table v6
-  const tableColumns_legacy = [
+  const tableColumnsTableV6 = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       Cell: ({ original }) => (
@@ -145,13 +145,13 @@ const FileTable = (props: {
   ];
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<FileEntry>[] = [
     {
       cell: ({ row: { original } }) => (
         <CellContentCenter>{toDisplayRowIndex(original.row)}</CellContentCenter>
       ),
       header: 'Line #',
-      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
+      accessorKey: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       size: 90,
     },
     {
@@ -169,7 +169,7 @@ const FileTable = (props: {
           <StarIcon fill="grey_1" />
         </div>
       ),
-      id: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
+      accessorKey: REQUIRED_FILE_ENTRY_FIELDS.IS_NEW,
       size: 48,
     },
     ...Object.entries(filteredFirstRecord).map(([key], i, arr) => ({
@@ -205,7 +205,7 @@ const FileTable = (props: {
           parentRef={containerRef}
           showPagination={false}
           pageSize={Number.MAX_SAFE_INTEGER}
-          columns={tableColumns_legacy}
+          columns={tableColumnsTableV6}
           data={tableData}
         />
       )}

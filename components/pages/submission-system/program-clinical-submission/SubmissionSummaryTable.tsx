@@ -18,6 +18,7 @@
  */
 
 import {
+  ColumnDef,
   css,
   Table,
   TableCellWrapper,
@@ -30,73 +31,62 @@ import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
 import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
-import { GqlClinicalSubmissionData } from './types';
+import { GqlClinicalEntityClinicalType, GqlClinicalEntity } from './types';
 import { getConfig } from 'global/config';
+
+type EntryTableV6 = {
+  [k: string]: number | JSX.Element;
+};
+
+type SubmissionSummaryStatus = {
+  submissionSummaryStatus: string;
+};
+
+// This type allows us to have a subset of the GqlClinicalEntity properties as columns, but not any other columns.
+//   A SubmissionSummaryStatus column is also allowed.
+type SubmissionSummaryColumns = Partial<
+  SubmissionSummaryStatus & {
+    [k in GqlClinicalEntityClinicalType]: string;
+  }
+>;
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-const defaultStats: GqlClinicalSubmissionData['clinicalEntities'][0]['stats'] = {
-  errorsFound: [],
-  new: [],
-  noUpdate: [],
-  updated: [],
-};
+const FIRST_COLUMN_ACCESSOR = 'submissionSummaryStatus';
 
 const SubmissionSummaryTable = ({
-  clinicalSubmissions,
+  clinicalEntities,
 }: {
-  clinicalSubmissions: GqlClinicalSubmissionData;
+  clinicalEntities: GqlClinicalEntity[];
 }) => {
   const theme = useTheme();
 
-  const FIRST_COLUMN_ACCESSOR = '__';
+  const newDataRow = clinicalEntities.reduce<SubmissionSummaryColumns>(
+    (acc, entity) => ({
+      ...acc,
+      [entity.clinicalType]: String(entity.stats?.new?.length || 0),
+    }),
+    { [FIRST_COLUMN_ACCESSOR]: 'New' },
+  );
 
-  type Entry = {
-    [k: string]: number | JSX.Element;
-  };
+  const updatedDataRow = clinicalEntities.reduce<SubmissionSummaryColumns>(
+    (acc, entity) => ({
+      ...acc,
+      [entity.clinicalType]: String(entity.stats?.updated?.length || 0),
+    }),
+    { [FIRST_COLUMN_ACCESSOR]: 'Updated' },
+  );
 
-  const newDataRow: Entry = {
-    [FIRST_COLUMN_ACCESSOR]: (
-      <>
-        <StatArea.StarIcon fill={FILE_STATE_COLORS.NEW} />
-        New
-      </>
-    ),
-    ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
-      (acc, entity) => ({
-        ...acc,
-        [entity.clinicalType]: String((entity.stats || defaultStats).new.length),
-      }),
-      {},
-    ),
-  };
-
-  const updatedDataRow: Entry = {
-    [FIRST_COLUMN_ACCESSOR]: (
-      <>
-        <StatArea.StarIcon fill={FILE_STATE_COLORS.UPDATED} />
-        &nbsp;Updated
-      </>
-    ),
-    ...clinicalSubmissions.clinicalEntities.reduce<{ [k: string]: string }>(
-      (acc, entity) => ({
-        ...acc,
-        [entity.clinicalType]: String((entity.stats || defaultStats).updated.length),
-      }),
-      {},
-    ),
-  };
-
-  const tableData = [newDataRow, updatedDataRow];
+  const tableData: SubmissionSummaryColumns[] = [newDataRow, updatedDataRow];
 
   // for react table v6
-  const tableColumns_legacy: TableColumnConfig<Entry>[] = [
+  const tableColumnsTableV6: TableColumnConfig<EntryTableV6>[] = [
     // this is the first column
     {
       accessor: FIRST_COLUMN_ACCESSOR,
       width: 100,
     },
-    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+    ...clinicalEntities.map((entity) => ({
       accessor: entity.clinicalType,
       Header: capitalize(entity.clinicalType.split('_').join(' ')),
     })),
@@ -104,25 +94,29 @@ const SubmissionSummaryTable = ({
   const containerRef = createRef<HTMLDivElement>();
 
   // for react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<SubmissionSummaryColumns>[] = [
     {
       header: '',
       accessorKey: FIRST_COLUMN_ACCESSOR,
       size: 100,
-      cell: ({ cell, row }) => (
-        <TableCellWrapper
-          css={css`
-            background: ${row.index ? theme.colors.accent3_3 : theme.colors.accent2_4};
-          `}
-        >
-          {cell.getValue()}
-        </TableCellWrapper>
-      ),
+      cell: ({ row: { index, original } }) => {
+        const cellValue = original[FIRST_COLUMN_ACCESSOR];
+        return (
+          <TableCellWrapper
+            css={css`
+              background: ${index ? theme.colors.accent3_3 : theme.colors.accent2_4};
+            `}
+          >
+            <StatArea.StarIcon fill={FILE_STATE_COLORS[cellValue.toUpperCase()]} />
+            &nbsp;{cellValue}
+          </TableCellWrapper>
+        );
+      },
       meta: {
         customCell: true,
       },
     },
-    ...clinicalSubmissions.clinicalEntities.map((entity) => ({
+    ...clinicalEntities.map((entity) => ({
       accessorKey: entity.clinicalType,
       header: capitalize(entity.clinicalType.split('_').join(' ')),
       cell: ({ cell, row }) => (
@@ -171,7 +165,7 @@ const SubmissionSummaryTable = ({
               } as CSSProperties,
             };
           }}
-          columns={tableColumns_legacy}
+          columns={tableColumnsTableV6}
           data={tableData}
           resizable
         />
