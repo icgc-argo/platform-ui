@@ -467,7 +467,7 @@ const LineChart = ({
   // invisible box (keep track of mouse hovering)
   const HoverDetector = () => {
     return (
-      <g fillOpacity="0" stroke="none">
+      <g fill-opacity="0" stroke="none">
         {xCoordinates.map((xCoordinate, idx) => (
           <rect
             onMouseEnter={() => {
@@ -480,7 +480,6 @@ const LineChart = ({
             height={verticalLineEnd - verticalLineStart}
             x={horizontalLineStart + xTickDistance * idx}
             width={xTickDistance}
-            key={xCoordinate}
           />
         ))}
       </g>
