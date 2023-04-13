@@ -99,6 +99,8 @@ export const DesignationCell = ({
   );
 };
 
+// FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
+// this code isn't required once the RNA feature is in production
 const isValid = (num: number) => num > 0;
 const DesignationEntryStyled = styled('div')`
   text-align: center;
@@ -106,9 +108,6 @@ const DesignationEntryStyled = styled('div')`
   color: ${({ num, theme }: { num: number; theme: UikitTheme }) =>
     isValid(num) ? theme.colors.primary : theme.colors.error};
 `;
-
-// FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
-// this code isn't required once the RNA feature is in production
 export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
   const theme = useTheme();
   return (
