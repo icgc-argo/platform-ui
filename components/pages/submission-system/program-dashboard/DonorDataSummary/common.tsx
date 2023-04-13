@@ -19,9 +19,9 @@
 
 import {
   DonorDataReleaseState,
+  DonorSummarySortingRequest,
+  DonorSummarySortingState,
   ProgramDonorReleaseStats,
-  SortingRequest,
-  SortingState,
 } from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
 import { ComponentProps, useEffect, useState } from 'react';
@@ -235,7 +235,9 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
   },
 };
 
-export const formatSortingRequest = (sorts: SortingState[]): SortingRequest =>
+export const formatDonorSummarySortingRequest = (
+  sorts: DonorSummarySortingState[],
+): DonorSummarySortingRequest =>
   sorts.map((sort) => ({
     field: sort.id,
     order: sort.desc ? 'desc' : 'asc',

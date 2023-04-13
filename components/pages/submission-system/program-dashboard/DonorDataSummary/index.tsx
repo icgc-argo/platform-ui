@@ -23,7 +23,11 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { Col, Row } from 'react-grid-system';
 import ContentError from '../../../../placeholders/ContentError';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
-import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout, formatSortingRequest } from './common';
+import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
+  useTimeout,
+  formatDonorSummarySortingRequest,
+} from './common';
 import DonorSummaryTable from './DonorSummaryTable';
 import DonorSummaryTableV8 from './DonorSummaryTableV8';
 import DownloadButtons from './DownloadButtons';
@@ -36,7 +40,7 @@ import {
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   ProgramDonorSummaryFilter,
-  SortingState,
+  DonorSummarySortingState,
 } from './types';
 
 import { getConfig } from 'global/config';
@@ -89,7 +93,7 @@ const DonorDataSummary = () => {
       order: 'desc' as DonorSummaryEntrySortOrder,
     },
   ];
-  const DEFAULT_SORTING: SortingState[] = [
+  const DEFAULT_SORTING: DonorSummarySortingState[] = [
     {
       id: 'updatedAt',
       desc: true,
@@ -108,7 +112,7 @@ const DonorDataSummary = () => {
     programShortName,
     first: DEFAULT_PAGE_SIZE,
     offset: DEFAULT_OFFSET,
-    sorts: formatSortingRequest(DEFAULT_SORTING),
+    sorts: formatDonorSummarySortingRequest(DEFAULT_SORTING),
   });
 
   const isDonorSummaryEntriesEmpty =

@@ -189,9 +189,9 @@ export type ProgramDonorSummaryFilter = {
   values: string[];
 };
 
-export type CellProps = { row: { original: DonorSummaryEntry } };
-export type FilterState = TableFilterRule & { field: ProgramDonorSummaryEntryField };
-export type SortingState = TableSortingRule & {
+export type DonorSummaryCellProps = { row: { original: DonorSummaryEntry } };
+export type DonorSummaryFilterState = TableFilterRule & { field: ProgramDonorSummaryEntryField };
+export type DonorSummarySortingState = TableSortingRule & {
   id: DonorSummaryEntrySortField;
 };
-export type SortingRequest = DonorSummaryEntrySort[];
+export type DonorSummarySortingRequest = DonorSummaryEntrySort[];

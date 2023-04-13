@@ -48,16 +48,16 @@ import {
 } from 'components/pages/submission-system/program-submitted-data/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
 import {
-  CellProps,
+  DonorSummaryCellProps,
   DonorDataReleaseState,
-  FilterState,
+  DonorSummaryFilterState,
   ProgramDonorSummaryEntryField,
-  SortingState,
+  DonorSummarySortingState,
 } from './types';
 import {
   EMPTY_PROGRAM_SUMMARY_STATS,
   FILTER_OPTIONS,
-  formatSortingRequest,
+  formatDonorSummarySortingRequest,
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
@@ -97,7 +97,7 @@ const DonorSummaryTableV8 = ({
   programShortName,
 }: {
   initialPagination: TablePaginationRule;
-  initialSorting: SortingState[];
+  initialSorting: DonorSummarySortingState[];
   isCardLoading?: boolean;
   programShortName: string;
 }) => {
@@ -115,12 +115,12 @@ const DonorSummaryTableV8 = ({
     usePagination(initialPagination);
 
   // filter state handling
-  const [filterState, setFilterState] = useState<FilterState[]>([]);
-  const handleFilterStateChange = (filters: FilterState[]) => {
+  const [filterState, setFilterState] = useState<DonorSummaryFilterState[]>([]);
+  const handleFilterStateChange = (filters: DonorSummaryFilterState[]) => {
     setFilterState(filters);
     handlePaginationState({ page: 0 });
   };
-  const updateFilter = ({ field, values }: FilterState) => {
+  const updateFilter = ({ field, values }: DonorSummaryFilterState) => {
     const newFilters = filterState.filter((filter) => filter.field !== field);
     if (values.length) {
       newFilters.push({
@@ -153,7 +153,7 @@ const DonorSummaryTableV8 = ({
     programShortName,
     first: paginationState.pageSize,
     offset: paginationState.pageSize * paginationState.page,
-    sorts: formatSortingRequest(sortingState),
+    sorts: formatDonorSummarySortingRequest(sortingState),
     filters: filterState,
     options: {
       onCompleted: (result) => {
@@ -316,7 +316,7 @@ const DonorSummaryTableV8 = ({
             />
           ),
           accessorKey: 'donorId',
-          cell: ({ row: { original } }: CellProps) => {
+          cell: ({ row: { original } }: DonorSummaryCellProps) => {
             const errorTab =
               errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
                 ?.entity || '';
@@ -450,7 +450,7 @@ const DonorSummaryTableV8 = ({
                 ),
                 meta: { customCell: true },
                 id: REGISTERED_SAMPLE_COLUMN_ID,
-                cell: ({ row: { original } }: CellProps) =>
+                cell: ({ row: { original } }: DonorSummaryCellProps) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
                       normalCount={original.registeredNormalSamples}
@@ -854,7 +854,7 @@ const DonorSummaryTableV8 = ({
         {
           header: 'Last Updated',
           accessorKey: 'updatedAt',
-          cell: ({ row: { original } }: CellProps) => {
+          cell: ({ row: { original } }: DonorSummaryCellProps) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
           size: 95,
