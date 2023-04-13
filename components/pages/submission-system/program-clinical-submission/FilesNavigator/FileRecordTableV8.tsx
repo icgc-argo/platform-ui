@@ -17,14 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ColumnDef, css, Table, TableColumnConfig, TableV8, useTheme } from '@icgc-argo/uikit';
+import { ColumnDef, css, TableV8, useTablePagination, useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import { ComponentProps, useMemo, createRef, CSSProperties } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import {
   CellContentCenter,
@@ -42,6 +42,9 @@ type TableColumns = {
 };
 
 type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR' | 'WARNING';
+
+const initialPage = 0;
+const initialPageSize = 20;
 
 export const FILE_STATE_COLORS: {
   [k in RecordState]: ComponentProps<typeof StarIcon>['fill'];
@@ -99,7 +102,15 @@ const FileRecordTable = ({
           return `${priority}::${r.row}`;
         },
   );
-  const containerRef = createRef<HTMLDivElement>();
+
+  const initialPagination = {
+    page: initialPage,
+    pageSize: initialPageSize,
+    pages: Math.ceil(records.length / initialPageSize),
+  };
+
+  const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
+    useTablePagination(initialPagination);
 
   const tableData: TableColumns[] = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
@@ -238,68 +249,15 @@ const FileRecordTable = ({
         return priorities[sortA] - priorities[sortB];
       },
     },
-    ...fields.map(({ name: fieldName }): typeof tableColumnsTableV6[0] => ({
+    ...fields.map(({ name: fieldName }) => ({
       accessorKey: fieldName,
       header: fieldName,
       cell: ({ row: { original } }) => <DataFieldCell original={original} fieldName={fieldName} />,
     })),
   ];
 
-  const tableColumnsTableV6: TableColumnConfig<typeof tableData[0]>[] = [
-    {
-      id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
-      Cell: ({ original }) => (
-        <CellContentCenter
-          css={
-            rowHasUpdate(original)
-              ? css`
-                  justify-content: flex-start;
-                  padding-top: 5px;
-                `
-              : css``
-          }
-        >
-          {toDisplayRowIndex(original.row)}
-        </CellContentCenter>
-      ),
-      Header: 'Line #',
-      resizable: false,
-      width: 70,
-    },
-    {
-      id: 'status',
-      // Cell: StatusColumnCell,
-      accessor: 'status',
-      resizable: false,
-      Header: (
-        <CellContentCenter>
-          <StarIcon fill={FILE_STATE_COLORS.NONE} />
-        </CellContentCenter>
-      ),
-      sortMethod: (a: typeof tableData[0]['status'], b: typeof tableData[0]['status']) => {
-        const priorities = {
-          ERROR: 1,
-          UPDATE: 2,
-          NEW: 3,
-          NONE: 4,
-        } as { [k in typeof tableData[0]['status']]: number };
-        return priorities[a] - priorities[b];
-      },
-      width: 50,
-    },
-    ...fields.map(
-      ({ name: fieldName }) =>
-        ({
-          accessor: fieldName,
-          Header: fieldName,
-          Cell: ({ original }) => <DataFieldCell original={original} fieldName={fieldName} />,
-        } as typeof tableColumnsTableV6[0]),
-    ),
-  ];
-
   return (
     <div
-      ref={containerRef}
       css={css`
         margin: 5px 10px;
         .updateRow + .updateRow {
@@ -322,50 +280,17 @@ const FileRecordTable = ({
         }
         right={<SubmissionInfoArea {...submissionData} />}
       />
-      <Table
-        parentRef={containerRef}
-        getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
-          ({
-            style:
-              isPendingApproval && cellHasUpdate({ row: row.original, field: column.id })
-                ? {
-                    background: theme.colors.accent3_3,
-                  }
-                : {},
-          } as { style: CSSProperties })
-        }
-        getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
-          ({
-            style: recordHasError(original)
-              ? {
-                  background: theme.colors.error_4,
-                }
-              : recordHasWarning(original)
-              ? {
-                  background: theme.colors.warning_4,
-                }
-              : isPendingApproval && rowHasUpdate(original)
-              ? {
-                  background: theme.colors.accent3_4,
-                }
-              : {},
-          } as { style: CSSProperties })
-        }
-        getTrGroupProps={(_, { original }: { original: typeof tableData[0] }) =>
-          isPendingApproval && rowHasUpdate(original)
-            ? {
-                className: `updateRow`, // append this classname so parent div's css can apply style
-              }
-            : {}
-        }
-        columns={tableColumnsTableV6}
+      <TableV8
+        columns={tableColumns}
         data={tableData}
-        showPagination
+        enableSorting
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        paginationState={paginationState}
+        showPageSizeOptions
+        withHeaders
+        withStripes
       />
-      <br />
-      <br />
-      <br />
-      <TableV8 data={tableData} columns={tableColumns} withHeaders withSorting withStripes />
     </div>
   );
 };
