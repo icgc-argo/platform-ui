@@ -39,6 +39,10 @@ import {
   SortingState,
 } from './types';
 
+import { getConfig } from 'global/config';
+
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
 export const useProgramDonorsSummaryQuery = ({
   programShortName,
   first,
@@ -148,25 +152,21 @@ const DonorDataSummary = () => {
         <ContentError />
       ) : !isCardLoading && isDonorSummaryEntriesEmpty ? (
         <EmptyDonorSummaryState />
+      ) : FEATURE_REACT_TABLE_V8_ENABLED ? (
+        <DonorSummaryTableV8
+          initialPagination={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
+          initialSorting={DEFAULT_SORTING}
+          isCardLoading={isCardLoading}
+          programShortName={programShortName}
+        />
       ) : (
-        <>
-          <DonorSummaryTable
-            programShortName={programShortName}
-            initialPages={initialPages}
-            initialPageSize={DEFAULT_PAGE_SIZE}
-            initialSorts={DEFAULT_SORTS_V6}
-            isCardLoading={isCardLoading}
-          />
-          <br />
-          <br />
-          <br />
-          <DonorSummaryTableV8
-            initialPagination={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
-            initialSorting={DEFAULT_SORTING}
-            isCardLoading={isCardLoading}
-            programShortName={programShortName}
-          />
-        </>
+        <DonorSummaryTable
+          programShortName={programShortName}
+          initialPages={initialPages}
+          initialPageSize={DEFAULT_PAGE_SIZE}
+          initialSorts={DEFAULT_SORTS_V6}
+          isCardLoading={isCardLoading}
+        />
       )}
     </DashboardCard>
   );
