@@ -42,6 +42,8 @@ type SubmissionSummaryStatus = {
   submissionSummaryStatus: string;
 };
 
+// This type allows us to have a subset of the GqlClinicalEntity properties as columns, but not any other columns.
+//   A SubmissionSummaryStatus column is also allowed.
 type SubmissionSummaryColumns = Partial<
   SubmissionSummaryStatus & {
     [k in GqlClinicalEntityClinicalType]: string;
@@ -144,7 +146,13 @@ const SubmissionSummaryTable = ({
       ref={containerRef}
     >
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
-        <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          withHeaders
+          enableColumnResizing
+          withRowBorder
+        />
       ) : (
         <Table
           parentRef={containerRef}

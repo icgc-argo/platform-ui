@@ -1,16 +1,13 @@
 import { ColumnDef, css, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import { createRef } from 'react';
 import { getConfig } from 'global/config';
+import { TreatmentData } from '../types';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 // NOTE types based on dummy data
-export type TreatmentTableColumns = {
-  drug_rxnormcui: string;
-  drug_name: string;
-  cumulative_drug_dose: string;
-  chemotherapy_dosage_units: string;
-};
+export type TreatmentTableColumns = TreatmentData;
+
 type TreatmentTableInput = {
   treatment_type: string;
   data: TreatmentTableColumns[];
@@ -54,7 +51,7 @@ const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
-            withResize
+            enableColumnResizing
             withSideBorders
             withStripes
           />

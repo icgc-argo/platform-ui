@@ -272,10 +272,10 @@ const UsersTable = (tableProps: {
             overflow-y: auto;
           `}
           data={tableProps.users}
+          enableColumnResizing
+          enableSorting
           loading={tableProps.loading}
           withHeaders
-          withResize
-          withSorting
           withStripes
         />
       ) : (

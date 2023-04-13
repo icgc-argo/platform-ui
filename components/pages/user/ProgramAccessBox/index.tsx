@@ -148,10 +148,10 @@ const ProgramTable = (props: { programs: Array<ProgramTableProgram> }) => {
         <TableV8
           columns={tableColumns}
           data={props.programs}
+          enableColumnResizing
           withHeaders
-          withSideBorders
-          withResize
           withRowHighlight
+          withSideBorders
           withStripes
         />
       ) : (

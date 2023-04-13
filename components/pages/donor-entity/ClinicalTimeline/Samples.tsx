@@ -18,6 +18,7 @@
  */
 
 import {
+  CellContext,
   ColumnDef,
   css,
   Table,
@@ -39,9 +40,10 @@ import sqonBuilder from 'sqon-builder';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-export type SamplesTableColumns = SampleNode['node'];
+export type SamplesTableRecord = SampleNode['node'];
 
-const getAvailableFilesLink = ({ getValue, row }) => {
+const getAvailableFilesLink = (props: CellContext<SamplesTableRecord, JSX.Element>) => {
+  const { getValue, row } = props;
   const { donorId } = usePageQuery<{ donorId: string }>();
   const sampleFilter = sqonBuilder
     .has('donor_id', donorId)
@@ -60,7 +62,7 @@ const getAvailableFilesLink = ({ getValue, row }) => {
   );
 };
 
-const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
+const Samples = ({ samples }: { samples: SamplesTableRecord[] }) => {
   // react table v6
   const tableDataTableV6: TableDataBase = formatTableDisplayNames(samples);
   const tableColumnsTableV6: TableColumnConfig<TableDataBase>[] = Object.keys(tableDataTableV6).map(
@@ -72,25 +74,25 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumns: ColumnDef<SamplesTableColumns>[] = samples.length
-    ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableColumns) => ({
+  const tableColumns: ColumnDef<SamplesTableRecord>[] = samples.length
+    ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableRecord) => ({
         accessorKey: sampleKey,
         header: () => formatTableHeader(sampleKey),
         ...(sampleKey === 'available_files'
           ? {
-              cell: ({ getValue, row }) => getAvailableFilesLink({ getValue, row }),
+              cell: getAvailableFilesLink,
             }
           : {}),
       }))
     : [];
 
-  const tableData: SamplesTableColumns[] = samples.map((sample) =>
-    Object.entries(sample).reduce<SamplesTableColumns>(
+  const tableData: SamplesTableRecord[] = samples.map((sample) =>
+    Object.entries(sample).reduce<SamplesTableRecord>(
       (acc, [key, value]) => ({
         ...acc,
         ...formatTableData(key, value),
       }),
-      {} as SamplesTableColumns,
+      {} as SamplesTableRecord,
     ),
   );
 
@@ -116,7 +118,7 @@ const Samples = ({ samples }: { samples: SamplesTableColumns[] }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
-            withResize
+            enableColumnResizing
             withSideBorders
             withStripes
           />

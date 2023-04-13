@@ -195,9 +195,9 @@ const FileTable = (props: {
         <TableV8
           columns={tableColumns}
           data={tableData}
+          enableColumnResizing
+          enableSorting
           withHeaders
-          withResize
-          withSorting
           withStripes
         />
       ) : (
