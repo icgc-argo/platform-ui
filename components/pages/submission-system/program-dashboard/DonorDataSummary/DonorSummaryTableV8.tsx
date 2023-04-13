@@ -27,14 +27,14 @@ import {
   FilterClearButton,
   Icon,
   Link,
-  ListFilterHeader,
+  TableListFilterHeader,
   Row,
   TableHeaderWrapper,
   TablePaginationRule,
   TableV8,
-  TextFilterHeader,
+  TableTextFilterHeader,
   ThemeColorNames,
-  usePagination,
+  useTablePagination,
   useTableTabs,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -112,7 +112,7 @@ const DonorSummaryTableV8 = ({
   const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
 
   const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
-    usePagination(initialPagination);
+    useTablePagination(initialPagination);
 
   // filter state handling
   const [filterState, setFilterState] = useState<DonorSummaryFilterState[]>([]);
@@ -305,7 +305,7 @@ const DonorSummaryTableV8 = ({
         },
         {
           header: () => (
-            <TextFilterHeader
+            <TableTextFilterHeader
               header={'Donor ID'}
               onFilter={(text) =>
                 text?.length
@@ -338,7 +338,7 @@ const DonorSummaryTableV8 = ({
         },
         {
           header: () => (
-            <ListFilterHeader
+            <TableListFilterHeader
               header={'Core Completion'}
               panelLegend={'Core Completion Status'}
               onFilter={(options) =>
@@ -404,7 +404,7 @@ const DonorSummaryTableV8 = ({
           ? [
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={`${
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA' : 'Sample'
@@ -467,7 +467,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={`${
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA ' : ''
@@ -533,7 +533,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
@@ -569,7 +569,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Sanger VC'}
                     panelLegend={'Sanger VC Status'}
                     onFilter={(options) =>
@@ -605,7 +605,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Mutect2 VC'}
                     panelLegend={'Mutect2 VC Status'}
                     onFilter={(options) =>
@@ -641,7 +641,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Open Access VF'}
                     panelLegend={'Open Access VF Status'}
                     onFilter={(options) =>
@@ -679,7 +679,7 @@ const DonorSummaryTableV8 = ({
           : [
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={'RNA Registration Status'}
                     onFilter={(options) =>
@@ -711,7 +711,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={'RNA Raw Reads Status'}
                     onFilter={(options) =>
@@ -743,7 +743,7 @@ const DonorSummaryTableV8 = ({
               },
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
@@ -800,7 +800,7 @@ const DonorSummaryTableV8 = ({
           ? [
               {
                 header: () => (
-                  <ListFilterHeader
+                  <TableListFilterHeader
                     header={'Alerts'}
                     panelLegend={'Filter Alerts'}
                     onFilter={(options) =>
