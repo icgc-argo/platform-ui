@@ -109,7 +109,7 @@ export const DesignationCell = ({
 // FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
 // this code isn't required once the RNA feature is in production
 const isValid = (num: number) => num > 0;
-const DesignationEntryStyled = styled('div')`
+const DesignationEntryLegacy = styled('div')`
   text-align: center;
   flex: 1;
   color: ${({ num, theme }: { num: number; theme: UikitTheme }) =>
@@ -119,10 +119,10 @@ export const DesignationCellLegacy = ({ left, right }: { left: number; right: nu
   const theme = useTheme();
   return (
     <DesignationContainer>
-      <DesignationEntryStyled theme={theme} num={left}>
+      <DesignationEntryLegacy theme={theme} num={left}>
         {left}N
-      </DesignationEntryStyled>
-      <DesignationEntryStyled
+      </DesignationEntryLegacy>
+      <DesignationEntryLegacy
         theme={theme}
         num={right}
         css={css`
@@ -130,7 +130,7 @@ export const DesignationCellLegacy = ({ left, right }: { left: number; right: nu
         `}
       >
         {right}T
-      </DesignationEntryStyled>
+      </DesignationEntryLegacy>
     </DesignationContainer>
   );
 };
