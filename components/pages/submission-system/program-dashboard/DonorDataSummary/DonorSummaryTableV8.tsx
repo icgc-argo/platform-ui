@@ -883,9 +883,7 @@ const DonorSummaryTableV8 = ({
             columns={tableColumns}
             data={programDonorSummaryEntries}
             enableColumnResizing
-            enableSorting
             loading={isCardLoading || isTableLoading}
-            manualSorting
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
             onSortingChange={setSortingState}
