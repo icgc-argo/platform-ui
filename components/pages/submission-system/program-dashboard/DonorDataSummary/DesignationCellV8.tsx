@@ -115,6 +115,7 @@ const DesignationEntryStyled = styled('div')`
 `;
 
 // FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED - remove when flag enabled in production
+// this code isn't required once the RNA feature is in production
 export const DesignationCellLegacy = ({ left, right }: { left: number; right: number }) => {
   const theme = useTheme();
   return (
