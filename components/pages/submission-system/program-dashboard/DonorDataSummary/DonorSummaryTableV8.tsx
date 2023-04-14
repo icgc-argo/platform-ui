@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
@@ -34,9 +34,10 @@ import {
   TableV8,
   TableTextFilterHeader,
   ThemeColorNames,
-  useTablePagination,
   useTableTabs,
   useTheme,
+  PaginationState,
+  DEFAULT_TABLE_PAGE_SIZE,
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
@@ -110,15 +111,18 @@ const DonorSummaryTableV8 = ({
     useTableTabs(PipelineNames.DNA);
   const [sortingState, setSortingState] = useState(initialSorting);
   const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
-
-  const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
-    useTablePagination(initialPagination);
+  const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: DEFAULT_TABLE_PAGE_SIZE,
+  });
+  const handlePaginationState = (nextState: Partial<PaginationState>) =>
+    setPaginationState({ pageIndex, pageSize, ...nextState });
 
   // filter state handling
   const [filterState, setFilterState] = useState<DonorSummaryFilterState[]>([]);
   const handleFilterStateChange = (filters: DonorSummaryFilterState[]) => {
     setFilterState(filters);
-    handlePaginationState({ page: 0 });
+    handlePaginationState({ pageIndex: 0 });
   };
   const updateFilter = ({ field, values }: DonorSummaryFilterState) => {
     const newFilters = filterState.filter((filter) => filter.field !== field);
@@ -151,18 +155,17 @@ const DonorSummaryTableV8 = ({
     loading,
   } = useProgramDonorsSummaryQuery({
     programShortName,
-    first: paginationState.pageSize,
-    offset: paginationState.pageSize * paginationState.page,
+    first: pageSize,
+    offset: pageSize * pageIndex,
     sorts: formatDonorSummarySortingRequest(sortingState),
     filters: filterState,
     options: {
       onCompleted: (result) => {
         const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
-        const nextPages = Math.ceil(totalDonors / paginationState.pageSize);
+        const nextPageCount = Math.ceil(totalDonors / pageSize);
         handlePaginationState({
           // stay on current page, unless that page is no longer available
-          page: paginationState.page < nextPages ? paginationState.page : 0,
-          pages: nextPages,
+          pageIndex: pageIndex < nextPageCount ? pageIndex : 0,
         });
         setTimeout(() => {
           setIsTableLoading(false);
@@ -862,6 +865,7 @@ const DonorSummaryTableV8 = ({
       ].filter(Boolean),
     },
   ];
+  console.log(programDonorSummaryEntries, programDonorSummaryEntries.length / pageSize);
 
   return (
     <div
@@ -884,14 +888,15 @@ const DonorSummaryTableV8 = ({
             data={programDonorSummaryEntries}
             enableColumnResizing
             loading={isCardLoading || isTableLoading}
-            onPageChange={onPageChange}
-            onPageSizeChange={onPageSizeChange}
-            onSortingChange={setSortingState}
-            paginationState={paginationState}
+            manualPagination
+            onPaginationChange={setPaginationState}
+            pageCount={Math.ceil((programDonorSummaryStats.registeredDonorsCount || 0) / pageSize)}
+            paginationState={{ pageIndex, pageSize }}
             showPageSizeOptions
             sortingState={sortingState}
             withFilters
             withHeaders
+            withPagination
             withStripes
             withTabs
           />
