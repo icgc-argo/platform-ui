@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ColumnDef, css, TableV8, useTablePagination, useTheme } from '@icgc-argo/uikit';
+import { ColumnDef, css, TableV8, useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
@@ -102,15 +102,6 @@ const FileRecordTable = ({
           return `${priority}::${r.row}`;
         },
   );
-
-  const initialPagination = {
-    page: initialPage,
-    pageSize: initialPageSize,
-    pages: Math.ceil(records.length / initialPageSize),
-  };
-
-  const { paginationState, handlePaginationState, onPageChange, onPageSizeChange } =
-    useTablePagination(initialPagination);
 
   const tableData: TableColumns[] = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
@@ -284,11 +275,9 @@ const FileRecordTable = ({
         columns={tableColumns}
         data={tableData}
         enableSorting
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-        paginationState={paginationState}
         showPageSizeOptions
         withHeaders
+        withPagination
         withStripes
       />
     </div>
