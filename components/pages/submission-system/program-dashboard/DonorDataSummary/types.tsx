@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { TableFilterRule, TableSortingRule } from '@icgc-argo/uikit';
+import { TableFilterRule, ColumnSort } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
 
 export type CompleteIncompleteFilterCounts = {
@@ -191,7 +191,7 @@ export type ProgramDonorSummaryFilter = {
 
 export type DonorSummaryCellProps = { row: { original: DonorSummaryEntry } };
 export type DonorSummaryFilterState = TableFilterRule & { field: ProgramDonorSummaryEntryField };
-export type DonorSummarySortingState = TableSortingRule & {
+export type DonorSummarySortingState = ColumnSort & {
   id: DonorSummaryEntrySortField;
 };
 export type DonorSummarySortingRequest = DonorSummaryEntrySort[];

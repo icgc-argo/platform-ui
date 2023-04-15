@@ -30,7 +30,6 @@ import {
   TableListFilterHeader,
   Row,
   TableHeaderWrapper,
-  TablePaginationRule,
   TableV8,
   TableTextFilterHeader,
   ThemeColorNames,
@@ -38,6 +37,8 @@ import {
   useTheme,
   PaginationState,
   DEFAULT_TABLE_PAGE_SIZE,
+  SortingState,
+  OnChangeFn,
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
@@ -54,6 +55,7 @@ import {
   DonorSummaryFilterState,
   ProgramDonorSummaryEntryField,
   DonorSummarySortingState,
+  DonorSummaryEntrySortField,
 } from './types';
 import {
   EMPTY_PROGRAM_SUMMARY_STATS,
@@ -67,6 +69,7 @@ import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { ContentError } from 'components/placeholders';
 import { DonorSummaryEntry } from 'generated/gql_types';
+import { find } from 'lodash';
 
 enum PipelineNames {
   DNA = 'DNA',
@@ -78,26 +81,32 @@ const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
   [PipelineNames.RNA]: 'accent3_4',
 };
 
-// These are used to sort columns with multiple fields
-// the order of the fields is how its is order in asc or desc
-const ID_SEPARATOR = '-';
-const REGISTERED_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
-const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
-const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
-const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
-const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
-const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
-const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
-const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegisteredTumourSamples';
-const RNA_ALIGNMENT_COLUMN_ID = 'rnaAlignmentsCompleted-rnaAlignmentsRunning-rnaAlignmentFailed';
+// these are used to sort columns with multiple fields.
+// the order of the fields is the order of sorting.
+const MULTI_SORT_COLUMN_IDS = {
+  alignmentsCompleted: ['alignmentsCompleted', 'alignmentsRunning', 'alignmentsFailed'],
+  mutectCompleted: ['mutectCompleted', 'mutectRunning', 'mutectFailed'],
+  openAccessCompleted: ['openAccessCompleted', 'openAccessRunning', 'openAccessFailed'],
+  publishedNormalAnalysis: ['publishedNormalAnalysis', 'publishedTumourAnalysis'],
+  registeredNormalSamples: ['registeredNormalSamples', 'registeredTumourSamples'],
+  rnaAlignmentsCompleted: ['rnaAlignmentsCompleted', 'rnaAlignmentsRunning', 'rnaAlignmentFailed'],
+  rnaPublishedNormalAnalysis: ['rnaPublishedNormalAnalysis', 'rnaPublishedTumourAnalysis'],
+  rnaRegisteredNormalSamples: ['rnaRegisteredNormalSamples', 'rnaRegisteredTumourSamples'],
+  sangerVcsCompleted: ['sangerVcsCompleted', 'sangerVcsRunning', 'sangerVcsFailed'],
+};
+const setupMultiSort = (columnId: keyof typeof MULTI_SORT_COLUMN_IDS) => ({
+  // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting.
+  // use accessorKey to enable sorting. it has to be a key in the data.
+  accessorKey: MULTI_SORT_COLUMN_IDS[columnId][0],
+  enableMultiSort: true,
+  id: columnId,
+});
 
 const DonorSummaryTableV8 = ({
-  initialPagination,
   initialSorting,
   isCardLoading = true,
   programShortName,
 }: {
-  initialPagination: TablePaginationRule;
   initialSorting: DonorSummarySortingState[];
   isCardLoading?: boolean;
   programShortName: string;
@@ -106,11 +115,11 @@ const DonorSummaryTableV8 = ({
   const theme = useTheme();
   const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
 
-  // state
+  // tabs
   const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
     useTableTabs(PipelineNames.DNA);
-  const [sortingState, setSortingState] = useState(initialSorting);
-  const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
+
+  // pagination
   const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: DEFAULT_TABLE_PAGE_SIZE,
@@ -118,7 +127,33 @@ const DonorSummaryTableV8 = ({
   const handlePaginationState = (nextState: Partial<PaginationState>) =>
     setPaginationState({ pageIndex, pageSize, ...nextState });
 
-  // filter state handling
+  // sorting
+  const [sortingState, setSortingState] = useState<DonorSummarySortingState[]>(initialSorting);
+  const onSortingChange: OnChangeFn<SortingState> = async (
+    getSorts: () => DonorSummarySortingState[],
+  ) => {
+    const newSort = getSorts();
+    const sorts = newSort.reduce(
+      (accSorts: Array<DonorSummarySortingState>, sortRule: DonorSummarySortingState) => {
+        const fields = MULTI_SORT_COLUMN_IDS[sortRule.id] || [sortRule.id];
+        const nextSorts = fields.map((field: DonorSummaryEntrySortField) => {
+          const currentState = find(sortingState, { id: field });
+          const currentDesc = currentState ? currentState.desc : sortRule.desc;
+          return {
+            id: field,
+            desc: !currentDesc,
+          };
+        });
+
+        return [...accSorts, ...nextSorts];
+      },
+      [],
+    );
+    handlePaginationState({ pageIndex: 0 });
+    setSortingState(sorts);
+  };
+
+  // filtering
   const [filterState, setFilterState] = useState<DonorSummaryFilterState[]>([]);
   const handleFilterStateChange = (filters: DonorSummaryFilterState[]) => {
     setFilterState(filters);
@@ -142,6 +177,7 @@ const DonorSummaryTableV8 = ({
     filterState.find((x) => x.field === field)?.values;
 
   // query
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
   const {
     data: {
       programDonorSummary: { entries: programDonorSummaryEntries, stats: programDonorSummaryStats },
@@ -152,7 +188,7 @@ const DonorSummaryTableV8 = ({
       },
     },
     error: programDonorsSummaryQueryError,
-    loading,
+    loading: programDonorsSummaryQueryLoading,
   } = useProgramDonorsSummaryQuery({
     programShortName,
     first: pageSize,
@@ -174,12 +210,11 @@ const DonorSummaryTableV8 = ({
     },
   });
 
-  // loading
   useEffect(() => {
-    if (loading) {
+    if (programDonorsSummaryQueryLoading) {
       setIsTableLoading(true);
     }
-  }, [loading]);
+  }, [programDonorsSummaryQueryLoading]);
 
   // custom components
   const StatusColumnCell = ({ row: { original } }) => {
@@ -451,8 +486,21 @@ const DonorSummaryTableV8 = ({
                     )}
                   />
                 ),
-                meta: { customCell: true },
-                id: REGISTERED_SAMPLE_COLUMN_ID,
+                meta: {
+                  customCell: true,
+                },
+                sortingFn: (rowA: Row<DonorSummaryEntry>, rowB: Row<DonorSummaryEntry>) => {
+                  const priorities: { [k in DonorDataReleaseState]: number } = {
+                    [DonorDataReleaseState.NO]: 1,
+                    [DonorDataReleaseState.PARTIALLY]: 2,
+                    [DonorDataReleaseState.FULLY]: 3,
+                  };
+                  return (
+                    priorities[rowA.original.releaseStatus] -
+                    priorities[rowB.original.releaseStatus]
+                  );
+                },
+                ...setupMultiSort('registeredNormalSamples'),
                 cell: ({ row: { original } }: DonorSummaryCellProps) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
@@ -518,7 +566,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 meta: { customCell: true },
-                id: RAW_READS_COLUMN_ID,
+                ...setupMultiSort('publishedNormalAnalysis'),
                 cell: ({ row: { original } }) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
@@ -561,7 +609,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('alignmentStatus')}
                   />
                 ),
-                id: ALIGNMENT_COLUMN_ID,
+                ...setupMultiSort('alignmentsCompleted'),
                 cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.alignmentsCompleted}
@@ -597,7 +645,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('sangerVCStatus')}
                   />
                 ),
-                id: SANGER_VC_COLUMN_ID,
+                ...setupMultiSort('sangerVcsCompleted'),
                 cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.sangerVcsCompleted}
@@ -633,7 +681,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('mutectStatus')}
                   />
                 ),
-                id: MUTECT2_VC_COLUMN_ID,
+                ...setupMultiSort('mutectCompleted'),
                 cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.mutectCompleted}
@@ -669,7 +717,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('openAccessStatus')}
                   />
                 ),
-                id: OPEN_ACCESS_VF_COLUMN_ID,
+                ...setupMultiSort('openAccessCompleted'),
                 cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.openAccessCompleted}
@@ -704,7 +752,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 meta: { customCell: true },
-                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
+                ...setupMultiSort('rnaRegisteredNormalSamples'),
                 cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaRegisteredNormalSamples}
@@ -736,7 +784,7 @@ const DonorSummaryTableV8 = ({
                   />
                 ),
                 meta: { customCell: true },
-                id: RNA_RAW_READS_COLUMN_ID,
+                ...setupMultiSort('rnaPublishedNormalAnalysis'),
                 cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaPublishedNormalAnalysis}
@@ -771,7 +819,7 @@ const DonorSummaryTableV8 = ({
                     activeFilters={getFilterValue('rnaAlignmentStatus')}
                   />
                 ),
-                id: RNA_ALIGNMENT_COLUMN_ID,
+                ...setupMultiSort('rnaAlignmentsCompleted'),
                 cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.rnaAlignmentsCompleted}
@@ -865,7 +913,6 @@ const DonorSummaryTableV8 = ({
       ].filter(Boolean),
     },
   ];
-  console.log(programDonorSummaryEntries, programDonorSummaryEntries.length / pageSize);
 
   return (
     <div
@@ -887,9 +934,12 @@ const DonorSummaryTableV8 = ({
             columns={tableColumns}
             data={programDonorSummaryEntries}
             enableColumnResizing
+            enableSorting
             loading={isCardLoading || isTableLoading}
             manualPagination
+            manualSorting
             onPaginationChange={setPaginationState}
+            onSortingChange={onSortingChange}
             pageCount={Math.ceil((programDonorSummaryStats.registeredDonorsCount || 0) / pageSize)}
             paginationState={{ pageIndex, pageSize }}
             showPageSizeOptions

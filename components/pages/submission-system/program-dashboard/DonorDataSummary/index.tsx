@@ -158,7 +158,6 @@ const DonorDataSummary = () => {
         <EmptyDonorSummaryState />
       ) : FEATURE_REACT_TABLE_V8_ENABLED ? (
         <DonorSummaryTableV8
-          initialPagination={{ pages: initialPages, pageSize: DEFAULT_PAGE_SIZE, page: 0 }}
           initialSorting={DEFAULT_SORTING}
           isCardLoading={isCardLoading}
           programShortName={programShortName}
@@ -172,6 +171,13 @@ const DonorDataSummary = () => {
           isCardLoading={isCardLoading}
         />
       )}
+      <DonorSummaryTable
+        programShortName={programShortName}
+        initialPages={initialPages}
+        initialPageSize={DEFAULT_PAGE_SIZE}
+        initialSorts={DEFAULT_SORTS_V6}
+        isCardLoading={isCardLoading}
+      />
     </DashboardCard>
   );
 };
