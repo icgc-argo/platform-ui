@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
@@ -96,7 +96,8 @@ const MULTI_SORT_COLUMN_IDS = {
 };
 const setupMultiSort = (columnId: keyof typeof MULTI_SORT_COLUMN_IDS) => ({
   // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting.
-  // use accessorKey to enable sorting. it has to be a key in the data.
+  // add accessorKey to enable sorting.
+  // ID & accessorKey must be keys from the data.
   accessorKey: MULTI_SORT_COLUMN_IDS[columnId][0],
   id: columnId,
 });
