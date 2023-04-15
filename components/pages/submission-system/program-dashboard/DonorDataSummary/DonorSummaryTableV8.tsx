@@ -98,7 +98,6 @@ const setupMultiSort = (columnId: keyof typeof MULTI_SORT_COLUMN_IDS) => ({
   // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting.
   // use accessorKey to enable sorting. it has to be a key in the data.
   accessorKey: MULTI_SORT_COLUMN_IDS[columnId][0],
-  enableMultiSort: true,
   id: columnId,
 });
 
