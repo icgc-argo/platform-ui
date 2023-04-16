@@ -20,7 +20,7 @@
 import { Icon } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
 import { StatArea as StatAreaDisplay } from '../../common';
-import { FILE_STATE_COLORS } from './FileRecordTableV8';
+import { FILE_STATE_COLORS } from './FileRecordTable';
 
 type FileStat = {
   newCount: number;

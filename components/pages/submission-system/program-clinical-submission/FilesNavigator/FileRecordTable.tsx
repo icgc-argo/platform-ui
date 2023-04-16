@@ -119,19 +119,21 @@ const FileRecordTable = ({
     }),
   );
 
-  const recordHasError = (record: typeof tableData[0]) =>
-    stats.errorsFound.some((row) => row === record.row);
+  const recordHasError = (original: TableColumns) =>
+    stats.errorsFound.some((row) => row === original.row);
 
-  const rowHasUpdate = (record: typeof tableData[0]) =>
-    stats.updated.some((row) => row === record.row);
+  const rowHasUpdate = (original: TableColumns) =>
+    stats.updated.some((row) => row === original.row);
 
-  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
-    file.dataUpdates.some((update) => update.field === cell.field && update.row === cell.row.row);
+  const cellHasUpdate = (original: { row: TableColumns; field: string }) =>
+    file.dataUpdates.some(
+      (update) => update.field === original.field && update.row === original.row.row,
+    );
 
-  const recordHasWarning = (record: typeof tableData[0]) =>
+  const recordHasWarning = (record: TableColumns) =>
     dataWarnings.some((dw) => dw.row === record.row);
 
-  const StatusColumnCell = ({ original }: { original: typeof tableData[0] }) => {
+  const StatusColumnCell = ({ original }: { original: TableColumns }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.row);
@@ -160,13 +162,7 @@ const FileRecordTable = ({
     );
   };
 
-  const DataFieldCell = ({
-    original,
-    fieldName,
-  }: {
-    original: typeof tableData[0];
-    fieldName: string;
-  }) =>
+  const DataFieldCell = ({ original, fieldName }: { original: TableColumns; fieldName: string }) =>
     isDiffPreview && rowHasUpdate(original) ? (
       <div
         css={css`
@@ -199,7 +195,7 @@ const FileRecordTable = ({
     field = '',
   }: PropsWithChildren<{ original: TableColumns; field?: string }>) => {
     const cellBackground =
-      isPendingApproval && cellHasUpdate({ row: original, field })
+      !isPendingApproval && cellHasUpdate({ row: original, field })
         ? theme.colors.accent3_3
         : recordHasError(original)
         ? theme.colors.error_4
