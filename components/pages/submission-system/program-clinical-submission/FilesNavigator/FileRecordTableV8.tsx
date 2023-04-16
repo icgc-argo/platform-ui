@@ -17,14 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ColumnDef, css, TableV8, useTheme } from '@icgc-argo/uikit';
+import { ColumnDef, css, TableCellWrapper, TableV8, useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
 import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
-import { ComponentProps, useMemo } from 'react';
+import { ComponentProps, PropsWithChildren, useMemo } from 'react';
 
 import {
   CellContentCenter,
@@ -134,7 +134,7 @@ const FileRecordTable = ({
   const recordHasWarning = (record: typeof tableData[0]) =>
     dataWarnings.some((dw) => dw.row === record.row);
 
-  const StatusColumnCell = ({ row: { original } }: { row: { original: typeof tableData[0] } }) => {
+  const StatusColumnCell = ({ original }: { original: typeof tableData[0] }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.row);
@@ -196,30 +196,77 @@ const FileRecordTable = ({
       <>{original[fieldName]}</>
     );
 
+  // meta - custom cell wrapper
+  // make a cell wrapper component that takes the ID and original and optional children
+
+  const CellWrapper = ({
+    children,
+    original,
+    field = '',
+  }: PropsWithChildren<{ original: TableColumns; field?: string }>) => {
+    const cellBackground =
+      isPendingApproval && cellHasUpdate({ row: original, field })
+        ? theme.colors.accent3_3
+        : recordHasError(original)
+        ? theme.colors.error_4
+        : recordHasWarning(original)
+        ? theme.colors.warning_4
+        : isPendingApproval && rowHasUpdate(original)
+        ? theme.colors.accent3_4
+        : 'transparent';
+    const cellClassName =
+      isPendingApproval && rowHasUpdate(original)
+        ? `updateRow` // append this classname so parent div's css can apply style
+        : '';
+    return (
+      <TableCellWrapper
+        className={cellClassName}
+        css={css`
+          background: ${cellBackground};
+        `}
+      >
+        {children}
+      </TableCellWrapper>
+    );
+  };
+
+  const cellMeta = {
+    meta: {
+      customCell: true,
+    },
+  };
+
   const tableColumns: ColumnDef<TableColumns>[] = [
     {
       accessorKey: 'row',
       cell: ({ row: { original } }) => (
-        <CellContentCenter
-          css={
-            rowHasUpdate(original)
-              ? css`
-                  justify-content: flex-start;
-                  padding-top: 5px;
-                `
-              : css``
-          }
-        >
-          {toDisplayRowIndex(original.row)}
-        </CellContentCenter>
+        <CellWrapper original={original}>
+          <CellContentCenter
+            css={
+              rowHasUpdate(original)
+                ? css`
+                    justify-content: flex-start;
+                    padding-top: 5px;
+                  `
+                : css``
+            }
+          >
+            {toDisplayRowIndex(original.row)}
+          </CellContentCenter>
+        </CellWrapper>
       ),
       enableResizing: false,
       header: 'Line #',
       size: 70,
+      ...cellMeta,
     },
     {
       accessorKey: 'status',
-      cell: StatusColumnCell,
+      cell: ({ row: { original } }) => (
+        <CellWrapper original={original} field="status">
+          <StatusColumnCell original={original} />
+        </CellWrapper>
+      ),
       enableResizing: false,
       header: () => (
         <CellContentCenter>
@@ -239,11 +286,17 @@ const FileRecordTable = ({
         };
         return priorities[sortA] - priorities[sortB];
       },
+      ...cellMeta,
     },
     ...fields.map(({ name: fieldName }) => ({
       accessorKey: fieldName,
       header: fieldName,
-      cell: ({ row: { original } }) => <DataFieldCell original={original} fieldName={fieldName} />,
+      ...cellMeta,
+      cell: ({ row: { original } }) => (
+        <CellWrapper original={original} field={fieldName}>
+          <DataFieldCell original={original} fieldName={fieldName} />
+        </CellWrapper>
+      ),
     })),
   ];
 
