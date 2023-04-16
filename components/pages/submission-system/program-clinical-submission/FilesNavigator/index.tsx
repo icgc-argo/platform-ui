@@ -44,7 +44,6 @@ import FileRecordTable from './FileRecordTable';
 import ErrorNotificationDefaultTable, {
   getDefaultErrorReportColumns,
 } from '../../ErrorNotification/ErrorNotificationDefaultTable';
-import FileRecordTableV8 from './FileRecordTableV8';
 
 const FilesNavigator = ({
   fileStates,
@@ -230,16 +229,6 @@ const FilesNavigator = ({
               )}
             </div>
             <FileRecordTable
-              isSubmissionValidated={isSubmissionValidated}
-              isPendingApproval={isPendingApproval}
-              file={selectedFile}
-              submissionData={{
-                fileName: selectedFile.fileName,
-                creator: selectedFile.creator,
-                createdAt: selectedFile.createdAt,
-              }}
-            />
-            <FileRecordTableV8
               isSubmissionValidated={isSubmissionValidated}
               isPendingApproval={isPendingApproval}
               file={selectedFile}
