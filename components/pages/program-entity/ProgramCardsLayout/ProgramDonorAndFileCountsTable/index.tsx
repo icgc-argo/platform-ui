@@ -20,35 +20,30 @@
 import { css, TableV8, Typography } from '@icgc-argo/uikit';
 
 const ProgramDonorAndFileCountsTable = ({
-  data: tableData,
+  columns,
+  data,
   title,
 }: {
+  columns: any[]; // can't use generics for column types
   data: Object[];
   title: string;
-}) => {
-  const tableColumns = Object.keys(tableData[0]).map((key) => ({
-    accessorKey: key,
-    header: key,
-  }));
-
-  return (
-    <div
+}) => (
+  <div
+    css={css`
+      margin: 14px 0 4px 0;
+    `}
+  >
+    <Typography
+      variant="navigation"
+      as="div"
       css={css`
-        margin: 14px 0 4px 0;
+        margin-bottom: 14px;
       `}
     >
-      <Typography
-        variant="navigation"
-        as="div"
-        css={css`
-          margin-bottom: 14px;
-        `}
-      >
-        {title}
-      </Typography>
-      <TableV8 columns={tableColumns} data={tableData} withHeaders withSideBorders withStripes />
-    </div>
-  );
-};
+      {title}
+    </Typography>
+    <TableV8 columns={columns} data={data} withHeaders withSideBorders withStripes />
+  </div>
+);
 
 export default ProgramDonorAndFileCountsTable;

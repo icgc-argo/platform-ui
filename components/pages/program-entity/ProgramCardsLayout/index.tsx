@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container, css, styled, useTheme } from '@icgc-argo/uikit';
+import { ColumnDef, Container, css, styled, useTheme } from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
@@ -44,8 +44,34 @@ const PaddedColumn = styled(Col)`
   align-items: stretch;
 `;
 
+// temporary types for dummy data
+type DataCategoryColumns = {
+  Category: string;
+  Donor: number;
+  Files: number;
+};
+
+type ExperimentalStrategyColumns = {
+  Donor: number;
+  Files: number;
+  Strategies: string;
+};
+
 const ProgramCardsLayout: ComponentType<{}> = () => {
-  const theme = useTheme();
+  // temporary columns for dummy data
+  const dataCategoryColumns: ColumnDef<DataCategoryColumns>[] = Object.keys(
+    donorAndFileCountsByExperimentalStrategy[0],
+  ).map((key: keyof DataCategoryColumns) => ({
+    accessorKey: key,
+    header: key,
+  }));
+
+  const experimentalStrategyColumns: ColumnDef<ExperimentalStrategyColumns>[] = Object.keys(
+    donorAndFileCountsByDataCategory[0],
+  ).map((key: keyof ExperimentalStrategyColumns) => ({
+    accessorKey: key,
+    header: key,
+  }));
 
   return (
     <div
@@ -83,6 +109,7 @@ const ProgramCardsLayout: ComponentType<{}> = () => {
             `}
           >
             <ProgramDonorAndFileCountsTable
+              columns={dataCategoryColumns}
               data={donorAndFileCountsByDataCategory}
               title={'Donor and File Counts By Data Category'}
             />
@@ -97,6 +124,7 @@ const ProgramCardsLayout: ComponentType<{}> = () => {
             `}
           >
             <ProgramDonorAndFileCountsTable
+              columns={experimentalStrategyColumns}
               data={donorAndFileCountsByExperimentalStrategy}
               title={'Donor and File Counts By Experimental Strategy'}
             />
