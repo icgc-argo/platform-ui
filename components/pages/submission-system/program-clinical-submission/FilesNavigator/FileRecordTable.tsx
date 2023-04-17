@@ -65,7 +65,6 @@ const FileRecordTable = ({
   );
   const theme = useTheme();
   const { records, stats, dataWarnings } = file;
-  console.log(file);
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
@@ -174,7 +173,7 @@ const FileRecordTable = ({
       <>{original[fieldName]}</>
     );
 
-  const CellWrapper = ({
+  const CellStatusDisplay = ({
     children,
     original,
     field = '',
@@ -215,7 +214,7 @@ const FileRecordTable = ({
     {
       accessorKey: 'rowIndex',
       cell: ({ row: { original } }) => (
-        <CellWrapper original={original}>
+        <CellStatusDisplay original={original}>
           <CellContentCenter
             css={
               rowHasUpdate(original)
@@ -228,7 +227,7 @@ const FileRecordTable = ({
           >
             {toDisplayRowIndex(original.rowIndex)}
           </CellContentCenter>
-        </CellWrapper>
+        </CellStatusDisplay>
       ),
       enableResizing: false,
       header: 'Line #',
@@ -238,9 +237,9 @@ const FileRecordTable = ({
     {
       accessorKey: 'status',
       cell: ({ row: { original } }) => (
-        <CellWrapper original={original} field="status">
+        <CellStatusDisplay original={original} field="status">
           <StatusColumnCell original={original} />
-        </CellWrapper>
+        </CellStatusDisplay>
       ),
       enableResizing: false,
       header: () => (
@@ -268,9 +267,9 @@ const FileRecordTable = ({
       header: fieldName,
       ...cellMeta,
       cell: ({ row: { original } }) => (
-        <CellWrapper original={original} field={fieldName}>
+        <CellStatusDisplay original={original} field={fieldName}>
           <DataFieldCell original={original} fieldName={fieldName} />
-        </CellWrapper>
+        </CellStatusDisplay>
       ),
     })),
   ];
