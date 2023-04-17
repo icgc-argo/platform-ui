@@ -34,17 +34,11 @@ import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
 import {
   DonorSummaryEntrySort,
-  DonorSummaryEntrySortField,
-  DonorSummaryEntrySortOrder,
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   ProgramDonorSummaryFilter,
   DonorSummarySortingState,
 } from './types';
-
-import { getConfig } from 'global/config';
-
-const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
 export const useProgramDonorsSummaryQuery = ({
   programShortName,
@@ -86,12 +80,6 @@ export const useProgramDonorsSummaryQuery = ({
 const DonorDataSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const DEFAULT_PAGE_SIZE = 20;
-  const DEFAULT_SORTS_V6 = [
-    {
-      field: 'updatedAt' as DonorSummaryEntrySortField,
-      order: 'desc' as DonorSummaryEntrySortOrder,
-    },
-  ];
   const DEFAULT_SORTING: DonorSummarySortingState[] = [
     {
       id: 'updatedAt',
@@ -116,11 +104,6 @@ const DonorDataSummary = () => {
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
-
-  const initialPages =
-    !isCardLoading && programDonorSummaryStats
-      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-      : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
