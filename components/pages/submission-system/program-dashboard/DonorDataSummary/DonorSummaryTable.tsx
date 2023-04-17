@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
@@ -29,7 +29,6 @@ import {
   Link,
   TableListFilterHeader,
   Row,
-  TableHeaderWrapper,
   TableV8,
   TableTextFilterHeader,
   ThemeColorNames,
@@ -39,6 +38,7 @@ import {
   DEFAULT_TABLE_PAGE_SIZE,
   SortingState,
   OnChangeFn,
+  TableHeaderWithBackground,
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
@@ -232,24 +232,6 @@ const DonorSummaryTable = ({
     );
   };
 
-  const HeaderWithBackground = ({
-    children,
-    fill,
-  }: PropsWithChildren<{ fill: keyof ThemeColorNames }>) => {
-    const theme = useTheme();
-    return (
-      <TableHeaderWrapper
-        css={css`
-          background: ${theme.colors[fill]};
-          justify-content: center;
-          text-transform: uppercase;
-        `}
-      >
-        {children}
-      </TableHeaderWrapper>
-    );
-  };
-
   const PercentageCell = ({
     original,
     fieldName,
@@ -313,7 +295,9 @@ const DonorSummaryTable = ({
   const tableColumns: ColumnDef<DonorSummaryEntry>[] = [
     {
       header: () => (
-        <HeaderWithBackground fill="secondary_4">Clinical Data Status</HeaderWithBackground>
+        <TableHeaderWithBackground fill="secondary_4">
+          Clinical Data Status
+        </TableHeaderWithBackground>
       ),
       id: 'clinicalDataStatus',
       meta: {
@@ -407,11 +391,11 @@ const DonorSummaryTable = ({
     },
     {
       header: () => (
-        <HeaderWithBackground
+        <TableHeaderWithBackground
           fill={PIPELINE_COLORS[PipelineNames[activePipeline]] as keyof ThemeColorNames}
         >
           {`${activePipeline}-SEQ PIPELINE`}
-        </HeaderWithBackground>
+        </TableHeaderWithBackground>
       ),
       id: 'dnaRnaSeqPipeline',
       meta: {
