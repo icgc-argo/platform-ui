@@ -33,24 +33,12 @@ import {
   TableInfoHeaderContainer,
 } from '../../common';
 import { ClinicalSubmissionEntityFile } from '../types';
-import StatsArea from './StatsArea';
+import StatsArea, { FILE_STATE_COLORS } from './StatsArea';
 
 type TableColumns = {
   row: number;
   status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
   fakeColumn: string;
-};
-
-type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR' | 'WARNING';
-
-export const FILE_STATE_COLORS: {
-  [k in RecordState]: ComponentProps<typeof StarIcon>['fill'];
-} = {
-  ERROR: 'error',
-  WARNING: 'warning',
-  NEW: 'accent2',
-  NONE: 'grey_1',
-  UPDATED: 'accent3_dark',
 };
 
 const REQUIRED_FILE_ENTRY_FIELDS = {

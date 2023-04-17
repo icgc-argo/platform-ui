@@ -20,13 +20,26 @@
 import { Icon } from '@icgc-argo/uikit';
 import pluralize from 'pluralize';
 import { StatArea as StatAreaDisplay } from '../../common';
-import { FILE_STATE_COLORS } from './FileRecordTable';
+import { DataTableStarIcon as StarIcon } from '../../common';
+import { ComponentProps } from 'react';
 
-type FileStat = {
+export type RecordState = 'NEW' | 'NONE' | 'UPDATED' | 'ERROR' | 'WARNING';
+
+export type FileStat = {
   newCount: number;
   noUpdateCount: number;
   updateCount: number;
   errorCount: number;
+};
+
+export const FILE_STATE_COLORS: {
+  [k in RecordState]: ComponentProps<typeof StarIcon>['fill'];
+} = {
+  ERROR: 'error',
+  WARNING: 'warning',
+  NEW: 'accent2',
+  NONE: 'grey_1',
+  UPDATED: 'accent3_dark',
 };
 
 const StatsArea = ({
