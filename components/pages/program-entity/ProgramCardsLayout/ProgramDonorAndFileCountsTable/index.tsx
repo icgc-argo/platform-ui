@@ -17,14 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Table, Typography } from '@icgc-argo/uikit';
-import { createRef } from 'react';
+import { css, TableV8, Typography } from '@icgc-argo/uikit';
 
-const ProgramDonorAndFileCountsTable = ({ data, title }: { data: Object[]; title: string }) => {
-  const containerRef = createRef<HTMLDivElement>();
-  const tableCol = Object.keys(data[0]).map((ele) => ({
-    Header: ele,
-    accessor: ele,
+const ProgramDonorAndFileCountsTable = ({
+  data: tableData,
+  title,
+}: {
+  data: Object[];
+  title: string;
+}) => {
+  const tableColumns = Object.keys(tableData[0]).map((key) => ({
+    accessorKey: key,
+    header: key,
   }));
 
   return (
@@ -42,18 +46,7 @@ const ProgramDonorAndFileCountsTable = ({ data, title }: { data: Object[]; title
       >
         {title}
       </Typography>
-      <div ref={containerRef}>
-        <Table
-          parentRef={containerRef}
-          data={data}
-          columns={tableCol}
-          withOutsideBorder
-          stripped
-          highlight={false}
-          showPagination={false}
-          sortable={false}
-        />
-      </div>
+      <TableV8 columns={tableColumns} data={tableData} withHeaders withSideBorders withStripes />
     </div>
   );
 };
