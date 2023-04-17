@@ -63,6 +63,7 @@ const RepositoryPage = () => {
               <PaddedRow>
                 <Col xl={12}>
                   <FileTable />
+                  <FileTableV8 />
                 </Col>
               </PaddedRow>
             </ContentBody>
