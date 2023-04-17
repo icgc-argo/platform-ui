@@ -213,7 +213,7 @@ const FileRecordTable = ({
 
   const tableColumns: ColumnDef<TableColumns>[] = [
     {
-      accessorKey: 'row',
+      accessorKey: 'rowIndex',
       cell: ({ row: { original } }) => (
         <CellWrapper original={original}>
           <CellContentCenter
