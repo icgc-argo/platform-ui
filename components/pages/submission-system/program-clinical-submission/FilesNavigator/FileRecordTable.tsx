@@ -36,12 +36,12 @@ import { ClinicalSubmissionEntityFile } from '../types';
 import StatsArea, { FILE_STATE_COLORS } from './StatsArea';
 
 type TableColumns = {
-  row: number;
+  rowIndex: number;
   status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
 };
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
-  ROW: 'row',
+  ROW_INDEX: 'rowIndex',
 };
 
 const FileRecordTable = ({
@@ -65,13 +65,14 @@ const FileRecordTable = ({
   );
   const theme = useTheme();
   const { records, stats, dataWarnings } = file;
+  console.log(file);
   const fields: ClinicalSubmissionEntityFile['records'][0]['fields'] = records.length
     ? records[0].fields
     : [];
   const sortedRecords = orderBy(
     records,
     !(isDccMember(permissions) && isPendingApproval)
-      ? REQUIRED_FILE_ENTRY_FIELDS.ROW
+      ? REQUIRED_FILE_ENTRY_FIELDS.ROW_INDEX
       : (r) => {
           const priority = (() => {
             switch (true) {
@@ -89,7 +90,7 @@ const FileRecordTable = ({
 
   const tableData: TableColumns[] = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
-      row: record.row,
+      rowIndex: record.row,
       status: (() => {
         switch (true) {
           case stats.updated.some((i) => i === record.row):
@@ -106,23 +107,21 @@ const FileRecordTable = ({
   );
 
   const recordHasError = (original: TableColumns) =>
-    stats.errorsFound.some((row) => row === original.row);
+    stats.errorsFound.some((row) => row === original.rowIndex);
 
   const rowHasUpdate = (original: TableColumns) =>
-    stats.updated.some((row) => row === original.row);
+    stats.updated.some((row) => row === original.rowIndex);
 
-  const cellHasUpdate = (original: { row: TableColumns; field: string }) =>
-    file.dataUpdates.some(
-      (update) => update.field === original.field && update.row === original.row.row,
-    );
+  const cellHasUpdate = ({ original, field }: { original: TableColumns; field: string }) =>
+    file.dataUpdates.some((update) => update.field === field && update.row === original.rowIndex);
 
-  const recordHasWarning = (record: TableColumns) =>
-    dataWarnings.some((dw) => dw.row === record.row);
+  const recordHasWarning = (original: TableColumns) =>
+    dataWarnings.some((dw) => dw.row === original.rowIndex);
 
   const StatusColumnCell = ({ original }: { original: TableColumns }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
-    const isNew = stats.new.some((row) => row === original.row);
+    const isNew = stats.new.some((row) => row === original.rowIndex);
     return (
       isSubmissionValidated && (
         <CellContentCenter
@@ -165,7 +164,7 @@ const FileRecordTable = ({
         <div>{original[fieldName]}</div>
         <div>
           {get(
-            file.dataUpdates.find((u) => u.field === fieldName && u.row === original.row),
+            file.dataUpdates.find((u) => u.field === fieldName && u.row === original.rowIndex),
             'oldValue',
             original[fieldName],
           )}
@@ -181,7 +180,7 @@ const FileRecordTable = ({
     field = '',
   }: PropsWithChildren<{ original: TableColumns; field?: string }>) => {
     const cellBackground =
-      !isPendingApproval && cellHasUpdate({ row: original, field })
+      !isPendingApproval && cellHasUpdate({ original, field })
         ? theme.colors.accent3_3
         : recordHasError(original)
         ? theme.colors.error_4
@@ -227,7 +226,7 @@ const FileRecordTable = ({
                 : css``
             }
           >
-            {toDisplayRowIndex(original.row)}
+            {toDisplayRowIndex(original.rowIndex)}
           </CellContentCenter>
         </CellWrapper>
       ),
