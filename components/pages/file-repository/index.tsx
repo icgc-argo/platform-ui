@@ -30,6 +30,7 @@ import StatsCard from './StatsCard';
 
 import { FiltersProvider } from './hooks/useFiltersContext';
 import QueryBarContainer from './QueryBar/QueryBarContainer';
+import FileTableV8 from './FileTableV8';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;

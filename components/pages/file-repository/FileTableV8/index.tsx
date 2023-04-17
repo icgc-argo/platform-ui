@@ -25,8 +25,6 @@ import {
   DEFAULT_TABLE_PAGE_SIZE,
   Link,
   PaginationState,
-  SelectTable,
-  TableColumnConfig,
   TableV8,
   Typography,
   useSelectTableSelectionState,
@@ -46,7 +44,7 @@ import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import { createRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
@@ -63,10 +61,6 @@ import {
   FileRepositoryTableQueryVariables,
 } from '../FileTable/types';
 
-type TableColumns = FileRepositoryRecord & { id: FileCentricDocumentField };
-
-const DEFAULT_PAGE_SIZE = 20;
-const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
     field: FileCentricDocumentField.file_number,
@@ -74,16 +68,22 @@ const DEFAULT_SORT = [
   },
 ];
 
-const useFileRepoTableQuery = (
-  first: number,
-  offset: number,
-  sort: FileRepositoryRecordSort[],
-  filters: FileRepoFiltersType,
-  options: Omit<
+const useFileRepoTableQuery = ({
+  first,
+  offset,
+  sort,
+  filters,
+  options = {},
+}: {
+  options?: Omit<
     QueryHookOptions<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>,
     'variables'
-  > = {},
-) => {
+  >;
+  first: number;
+  offset: number;
+  filters: FileRepoFiltersType;
+  sort: FileRepositoryRecordSort[];
+}) => {
   const queryResult = useQuery<FileRepositoryTableQueryData, FileRepositoryTableQueryVariables>(
     FILE_REPOSITORY_TABLE_QUERY,
     {
@@ -103,71 +103,24 @@ const useFileRepoTableQuery = (
   return queryResult;
 };
 
-const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
-  pageIndex: 0,
-  pageSize: DEFAULT_TABLE_PAGE_SIZE,
-});
-const handlePaginationState = (nextState: Partial<PaginationState>) =>
-  setPaginationState({ pageIndex, pageSize, ...nextState });
+const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
+  const sort = newSorted.reduce(
+    (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
+      const order = sortRule.desc ? 'desc' : 'asc';
 
-const useFileRepoPaginationState = () => {
-  const [paginationState, setPagingState] = useState({
-    pageSize: DEFAULT_PAGE_SIZE,
-    page: DEFAULT_PAGE_OFFSET,
-    sort: DEFAULT_SORT,
-  });
+      // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
+      const sortField =
+        sortRule.id === FileCentricDocumentField.file_id
+          ? FileCentricDocumentField.file_number
+          : sortRule.id;
 
-  useEffect(() => {
-    resetCurrentPage();
-  }, [paginationState.pageSize]);
-
-  const handlePagingStateChange = (state: typeof paginationState) => {
-    setPagingState(state);
-  };
-
-  const onPageChange = (newPageNum: number) => {
-    handlePagingStateChange({ ...paginationState, page: newPageNum });
-  };
-
-  const onPageSizeChange = (newPageSize: string) => {
-    handlePagingStateChange({
-      ...paginationState,
-      pageSize: parseInt(newPageSize),
-    });
-  };
-  const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
-    const sort = newSorted.reduce(
-      (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
-        const order = sortRule.desc ? 'desc' : 'asc';
-
-        // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
-        const sortField =
-          sortRule.id === FileCentricDocumentField.file_id
-            ? FileCentricDocumentField.file_number
-            : sortRule.id;
-
-        return accSort.concat({
-          field: sortField,
-          order: order,
-        });
-      },
-      [],
-    );
-    handlePagingStateChange({ ...paginationState, sort });
-  };
-  const resetCurrentPage = () => {
-    setPagingState({
-      ...paginationState,
-      page: 0,
-    });
-  };
-  return {
-    paginationState,
-    onPageChange,
-    onPageSizeChange,
-    onSortedChange,
-    resetCurrentPage,
-  };
+      return accSort.concat({
+        field: sortField,
+        order: order,
+      });
+    },
+    [],
+  );
 };
 
 const FileTableV8 = () => {
@@ -179,42 +132,27 @@ const FileTableV8 = () => {
 
   const { data: fieldDisplayNames } = useFileCentricFieldDisplayName();
 
-  const { paginationState, onPageChange, onPageSizeChange, onSortedChange, resetCurrentPage } =
-    useFileRepoPaginationState();
-  useEffect(() => {
-    resetCurrentPage();
-  }, [filters]);
+  const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: DEFAULT_TABLE_PAGE_SIZE,
+  });
+  const handlePaginationState = (nextState: Partial<PaginationState>) =>
+    setPaginationState({ pageIndex, pageSize, ...nextState });
 
-  const offset = paginationState.pageSize * paginationState.page;
-  const { data: records, loading = true } = useFileRepoTableQuery(
-    paginationState.pageSize,
-    offset,
-    paginationState.sort,
+  const { data: records, loading = true } = useFileRepoTableQuery({
+    first: pageSize,
+    offset: pageSize * pageIndex,
+    sort: [],
     filters,
-  );
+  });
 
   const totalEntries = records ? records.file.hits.total : 0;
-  const pageCount = Math.ceil(totalEntries / paginationState.pageSize);
 
-  const fileDownloader = (objectId: String) => {
-    //todo
-  };
-
-  const getDownloadStatus = (isDownloadable: boolean) => {
-    const canUserDownload = egoJwt && isDownloadable;
-    const toolTipText = egoJwt
-      ? isDownloadable
-        ? 'Download file'
-        : 'You do not have permission to download this file'
-      : 'Please log in to access controlled files';
-    return { canUserDownload, toolTipText };
-  };
-
-  const tableColumns: ColumnDef<TableColumns>[] = [
+  const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
     {
       header: 'File ID',
-      // headerClassName: paginationState.sort == DEFAULT_SORT ? '-sort-desc' : '',
-      id: FileCentricDocumentField.file_id,
+      // headerClassName: sort == DEFAULT_SORT ? '-sort-desc' : '',
+      // id: FileCentricDocumentField.file_id,
       accessorKey: 'fileId',
       cell: ({ row: { original } }) => {
         return (
@@ -230,7 +168,7 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['donors.donor_id'],
-      id: FileCentricDocumentField['donors.donor_id'],
+      // id: FileCentricDocumentField['donors.donor_id'],
       accessorKey: 'donorId',
       cell: ({ row: { original } }) => {
         return FEATURE_DONOR_ENTITY_ENABLED ? (
@@ -248,12 +186,12 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['donors.submitter_donor_id'],
-      id: FileCentricDocumentField['donors.submitter_donor_id'],
+      // id: FileCentricDocumentField['donors.submitter_donor_id'],
       accessorKey: 'submitterDonorId',
     },
     {
       header: fieldDisplayNames['study_id'],
-      id: FileCentricDocumentField['study_id'],
+      // id: FileCentricDocumentField['study_id'],
       accessorKey: 'programId',
       cell: ({ row: { original } }) => {
         return FEATURE_PROGRAM_ENTITY_ENABLED ? (
@@ -271,68 +209,36 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['data_type'],
-      id: FileCentricDocumentField['data_type'],
+      // id: FileCentricDocumentField['data_type'],
       accessorKey: 'dataType',
       size: 180,
     },
     {
       header: fieldDisplayNames['file_type'],
-      id: FileCentricDocumentField['file_type'],
+      // id: FileCentricDocumentField['file_type'],
       accessorKey: 'fileType',
       size: 80,
     },
     {
       header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
-      id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+      // id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessorKey: 'experimentalStrategy',
     },
     {
       header: fieldDisplayNames['file.size'],
-      id: FileCentricDocumentField['file.size'],
+      // id: FileCentricDocumentField['file.size'],
       accessorKey: 'size',
       cell: ({ row: { original } }) => filesize(original.size),
     },
     {
       header: fieldDisplayNames['object_id'],
-      id: FileCentricDocumentField['object_id'],
+      // id: FileCentricDocumentField['object_id'],
       accessorKey: 'objectId',
       size: 260,
     },
-    // disabled for initial File Repo release
-    // {
-    //   header: 'Actions',
-    //   size: 80,
-    //   sortable: false,
-    //   cell: ({ row: { original } }) => {
-    //     const downloadStatus = getDownloadStatus(original.isDownloadable);
-
-    //     return (
-    //         <div
-    //           css={css`
-    //             display: flex;
-    //             flex-direction: row;
-    //             justify-content: center;
-    //             align-items: center;
-    //           `}
-    //         >
-    //           <InteractiveIcon
-    //             position="left"
-    //             html={<span>{downloadStatus.toolTipText}</span>}
-    //             disabled={!downloadStatus.canUserDownload}
-    //             height="16px"
-    //             width="16px"
-    //             name={downloadStatus.canUserDownload ? 'download' : 'lock'}
-    //             fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
-    //             onClick={e => fileDownloader(original.fileID)}
-    //           />
-    //         </div>
-    //     );
-    //   },
-    // },
   ];
-  const containerRef = createRef<HTMLDivElement>();
 
-  const fileRepoEntries: FileRepositoryRecord[] = records
+  const tableData: FileRepositoryRecord[] = records
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
         donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
@@ -345,7 +251,7 @@ const FileTableV8 = () => {
         fileId: node.file_id,
         fileType: node.file_type,
         size: node.file.size,
-        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+        isDownloadable: false,
       }))
     : [];
 
@@ -365,30 +271,33 @@ const FileTableV8 = () => {
 
   const tableElement = (
     <div
-      ref={containerRef}
       css={css`
         z-index: 2;
         padding-top: 10px;
       `}
     >
       <TableV8
+        // enableSorting
+        // manualSorting
+        // sortingState
         columns={tableColumns}
-        data={fileRepoEntries}
-        enableSorting
+        data={tableData}
         loading={loading}
+        manualPagination
         onPaginationChange={setPaginationState}
-        pageCount={Math.ceil(totalEntries / paginationState.pageSize)}
+        pageCount={Math.ceil(totalEntries / pageSize)}
         paginationState={{ pageIndex, pageSize }}
+        showPageSizeOptions
+        withHeaders
         withPagination
+        withRowHighlight
+        withStripes
       />
     </div>
   );
 
-  const startRowDisplay = paginationState.pageSize * paginationState.page + 1;
-  const endRowDisplay = Math.min(
-    paginationState.pageSize * (paginationState.page + 1),
-    totalEntries,
-  );
+  const firstRowIndex = pageSize * pageIndex + 1;
+  const lastRowIndex = Math.min(pageSize * (pageIndex + 1), totalEntries);
 
   return (
     <Container
@@ -411,7 +320,7 @@ const FileTableV8 = () => {
           >
             <div>
               <Typography variant="data" color="grey">
-                {`${startRowDisplay.toLocaleString()}-${endRowDisplay.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize(
+                {`${firstRowIndex.toLocaleString()}-${lastRowIndex.toLocaleString()} of ${totalEntries.toLocaleString()} ${pluralize(
                   'file',
                   totalEntries,
                 )}`}
