@@ -65,7 +65,7 @@ import {
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
 import { useProgramDonorsSummaryQuery } from '.';
-import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
+import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
 import { ContentError } from 'components/placeholders';
 import { DonorSummaryEntry } from 'generated/gql_types';
