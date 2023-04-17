@@ -29,7 +29,6 @@ import {
   formatDonorSummarySortingRequest,
 } from './common';
 import DonorSummaryTable from './DonorSummaryTable';
-import DonorSummaryTableV8 from './DonorSummaryTableV8';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
@@ -156,28 +155,13 @@ const DonorDataSummary = () => {
         <ContentError />
       ) : !isCardLoading && isDonorSummaryEntriesEmpty ? (
         <EmptyDonorSummaryState />
-      ) : FEATURE_REACT_TABLE_V8_ENABLED ? (
-        <DonorSummaryTableV8
+      ) : (
+        <DonorSummaryTable
           initialSorting={DEFAULT_SORTING}
           isCardLoading={isCardLoading}
           programShortName={programShortName}
         />
-      ) : (
-        <DonorSummaryTable
-          programShortName={programShortName}
-          initialPages={initialPages}
-          initialPageSize={DEFAULT_PAGE_SIZE}
-          initialSorts={DEFAULT_SORTS_V6}
-          isCardLoading={isCardLoading}
-        />
       )}
-      <DonorSummaryTable
-        programShortName={programShortName}
-        initialPages={initialPages}
-        initialPageSize={DEFAULT_PAGE_SIZE}
-        initialSorts={DEFAULT_SORTS_V6}
-        isCardLoading={isCardLoading}
-      />
     </DashboardCard>
   );
 };

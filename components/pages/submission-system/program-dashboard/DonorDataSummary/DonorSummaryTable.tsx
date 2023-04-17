@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,117 +17,154 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import NextLink from 'next/link';
 import urlJoin from 'url-join';
-
+import {
+  ColumnDef,
+  css,
+  FilterClearButton,
+  Icon,
+  Link,
+  TableListFilterHeader,
+  Row,
+  TableHeaderWrapper,
+  TableV8,
+  TableTextFilterHeader,
+  ThemeColorNames,
+  useTableTabs,
+  useTheme,
+  PaginationState,
+  DEFAULT_TABLE_PAGE_SIZE,
+  SortingState,
+  OnChangeFn,
+} from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import CLINICAL_ERRORS_QUERY from 'components/pages/submission-system/program-submitted-data/ClinicalErrors/CLINICAL_ERRORS_QUERY';
+import { displayDate } from 'global/utils/common';
 import {
   ClinicalEntityQueryResponse,
   defaultClinicalEntityFilters,
   parseDonorIdString,
 } from 'components/pages/submission-system/program-submitted-data/common';
-
-import {
-  DonorDataReleaseState,
-  DonorSummaryEntrySort,
-  DonorSummaryEntrySortField,
-  DonorSummaryEntrySortOrder,
-  DonorSummaryRecord,
-  MolecularProcessingStatus,
-  ProgramDonorSummaryEntryField,
-} from './types';
-
-import {
-  css,
-  DropdownPanel,
-  FilterClearButton,
-  FilterOption,
-  Icon,
-  Link,
-  ListFilter,
-  styled,
-  Table,
-  TableColumnConfig,
-  TextInputFilter,
-  useTheme,
-} from '@icgc-argo/uikit';
-import { displayDate } from 'global/utils/common';
 import { CellContentCenter, DataTableStarIcon as StarIcon, Pipeline } from '../../common';
-
-import ContentError from 'components/placeholders/ContentError';
-import { SortedChangeFunction, SortingRule } from 'global/types/table';
-import { startCase } from 'lodash';
-
-import { createRef, PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from 'react';
-import { Row } from 'react-grid-system';
-import { useProgramDonorsSummaryQuery } from '.';
+import {
+  DonorSummaryCellProps,
+  DonorDataReleaseState,
+  DonorSummaryFilterState,
+  ProgramDonorSummaryEntryField,
+  DonorSummarySortingState,
+  DonorSummaryEntrySortField,
+} from './types';
 import {
   EMPTY_PROGRAM_SUMMARY_STATS,
   FILTER_OPTIONS,
+  formatDonorSummarySortingRequest,
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
+import { useProgramDonorsSummaryQuery } from '.';
+import { DesignationCell, DesignationCellLegacy } from './DesignationCellV8';
 import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
-import { getConfig } from 'global/config';
-import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
+import { ContentError } from 'components/placeholders';
+import { DonorSummaryEntry } from 'generated/gql_types';
+import { find } from 'lodash';
 
-type PagingState = {
-  pages: number;
-  pageSize: number;
-  page: number;
-  sorts: DonorSummaryEntrySort[];
+enum PipelineNames {
+  DNA = 'DNA',
+  RNA = 'RNA',
+}
+
+const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
+  [PipelineNames.DNA]: 'warning_4',
+  [PipelineNames.RNA]: 'accent3_4',
 };
 
-const getDefaultSort = (donorSorts: DonorSummaryEntrySort[]) =>
-  donorSorts.map(({ field, order }) => ({ id: field, desc: order === 'desc' }));
+// these are used to sort columns with multiple fields.
+// the order of the fields is the order of sorting.
+const MULTI_SORT_COLUMN_IDS = {
+  alignmentsCompleted: ['alignmentsCompleted', 'alignmentsRunning', 'alignmentsFailed'],
+  mutectCompleted: ['mutectCompleted', 'mutectRunning', 'mutectFailed'],
+  openAccessCompleted: ['openAccessCompleted', 'openAccessRunning', 'openAccessFailed'],
+  publishedNormalAnalysis: ['publishedNormalAnalysis', 'publishedTumourAnalysis'],
+  registeredNormalSamples: ['registeredNormalSamples', 'registeredTumourSamples'],
+  rnaAlignmentsCompleted: ['rnaAlignmentsCompleted', 'rnaAlignmentsRunning', 'rnaAlignmentFailed'],
+  rnaPublishedNormalAnalysis: ['rnaPublishedNormalAnalysis', 'rnaPublishedTumourAnalysis'],
+  rnaRegisteredNormalSamples: ['rnaRegisteredNormalSamples', 'rnaRegisteredTumourSamples'],
+  sangerVcsCompleted: ['sangerVcsCompleted', 'sangerVcsRunning', 'sangerVcsFailed'],
+};
+const setupMultiSort = (columnId: keyof typeof MULTI_SORT_COLUMN_IDS) => ({
+  // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting.
+  // add accessorKey to enable sorting.
+  // ID & accessorKey must be keys from the data.
+  accessorKey: MULTI_SORT_COLUMN_IDS[columnId][0],
+  id: columnId,
+});
 
 const DonorSummaryTable = ({
-  programShortName,
-  initialPages,
-  initialPageSize,
-  initialSorts,
+  initialSorting,
   isCardLoading = true,
+  programShortName,
 }: {
-  programShortName: string;
-  initialPages: PagingState['pages'];
-  initialPageSize: PagingState['pageSize'];
-  initialSorts: PagingState['sorts'];
+  initialSorting: DonorSummarySortingState[];
   isCardLoading?: boolean;
+  programShortName: string;
 }) => {
+  // config
   const theme = useTheme();
   const { FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED, FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
-  const { activePipeline, setActivePipeline } = usePipelines();
 
-  // These are used to sort columns with multiple fields
-  // the order of the fields is how its is order in asc or desc
-  const ID_SEPARATOR = '-';
-  const REGISTERED_SAMPLE_COLUMN_ID = 'registeredNormalSamples-registeredTumourSamples';
-  const RAW_READS_COLUMN_ID = 'publishedNormalAnalysis-publishedTumourAnalysis';
-  const ALIGNMENT_COLUMN_ID = 'alignmentsCompleted-alignmentsRunning-alignmentsFailed';
-  const SANGER_VC_COLUMN_ID = 'sangerVcsCompleted-sangerVcsRunning-sangerVcsFailed';
-  const MUTECT2_VC_COLUMN_ID = 'mutectCompleted-mutectRunning-mutectFailed';
-  const OPEN_ACCESS_VF_COLUMN_ID = 'openAccessCompleted-openAccessRunning-openAccessFailed';
-  const RNA_RAW_READS_COLUMN_ID = 'rnaPublishedNormalAnalysis-rnaPublishedTumourAnalysis';
-  const RNA_REGISTERED_SAMPLE_COLUMN_ID = 'rnaRegisteredNormalSamples-rnaRegisteredTumourSamples';
-  const RNA_ALIGNMENT_COLUMN_ID = 'rnaAlignmentsCompleted-rnaAlignmentsRunning-rnaAlignmentFailed';
+  // tabs
+  const { activeTableTab: activePipeline, handleActiveTableTab: handleActivePipeline } =
+    useTableTabs(PipelineNames.DNA);
 
-  const containerRef = createRef<HTMLDivElement>();
-  const checkmarkIcon = <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />;
+  // pagination
+  const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: DEFAULT_TABLE_PAGE_SIZE,
+  });
+  const handlePaginationState = (nextState: Partial<PaginationState>) =>
+    setPaginationState({ pageIndex, pageSize, ...nextState });
 
-  const [filterState, setFilterState] = useState([]);
+  // sorting
+  const [sortingState, setSortingState] = useState<DonorSummarySortingState[]>(initialSorting);
+  const onSortingChange: OnChangeFn<SortingState> = async (
+    getSorts: () => DonorSummarySortingState[],
+  ) => {
+    const newSort = getSorts();
+    const sorts = newSort.reduce(
+      (accSorts: Array<DonorSummarySortingState>, sortRule: DonorSummarySortingState) => {
+        const fields = MULTI_SORT_COLUMN_IDS[sortRule.id] || [sortRule.id];
+        const nextSorts = fields.map((field: DonorSummaryEntrySortField) => {
+          const currentState = find(sortingState, { id: field });
+          const currentDesc = currentState ? currentState.desc : sortRule.desc;
+          return {
+            id: field,
+            desc: !currentDesc,
+          };
+        });
 
-  const handleFilterStateChange = (filters) => {
-    setFilterState(filters);
-    setPagingState({ ...pagingState, page: 0 });
+        return [...accSorts, ...nextSorts];
+      },
+      [],
+    );
+    handlePaginationState({ pageIndex: 0 });
+    setSortingState(sorts);
   };
-  const updateFilter = (field: ProgramDonorSummaryEntryField, value: string | string[]) => {
-    const newFilters = filterState.filter((x) => x.field !== field);
-    if (value.length) {
+
+  // filtering
+  const [filterState, setFilterState] = useState<DonorSummaryFilterState[]>([]);
+  const handleFilterStateChange = (filters: DonorSummaryFilterState[]) => {
+    setFilterState(filters);
+    handlePaginationState({ pageIndex: 0 });
+  };
+  const updateFilter = ({ field, values }: DonorSummaryFilterState) => {
+    const newFilters = filterState.filter((filter) => filter.field !== field);
+    if (values.length) {
       newFilters.push({
-        field: field,
-        values: typeof value === 'string' ? [value] : value,
+        field,
+        values: [].concat(values),
       });
     }
     handleFilterStateChange(newFilters);
@@ -139,286 +176,8 @@ const DonorSummaryTable = ({
   const getFilterValue = (field: ProgramDonorSummaryEntryField) =>
     filterState.find((x) => x.field === field)?.values;
 
-  const StatusColumnCell = ({ original }: { original: DonorSummaryRecord }) => (
-    <CellContentCenter>
-      {original.validWithCurrentDictionary || FEATURE_SUBMITTED_DATA_ENABLED ? (
-        <StarIcon
-          fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
-          outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
-        />
-      ) : (
-        <Icon name="warning" fill={useTheme().colors.error} width="16px" height="15px" />
-      )}
-    </CellContentCenter>
-  );
-
-  const PercentageCell = ({
-    original,
-    fieldName,
-  }: {
-    original: DonorSummaryRecord;
-    fieldName: 'submittedCoreDataPercent' | 'submittedExtendedDataPercent';
-  }) => {
-    // original[fieldName] value is expected to be a fraction in decimal form
-    const percentageVal = Math.round(original[fieldName] * 100);
-    const cellContent =
-      percentageVal === 100 ? checkmarkIcon : percentageVal === 0 ? '' : `${percentageVal}%`;
-    return (
-      <div
-        css={css`
-          padding-left: 4px;
-        `}
-      >
-        {cellContent}
-      </div>
-    );
-  };
-
-  const ProcessingCell = ({ original }: { original: DonorSummaryRecord }) => {
-    const getIcon = (status: MolecularProcessingStatus) =>
-      ({
-        [MolecularProcessingStatus.COMPLETE]: checkmarkIcon,
-        [MolecularProcessingStatus.PROCESSING]: (
-          <Icon width="12px" height="12px" fill="warning_dark" name="ellipses" />
-        ),
-        [MolecularProcessingStatus.REGISTERED]: (
-          <Icon width="12px" height="12px" fill="primary_2" name="dash" />
-        ),
-      }[status]);
-
-    return (
-      <div
-        css={css`
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
-          align-items: center;
-          width: 70%;
-        `}
-      >
-        <div
-          css={css`
-            padding: 4px 8px 0px 0px;
-          `}
-        >
-          {getIcon(original.processingStatus)}
-        </div>
-        <div>{startCase(original.processingStatus.toLowerCase())}</div>
-      </div>
-    );
-  };
-
-  const FilterableHeader = ({
-    header,
-    open,
-    setOpen,
-    focusFirst,
-    buttonRef,
-    panelRef,
-    handleBlur,
-    active,
-    children,
-    panelLegend,
-  }: PropsWithChildren<{
-    header: string;
-    open: boolean;
-    setOpen?: (open?: boolean | any) => void;
-    focusFirst?: () => void;
-    buttonRef?: Ref<HTMLInputElement>;
-    panelRef?: Ref<HTMLElement>;
-    handleBlur?: (event?: any) => void;
-    active?: boolean;
-    panelLegend?: string;
-  }>) => {
-    return (
-      <Row
-        css={css`
-          margin: unset !important;
-          justify-content: space-between !important;
-          align-items: center !important;
-        `}
-      >
-        <div
-          css={css`
-            white-space: normal;
-            max-width: calc(100% - 14px);
-            overflow: hidden;
-            z-index: 10;
-          `}
-        >
-          {header}
-        </div>
-        <DropdownPanel
-          inputLabel={`Filter by ${header}`}
-          triggerIcon="filter"
-          triggerTooltip={`Filter by ${header}`}
-          open={open}
-          setOpen={setOpen}
-          focusFirst={focusFirst}
-          buttonRef={buttonRef}
-          panelRef={panelRef}
-          handleBlur={handleBlur}
-          active={active}
-          // occasionally, some dropdown panels need to be wider, or longer.
-          // this customization was added instead of making the panel elastic
-          // to prevent panels from running off the side of the page
-          // or the bottom of the table.
-          // panelLegend indicates which dropdown panel is affected
-          css={css`
-            ${['DNA Raw Reads Status'].includes(panelLegend) &&
-            `
-              width: 275px;
-            `}
-          `}
-        >
-          {children}
-        </DropdownPanel>
-        <div
-          css={css`
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            width: 100%;
-            height: 100%;
-            ${open ? `background: ${theme.colors.grey_3};` : ''}
-          `}
-        />
-      </Row>
-    );
-  };
-
-  const TextFilterHeader = ({
-    header,
-    panelLegend,
-    filterValue = '',
-    onFilter = () => {},
-  }: {
-    header: string;
-    panelLegend?: string;
-    filterValue?: string;
-    onFilter?: (text?: string) => void;
-  }) => {
-    const [open, setOpen] = useState(false);
-    const buttonRef = useRef<HTMLInputElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const panelRef = useRef<HTMLElement>(null);
-
-    // Focus on the input when the panel opens
-    const focusInput = () => {
-      if (inputRef && inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: FocusEvent) => {
-      const nextTarget = e.relatedTarget as Node;
-
-      if (open && !panelRef?.current?.contains(nextTarget)) {
-        setOpen(false);
-      }
-    };
-
-    return (
-      <FilterableHeader
-        header={header}
-        open={open}
-        setOpen={setOpen}
-        focusFirst={focusInput}
-        buttonRef={buttonRef}
-        panelRef={panelRef}
-        handleBlur={handleBlur}
-        active={filterValue?.length > 0}
-        panelLegend={panelLegend}
-      >
-        <TextInputFilter
-          onConfirmClick={onFilter}
-          inputLabel={`Filter by ${header}`}
-          inputPlaceholder={`Search for ${header}...`}
-          panelLegend={panelLegend || header}
-          inputRef={inputRef}
-          setOpen={setOpen}
-          handleBlur={handleBlur}
-          initialValue={filterValue}
-        />
-      </FilterableHeader>
-    );
-  };
-
-  const ListFilterHeader = ({
-    header,
-    panelLegend,
-    filterOptions = [],
-    filterCounts,
-    activeFilters = [],
-    onFilter = () => {},
-  }: {
-    header: string;
-    panelLegend?: string;
-    filterOptions?: Array<FilterOption>;
-    filterCounts?: Record<string, number>;
-    activeFilters?: Array<string>;
-    onFilter?: (filters?: Array<FilterOption>) => void;
-  }) => {
-    const [open, setOpen] = useState(false);
-    const options = useMemo(
-      () =>
-        filterOptions.map((option) => ({
-          ...option,
-          isChecked: activeFilters?.indexOf(option.key) > -1 ? true : false,
-          doc_count: filterCounts?.[option.key],
-        })),
-      [filterOptions, activeFilters],
-    );
-    const buttonRef = useRef<HTMLInputElement>(null);
-    const panelRef = useRef<HTMLElement>(null);
-
-    // Close dropdown panel when tabbing out of it
-    const handleBlur = (e: FocusEvent) => {
-      const nextTarget = e.relatedTarget as Node;
-
-      if (open && !panelRef?.current?.contains(nextTarget)) {
-        setOpen(false);
-      }
-    };
-
-    return (
-      <FilterableHeader
-        header={header}
-        open={open}
-        setOpen={setOpen}
-        buttonRef={buttonRef}
-        panelRef={panelRef}
-        handleBlur={handleBlur}
-        panelLegend={panelLegend}
-        active={activeFilters.length > 0}
-      >
-        <ListFilter
-          filterOptions={options}
-          onConfirmClick={onFilter}
-          panelLegend={panelLegend || header}
-          open={open}
-          setOpen={setOpen}
-          handleBlur={handleBlur}
-        />
-      </FilterableHeader>
-    );
-  };
-
-  const [pagingState, setPagingState] = useState<PagingState>({
-    pages: initialPages,
-    pageSize: initialPageSize,
-    page: 0,
-    sorts: initialSorts,
-  });
-
-  const [loaderTimeout, setLoaderTimeout] = useState<NodeJS.Timeout>();
-
-  const offset = pagingState.pageSize * pagingState.page;
-  const first = pagingState.pageSize;
-  const sorts = pagingState.sorts;
-
+  // query
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(isCardLoading);
   const {
     data: {
       programDonorSummary: { entries: programDonorSummaryEntries, stats: programDonorSummaryStats },
@@ -429,31 +188,95 @@ const DonorSummaryTable = ({
       },
     },
     error: programDonorsSummaryQueryError,
-    loading,
+    loading: programDonorsSummaryQueryLoading,
   } = useProgramDonorsSummaryQuery({
     programShortName,
-    first,
-    offset,
-    sorts,
+    first: pageSize,
+    offset: pageSize * pageIndex,
+    sorts: formatDonorSummarySortingRequest(sortingState),
     filters: filterState,
     options: {
       onCompleted: (result) => {
         const totalDonors = result.programDonorSummary?.stats?.registeredDonorsCount || 0;
-        const nextPages = Math.ceil(totalDonors / pagingState.pageSize);
-        setPagingState({
-          ...pagingState,
+        const nextPageCount = Math.ceil(totalDonors / pageSize);
+        handlePaginationState({
           // stay on current page, unless that page is no longer available
-          page: pagingState.page < nextPages ? pagingState.page : 0,
-          pages: nextPages,
+          pageIndex: pageIndex < nextPageCount ? pageIndex : 0,
         });
-        setLoaderTimeout(
-          setTimeout(() => {
-            setIsTableLoading(false);
-          }, 500),
-        );
+        setTimeout(() => {
+          setIsTableLoading(false);
+        }, 500);
       },
     },
   });
+
+  useEffect(() => {
+    if (programDonorsSummaryQueryLoading) {
+      setIsTableLoading(true);
+    }
+  }, [programDonorsSummaryQueryLoading]);
+
+  // custom components
+  const StatusColumnCell = ({ row: { original } }) => {
+    return (
+      <CellContentCenter>
+        {original.validWithCurrentDictionary || FEATURE_SUBMITTED_DATA_ENABLED ? (
+          <StarIcon
+            fill={RELEASED_STATE_FILL_COLOURS[original.releaseStatus]}
+            outline={RELEASED_STATE_STROKE_COLOURS[original.releaseStatus]}
+          />
+        ) : (
+          <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />
+        )}
+      </CellContentCenter>
+    );
+  };
+
+  const HeaderWithBackground = ({
+    children,
+    fill,
+  }: PropsWithChildren<{ fill: keyof ThemeColorNames }>) => {
+    const theme = useTheme();
+    return (
+      <TableHeaderWrapper
+        css={css`
+          background: ${theme.colors[fill]};
+          justify-content: center;
+          text-transform: uppercase;
+        `}
+      >
+        {children}
+      </TableHeaderWrapper>
+    );
+  };
+
+  const PercentageCell = ({
+    original,
+    fieldName,
+  }: {
+    original: any;
+    fieldName: 'submittedCoreDataPercent' | 'submittedExtendedDataPercent';
+  }) => {
+    // original[fieldName] value is expected to be a fraction in decimal form
+    const percentageVal = Math.round(original[fieldName] * 100);
+    const cellContent =
+      percentageVal === 100 ? (
+        <Icon name="checkmark" fill="accent1_dimmed" width="12px" height="12px" />
+      ) : percentageVal === 0 ? (
+        ''
+      ) : (
+        `${percentageVal}%`
+      );
+    return (
+      <div
+        css={css`
+          padding-left: 4px;
+        `}
+      >
+        {cellContent}
+      </div>
+    );
+  };
 
   const donorsWithErrors = programDonorSummaryEntries
     .filter((entry) => !entry.validWithCurrentDictionary)
@@ -486,46 +309,52 @@ const DonorSummaryTable = ({
       })
     : [];
 
-  const tableColumns: Array<TableColumnConfig<DonorSummaryRecord>> = [
+  // table info
+  const tableColumns: ColumnDef<DonorSummaryEntry>[] = [
     {
-      Header: 'CLINICAL DATA STATUS',
-      headerStyle: {
-        background: theme.colors.secondary_4,
+      header: () => (
+        <HeaderWithBackground fill="secondary_4">Clinical Data Status</HeaderWithBackground>
+      ),
+      id: 'clinicalDataStatus',
+      meta: {
+        customHeader: true,
       },
       columns: [
         {
-          Header: (
+          header: () => (
             <CellContentCenter>
               <StarIcon fill={'grey_1'} />
             </CellContentCenter>
           ),
-          Cell: StatusColumnCell,
-          accessor: 'releaseStatus',
-          resizable: false,
-          width: 50,
-          sortMethod: (a: DonorDataReleaseState, b: DonorDataReleaseState) => {
-            const priorities = {
+          cell: StatusColumnCell,
+          accessorKey: 'releaseStatus',
+          size: 50,
+          enableResizing: false,
+          sortingFn: (rowA: Row<DonorSummaryEntry>, rowB: Row<DonorSummaryEntry>) => {
+            const priorities: { [k in DonorDataReleaseState]: number } = {
               [DonorDataReleaseState.NO]: 1,
               [DonorDataReleaseState.PARTIALLY]: 2,
               [DonorDataReleaseState.FULLY]: 3,
-            } as { [k in DonorDataReleaseState]: number };
-            return priorities[a] - priorities[b];
+            };
+            return (
+              priorities[rowA.original.releaseStatus] - priorities[rowB.original.releaseStatus]
+            );
           },
         },
         {
-          Header: (
-            <TextFilterHeader
+          header: () => (
+            <TableTextFilterHeader
               header={'Donor ID'}
               onFilter={(text) =>
                 text?.length
-                  ? updateFilter('combinedDonorId', text)
+                  ? updateFilter({ field: 'combinedDonorId', values: [].concat(text) })
                   : clearFilter('combinedDonorId')
               }
               filterValue={getFilterValue('combinedDonorId')}
             />
           ),
-          accessor: 'donorId',
-          Cell: ({ original }: { original: DonorSummaryRecord }) => {
+          accessorKey: 'donorId',
+          cell: ({ row: { original } }: DonorSummaryCellProps) => {
             const errorTab =
               errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
                 ?.entity || '';
@@ -543,18 +372,18 @@ const DonorSummaryTable = ({
               `${original.donorId} (${original.submitterDonorId})`
             );
           },
-          width: 135,
+          size: 135,
         },
         {
-          Header: (
-            <ListFilterHeader
+          header: () => (
+            <TableListFilterHeader
               header={'Core Completion'}
               panelLegend={'Core Completion Status'}
               onFilter={(options) =>
-                updateFilter(
-                  'coreDataPercentAggregation',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
+                updateFilter({
+                  field: 'coreDataPercentAggregation',
+                  values: options.filter((option) => option.isChecked).map((option) => option.key),
+                })
               }
               filterOptions={FILTER_OPTIONS.completeIncomplete}
               filterCounts={{
@@ -568,36 +397,65 @@ const DonorSummaryTable = ({
               activeFilters={getFilterValue('coreDataPercentAggregation')}
             />
           ),
-          accessor: 'submittedCoreDataPercent',
-          Cell: ({ original }) => (
+          accessorKey: 'submittedCoreDataPercent',
+          cell: ({ row: { original } }) => (
             <PercentageCell original={original} fieldName="submittedCoreDataPercent" />
           ),
-          width: 95,
+          size: 95,
         },
       ],
     },
     {
-      Header: `${activePipeline}-SEQ PIPELINE`,
-      headerStyle: {
-        background: theme.colors[PIPELINE_COLORS[activePipeline]],
+      header: () => (
+        <HeaderWithBackground
+          fill={PIPELINE_COLORS[PipelineNames[activePipeline]] as keyof ThemeColorNames}
+        >
+          {`${activePipeline}-SEQ PIPELINE`}
+        </HeaderWithBackground>
+      ),
+      id: 'dnaRnaSeqPipeline',
+      meta: {
+        customHeader: true,
+        ...(FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+          ? {
+              columnTabs: {
+                activeTab: activePipeline,
+                handleTabs: handleActivePipeline,
+                tabs: [
+                  {
+                    label: 'DNA-SEQ',
+                    value: PipelineNames.DNA,
+                    color: theme.colors[PIPELINE_COLORS[PipelineNames.DNA]],
+                  },
+                  {
+                    label: 'RNA-SEQ',
+                    value: PipelineNames.RNA,
+                    color: theme.colors[PIPELINE_COLORS[PipelineNames.RNA]],
+                  },
+                ],
+              },
+            }
+          : {}),
       },
       columns: [
         ...(activePipeline === PipelineNames.DNA
           ? [
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={`${
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA' : 'Sample'
                     } Registration Status`}
                     onFilter={(options) =>
-                      updateFilter(
-                        FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                      updateFilter({
+                        field: FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
                           ? 'dnaTNRegistered'
                           : 'registeredSamplePairs',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
@@ -628,8 +486,22 @@ const DonorSummaryTable = ({
                     )}
                   />
                 ),
-                id: REGISTERED_SAMPLE_COLUMN_ID,
-                Cell: ({ original }) =>
+                meta: {
+                  customCell: true,
+                },
+                sortingFn: (rowA: Row<DonorSummaryEntry>, rowB: Row<DonorSummaryEntry>) => {
+                  const priorities: { [k in DonorDataReleaseState]: number } = {
+                    [DonorDataReleaseState.NO]: 1,
+                    [DonorDataReleaseState.PARTIALLY]: 2,
+                    [DonorDataReleaseState.FULLY]: 3,
+                  };
+                  return (
+                    priorities[rowA.original.releaseStatus] -
+                    priorities[rowB.original.releaseStatus]
+                  );
+                },
+                ...setupMultiSort('registeredNormalSamples'),
+                cell: ({ row: { original } }: DonorSummaryCellProps) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
                       normalCount={original.registeredNormalSamples}
@@ -645,17 +517,21 @@ const DonorSummaryTable = ({
                   ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={`${
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'DNA ' : ''
                     }Raw Reads Status`}
                     onFilter={(options) =>
-                      updateFilter(
-                        FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? 'dnaTNMatchedPair' : 'rawReads',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
+                          ? 'dnaTNMatchedPair'
+                          : 'rawReads',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={
                       FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED
@@ -689,8 +565,9 @@ const DonorSummaryTable = ({
                     )}
                   />
                 ),
-                id: RAW_READS_COLUMN_ID,
-                Cell: ({ original }) =>
+                meta: { customCell: true },
+                ...setupMultiSort('publishedNormalAnalysis'),
+                cell: ({ row: { original } }) =>
                   FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED ? (
                     <DesignationCell
                       normalCount={original.publishedNormalAnalysis}
@@ -706,15 +583,17 @@ const DonorSummaryTable = ({
                   ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'alignmentStatus',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'alignmentStatus',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
@@ -730,8 +609,8 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('alignmentStatus')}
                   />
                 ),
-                id: ALIGNMENT_COLUMN_ID,
-                Cell: ({ original }) => (
+                ...setupMultiSort('alignmentsCompleted'),
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.alignmentsCompleted}
                     inProgress={original.alignmentsRunning}
@@ -740,15 +619,17 @@ const DonorSummaryTable = ({
                 ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Sanger VC'}
                     panelLegend={'Sanger VC Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'sangerVCStatus',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'sangerVCStatus',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
@@ -764,8 +645,8 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('sangerVCStatus')}
                   />
                 ),
-                id: SANGER_VC_COLUMN_ID,
-                Cell: ({ original }) => (
+                ...setupMultiSort('sangerVcsCompleted'),
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.sangerVcsCompleted}
                     inProgress={original.sangerVcsRunning}
@@ -774,15 +655,17 @@ const DonorSummaryTable = ({
                 ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Mutect2 VC'}
                     panelLegend={'Mutect2 VC Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'mutectStatus',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'mutectStatus',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
@@ -798,8 +681,8 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('mutectStatus')}
                   />
                 ),
-                id: MUTECT2_VC_COLUMN_ID,
-                Cell: ({ original }) => (
+                ...setupMultiSort('mutectCompleted'),
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.mutectCompleted}
                     inProgress={original.mutectRunning}
@@ -808,15 +691,17 @@ const DonorSummaryTable = ({
                 ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Open Access VF'}
                     panelLegend={'Open Access VF Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'openAccessStatus',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'openAccessStatus',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
@@ -832,8 +717,8 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('openAccessStatus')}
                   />
                 ),
-                id: OPEN_ACCESS_VF_COLUMN_ID,
-                Cell: ({ original }) => (
+                ...setupMultiSort('openAccessCompleted'),
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.openAccessCompleted}
                     inProgress={original.openAccessRunning}
@@ -844,15 +729,17 @@ const DonorSummaryTable = ({
             ]
           : [
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Registered Samples'}
                     panelLegend={'RNA Registration Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'rnaRegisteredSample',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'rnaRegisteredSample',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.samplesRegisteredNoSamplesRegistered}
                     filterCounts={{
@@ -864,8 +751,9 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('rnaRegisteredSample')}
                   />
                 ),
-                id: RNA_REGISTERED_SAMPLE_COLUMN_ID,
-                Cell: ({ original }) => (
+                meta: { customCell: true },
+                ...setupMultiSort('rnaRegisteredNormalSamples'),
+                cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaRegisteredNormalSamples}
                     tumourCount={original.rnaRegisteredTumourSamples}
@@ -873,15 +761,17 @@ const DonorSummaryTable = ({
                 ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Raw Reads'}
                     panelLegend={'RNA Raw Reads Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'rnaRawReads',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'rnaRawReads',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.dataSubmittedNoData}
                     filterCounts={{
@@ -893,8 +783,9 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('rnaRawReads')}
                   />
                 ),
-                id: RNA_RAW_READS_COLUMN_ID,
-                Cell: ({ original }) => (
+                meta: { customCell: true },
+                ...setupMultiSort('rnaPublishedNormalAnalysis'),
+                cell: ({ row: { original } }) => (
                   <DesignationCell
                     normalCount={original.rnaPublishedNormalAnalysis}
                     tumourCount={original.rnaPublishedTumourAnalysis}
@@ -902,15 +793,17 @@ const DonorSummaryTable = ({
                 ),
               },
               {
-                Header: (
-                  <ListFilterHeader
+                header: () => (
+                  <TableListFilterHeader
                     header={'Alignment'}
                     panelLegend={'Alignment Status'}
                     onFilter={(options) =>
-                      updateFilter(
-                        'rnaAlignmentStatus',
-                        options.filter((option) => option.isChecked).map((option) => option.key),
-                      )
+                      updateFilter({
+                        field: 'rnaAlignmentStatus',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
                     }
                     filterOptions={FILTER_OPTIONS.completedInProgressFailed}
                     filterCounts={{
@@ -926,8 +819,8 @@ const DonorSummaryTable = ({
                     activeFilters={getFilterValue('rnaAlignmentStatus')}
                   />
                 ),
-                id: RNA_ALIGNMENT_COLUMN_ID,
-                Cell: ({ original }) => (
+                ...setupMultiSort('rnaAlignmentsCompleted'),
+                cell: ({ row: { original } }) => (
                   <Pipeline
                     complete={original.rnaAlignmentsCompleted}
                     inProgress={original.rnaAlignmentsRunning}
@@ -939,126 +832,92 @@ const DonorSummaryTable = ({
       ],
     },
     {
-      Header: filterState.length ? (
-        <FilterClearButton
-          size="sm"
-          variant="text"
-          type="button"
-          onClick={() => handleFilterStateChange([])}
-        >
-          Clear Filters
-        </FilterClearButton>
-      ) : (
-        <></>
-      ),
+      header: () =>
+        filterState.length ? (
+          <FilterClearButton
+            size="sm"
+            variant="text"
+            type="button"
+            onClick={() => handleFilterStateChange([])}
+          >
+            Clear Filters
+          </FilterClearButton>
+        ) : (
+          <></>
+        ),
+      id: 'updated',
       columns: [
-        FEATURE_SUBMITTED_DATA_ENABLED && {
-          Header: (
-            <ListFilterHeader
-              header={'Alerts'}
-              panelLegend={'Filter Alerts'}
-              onFilter={(options) =>
-                updateFilter(
-                  'validWithCurrentDictionary',
-                  options.filter((option) => option.isChecked).map((option) => option.key),
-                )
-              }
-              filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
-              filterCounts={{
-                [FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
-                  programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-                [FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
-                  programDonorSummaryStats?.registeredDonorsCount -
-                    programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
-              }}
-              activeFilters={getFilterValue('validWithCurrentDictionary')}
-            />
-          ),
-          accessor: 'validWithCurrentDictionary',
-          Cell: ({ original }: { original: DonorSummaryRecord }) => {
-            const errorTab =
-              errorLinkData.find((error) => error.donorId === parseDonorIdString(original.donorId))
-                ?.entity || '';
+        ...(FEATURE_SUBMITTED_DATA_ENABLED
+          ? [
+              {
+                header: () => (
+                  <TableListFilterHeader
+                    header={'Alerts'}
+                    panelLegend={'Filter Alerts'}
+                    onFilter={(options) =>
+                      updateFilter({
+                        field: 'validWithCurrentDictionary',
+                        values: options
+                          .filter((option) => option.isChecked)
+                          .map((option) => option.key),
+                      })
+                    }
+                    filterOptions={FILTER_OPTIONS.validWithCurrentDictionary}
+                    filterCounts={{
+                      [FILTER_OPTIONS.validWithCurrentDictionary[0].key]:
+                        programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+                      [FILTER_OPTIONS.validWithCurrentDictionary[1].key]:
+                        programDonorSummaryStats?.registeredDonorsCount -
+                          programDonorSummaryStats?.donorsInvalidWithCurrentDictionaryCount || 0,
+                    }}
+                    activeFilters={getFilterValue('validWithCurrentDictionary')}
+                  />
+                ),
+                accessorKey: 'validWithCurrentDictionary',
+                cell: ({ row: { original } }) => {
+                  const errorTab =
+                    errorLinkData.find(
+                      (error) => error.donorId === parseDonorIdString(original.donorId),
+                    )?.entity || '';
 
-            const linkUrl = urlJoin(
-              `/submission/program/`,
-              programShortName,
-              `/clinical-data/?donorId=${original.donorId}`,
-              errorTab && `&tab=${errorTab}`,
-            );
+                  const linkUrl = urlJoin(
+                    `/submission/program/`,
+                    programShortName,
+                    `/clinical-data/?donorId=${original.donorId}`,
+                    errorTab && `&tab=${errorTab}`,
+                  );
 
-            return original.validWithCurrentDictionary ? (
-              ''
-            ) : (
-              <NextLink href={linkUrl}>
-                <Link>
-                  <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
-                  Update Clinical
-                </Link>
-              </NextLink>
-            );
-          },
-          width: 125,
-        },
+                  return original.validWithCurrentDictionary ? (
+                    ''
+                  ) : (
+                    <NextLink href={linkUrl}>
+                      <Link>
+                        <Icon name="warning" fill={theme.colors.error} width="16px" height="15px" />{' '}
+                        Update Clinical
+                      </Link>
+                    </NextLink>
+                  );
+                },
+                size: 125,
+              },
+            ]
+          : []),
         {
-          Header: 'Last Updated',
-          accessor: 'updatedAt',
-          Cell: ({ original }: { original: DonorSummaryRecord }) => {
+          header: 'Last Updated',
+          accessorKey: 'updatedAt',
+          cell: ({ row: { original } }: DonorSummaryCellProps) => {
             return <div>{displayDate(original.updatedAt)}</div>;
           },
-          width: 95,
+          size: 95,
         },
       ].filter(Boolean),
     },
   ];
 
-  const [isTableLoading, setIsTableLoading] = useState(isCardLoading);
-  useEffect(() => {
-    if (loading) {
-      setIsTableLoading(true);
-    }
-  }, [loading]);
-
-  const onPageChange = async (newPageNum: number) => {
-    setPagingState({ ...pagingState, page: newPageNum }); // newPageNum is zero indexed
-  };
-
-  const onPageSizeChange = async (newPageSize: number, newPage: number) => {
-    setPagingState({
-      ...pagingState,
-      page: 0,
-      pageSize: newPageSize,
-      pages: Math.ceil(programDonorSummaryStats.registeredDonorsCount / newPageSize),
-    });
-  };
-
-  const onSortedChange: SortedChangeFunction = async (newSorted: SortingRule[]) => {
-    const sorts = newSorted.reduce(
-      (accSorts: Array<DonorSummaryEntrySort>, sortRule: SortingRule) => {
-        const fields = sortRule.id.split(ID_SEPARATOR);
-        const order = sortRule.desc ? 'desc' : 'asc';
-        return accSorts.concat(
-          fields.map((field) => ({
-            field: field as DonorSummaryEntrySortField,
-            order: order as DonorSummaryEntrySortOrder,
-          })),
-        );
-      },
-      [],
-    );
-    setPagingState({ ...pagingState, sorts });
-  };
-
   return (
     <div
-      ref={containerRef}
-      // this z-index needs to be greater then GlobalFooter's z-index otherwise the drop down is hidden behind it
       css={css`
-        z-index: 2;
         padding-top: 10px;
-        .rt-td {
-          position: relative; // helps DesignationCell styling
-        }
       `}
     >
       {programDonorsSummaryQueryError ? (
@@ -1071,31 +930,25 @@ const DonorSummaryTable = ({
             `}
             programDonorSummaryStats={programDonorSummaryStats}
           />
-          {FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED && (
-            <PipelineTabs
-              activePipeline={activePipeline}
-              handlePipelineTabs={(e, value) => {
-                setActivePipeline(value);
-              }}
-            />
-          )}
-
-          <Table
-            loading={isTableLoading}
-            parentRef={containerRef}
+          <TableV8
             columns={tableColumns}
             data={programDonorSummaryEntries}
-            showPagination={true}
-            manual={true}
-            pages={pagingState.pages}
-            pageSize={pagingState.pageSize}
-            page={pagingState.page}
-            onPageChange={onPageChange}
-            onPageSizeChange={onPageSizeChange}
-            onSortedChange={onSortedChange}
-            defaultSorted={getDefaultSort(initialSorts)}
-            // filter panel style workarounds
-            className={`has-filters${!programDonorSummaryEntries.length ? ' no-data' : ''}`}
+            enableColumnResizing
+            enableSorting
+            loading={isCardLoading || isTableLoading}
+            manualPagination
+            manualSorting
+            onPaginationChange={setPaginationState}
+            onSortingChange={onSortingChange}
+            pageCount={Math.ceil((programDonorSummaryStats.registeredDonorsCount || 0) / pageSize)}
+            paginationState={{ pageIndex, pageSize }}
+            showPageSizeOptions
+            sortingState={sortingState}
+            withFilters
+            withHeaders
+            withPagination
+            withStripes
+            withTabs
           />
         </>
       )}
