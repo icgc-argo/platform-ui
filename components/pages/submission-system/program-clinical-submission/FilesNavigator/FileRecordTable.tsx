@@ -38,7 +38,6 @@ import StatsArea, { FILE_STATE_COLORS } from './StatsArea';
 type TableColumns = {
   row: number;
   status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
-  fakeColumn: string;
 };
 
 const REQUIRED_FILE_ENTRY_FIELDS = {
@@ -90,7 +89,6 @@ const FileRecordTable = ({
 
   const tableData: TableColumns[] = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
-      fakeColumn: 'testing',
       row: record.row,
       status: (() => {
         switch (true) {
