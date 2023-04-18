@@ -531,18 +531,20 @@ const ClinicalEntityDataTable = ({
         isCompletionCell &&
         completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
 
-      const { entityData: completionEntityData } = completionRecord;
+      if (completionRecord) {
+        const { entityData: completionEntityData } = completionRecord;
 
-      const {
-        specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
-      } = completionEntityData;
+        const {
+          specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
+        } = completionEntityData;
 
-      const currentPercentage =
-        id === completionColumnHeaders['normalSpecimens']
-          ? normalSpecimensPercentage
-          : tumourSpecimensPercentage;
+        const currentPercentage =
+          id === completionColumnHeaders['normalSpecimens']
+            ? normalSpecimensPercentage
+            : tumourSpecimensPercentage;
 
-      hasCompletionErrors = currentPercentage !== 1;
+        hasCompletionErrors = currentPercentage !== 1;
+      }
     }
 
     const specificErrorValue =
