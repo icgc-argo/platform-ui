@@ -184,8 +184,8 @@ const FileTableV8 = () => {
       header: () => (
         <TableRowSelectionCheckbox
           checked={allRowsSelected}
-          onChange={toggleAllHandler}
           id="toggleAll"
+          onChange={toggleAllHandler}
         />
       ),
       id: 'checkbox-column',
