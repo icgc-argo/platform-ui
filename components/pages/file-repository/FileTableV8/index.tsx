@@ -24,7 +24,10 @@ import {
   css,
   DEFAULT_TABLE_PAGE_SIZE,
   Link,
+  OnChangeFn,
   PaginationState,
+  RowSelectionState,
+  SortingState,
   TableV8,
   Typography,
   useSelectTableSelectionState,
@@ -56,7 +59,7 @@ import {
   FileRepositoryRecord,
   FileRepositoryRecordSort,
   FileRepositoryRecordSortOrder,
-  FileRepositorySortingRule,
+  FileRepositorySortingState,
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
 } from '../FileTable/types';
@@ -103,9 +106,9 @@ const useFileRepoTableQuery = ({
   return queryResult;
 };
 
-const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingRule[]) => {
+const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingState[]) => {
   const sort = newSorted.reduce(
-    (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingRule) => {
+    (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingState) => {
       const order = sortRule.desc ? 'desc' : 'asc';
 
       // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
@@ -123,6 +126,12 @@ const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySor
   );
 };
 
+const formatFileRepoSortRequest = (sorts: SortingState): FileRepositoryRecordSort[] =>
+  sorts.map(({ id, desc }: { id: FileCentricDocumentField; desc: boolean }) => ({
+    field: id,
+    order: desc ? 'desc' : 'asc',
+  }));
+
 const FileTableV8 = () => {
   const { FEATURE_DONOR_ENTITY_ENABLED, FEATURE_PROGRAM_ENTITY_ENABLED } = getConfig();
 
@@ -132,6 +141,7 @@ const FileTableV8 = () => {
 
   const { data: fieldDisplayNames } = useFileCentricFieldDisplayName();
 
+  // pagination
   const [{ pageIndex, pageSize }, setPaginationState] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: DEFAULT_TABLE_PAGE_SIZE,
@@ -139,10 +149,17 @@ const FileTableV8 = () => {
   const handlePaginationState = (nextState: Partial<PaginationState>) =>
     setPaginationState({ pageIndex, pageSize, ...nextState });
 
+  // sorting
+  const [sortingState, setSortingState] = useState<SortingState>([]);
+  const onSortingChange: OnChangeFn<SortingState> = async (nextSort) => {
+    handlePaginationState({ pageIndex: 0 });
+    setSortingState(nextSort);
+  };
+
   const { data: records, loading = true } = useFileRepoTableQuery({
     first: pageSize,
     offset: pageSize * pageIndex,
-    sort: [],
+    sort: formatFileRepoSortRequest(sortingState),
     filters,
   });
 
@@ -269,6 +286,8 @@ const FileTableV8 = () => {
     selectionKeyField: 'objectId',
   });
 
+  const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>();
+
   const tableElement = (
     <div
       css={css`
@@ -277,17 +296,22 @@ const FileTableV8 = () => {
       `}
     >
       <TableV8
-        // enableSorting
-        // manualSorting
-        // sortingState
         columns={tableColumns}
         data={tableData}
+        enableRowSelection
+        enableSorting
         loading={loading}
         manualPagination
+        manualRowSelection
+        manualSorting
         onPaginationChange={setPaginationState}
+        onRowSelectionChange={setRowSelectionState}
+        onSortingChange={onSortingChange}
         pageCount={Math.ceil(totalEntries / pageSize)}
         paginationState={{ pageIndex, pageSize }}
+        rowSelectionState={rowSelectionState}
         showPageSizeOptions
+        sortingState={sortingState}
         withHeaders
         withPagination
         withRowHighlight

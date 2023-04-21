@@ -87,6 +87,7 @@ export type FileRepositoryRecordSort = {
 
 export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
 
-export type FileRepositorySortingRule = SortingRule & {
+export type FileRepositorySortingState = {
   id: FileCentricDocumentField;
+  desc: boolean;
 };
