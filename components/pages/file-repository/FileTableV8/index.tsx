@@ -26,11 +26,11 @@ import {
   Link,
   OnChangeFn,
   PaginationState,
-  RowSelectionState,
   SortingState,
+  TableRowSelectionCheckbox,
   TableV8,
   Typography,
-  useSelectTableSelectionState,
+  useTableRowSelection,
   useTheme,
 } from '@icgc-argo/uikit';
 import filesize from 'filesize';
@@ -165,11 +165,44 @@ const FileTableV8 = () => {
 
   const totalEntries = records ? records.file.hits.total : 0;
 
+  const {
+    allRowsSelected,
+    isSelected,
+    selectedRows,
+    selectedRowsCount,
+    selectionKeyField,
+    toggleAllHandler,
+    toggleHandler,
+    unselectedRows,
+  } = useTableRowSelection({
+    totalEntriesCount: totalEntries,
+    selectionKeyField: 'objectId',
+  });
+
   const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
+    {
+      header: () => (
+        <TableRowSelectionCheckbox
+          checked={allRowsSelected}
+          onChange={toggleAllHandler}
+          id="toggleAll"
+        />
+      ),
+      id: 'checkbox-column',
+      cell: ({ row }) => {
+        const rowId = row.original[selectionKeyField];
+        return (
+          <TableRowSelectionCheckbox
+            checked={isSelected(rowId)}
+            id={rowId}
+            onChange={() => toggleHandler(rowId)}
+          />
+        );
+      },
+    },
     {
       header: 'File ID',
       // headerClassName: sort == DEFAULT_SORT ? '-sort-desc' : '',
-      // id: FileCentricDocumentField.file_id,
       accessorKey: 'fileId',
       cell: ({ row: { original } }) => {
         return (
@@ -185,7 +218,6 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['donors.donor_id'],
-      // id: FileCentricDocumentField['donors.donor_id'],
       accessorKey: 'donorId',
       cell: ({ row: { original } }) => {
         return FEATURE_DONOR_ENTITY_ENABLED ? (
@@ -203,12 +235,10 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['donors.submitter_donor_id'],
-      // id: FileCentricDocumentField['donors.submitter_donor_id'],
       accessorKey: 'submitterDonorId',
     },
     {
       header: fieldDisplayNames['study_id'],
-      // id: FileCentricDocumentField['study_id'],
       accessorKey: 'programId',
       cell: ({ row: { original } }) => {
         return FEATURE_PROGRAM_ENTITY_ENABLED ? (
@@ -226,30 +256,25 @@ const FileTableV8 = () => {
     },
     {
       header: fieldDisplayNames['data_type'],
-      // id: FileCentricDocumentField['data_type'],
       accessorKey: 'dataType',
       size: 180,
     },
     {
       header: fieldDisplayNames['file_type'],
-      // id: FileCentricDocumentField['file_type'],
       accessorKey: 'fileType',
       size: 80,
     },
     {
       header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
-      // id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessorKey: 'experimentalStrategy',
     },
     {
       header: fieldDisplayNames['file.size'],
-      // id: FileCentricDocumentField['file.size'],
       accessorKey: 'size',
       cell: ({ row: { original } }) => filesize(original.size),
     },
     {
       header: fieldDisplayNames['object_id'],
-      // id: FileCentricDocumentField['object_id'],
       accessorKey: 'objectId',
       size: 260,
     },
@@ -272,22 +297,6 @@ const FileTableV8 = () => {
       }))
     : [];
 
-  const {
-    allRowsSelected,
-    isSelected,
-    selectedRows,
-    unselectedRows,
-    toggleAllHandler,
-    toggleHandler,
-    selectionKeyField,
-    selectedRowsCount,
-  } = useSelectTableSelectionState<FileRepositoryRecord>({
-    totalEntriesCount: totalEntries,
-    selectionKeyField: 'objectId',
-  });
-
-  const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>();
-
   const tableElement = (
     <div
       css={css`
@@ -298,18 +307,14 @@ const FileTableV8 = () => {
       <TableV8
         columns={tableColumns}
         data={tableData}
-        enableRowSelection
         enableSorting
         loading={loading}
         manualPagination
-        manualRowSelection
         manualSorting
         onPaginationChange={setPaginationState}
-        onRowSelectionChange={setRowSelectionState}
         onSortingChange={onSortingChange}
         pageCount={Math.ceil(totalEntries / pageSize)}
         paginationState={{ pageIndex, pageSize }}
-        rowSelectionState={rowSelectionState}
         showPageSizeOptions
         sortingState={sortingState}
         withHeaders
