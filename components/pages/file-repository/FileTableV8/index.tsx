@@ -26,8 +26,8 @@ import {
   Link,
   OnChangeFn,
   PaginationState,
+  RowSelectionCell,
   SortingState,
-  TableCellWrapper,
   TableRowSelectionCheckbox,
   TableV8,
   Typography,
@@ -172,13 +172,13 @@ const FileTableV8 = () => {
     unselectedRows,
   });
 
-  const RowSelectionCell = ({
+  const RowSelectionCellWrapper = ({
     children,
     original,
   }: PropsWithChildren<{ original: FileRepositoryRecord }>) => (
-    <TableCellWrapper className={isSelected(original[selectionKeyField]) ? 'selected' : ''}>
+    <RowSelectionCell isSelected={isSelected(original[selectionKeyField])}>
       {children}
-    </TableCellWrapper>
+    </RowSelectionCell>
   );
 
   const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
@@ -197,13 +197,13 @@ const FileTableV8 = () => {
       cell: ({ row: { original } }) => {
         const rowId = original[selectionKeyField];
         return (
-          <RowSelectionCell original={original}>
+          <RowSelectionCellWrapper original={original}>
             <TableRowSelectionCheckbox
               checked={isSelected(rowId)}
               id={rowId}
               onChange={() => toggleHandler(rowId)}
             />
-          </RowSelectionCell>
+          </RowSelectionCellWrapper>
         );
       },
       size: 15,
@@ -215,7 +215,7 @@ const FileTableV8 = () => {
       id: FileCentricDocumentField.file_number,
       accessorKey: 'fileId',
       cell: ({ row: { original } }) => (
-        <RowSelectionCell original={original}>
+        <RowSelectionCellWrapper original={original}>
           <NextLink
             href={FILE_ENTITY_PATH}
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
@@ -223,7 +223,7 @@ const FileTableV8 = () => {
           >
             <Link>{original.fileId}</Link>
           </NextLink>
-        </RowSelectionCell>
+        </RowSelectionCellWrapper>
       ),
     },
     {
@@ -231,7 +231,7 @@ const FileTableV8 = () => {
       id: FileCentricDocumentField['donors.donor_id'],
       accessorKey: 'donorId',
       cell: ({ row: { original } }) => (
-        <RowSelectionCell original={original}>
+        <RowSelectionCellWrapper original={original}>
           {FEATURE_DONOR_ENTITY_ENABLED ? (
             <NextLink
               href={DONOR_ENTITY_PATH}
@@ -243,7 +243,7 @@ const FileTableV8 = () => {
           ) : (
             original.donorId
           )}
-        </RowSelectionCell>
+        </RowSelectionCellWrapper>
       ),
     },
     {
@@ -256,7 +256,7 @@ const FileTableV8 = () => {
       id: FileCentricDocumentField['study_id'],
       accessorKey: 'programId',
       cell: ({ row: { original } }) => (
-        <RowSelectionCell original={original}>
+        <RowSelectionCellWrapper original={original}>
           {FEATURE_PROGRAM_ENTITY_ENABLED ? (
             <NextLink
               href={PROGRAM_ENTITY_PATH}
@@ -268,7 +268,7 @@ const FileTableV8 = () => {
           ) : (
             original.programId
           )}
-        </RowSelectionCell>
+        </RowSelectionCellWrapper>
       ),
     },
     {
@@ -293,7 +293,9 @@ const FileTableV8 = () => {
       id: FileCentricDocumentField['file.size'],
       accessorKey: 'size',
       cell: ({ row: { original } }) => (
-        <RowSelectionCell original={original}>{filesize(original.size)}</RowSelectionCell>
+        <RowSelectionCellWrapper original={original}>
+          {filesize(original.size)}
+        </RowSelectionCellWrapper>
       ),
     },
     {
@@ -307,11 +309,12 @@ const FileTableV8 = () => {
     //   header: 'Actions',
     //   size: 80,
     //   enableSorting: false,
-    //   cell: ({row: { original }}: { original: FileRepositoryRecord }) => {
+    //   cell: ({row: { original }}) => {
     //     const downloadStatus = getDownloadStatus(original.isDownloadable);
 
     //     return (
-    //         <div
+    //      <RowSelectionCellWrapper original={original}>
+    //          <div
     //           css={css`
     //             display: flex;
     //             flex-direction: row;
@@ -330,6 +333,7 @@ const FileTableV8 = () => {
     //             onClick={e => fileDownloader(original.fileID)}
     //           />
     //         </div>
+    //        </RowSelectionCellWrapper>
     //     );
     //   },
     // },
@@ -339,7 +343,7 @@ const FileTableV8 = () => {
     ...(column.cell === undefined
       ? {
           cell: ({ row: { original }, cell }) => (
-            <RowSelectionCell original={original}>{cell.getValue()}</RowSelectionCell>
+            <RowSelectionCellWrapper original={original}>{cell.getValue()}</RowSelectionCellWrapper>
           ),
         }
       : {}),
