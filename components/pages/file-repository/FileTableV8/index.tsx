@@ -27,6 +27,7 @@ import {
   OnChangeFn,
   PaginationState,
   SortingState,
+  TableCellWrapper,
   TableRowSelectionCheckbox,
   TableV8,
   Typography,
@@ -43,11 +44,9 @@ import {
   PROGRAM_ENTITY_ID_PATH,
   PROGRAM_ENTITY_PATH,
 } from 'global/constants/pages';
-import useAuthContext from 'global/hooks/useAuthContext';
-import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
@@ -58,20 +57,19 @@ import TsvDownloadButton from '../FileTable/TsvDownloadButton';
 import {
   FileRepositoryRecord,
   FileRepositoryRecordSort,
-  FileRepositoryRecordSortOrder,
   FileRepositorySortingState,
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
 } from '../FileTable/types';
 
-const DEFAULT_SORT = [
+const DEFAULT_FILE_REPOSITORY_TABLE_SORT: FileRepositorySortingState[] = [
   {
-    field: FileCentricDocumentField.file_number,
-    order: 'desc' as FileRepositoryRecordSortOrder,
+    id: FileCentricDocumentField.file_number,
+    desc: true,
   },
 ];
 
-const useFileRepoTableQuery = ({
+const useFileRepositoryTableQuery = ({
   first,
   offset,
   sort,
@@ -106,27 +104,7 @@ const useFileRepoTableQuery = ({
   return queryResult;
 };
 
-const onSortedChange: SortedChangeFunction = async (newSorted: FileRepositorySortingState[]) => {
-  const sort = newSorted.reduce(
-    (accSort: Array<FileRepositoryRecordSort>, sortRule: FileRepositorySortingState) => {
-      const order = sortRule.desc ? 'desc' : 'asc';
-
-      // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
-      const sortField =
-        sortRule.id === FileCentricDocumentField.file_id
-          ? FileCentricDocumentField.file_number
-          : sortRule.id;
-
-      return accSort.concat({
-        field: sortField,
-        order: order,
-      });
-    },
-    [],
-  );
-};
-
-const formatFileRepoSortRequest = (sorts: SortingState): FileRepositoryRecordSort[] =>
+const formatFileRepositorySortRequest = (sorts: SortingState): FileRepositoryRecordSort[] =>
   sorts.map(({ id, desc }: { id: FileCentricDocumentField; desc: boolean }) => ({
     field: id,
     order: desc ? 'desc' : 'asc',
@@ -135,7 +113,6 @@ const formatFileRepoSortRequest = (sorts: SortingState): FileRepositoryRecordSor
 const FileTableV8 = () => {
   const { FEATURE_DONOR_ENTITY_ENABLED, FEATURE_PROGRAM_ENTITY_ENABLED } = getConfig();
 
-  const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
   const theme = useTheme();
 
@@ -150,20 +127,25 @@ const FileTableV8 = () => {
     setPaginationState({ pageIndex, pageSize, ...nextState });
 
   // sorting
-  const [sortingState, setSortingState] = useState<SortingState>([]);
-  const onSortingChange: OnChangeFn<SortingState> = async (nextSort) => {
+  const [sortingState, setSortingState] = useState<FileRepositorySortingState[]>(
+    DEFAULT_FILE_REPOSITORY_TABLE_SORT,
+  );
+  const onSortingChange: OnChangeFn<FileRepositorySortingState[]> = (
+    getNextSort: () => FileRepositorySortingState[],
+  ) => {
     handlePaginationState({ pageIndex: 0 });
+    const nextSort = getNextSort();
     setSortingState(nextSort);
   };
 
-  const { data: records, loading = true } = useFileRepoTableQuery({
+  const { data: records, loading = true } = useFileRepositoryTableQuery({
     first: pageSize,
     offset: pageSize * pageIndex,
-    sort: formatFileRepoSortRequest(sortingState),
+    sort: formatFileRepositorySortRequest(sortingState),
     filters,
   });
 
-  const totalEntries = records ? records.file.hits.total : 0;
+  const totalEntries = records?.file?.hits?.total || 0;
 
   const {
     allRowsSelected,
@@ -179,7 +161,29 @@ const FileTableV8 = () => {
     selectionKeyField: 'objectId',
   });
 
+  console.log({
+    allRowsSelected,
+    isSelected,
+    selectedRows,
+    selectedRowsCount,
+    selectionKeyField,
+    toggleAllHandler,
+    toggleHandler,
+    unselectedRows,
+  });
+
+  const RowSelectionCell = ({
+    children,
+    original,
+  }: PropsWithChildren<{ original: FileRepositoryRecord }>) => (
+    <TableCellWrapper className={isSelected(original[selectionKeyField]) ? 'selected' : ''}>
+      {children}
+    </TableCellWrapper>
+  );
+
   const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
+    // accessorKey corresponds to tableData keys.
+    // id is used for sorting.
     {
       header: () => (
         <TableRowSelectionCheckbox
@@ -189,23 +193,29 @@ const FileTableV8 = () => {
         />
       ),
       id: 'checkbox-column',
-      cell: ({ row }) => {
-        const rowId = row.original[selectionKeyField];
+      enableSorting: false,
+      cell: ({ row: { original } }) => {
+        const rowId = original[selectionKeyField];
         return (
-          <TableRowSelectionCheckbox
-            checked={isSelected(rowId)}
-            id={rowId}
-            onChange={() => toggleHandler(rowId)}
-          />
+          <RowSelectionCell original={original}>
+            <TableRowSelectionCheckbox
+              checked={isSelected(rowId)}
+              id={rowId}
+              onChange={() => toggleHandler(rowId)}
+            />
+          </RowSelectionCell>
         );
       },
+      size: 15,
     },
     {
       header: 'File ID',
-      // headerClassName: sort == DEFAULT_SORT ? '-sort-desc' : '',
+      // sorting uses file_number instead of file_id to make
+      // numeric sorting work. doesn't affect TSV downloads.
+      id: FileCentricDocumentField.file_number,
       accessorKey: 'fileId',
-      cell: ({ row: { original } }) => {
-        return (
+      cell: ({ row: { original } }) => (
+        <RowSelectionCell original={original}>
           <NextLink
             href={FILE_ENTITY_PATH}
             as={FILE_ENTITY_PATH.replace(FILE_ENTITY_ID_PATH, original.fileId)}
@@ -213,74 +223,129 @@ const FileTableV8 = () => {
           >
             <Link>{original.fileId}</Link>
           </NextLink>
-        );
-      },
+        </RowSelectionCell>
+      ),
     },
     {
       header: fieldDisplayNames['donors.donor_id'],
+      id: FileCentricDocumentField['donors.donor_id'],
       accessorKey: 'donorId',
-      cell: ({ row: { original } }) => {
-        return FEATURE_DONOR_ENTITY_ENABLED ? (
-          <NextLink
-            href={DONOR_ENTITY_PATH}
-            as={DONOR_ENTITY_PATH.replace(DONOR_ENTITY_ID_PATH, original.donorId)}
-            passHref
-          >
-            <Link>{original.donorId}</Link>
-          </NextLink>
-        ) : (
-          original.donorId
-        );
-      },
+      cell: ({ row: { original } }) => (
+        <RowSelectionCell original={original}>
+          {FEATURE_DONOR_ENTITY_ENABLED ? (
+            <NextLink
+              href={DONOR_ENTITY_PATH}
+              as={DONOR_ENTITY_PATH.replace(DONOR_ENTITY_ID_PATH, original.donorId)}
+              passHref
+            >
+              <Link>{original.donorId}</Link>
+            </NextLink>
+          ) : (
+            original.donorId
+          )}
+        </RowSelectionCell>
+      ),
     },
     {
       header: fieldDisplayNames['donors.submitter_donor_id'],
+      id: FileCentricDocumentField['donors.submitter_donor_id'],
       accessorKey: 'submitterDonorId',
     },
     {
       header: fieldDisplayNames['study_id'],
+      id: FileCentricDocumentField['study_id'],
       accessorKey: 'programId',
-      cell: ({ row: { original } }) => {
-        return FEATURE_PROGRAM_ENTITY_ENABLED ? (
-          <NextLink
-            href={PROGRAM_ENTITY_PATH}
-            as={PROGRAM_ENTITY_PATH.replace(PROGRAM_ENTITY_ID_PATH, original.programId)}
-            passHref
-          >
-            <Link>{original.programId}</Link>
-          </NextLink>
-        ) : (
-          original.programId
-        );
-      },
+      cell: ({ row: { original } }) => (
+        <RowSelectionCell original={original}>
+          {FEATURE_PROGRAM_ENTITY_ENABLED ? (
+            <NextLink
+              href={PROGRAM_ENTITY_PATH}
+              as={PROGRAM_ENTITY_PATH.replace(PROGRAM_ENTITY_ID_PATH, original.programId)}
+              passHref
+            >
+              <Link>{original.programId}</Link>
+            </NextLink>
+          ) : (
+            original.programId
+          )}
+        </RowSelectionCell>
+      ),
     },
     {
       header: fieldDisplayNames['data_type'],
+      id: FileCentricDocumentField['data_type'],
       accessorKey: 'dataType',
       size: 180,
     },
     {
       header: fieldDisplayNames['file_type'],
+      id: FileCentricDocumentField['file_type'],
       accessorKey: 'fileType',
       size: 80,
     },
     {
       header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
+      id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessorKey: 'experimentalStrategy',
     },
     {
       header: fieldDisplayNames['file.size'],
+      id: FileCentricDocumentField['file.size'],
       accessorKey: 'size',
-      cell: ({ row: { original } }) => filesize(original.size),
+      cell: ({ row: { original } }) => (
+        <RowSelectionCell original={original}>{filesize(original.size)}</RowSelectionCell>
+      ),
     },
     {
       header: fieldDisplayNames['object_id'],
+      id: FileCentricDocumentField['object_id'],
       accessorKey: 'objectId',
       size: 260,
     },
-  ];
+    // disabled for initial File Repo release
+    // {
+    //   header: 'Actions',
+    //   size: 80,
+    //   enableSorting: false,
+    //   cell: ({row: { original }}: { original: FileRepositoryRecord }) => {
+    //     const downloadStatus = getDownloadStatus(original.isDownloadable);
 
-  const tableData: FileRepositoryRecord[] = records
+    //     return (
+    //         <div
+    //           css={css`
+    //             display: flex;
+    //             flex-direction: row;
+    //             justify-content: center;
+    //             align-items: center;
+    //           `}
+    //         >
+    //           <InteractiveIcon
+    //             position="left"
+    //             html={<span>{downloadStatus.toolTipText}</span>}
+    //             disabled={!downloadStatus.canUserDownload}
+    //             height="16px"
+    //             width="16px"
+    //             name={downloadStatus.canUserDownload ? 'download' : 'lock'}
+    //             fill={downloadStatus.canUserDownload ? 'accent2_dark' : 'primary_2'}
+    //             onClick={e => fileDownloader(original.fileID)}
+    //           />
+    //         </div>
+    //     );
+    //   },
+    // },
+  ].map((column) => ({
+    ...column,
+    meta: { customCell: true },
+    ...(column.cell === undefined
+      ? {
+          cell: ({ row: { original }, cell }) => (
+            <RowSelectionCell original={original}>{cell.getValue()}</RowSelectionCell>
+          ),
+        }
+      : {}),
+  }));
+
+  const tableData: FileRepositoryRecord[] = records?.file?.hits
     ? records.file.hits.edges.map(({ node }) => ({
         objectId: node.object_id,
         donorId: node.donors.hits.edges.map((edge) => edge.node.donor_id).join(', '),
@@ -308,6 +373,7 @@ const FileTableV8 = () => {
         columns={tableColumns}
         data={tableData}
         enableSorting
+        initialState={{ sorting: DEFAULT_FILE_REPOSITORY_TABLE_SORT }}
         loading={loading}
         manualPagination
         manualSorting
