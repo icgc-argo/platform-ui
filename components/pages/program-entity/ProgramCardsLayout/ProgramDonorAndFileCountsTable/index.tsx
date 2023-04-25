@@ -28,22 +28,18 @@ const ProgramDonorAndFileCountsTable = ({
   data: Object[];
   title: string;
 }) => (
-  <div
-    css={css`
-      margin: 14px 0 4px 0;
-    `}
-  >
+  <>
     <Typography
       variant="navigation"
       as="div"
       css={css`
-        margin-bottom: 14px;
+        margin-bottom: 16px;
       `}
     >
       {title}
     </Typography>
     <TableV8 columns={columns} data={data} withHeaders withSideBorders withStripes />
-  </div>
+  </>
 );
 
 export default ProgramDonorAndFileCountsTable;
