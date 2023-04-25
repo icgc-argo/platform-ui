@@ -21,81 +21,46 @@ import {
   Button,
   css,
   Icon,
+  NOTIFICATION_VARIANTS,
   Notification,
   NotificationVariant,
-  NOTIFICATION_VARIANTS,
-  Table,
-  TableColumnConfig,
 } from '@icgc-argo/uikit';
-import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
 import { ReactNode, ComponentProps, createRef } from 'react';
 
-import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
+import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from '../common';
 
-export const getDefaultColumns = (level: NotificationVariant) => {
-  const variant = level === NOTIFICATION_VARIANTS.ERROR ? 'Error' : 'Warning';
-  return [
-    {
-      accessor: 'row' as 'row',
-      Header: 'Line #',
-      maxWidth: 70,
-    },
-    {
-      accessor: 'donorId' as 'donorId',
-      Header: 'Submitter Donor ID',
-      maxWidth: 160,
-    },
-    {
-      accessor: 'field' as 'field',
-      Header: `Field with ${variant}`,
-      maxWidth: 200,
-    },
-    {
-      accessor: 'value' as 'value',
-      Header: `${variant} Value`,
-      maxWidth: 130,
-    },
-    {
-      accessor: 'message' as 'message',
-      Header: `${variant} Description`,
-    },
-  ];
-};
+export type ErrorReportColumns = { header: string; id: string };
 
-const ErrorNotification = <Error extends { [k: string]: any }>({
+const ErrorNotification = <T extends { [k: string]: any }>({
   level,
-  title,
-  errors,
-  subtitle,
-  columnConfig,
   onClearClick,
+  reportColumns = [],
+  reportData = [],
+  subtitle,
+  tableComponent = <></>,
+  title,
   tsvExcludeCols = [],
-  tableProps,
 }: {
   level: NotificationVariant;
-  title: string;
-  subtitle: ReactNode;
-  columnConfig: Array<
-    TableColumnConfig<Error> & {
-      accessor: keyof Error | string;
-    }
-  >;
-  errors: Array<Error>;
   onClearClick?: ComponentProps<typeof Button>['onClick'];
-  tsvExcludeCols?: Array<keyof Error>;
-  tableProps?: Partial<TableProps>;
+  reportColumns: ErrorReportColumns[];
+  reportData: Array<T>;
+  subtitle: ReactNode;
+  tableComponent?: JSX.Element;
+  title: string;
+  tsvExcludeCols?: Array<keyof T>;
 }) => {
   const onDownloadClick = () => {
-    exportToTsv(errors, {
-      exclude: union(tsvExcludeCols, ['__typename' as keyof Error]),
-      order: columnConfig.map((entry) => entry.accessor),
+    exportToTsv(reportData, {
+      exclude: union(tsvExcludeCols, ['__typename']),
+      order: reportColumns.map((entry) => entry.id),
       fileName: `${level}_report.tsv`,
-      headerDisplays: columnConfig.reduce<{}>(
-        (acc, { accessor, Header }) => ({
+      headerDisplays: reportColumns.reduce(
+        (acc, { header, id }) => ({
           ...acc,
-          [accessor]: Header as string,
+          [id]: header,
         }),
         {},
       ),
@@ -160,20 +125,7 @@ const ErrorNotification = <Error extends { [k: string]: any }>({
             `}
           >
             <div>{subtitle}</div>
-            <Table
-              parentRef={containerRef}
-              NoDataComponent={() => null}
-              columns={columnConfig.map((col) => ({
-                ...col,
-                style: {
-                  whiteSpace: 'pre-line',
-                  ...(col.style || {}),
-                },
-              }))}
-              data={errors}
-              showPagination
-              {...tableProps}
-            />
+            {tableComponent}
           </div>
         );
       })()}

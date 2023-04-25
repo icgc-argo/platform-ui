@@ -44,3 +44,5 @@ export type TableProps = {
   onSortedChange?: SortedChangeFunction;
   showPagination?: boolean;
 };
+
+export type TableSortOrder = { order: 'asc' | 'desc' };

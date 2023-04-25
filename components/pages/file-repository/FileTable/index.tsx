@@ -53,7 +53,6 @@ import TsvDownloadButton from './TsvDownloadButton';
 import {
   FileRepositoryRecord,
   FileRepositoryRecordSort,
-  FileRepositoryRecordSortOrder,
   FileRepositorySortingRule,
   FileRepositoryTableQueryData,
   FileRepositoryTableQueryVariables,
@@ -61,10 +60,10 @@ import {
 
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
-const DEFAULT_SORT = [
+const DEFAULT_SORT: FileRepositoryRecordSort[] = [
   {
     field: FileCentricDocumentField.file_number,
-    order: 'desc' as FileRepositoryRecordSortOrder,
+    order: 'desc',
   },
 ];
 

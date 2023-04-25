@@ -17,13 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Link, UikitTheme } from '@icgc-argo/uikit';
-import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
-import { usePageQuery } from 'global/hooks/usePageContext';
+import { UikitTheme } from '@icgc-argo/uikit';
 import { chunk, isEmpty } from 'lodash';
-import sqonBuilder from 'sqon-builder';
-import urlJoin from 'url-join';
-import { DiagnosisNode, EntityType, SpecimenNode } from '../types';
+import { AliasedDisplayData, DiagnosisNode, EntityType, SpecimenNode, Specimens } from '../types';
 
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
@@ -84,7 +80,7 @@ export const splitIntoColumns = (
   }
 };
 
-const donorCentricDisplayNames = {
+export const donorCentricDisplayNames = {
   age_at_diagnosis: 'Age at Diagnosis',
   age_at_menarche: 'Age at Menarche',
   available_files: 'Available Files',
@@ -163,10 +159,6 @@ const donorCentricDisplayNames = {
   weight: 'Weight',
   weight_at_followup: 'Weight at Followup',
   workflow_names: 'Workflow Names',
-};
-
-type AliasedDisplayData = {
-  [K in keyof typeof donorCentricDisplayNames]?: any;
 };
 
 // format for display
@@ -260,7 +252,7 @@ export const formatTimelineEntityData = (donorData) => {
     },
   )[0];
 
-  const specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
+  const specimens: Specimens = donorData.specimens?.hits.edges.map(({ node }: SpecimenNode) => {
     const { pathological_t_category, pathological_n_category, pathological_m_category } = node;
 
     const aliasedKeys = [
@@ -275,25 +267,7 @@ export const formatTimelineEntityData = (donorData) => {
     if (pathological_t_category && pathological_n_category && pathological_m_category)
       data.pathological_tnm_category = `${pathological_t_category}${pathological_n_category}${pathological_m_category}`;
 
-    const samples = node.samples.hits.edges.map((sample) => {
-      const { donorId } = usePageQuery<{ donorId: string }>();
-      const sampleFilter = sqonBuilder
-        .has('donor_id', donorId)
-        .has('submitter_sample_id', sample.node['submitter_sample_id'])
-        .build();
-
-      const sampleFilterUrl = urlJoin(
-        FILE_REPOSITORY_PATH,
-        `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
-      );
-
-      const available_files = (
-        <Link variant="INLINE" href={sampleFilterUrl}>
-          {sample.node['available_files']}
-        </Link>
-      );
-      return { ...sample.node, available_files };
-    });
+    const samples = node.samples.hits.edges.map((sample) => sample.node);
 
     return {
       id: `SPECIMEN ${node.submitter_specimen_id}`,
@@ -316,8 +290,8 @@ export const formatTimelineEntityData = (donorData) => {
 export const formatTableHeader = (columnKey: string) =>
   donorCentricDisplayNames[columnKey] || columnKey;
 
-export const formatTableData = (key: string, value: string | number | React.ReactNode) => {
-  let displayValue: any;
+export const formatTableData = (key: string, value: React.ReactNode) => {
+  let displayValue: React.ReactNode;
   switch (key) {
     case 'age_at_diagnosis':
       displayValue = `${value} years`;

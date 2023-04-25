@@ -19,6 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import {
+  ColumnDef,
   ContentPlaceholder,
   css,
   DnaLoader,
@@ -27,6 +28,7 @@ import {
   noDataSvg,
   NOTIFICATION_VARIANTS,
   Table,
+  TableV8,
   Tooltip,
   Typography,
   useTheme,
@@ -34,7 +36,7 @@ import {
 import memoize from 'lodash/memoize';
 
 import { TableInfoHeaderContainer } from '../../common';
-import ErrorNotification from '../../ErrorNotification';
+import ErrorNotification, { ErrorReportColumns } from '../../ErrorNotification';
 import {
   aliasedEntityFields,
   aliasedEntityNames,
@@ -58,6 +60,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
 import { createRef, useState, useEffect } from 'react';
+import { errorNotificationTableProps } from '../../ErrorNotification/ErrorNotificationDefaultTable';
 
 export type DonorEntry = {
   row: string;
@@ -65,25 +68,38 @@ export type DonorEntry = {
   [k: string]: string | number | boolean;
 };
 
-const errorColumns = [
-  {
-    accessor: 'entries',
-    Header: '# Affected Records',
-    id: 'entries',
-    maxWidth: 135,
-  },
-  {
-    accessor: 'fieldName',
-    Header: `Field with Error`,
-    id: 'fieldName',
-    maxWidth: 215,
-  },
-  {
-    accessor: 'errorMessage',
-    Header: `Error Description`,
-    id: 'errorMessage',
-  },
-];
+type ErrorTableColumns = {
+  entries: number;
+  errorMessage: string;
+  fieldName: string;
+};
+
+type ErrorTableColumnProperties = {
+  accessorKey: keyof ErrorTableColumns;
+  header: string;
+  maxSize?: number;
+};
+
+type DefaultErrorColumns = {
+  errorReportColumns: ErrorReportColumns[];
+  errorTableColumns: ColumnDef<ErrorTableColumns>[];
+};
+const getErrorColumns = (): DefaultErrorColumns => {
+  const errorTableColumns: ErrorTableColumnProperties[] = [
+    { accessorKey: 'entries', header: '# Affected Records', maxSize: 135 },
+    { accessorKey: 'fieldName', header: `Field with Error`, maxSize: 215 },
+    { accessorKey: 'errorMessage', header: `Error Description` },
+  ];
+
+  const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+    ({ accessorKey, header }) => ({
+      header,
+      id: accessorKey,
+    }),
+  );
+
+  return { errorReportColumns, errorTableColumns };
+};
 
 const NoDataCell = () => (
   <div
@@ -323,7 +339,7 @@ const ClinicalEntityDataTable = ({
     });
   });
 
-  const tableErrors = tableErrorGroups.map((errorGroup) => {
+  const errorData = tableErrorGroups.map((errorGroup) => {
     // Counts Number of Records affected for each Error Object
     const { fieldName, entityName, message, errorType } = errorGroup[0];
 
@@ -342,7 +358,7 @@ const ClinicalEntityDataTable = ({
     };
   });
 
-  const totalErrors = tableErrors.reduce(
+  const totalErrors = errorData.reduce(
     (errorCount, errorGroup) => errorCount + errorGroup.entries,
     0,
   );
@@ -625,6 +641,8 @@ const ClinicalEntityDataTable = ({
   const numTablePages = Math.ceil(totalDocs / pageSize);
   const numErrorPages = Math.ceil(totalErrors / errorPageSize);
 
+  const { errorReportColumns, errorTableColumns } = getErrorColumns();
+
   return loading ? (
     <DnaLoader
       css={css`
@@ -651,24 +669,19 @@ const ClinicalEntityDataTable = ({
         >
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
+            subtitle={<Subtitle program={program} />}
+            reportData={errorData}
+            reportColumns={errorReportColumns}
+            tableComponent={
+              <TableV8
+                {...errorNotificationTableProps}
+                columns={errorTableColumns}
+                data={errorData}
+              />
+            }
             title={`${totalErrors.toLocaleString()} error(s) found on the current page of ${clinicalEntityDisplayNames[
               entityType
             ].toLowerCase()} table`}
-            subtitle={<Subtitle program={program} />}
-            errors={tableErrors}
-            columnConfig={errorColumns}
-            tableProps={{
-              page: errorPage,
-              pages: numErrorPages,
-              pageSize: errorPageSize,
-              sorted: errorSorted,
-              onPageChange: (value) => updatePageSettings('page', value),
-              onPageSizeChange: (value) => updatePageSettings('pageSize', value),
-              onSortedChange: (value) => updatePageSettings('sorted', value),
-              // TODO: Test + Update Pagination in #2267
-              // https://github.com/icgc-argo/platform-ui/issues/2267
-              showPagination: false,
-            }}
           />
         </div>
       )}

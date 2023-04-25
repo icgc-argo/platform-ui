@@ -19,11 +19,15 @@
 
 import { useMutation } from '@apollo/client';
 import {
+  ColumnDef,
   Container,
   css,
   DnaLoader,
   Notification,
+  NotificationVariant,
   NOTIFICATION_VARIANTS,
+  Table,
+  TableV8,
   Typography,
 } from '@icgc-argo/uikit';
 import useGlobalLoader from 'components/GlobalLoader';
@@ -36,16 +40,22 @@ import useUrlParamState from 'global/hooks/useUrlParamState';
 import { toDisplayError } from 'global/utils/clinicalUtils';
 import { displayDateAndTime, sleep } from 'global/utils/common';
 import { capitalize } from 'global/utils/stringUtils';
+import { omit } from 'lodash';
 import head from 'lodash/head';
 import map from 'lodash/map';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import Router from 'next/router';
-import { useState, useEffect, useMemo, ComponentProps } from 'react';
+import { useState, useEffect, useMemo, ComponentProps, createRef } from 'react';
 
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import ErrorNotification, { ErrorReportColumns } from '../ErrorNotification';
+import {
+  ErrorNotificationDefaultColumns,
+  errorNotificationTableProps,
+  getDefaultErrorTableColumns,
+} from '../ErrorNotification/ErrorNotificationDefaultTable';
 import { SchemaInvalidSubmissionNotification } from '../SchemaInvalidSubmissionNotification';
 import {
   SubmissionSystemLockedNotification,
@@ -63,13 +73,27 @@ import {
   ClinicalSubmissionError,
   ClinicalSubmissionQueryData,
   GqlClinicalEntity,
+  GqlClinicalEntityClinicalType,
   SignOffSubmissionMutationVariables,
   UploadFilesMutationVariables,
   ValidateSubmissionMutationVariables,
 } from './types';
 import useUserConfirmationModalState from './useUserConfirmationModalState';
+import { getConfig } from 'global/config';
 
-const CLINICAL_FILE_ORDER = [
+const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
+
+type ErrorTableColumns = ErrorNotificationDefaultColumns & {
+  fileName: string;
+};
+
+export type ErrorTableColumnProperties = {
+  accessorKey: keyof ErrorTableColumns;
+  header: string;
+  maxSize?: number;
+};
+
+const CLINICAL_FILE_ORDER: ReadonlyArray<GqlClinicalEntityClinicalType> = [
   'donor',
   'specimen',
   'primary_diagnosis',
@@ -84,7 +108,7 @@ const CLINICAL_FILE_ORDER = [
   'exposure',
   'comorbidity',
   'biomarker',
-];
+] as const;
 
 const gqlClinicalEntityToClinicalSubmissionEntityFile =
   (submissionState: ClinicalSubmissionQueryData['clinicalSubmissions']['state']) =>
@@ -138,6 +162,31 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
     ),
     gqlClinicalEntityToClinicalSubmissionEntityFile(dataObj.clinicalSubmissions.state),
   );
+
+const getErrorColumns = (
+  level: NotificationVariant,
+): {
+  errorReportColumns: ErrorReportColumns[];
+  errorTableColumns: ColumnDef<ErrorTableColumns>[];
+} => {
+  const errorTableColumns: ErrorTableColumnProperties[] = [
+    ...getDefaultErrorTableColumns(level),
+    {
+      accessorKey: 'fileName',
+      header: 'File',
+      maxSize: 150,
+    },
+  ];
+
+  const errorReportColumns: ErrorReportColumns[] = errorTableColumns.map(
+    ({ accessorKey, header }) => ({
+      header,
+      id: accessorKey,
+    }),
+  );
+
+  return { errorReportColumns, errorTableColumns };
+};
 
 const PageContent = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
@@ -426,6 +475,58 @@ const PageContent = () => {
     }
   };
 
+  const { errorReportColumns, errorTableColumns } = getErrorColumns(NOTIFICATION_VARIANTS.ERROR);
+  const { errorReportColumns: warningReportColumns, errorTableColumns: warningTableColumns } =
+    getErrorColumns(NOTIFICATION_VARIANTS.WARNING);
+  const errorData = allDataErrors.map(toDisplayError);
+  const warningData = allDataWarnings.map(toDisplayError);
+
+  const containerRefTableV6 = createRef<HTMLDivElement>();
+
+  const ErrorTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8 columns={errorTableColumns} data={errorData} {...errorNotificationTableProps} />
+  ) : (
+    <div ref={containerRefTableV6}>
+      <Table
+        parentRef={containerRefTableV6}
+        columns={errorTableColumns.map(
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
+            style: {
+              whiteSpace: 'pre-line',
+            },
+            // react table v6 property name conversion
+            accessor: accessorKey,
+            Header: header,
+            width: maxSize,
+          }),
+        )}
+        data={errorData}
+      />
+    </div>
+  );
+
+  const WarningTable = FEATURE_REACT_TABLE_V8_ENABLED ? (
+    <TableV8 columns={warningTableColumns} data={warningData} {...errorNotificationTableProps} />
+  ) : (
+    <div ref={containerRefTableV6}>
+      <Table
+        parentRef={containerRefTableV6}
+        columns={warningTableColumns.map(
+          ({ accessorKey, header, maxSize }: ErrorTableColumnProperties) => ({
+            style: {
+              whiteSpace: 'pre-line',
+            },
+            // react table v6 property name conversion
+            accessor: accessorKey,
+            Header: header,
+            width: maxSize,
+          }),
+        )}
+        data={warningData}
+      />
+    </div>
+  );
+
   return (
     <div
       css={css`
@@ -492,7 +593,7 @@ const PageContent = () => {
               <strong>{data.clinicalSubmissions.updatedBy}</strong>
             </Typography>
           </div>
-          <SubmissionSummaryTable clinicalSubmissions={data.clinicalSubmissions} />
+          <SubmissionSummaryTable clinicalEntities={data.clinicalSubmissions.clinicalEntities} />
         </Container>
       )}
       {
@@ -529,15 +630,9 @@ const PageContent = () => {
             level={NOTIFICATION_VARIANTS.ERROR}
             title={`${allDataErrors.length.toLocaleString()} error(s) found in submission workspace`}
             subtitle="Your submission cannot yet be signed off. Please correct the following errors and reupload the corresponding files."
-            errors={allDataErrors.map(toDisplayError)}
-            columnConfig={[
-              {
-                accessor: 'fileName',
-                Header: 'File',
-                maxWidth: 150,
-              },
-              ...getDefaultColumns(NOTIFICATION_VARIANTS.ERROR),
-            ]}
+            reportData={allDataErrors.map(toDisplayError)}
+            reportColumns={errorReportColumns}
+            tableComponent={ErrorTable}
           />
         </div>
       )}
@@ -552,15 +647,9 @@ const PageContent = () => {
             level={NOTIFICATION_VARIANTS.WARNING}
             title={`${allDataWarnings.length.toLocaleString()} warning(s) found in submission workspace`}
             subtitle="Your submission has the following warnings, check them to make sure the changes are as intended."
-            errors={allDataWarnings.map(toDisplayError)}
-            columnConfig={[
-              {
-                accessor: 'fileName',
-                Header: 'File',
-                maxWidth: 150,
-              },
-              ...getDefaultColumns(NOTIFICATION_VARIANTS.WARNING),
-            ]}
+            reportData={allDataWarnings.map(toDisplayError)}
+            reportColumns={warningReportColumns}
+            tableComponent={WarningTable}
           />
         </div>
       )}

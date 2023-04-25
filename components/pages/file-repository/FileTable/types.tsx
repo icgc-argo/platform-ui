@@ -18,7 +18,7 @@
  */
 
 import { FileRepoFiltersType } from '../utils/types';
-import { SortingRule } from 'global/types/table';
+import { SortingRule, TableSortOrder } from 'global/types/table';
 import { FileCentricDocumentField } from '../types';
 
 export type FileRepositoryRecord = {
@@ -80,12 +80,9 @@ export type FileRepositoryTableQueryVariables = {
   sort: FileRepositoryRecordSort[];
 };
 
-export type FileRepositoryRecordSort = {
+export type FileRepositoryRecordSort = TableSortOrder & {
   field: FileCentricDocumentField;
-  order: FileRepositoryRecordSortOrder;
 };
-
-export type FileRepositoryRecordSortOrder = 'asc' | 'desc';
 
 export type FileRepositorySortingRule = SortingRule & {
   id: FileCentricDocumentField;

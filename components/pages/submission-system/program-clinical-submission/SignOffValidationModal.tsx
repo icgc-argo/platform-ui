@@ -72,7 +72,7 @@ const SignOffValidationModal = ({
           Clinical Submission Summary
         </Typography>
       </div>
-      <SubmissionSummaryTable clinicalSubmissions={clinicalSubmissions} />
+      <SubmissionSummaryTable clinicalEntities={clinicalSubmissions.clinicalEntities} />
     </Modal>
   );
 };
