@@ -17,6 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { TableFilterRule, ColumnSort } from '@icgc-argo/uikit';
+import { DonorSummaryEntry } from 'generated/gql_types';
+import { TableSortOrder } from 'global/types/table';
+
 export type CompleteIncompleteFilterCounts = {
   completed: number;
   incomplete: number;
@@ -119,7 +123,7 @@ export enum MolecularProcessingStatus {
 // **** GQL types ****
 export type ProgramDonorsSummaryQueryData = {
   programDonorSummary: {
-    entries: DonorSummaryRecord[];
+    entries: DonorSummaryEntry[];
     stats: ProgramDonorReleaseStats;
   };
 };
@@ -132,13 +136,11 @@ export type ProgramDonorsSummaryQueryVariables = {
   filters?: ProgramDonorSummaryFilter[];
 };
 
-export type DonorSummaryEntrySort = {
+export type DonorSummaryEntrySort = TableSortOrder & {
   field: DonorSummaryEntrySortField;
-  order: DonorSummaryEntrySortOrder;
 };
 
 export type DonorSummaryEntrySortField = keyof DonorSummaryRecord;
-export type DonorSummaryEntrySortOrder = 'asc' | 'desc';
 
 export type ProgramDonorSummaryEntryField =
   | 'donorId'
@@ -183,5 +185,12 @@ export type ProgramDonorSummaryEntryField =
 
 export type ProgramDonorSummaryFilter = {
   field: ProgramDonorSummaryEntryField;
-  values: [String];
+  values: string[];
 };
+
+export type DonorSummaryCellProps = { row: { original: DonorSummaryEntry } };
+export type DonorSummaryFilterState = TableFilterRule & { field: ProgramDonorSummaryEntryField };
+export type DonorSummarySortingState = ColumnSort & {
+  id: DonorSummaryEntrySortField;
+};
+export type DonorSummarySortingRequest = DonorSummaryEntrySort[];

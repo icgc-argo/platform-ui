@@ -23,18 +23,21 @@ import { usePageQuery } from 'global/hooks/usePageContext';
 import { Col, Row } from 'react-grid-system';
 import ContentError from '../../../../placeholders/ContentError';
 import { DashboardCard, POLL_INTERVAL_MILLISECONDS } from '../common';
-import { EMPTY_PROGRAM_SUMMARY_STATS, useTimeout } from './common';
+import {
+  EMPTY_PROGRAM_SUMMARY_STATS,
+  useTimeout,
+  formatDonorSummarySortingRequest,
+} from './common';
 import DonorSummaryTable from './DonorSummaryTable';
 import DownloadButtons from './DownloadButtons';
 import EmptyDonorSummaryState from './EmptyDonorSummaryTable';
 import PROGRAM_DONOR_SUMMARY_QUERY from './gql/PROGRAM_DONOR_SUMMARY_QUERY';
 import {
   DonorSummaryEntrySort,
-  DonorSummaryEntrySortField,
-  DonorSummaryEntrySortOrder,
   ProgramDonorsSummaryQueryData,
   ProgramDonorsSummaryQueryVariables,
   ProgramDonorSummaryFilter,
+  DonorSummarySortingState,
 } from './types';
 
 export const useProgramDonorsSummaryQuery = ({
@@ -77,10 +80,10 @@ export const useProgramDonorsSummaryQuery = ({
 const DonorDataSummary = () => {
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const DEFAULT_PAGE_SIZE = 20;
-  const DEFAULT_SORTS = [
+  const DEFAULT_SORTING: DonorSummarySortingState[] = [
     {
-      field: 'updatedAt' as DonorSummaryEntrySortField,
-      order: 'desc' as DonorSummaryEntrySortOrder,
+      id: 'updatedAt',
+      desc: true,
     },
   ];
   const DEFAULT_OFFSET = 0;
@@ -96,16 +99,11 @@ const DonorDataSummary = () => {
     programShortName,
     first: DEFAULT_PAGE_SIZE,
     offset: DEFAULT_OFFSET,
-    sorts: DEFAULT_SORTS,
+    sorts: formatDonorSummarySortingRequest(DEFAULT_SORTING),
   });
 
   const isDonorSummaryEntriesEmpty =
     !programDonorSummaryStats || programDonorSummaryStats.registeredDonorsCount === 0;
-
-  const initialPages =
-    !isCardLoading && programDonorSummaryStats
-      ? Math.ceil(programDonorSummaryStats.registeredDonorsCount / DEFAULT_PAGE_SIZE)
-      : 1;
 
   const CardTitle = () => (
     <Typography variant="default" component="span">
@@ -142,11 +140,9 @@ const DonorDataSummary = () => {
         <EmptyDonorSummaryState />
       ) : (
         <DonorSummaryTable
-          programShortName={programShortName}
-          initialPages={initialPages}
-          initialPageSize={DEFAULT_PAGE_SIZE}
-          initialSorts={DEFAULT_SORTS}
+          initialSorting={DEFAULT_SORTING}
           isCardLoading={isCardLoading}
+          programShortName={programShortName}
         />
       )}
     </DashboardCard>
