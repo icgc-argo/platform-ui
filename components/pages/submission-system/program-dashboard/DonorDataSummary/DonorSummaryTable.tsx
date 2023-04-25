@@ -71,9 +71,6 @@ import { ContentError } from 'components/placeholders';
 import { DonorSummaryEntry } from 'generated/gql_types';
 import { find } from 'lodash';
 
-type DonorSummaryEntryFields = keyof DonorSummaryEntry;
-type DonorSummaryColumnIds = { [k in DonorSummaryEntryFields]: DonorSummaryEntryFields[] };
-
 enum PipelineNames {
   DNA = 'DNA',
   RNA = 'RNA',
@@ -86,22 +83,22 @@ const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
 
 // these are used to sort columns with multiple fields.
 // the order of the fields is the order of sorting.
-const MULTI_SORT_COLUMN_IDS: Partial<DonorSummaryColumnIds> = {
-  alignmentsCompleted: ['alignmentsRunning', 'alignmentsFailed'],
-  mutectCompleted: ['mutectRunning', 'mutectFailed'],
-  openAccessCompleted: ['openAccessRunning', 'openAccessFailed'],
-  publishedNormalAnalysis: ['publishedTumourAnalysis'],
-  registeredNormalSamples: ['registeredTumourSamples'],
-  rnaAlignmentsCompleted: ['rnaAlignmentsRunning', 'rnaAlignmentFailed'],
-  rnaPublishedNormalAnalysis: ['rnaPublishedTumourAnalysis'],
-  rnaRegisteredNormalSamples: ['rnaRegisteredTumourSamples'],
-  sangerVcsCompleted: ['sangerVcsRunning', 'sangerVcsFailed'],
+const MULTI_SORT_COLUMN_IDS = {
+  alignmentsCompleted: ['alignmentsCompleted', 'alignmentsRunning', 'alignmentsFailed'],
+  mutectCompleted: ['mutectCompleted', 'mutectRunning', 'mutectFailed'],
+  openAccessCompleted: ['openAccessCompleted', 'openAccessRunning', 'openAccessFailed'],
+  publishedNormalAnalysis: ['publishedNormalAnalysis', 'publishedTumourAnalysis'],
+  registeredNormalSamples: ['registeredNormalSamples', 'registeredTumourSamples'],
+  rnaAlignmentsCompleted: ['rnaAlignmentsCompleted', 'rnaAlignmentsRunning', 'rnaAlignmentFailed'],
+  rnaPublishedNormalAnalysis: ['rnaPublishedNormalAnalysis', 'rnaPublishedTumourAnalysis'],
+  rnaRegisteredNormalSamples: ['rnaRegisteredNormalSamples', 'rnaRegisteredTumourSamples'],
+  sangerVcsCompleted: ['sangerVcsCompleted', 'sangerVcsRunning', 'sangerVcsFailed'],
 };
-const setupMultiSort = (columnId: DonorSummaryEntryFields) => ({
-  // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting in onSortingChange
-  // must have accessorKey in the column definition to enable sorting.
+const setupMultiSort = (columnId: keyof typeof MULTI_SORT_COLUMN_IDS) => ({
+  // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting.
+  // add accessorKey to enable sorting.
   // ID & accessorKey must be keys from the data.
-  accessorKey: columnId,
+  accessorKey: MULTI_SORT_COLUMN_IDS[columnId][0],
   id: columnId,
 });
 
@@ -138,7 +135,7 @@ const DonorSummaryTable = ({
     const newSort = getSorts();
     const sorts = newSort.reduce(
       (accSorts: Array<DonorSummarySortingState>, sortRule: DonorSummarySortingState) => {
-        const fields = [sortRule.id, ...(MULTI_SORT_COLUMN_IDS[sortRule.id] || [])];
+        const fields = MULTI_SORT_COLUMN_IDS[sortRule.id] || [sortRule.id];
         const nextSorts = fields.map((field: DonorSummaryEntrySortField) => {
           const currentState = find(sortingState, { id: field });
           const currentDesc = currentState ? currentState.desc : sortRule.desc;
