@@ -222,12 +222,17 @@ export type SpecimenNode = {
 };
 
 // NOTE: types based on dummy data
-export type TreatmentData = {
-  drug_rxnormcui: string;
-  drug_name: string;
-  cumulative_drug_dose: string;
+export type TreatmentData = Partial<{
+  anatomical_site_irradiated: string;
   chemotherapy_dosage_units: string;
-};
+  cumulative_drug_dose: number;
+  drug_name: string;
+  drug_rxnormcui: number;
+  radiation_therapy_dosage: number;
+  radiation_therapy_fractions: number;
+  radiation_therapy_modality: string;
+  radiation_therapy_type: string;
+}>;
 
 export type TreatmentNode = {
   node: {

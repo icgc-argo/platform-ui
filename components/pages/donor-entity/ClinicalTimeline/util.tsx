@@ -19,14 +19,7 @@
 
 import { UikitTheme } from '@icgc-argo/uikit';
 import { chunk, isEmpty } from 'lodash';
-import {
-  AliasedDisplayData,
-  DiagnosisNode,
-  EntityType,
-  SpecimenNode,
-  Specimens,
-  TableDataValue,
-} from '../types';
+import { AliasedDisplayData, DiagnosisNode, EntityType, SpecimenNode, Specimens } from '../types';
 
 export const getTimelineStyles = (theme: UikitTheme) => {
   const colors = theme.colors;
