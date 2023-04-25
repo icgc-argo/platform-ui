@@ -72,7 +72,7 @@ import { DonorSummaryEntry } from 'generated/gql_types';
 import { find } from 'lodash';
 
 type DonorSummaryEntryFields = keyof DonorSummaryEntry;
-type DonorSummaryColumnIds = {
+type DonorSummaryMultiSortColumnIds = {
   [k in DonorSummaryEntryFields]: DonorSummaryEntryFields[];
 };
 
@@ -88,7 +88,7 @@ const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
 
 // these are used to sort columns with multiple fields.
 // the order of the fields is the order of sorting.
-const MULTI_SORT_COLUMN_IDS: Partial<DonorSummaryColumnIds> = {
+const MULTI_SORT_COLUMN_IDS: Partial<DonorSummaryMultiSortColumnIds> = {
   alignmentsCompleted: ['alignmentsRunning', 'alignmentsFailed'],
   mutectCompleted: ['mutectRunning', 'mutectFailed'],
   openAccessCompleted: ['openAccessRunning', 'openAccessFailed'],
