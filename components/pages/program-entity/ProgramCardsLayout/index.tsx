@@ -60,14 +60,14 @@ type ExperimentalStrategyColumns = {
 const ProgramCardsLayout: ComponentType<{}> = () => {
   // temporary columns for dummy data
   const dataCategoryColumns: ColumnDef<DataCategoryColumns>[] = Object.keys(
-    donorAndFileCountsByExperimentalStrategy[0],
+    donorAndFileCountsByDataCategory[0],
   ).map((key: keyof DataCategoryColumns) => ({
     accessorKey: key,
     header: key,
   }));
 
   const experimentalStrategyColumns: ColumnDef<ExperimentalStrategyColumns>[] = Object.keys(
-    donorAndFileCountsByDataCategory[0],
+    donorAndFileCountsByExperimentalStrategy[0],
   ).map((key: keyof ExperimentalStrategyColumns) => ({
     accessorKey: key,
     header: key,
