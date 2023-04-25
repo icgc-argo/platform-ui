@@ -161,17 +161,6 @@ const FileTable = () => {
     selectionKeyField: 'objectId',
   });
 
-  console.log({
-    allRowsSelected,
-    isSelected,
-    selectedRows,
-    selectedRowsCount,
-    selectionKeyField,
-    toggleAllHandler,
-    toggleHandler,
-    unselectedRows,
-  });
-
   const RowSelectionCellWrapper = ({
     children,
     original,
