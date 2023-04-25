@@ -17,7 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
+import {
+  DonorDataReleaseState,
+  DonorSummarySortingRequest,
+  DonorSummarySortingState,
+  ProgramDonorReleaseStats,
+} from './types';
 import { DataTableStarIcon as StarIcon } from '../../common';
 import { ComponentProps, useEffect, useState } from 'react';
 
@@ -229,3 +234,11 @@ export const EMPTY_PROGRAM_SUMMARY_STATS: ProgramDonorReleaseStats = {
     noData: 0,
   },
 };
+
+export const formatDonorSummarySortingRequest = (
+  sorts: DonorSummarySortingState[],
+): DonorSummarySortingRequest =>
+  sorts.map((sort) => ({
+    field: sort.id,
+    order: sort.desc ? 'desc' : 'asc',
+  }));
