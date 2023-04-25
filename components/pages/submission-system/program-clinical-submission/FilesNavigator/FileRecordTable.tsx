@@ -40,6 +40,8 @@ type FileRecord = {
   status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
 };
 
+type FileRecordTableProps = { row: { original: FileRecord } };
+
 const REQUIRED_FILE_ENTRY_FIELDS = {
   ROW_INDEX: 'rowIndex',
 };
@@ -207,7 +209,7 @@ const FileRecordTable = ({
   const tableColumns: ColumnDef<FileRecord>[] = [
     {
       accessorKey: 'rowIndex',
-      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
+      cell: ({ row: { original } }: FileRecordTableProps) => (
         <CellStatusDisplay original={original}>
           <CellContentCenter
             css={
@@ -229,7 +231,7 @@ const FileRecordTable = ({
     },
     {
       accessorKey: 'status',
-      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
+      cell: ({ row: { original } }: FileRecordTableProps) => (
         <CellStatusDisplay original={original} field="status">
           <StatusColumnCell original={original} />
         </CellStatusDisplay>
@@ -257,7 +259,7 @@ const FileRecordTable = ({
     ...fields.map(({ name: fieldName }) => ({
       accessorKey: fieldName,
       header: fieldName,
-      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
+      cell: ({ row: { original } }: FileRecordTableProps) => (
         <CellStatusDisplay original={original} field={fieldName}>
           <DataFieldCell original={original} fieldName={fieldName} />
         </CellStatusDisplay>
