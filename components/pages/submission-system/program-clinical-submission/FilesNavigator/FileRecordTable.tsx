@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ColumnDef, css, TableCellWrapper, TableV8, useTheme } from '@icgc-argo/uikit';
+import { ColumnDef, css, Row, TableCellWrapper, TableV8, useTheme } from '@icgc-argo/uikit';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { usePageQuery } from 'global/hooks/usePageContext';
 import { toDisplayRowIndex } from 'global/utils/clinicalUtils';
@@ -204,16 +204,10 @@ const FileRecordTable = ({
     );
   };
 
-  const cellMeta = {
-    meta: {
-      customCell: true,
-    },
-  };
-
   const tableColumns: ColumnDef<FileRecord>[] = [
     {
       accessorKey: 'rowIndex',
-      cell: ({ row: { original } }) => (
+      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
         <CellStatusDisplay original={original}>
           <CellContentCenter
             css={
@@ -232,11 +226,10 @@ const FileRecordTable = ({
       enableResizing: false,
       header: 'Line #',
       size: 70,
-      ...cellMeta,
     },
     {
       accessorKey: 'status',
-      cell: ({ row: { original } }) => (
+      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
         <CellStatusDisplay original={original} field="status">
           <StatusColumnCell original={original} />
         </CellStatusDisplay>
@@ -249,7 +242,7 @@ const FileRecordTable = ({
       ),
       id: 'status',
       size: 50,
-      sortingFn: (a, b) => {
+      sortingFn: (a: Row<FileRecord>, b: Row<FileRecord>) => {
         const sortA = a.original.status;
         const sortB = b.original.status;
         const priorities: { [k in FileRecord['status']]: number } = {
@@ -260,19 +253,22 @@ const FileRecordTable = ({
         };
         return priorities[sortA] - priorities[sortB];
       },
-      ...cellMeta,
     },
     ...fields.map(({ name: fieldName }) => ({
       accessorKey: fieldName,
       header: fieldName,
-      ...cellMeta,
-      cell: ({ row: { original } }) => (
+      cell: ({ row: { original } }: { row: { original: FileRecord } }) => (
         <CellStatusDisplay original={original} field={fieldName}>
           <DataFieldCell original={original} fieldName={fieldName} />
         </CellStatusDisplay>
       ),
     })),
-  ];
+  ].map((column) => ({
+    ...column,
+    meta: {
+      customCell: true,
+    },
+  }));
 
   return (
     <div
