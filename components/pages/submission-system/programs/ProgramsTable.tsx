@@ -381,12 +381,12 @@ export default function ProgramsTable(tableProps: {
     <TableV8
       columns={tableColumns}
       data={tableData}
+      enableColumnResizing
+      enableSorting
       LoaderComponent={tableProps.LoadingComponent}
       loading={tableProps.loading}
       withHeaders
-      withResize
       withRowHighlight
-      withSorting
       withStripes
     />
   ) : (

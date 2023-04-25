@@ -30,9 +30,9 @@ import { capitalize } from 'global/utils/stringUtils';
 import { createRef, CSSProperties } from 'react';
 
 import { StatArea } from '../common';
-import { FILE_STATE_COLORS } from './FilesNavigator/FileRecordTable';
 import { GqlClinicalEntityClinicalType, GqlClinicalEntity } from './types';
 import { getConfig } from 'global/config';
+import { FILE_STATE_COLORS } from './FilesNavigator/StatsArea';
 
 type EntryTableV6 = {
   [k: string]: number | JSX.Element;
@@ -146,7 +146,13 @@ const SubmissionSummaryTable = ({
       ref={containerRef}
     >
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
-        <TableV8 columns={tableColumns} data={tableData} withHeaders withResize withRowBorder />
+        <TableV8
+          columns={tableColumns}
+          data={tableData}
+          withHeaders
+          enableColumnResizing
+          withRowBorder
+        />
       ) : (
         <Table
           parentRef={containerRef}

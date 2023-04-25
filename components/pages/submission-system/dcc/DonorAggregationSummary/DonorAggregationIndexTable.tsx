@@ -150,11 +150,11 @@ const DonorAggregationIndexTable = ({
         <TableV8
           columns={tableColumns}
           data={tableData}
+          enableColumnResizing
+          enableSorting
           loading={loading || someQueriesLoading}
           withHeaders
-          withResize
           withSideBorders
-          withSorting
           withStripes
         />
       ) : (

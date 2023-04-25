@@ -118,7 +118,7 @@ const Samples = ({ samples }: { samples: SamplesTableRecord[] }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
-            withResize
+            enableColumnResizing
             withSideBorders
             withStripes
           />

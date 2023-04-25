@@ -51,7 +51,7 @@ const Treatment = ({ treatment }: { treatment: TreatmentTableInput }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
-            withResize
+            enableColumnResizing
             withSideBorders
             withStripes
           />

@@ -40,10 +40,10 @@ export type ErrorNotificationDefaultColumns = {
 
 // use these props for tables used in ErrorNotification
 export const errorNotificationTableProps: ReactTableCustomProps = {
+  enableColumnResizing: true,
+  enableSorting: true,
   withHeaders: true,
-  withResize: true,
   withRowHighlight: true,
-  withSorting: true,
   withStripes: true,
 };
 
