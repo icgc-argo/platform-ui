@@ -96,8 +96,8 @@ export const DesignationCell = ({
   return (
     <TableCellWrapper
       css={css`
-        padding: 0 !important;
-        align-items: stretch !important;
+        padding: 0;
+        align-items: stretch;
       `}
     >
       <DesignationEntry background={normalBg}>{normalCount}N</DesignationEntry>
