@@ -19,6 +19,7 @@
 
 import {
   Button,
+  ColumnDef,
   Container,
   css,
   Icon,
@@ -28,7 +29,7 @@ import {
   Typography,
   useTheme,
 } from '@icgc-argo/uikit';
-import { ComponentType } from 'react';
+import { ComponentType, ReactElement } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { getConfig } from 'global/config';
 
@@ -116,6 +117,15 @@ const DataRow: ComponentType<{ name: string; link: string; fileCount: number }> 
 const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header, data }) => {
   const theme = useTheme();
 
+  const tableColumns: ColumnDef<{ id: ReactElement }>[] = [
+    {
+      accessorKey: 'id',
+      id: 'id',
+      header,
+      cell: ({ renderValue }) => renderValue(),
+    },
+  ];
+
   return (
     <Col xs={12}>
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
@@ -130,14 +140,7 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
             }
           `}
           data={data}
-          columns={[
-            {
-              accessorKey: 'id',
-              id: 'id',
-              header,
-              cell: (info) => info.renderValue(),
-            },
-          ]}
+          columns={tableColumns}
           withHeaders
           withRowBorder
         />

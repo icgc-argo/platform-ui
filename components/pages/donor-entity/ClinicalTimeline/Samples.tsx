@@ -18,6 +18,8 @@
  */
 
 import {
+  CellContext,
+  ColumnDef,
   css,
   Table,
   TableColumnConfig,
@@ -29,36 +31,68 @@ import { createRef } from 'react';
 import { SampleNode } from '../types';
 import { formatTableHeader, formatTableDisplayNames, formatTableData } from './util';
 import { getConfig } from 'global/config';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import NextLink from 'next/link';
+import { Link } from '@icgc-argo/uikit';
+import urlJoin from 'url-join';
+import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import sqonBuilder from 'sqon-builder';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-const Samples = ({ samples }: { samples: SampleNode[] }) => {
+export type SamplesTableRecord = SampleNode['node'];
+
+const getAvailableFilesLink = (props: CellContext<SamplesTableRecord, JSX.Element>) => {
+  const { getValue, row } = props;
+  const { donorId } = usePageQuery<{ donorId: string }>();
+  const sampleFilter = sqonBuilder
+    .has('donor_id', donorId)
+    .has('submitter_sample_id', row.original.submitter_sample_id)
+    .build();
+
+  const sampleFilterUrl = urlJoin(
+    FILE_REPOSITORY_PATH,
+    `?filters=${encodeURIComponent(JSON.stringify(sampleFilter))}`,
+  );
+
+  return (
+    <NextLink href={sampleFilterUrl} passHref>
+      <Link variant="INLINE">{getValue()}</Link>
+    </NextLink>
+  );
+};
+
+const Samples = ({ samples }: { samples: SamplesTableRecord[] }) => {
   // react table v6
-  const tableData_legacy: TableDataBase = formatTableDisplayNames(samples);
-  const tableColumns_legacy: TableColumnConfig<TableDataBase>[] = Object.keys(tableData_legacy).map(
+  const tableDataTableV6: TableDataBase = formatTableDisplayNames(samples);
+  const tableColumnsTableV6: TableColumnConfig<TableDataBase>[] = Object.keys(tableDataTableV6).map(
     (key) => ({
       Header: key,
-      Cell: tableData_legacy[key],
+      Cell: tableDataTableV6[key],
     }),
   );
   const containerRef = createRef<HTMLDivElement>();
 
   // react table v8
-  const tableColumns = !!samples.length
-    ? Object.keys(samples[0]).map((sampleKey) => ({
+  const tableColumns: ColumnDef<SamplesTableRecord>[] = samples.length
+    ? Object.keys(samples[0]).map((sampleKey: keyof SamplesTableRecord) => ({
         accessorKey: sampleKey,
         header: () => formatTableHeader(sampleKey),
-        id: sampleKey,
+        ...(sampleKey === 'available_files'
+          ? {
+              cell: getAvailableFilesLink,
+            }
+          : {}),
       }))
     : [];
 
-  const tableData = samples.map((sample) =>
-    Object.entries(sample).reduce(
+  const tableData: SamplesTableRecord[] = samples.map((sample) =>
+    Object.entries(sample).reduce<SamplesTableRecord>(
       (acc, [key, value]) => ({
         ...acc,
         ...formatTableData(key, value),
       }),
-      {},
+      {} as SamplesTableRecord,
     ),
   );
 
@@ -84,13 +118,14 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
             columns={tableColumns}
             data={tableData}
             withHeaders
+            enableColumnResizing
             withSideBorders
             withStripes
           />
         ) : (
           <Table
             parentRef={containerRef}
-            columns={tableColumns_legacy}
+            columns={tableColumnsTableV6}
             data={samples}
             withOutsideBorder
             stripped

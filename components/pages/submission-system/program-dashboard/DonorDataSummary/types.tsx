@@ -19,7 +19,7 @@
 
 import { TableFilterRule, ColumnSort } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
-import { TableSortOrder } from 'global/utils/tables';
+import { TableSortOrder } from 'global/types/table';
 
 export type CompleteIncompleteFilterCounts = {
   completed: number;

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Link, Table, TableV8, Typography } from '@icgc-argo/uikit';
+import { ColumnDef, css, Icon, Link, Table, TableV8, Typography } from '@icgc-argo/uikit';
 import {
   PROGRAMS_LIST_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -41,7 +41,7 @@ import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
-type T_ProgramTableProgram = {
+type ProgramTableProgram = {
   shortName: string;
   role: string;
   permissions: string;
@@ -55,10 +55,10 @@ interface Column {
   Cell?: any;
 }
 
-const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
+const ProgramTable = (props: { programs: Array<ProgramTableProgram> }) => {
   const { permissions } = useAuthContext();
 
-  const ProgramNameCell = ({ original }: { original: T_ProgramTableProgram }) => (
+  const ProgramNameCell = ({ original }: { original: ProgramTableProgram }) => (
     <NextLink
       href={
         isDccMember(permissions)
@@ -84,7 +84,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     { Header: 'Permissions', accessor: 'permissions' },
   ];
 
-  const tableColumns_legacy = !isDccMember(permissions)
+  const tableColumnsTableV6 = !isDccMember(permissions)
     ? [
         ...baseColumns.slice(0, 1),
         {
@@ -97,40 +97,44 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     : baseColumns;
 
   // react table v8
-  const tableColumns = [
+  const tableColumns: ColumnDef<ProgramTableProgram>[] = [
     {
       accessorKey: 'shortName',
-      cell: (info) => (
+      cell: ({
+        row: {
+          original: { shortName },
+        },
+      }) => (
         <NextLink
           href={
             !isDccMember(permissions)
               ? PROGRAMS_LIST_PATH
-              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, info.getValue())
+              : PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, shortName)
           }
         >
-          <Link>{info.getValue()}</Link>
+          <Link>{shortName}</Link>
         </NextLink>
       ),
-      header: () => 'Program Name',
+      header: 'Program Name',
       id: 'shortName',
-      // maxWidth: 150,
+      size: 150,
     },
     ...(isDccMember
       ? []
       : [
           {
             accessorKey: 'membershipType',
-            cell: (info) => capitalize(info.renderValue()),
-            header: () => 'Membership Type',
+            cell: ({ renderValue }) => capitalize(renderValue()),
+            header: 'Membership Type',
           },
         ]),
     {
       accessorKey: 'role',
-      header: () => 'Role',
+      header: 'Role',
       id: 'role',
-      // maxWidth: 170
+      size: 170,
     },
-    { accessorKey: 'permissions', header: () => 'Permissions', id: 'permissions' },
+    { accessorKey: 'permissions', header: 'Permissions', id: 'permissions' },
   ];
 
   return (
@@ -144,9 +148,10 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
         <TableV8
           columns={tableColumns}
           data={props.programs}
+          enableColumnResizing
           withHeaders
-          withSideBorders
           withRowHighlight
+          withSideBorders
           withStripes
         />
       ) : (
@@ -156,7 +161,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
           sortable={false}
           showPagination={false}
           data={props.programs}
-          columns={tableColumns_legacy}
+          columns={tableColumnsTableV6}
           getTdProps={(_, row, column) => ({ style: { whiteSpace: 'normal' } })}
         />
       )}
@@ -187,7 +192,7 @@ const MEMBERSHIP_DISPLAY_NAME = {
 const getProgramTableProgramFromEgoJwt = (
   permissions: string[],
   readablePrograms,
-): T_ProgramTableProgram[] => {
+): ProgramTableProgram[] => {
   if (isDccMember(permissions)) {
     return [
       {

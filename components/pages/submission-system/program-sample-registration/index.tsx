@@ -39,7 +39,10 @@ import union from 'lodash/union';
 
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
-import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
+import ErrorNotification from '../ErrorNotification';
+import ErrorNotificationDefaultTable, {
+  getDefaultErrorReportColumns,
+} from '../ErrorNotification/ErrorNotificationDefaultTable';
 import SubmissionLayout from '../layout';
 import SampleRegistrationProgressBar from '../SampleRegistrationProgressBar';
 import {
@@ -178,6 +181,8 @@ export default function ProgramIDRegistration() {
     margin-bottom: 8px;
   `;
 
+  const errorData = schemaOrValidationErrors.map(toDisplayError);
+
   return (
     <SubmissionLayout
       subtitle={`${programShortName} Sample Registration`}
@@ -280,12 +285,15 @@ export default function ProgramIDRegistration() {
           <ErrorNotification
             level={NOTIFICATION_VARIANTS.ERROR}
             onClearClick={handleClearClick}
-            title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
-            errors={schemaOrValidationErrors.map(toDisplayError)}
+            reportColumns={getDefaultErrorReportColumns(NOTIFICATION_VARIANTS.ERROR)}
+            reportData={errorData}
             subtitle={
               'Your file cannot be processed. Please correct the following errors and reupload your file.'
             }
-            columnConfig={getDefaultColumns(NOTIFICATION_VARIANTS.ERROR)}
+            tableComponent={
+              <ErrorNotificationDefaultTable data={errorData} level={NOTIFICATION_VARIANTS.ERROR} />
+            }
+            title={`${schemaOrValidationErrors.length.toLocaleString()} error(s) found in uploaded file`}
             tsvExcludeCols={['type', 'specimenId', 'sampleId']}
           />
         ) : (
