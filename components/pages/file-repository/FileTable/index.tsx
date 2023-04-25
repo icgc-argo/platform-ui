@@ -26,8 +26,8 @@ import {
   Link,
   OnChangeFn,
   PaginationState,
-  RowSelectionCell,
   SortingState,
+  TableCellWrapper,
   TableRowSelectionCheckbox,
   TableV8,
   Typography,
@@ -165,9 +165,9 @@ const FileTable = () => {
     children,
     original,
   }: PropsWithChildren<{ original: FileRepositoryRecord }>) => (
-    <RowSelectionCell isSelected={isSelected(original[selectionKeyField])}>
+    <TableCellWrapper selected={isSelected(original[selectionKeyField])}>
       {children}
-    </RowSelectionCell>
+    </TableCellWrapper>
   );
 
   const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
