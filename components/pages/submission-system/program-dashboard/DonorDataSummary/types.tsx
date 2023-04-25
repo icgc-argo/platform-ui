@@ -19,6 +19,7 @@
 
 import { TableFilterRule, ColumnSort } from '@icgc-argo/uikit';
 import { DonorSummaryEntry } from 'generated/gql_types';
+import { TableSortOrder } from 'global/types/table';
 
 export type CompleteIncompleteFilterCounts = {
   completed: number;
@@ -135,13 +136,11 @@ export type ProgramDonorsSummaryQueryVariables = {
   filters?: ProgramDonorSummaryFilter[];
 };
 
-export type DonorSummaryEntrySort = {
+export type DonorSummaryEntrySort = TableSortOrder & {
   field: DonorSummaryEntrySortField;
-  order: DonorSummaryEntrySortOrder;
 };
 
 export type DonorSummaryEntrySortField = keyof DonorSummaryRecord;
-export type DonorSummaryEntrySortOrder = 'asc' | 'desc';
 
 export type ProgramDonorSummaryEntryField =
   | 'donorId'
