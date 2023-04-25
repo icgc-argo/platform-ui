@@ -86,5 +86,4 @@ export type FileRepositoryRecordSort = TableSortOrder & {
 
 export type FileRepositorySortingState = SortingRule & {
   id: FileCentricDocumentField;
-  desc: boolean;
 };
