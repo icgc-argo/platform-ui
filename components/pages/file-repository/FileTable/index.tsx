@@ -329,13 +329,13 @@ const FileTable = () => {
   ].map((column) => ({
     ...column,
     meta: { customCell: true },
-    ...(column.cell === undefined
-      ? {
+    ...(column.cell
+      ? {}
+      : {
           cell: ({ row: { original }, cell }) => (
             <RowSelectionCellWrapper original={original}>{cell.getValue()}</RowSelectionCellWrapper>
           ),
-        }
-      : {}),
+        }),
   }));
 
   const tableData: FileRepositoryRecord[] = records?.file?.hits
@@ -351,7 +351,7 @@ const FileTable = () => {
         fileId: node.file_id,
         fileType: node.file_type,
         size: node.file.size,
-        isDownloadable: false,
+        isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
       }))
     : [];
 
