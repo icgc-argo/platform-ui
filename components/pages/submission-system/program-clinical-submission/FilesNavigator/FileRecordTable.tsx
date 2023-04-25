@@ -122,7 +122,7 @@ const FileRecordTable = ({
   const StatusColumnCell = ({ original }: { original: FileRecord }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
-    const isNew = stats.new.some((row) => row === original.rowIndex);
+    const hasNewData = stats.new.some((row) => row === original.rowIndex);
     return (
       isSubmissionValidated && (
         <CellContentCenter
@@ -137,7 +137,7 @@ const FileRecordTable = ({
                 ? FILE_STATE_COLORS.ERROR
                 : hasUpdate
                 ? FILE_STATE_COLORS.UPDATED
-                : isNew
+                : hasNewData
                 ? FILE_STATE_COLORS.NEW
                 : FILE_STATE_COLORS.NONE
             }
@@ -180,6 +180,7 @@ const FileRecordTable = ({
     original,
     field = '',
   }: PropsWithChildren<{ original: FileRecord; field?: string }>) => {
+    const pendingApprovalRowUpdate = isPendingApproval && rowHasUpdate(original);
     const cellBackground =
       !isPendingApproval && cellHasUpdate({ original, field })
         ? theme.colors.accent3_3
@@ -187,13 +188,12 @@ const FileRecordTable = ({
         ? theme.colors.error_4
         : recordHasWarning(original)
         ? theme.colors.warning_4
-        : isPendingApproval && rowHasUpdate(original)
+        : pendingApprovalRowUpdate
         ? theme.colors.accent3_4
         : 'transparent';
-    const cellClassName =
-      isPendingApproval && rowHasUpdate(original)
-        ? `updateRow` // append this classname so parent div's css can apply style
-        : '';
+    const cellClassName = pendingApprovalRowUpdate
+      ? `updateRow` // append this classname so parent div's css can apply style
+      : '';
     return (
       <TableCellWrapper
         className={cellClassName}
@@ -213,12 +213,11 @@ const FileRecordTable = ({
         <CellStatusDisplay original={original}>
           <CellContentCenter
             css={
-              rowHasUpdate(original)
-                ? css`
-                    justify-content: flex-start;
-                    padding-top: 5px;
-                  `
-                : css``
+              rowHasUpdate(original) &&
+              css`
+                justify-content: flex-start;
+                padding-top: 5px;
+              `
             }
           >
             {toDisplayRowIndex(original.rowIndex)}
