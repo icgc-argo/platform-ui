@@ -35,7 +35,7 @@ import {
 import { ClinicalSubmissionEntityFile } from '../types';
 import StatsArea, { FILE_STATE_COLORS } from './StatsArea';
 
-type TableColumns = {
+type FileRecord = {
   rowIndex: number;
   status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE';
 };
@@ -87,7 +87,7 @@ const FileRecordTable = ({
         },
   );
 
-  const tableData: TableColumns[] = sortedRecords.map((record) =>
+  const tableData: FileRecord[] = sortedRecords.map((record) =>
     record.fields.reduce((acc, { name, value }) => ({ ...acc, [name]: value }), {
       rowIndex: record.row,
       status: (() => {
@@ -105,19 +105,19 @@ const FileRecordTable = ({
     }),
   );
 
-  const recordHasError = (original: TableColumns) =>
+  const recordHasError = (original: FileRecord) =>
     stats.errorsFound.some((row) => row === original.rowIndex);
 
-  const rowHasUpdate = (original: TableColumns) =>
+  const rowHasUpdate = (original: FileRecord) =>
     stats.updated.some((row) => row === original.rowIndex);
 
-  const cellHasUpdate = ({ original, field }: { original: TableColumns; field: string }) =>
+  const cellHasUpdate = ({ original, field }: { original: FileRecord; field: string }) =>
     file.dataUpdates.some((update) => update.field === field && update.row === original.rowIndex);
 
-  const recordHasWarning = (original: TableColumns) =>
+  const recordHasWarning = (original: FileRecord) =>
     dataWarnings.some((dw) => dw.row === original.rowIndex);
 
-  const StatusColumnCell = ({ original }: { original: TableColumns }) => {
+  const StatusColumnCell = ({ original }: { original: FileRecord }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.rowIndex);
@@ -146,7 +146,7 @@ const FileRecordTable = ({
     );
   };
 
-  const DataFieldCell = ({ original, fieldName }: { original: TableColumns; fieldName: string }) =>
+  const DataFieldCell = ({ original, fieldName }: { original: FileRecord; fieldName: string }) =>
     isDiffPreview && rowHasUpdate(original) ? (
       <div
         css={css`
@@ -177,7 +177,7 @@ const FileRecordTable = ({
     children,
     original,
     field = '',
-  }: PropsWithChildren<{ original: TableColumns; field?: string }>) => {
+  }: PropsWithChildren<{ original: FileRecord; field?: string }>) => {
     const cellBackground =
       !isPendingApproval && cellHasUpdate({ original, field })
         ? theme.colors.accent3_3
@@ -210,7 +210,7 @@ const FileRecordTable = ({
     },
   };
 
-  const tableColumns: ColumnDef<TableColumns>[] = [
+  const tableColumns: ColumnDef<FileRecord>[] = [
     {
       accessorKey: 'rowIndex',
       cell: ({ row: { original } }) => (
@@ -252,7 +252,7 @@ const FileRecordTable = ({
       sortingFn: (a, b) => {
         const sortA = a.original.status;
         const sortB = b.original.status;
-        const priorities: { [k in TableColumns['status']]: number } = {
+        const priorities: { [k in FileRecord['status']]: number } = {
           ERROR: 1,
           UPDATE: 2,
           NEW: 3,
