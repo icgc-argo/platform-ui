@@ -177,8 +177,8 @@ const FileTable = () => {
       header: () => (
         <TableRowSelectionCheckbox
           checked={allRowsSelected}
-          id="toggleAll"
           onChange={toggleAllHandler}
+          value="toggleAll"
         />
       ),
       id: 'checkbox-column',
@@ -189,8 +189,8 @@ const FileTable = () => {
           <RowSelectionCellWrapper original={original}>
             <TableRowSelectionCheckbox
               checked={isSelected(rowId)}
-              id={rowId}
               onChange={() => toggleHandler(rowId)}
+              value={rowId}
             />
           </RowSelectionCellWrapper>
         );
