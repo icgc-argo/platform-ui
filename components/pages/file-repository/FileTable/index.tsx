@@ -55,6 +55,7 @@ import { FileRepoFiltersType } from '../utils/types';
 import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
 import TsvDownloadButton from './TsvDownloadButton';
 import {
+  FileRepositoryCoreCell,
   FileRepositoryRecord,
   FileRepositoryRecordSort,
   FileRepositorySortingState,
@@ -170,10 +171,22 @@ const FileTable = () => {
     </TableCellWrapper>
   );
 
+  const defaultCell = (props: FileRepositoryCoreCell) => (
+    <RowSelectionCellWrapper original={props.row.original}>
+      {props.getValue()}
+    </RowSelectionCellWrapper>
+  );
+
+  const defaultColumn = {
+    cell: defaultCell,
+    meta: { customCell: true },
+  };
+
   const tableColumns: ColumnDef<FileRepositoryRecord>[] = [
     // accessorKey corresponds to tableData keys.
     // id is used for sorting.
     {
+      ...defaultColumn,
       header: () => (
         <TableRowSelectionCheckbox
           checked={allRowsSelected}
@@ -198,6 +211,7 @@ const FileTable = () => {
       size: 15,
     },
     {
+      ...defaultColumn,
       header: 'File ID',
       // sorting uses file_number instead of file_id to make
       // numeric sorting work. doesn't affect TSV downloads.
@@ -216,6 +230,7 @@ const FileTable = () => {
       ),
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['donors.donor_id'],
       id: FileCentricDocumentField['donors.donor_id'],
       accessorKey: 'donorId',
@@ -236,11 +251,13 @@ const FileTable = () => {
       ),
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['donors.submitter_donor_id'],
       id: FileCentricDocumentField['donors.submitter_donor_id'],
       accessorKey: 'submitterDonorId',
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['study_id'],
       id: FileCentricDocumentField['study_id'],
       accessorKey: 'programId',
@@ -261,23 +278,27 @@ const FileTable = () => {
       ),
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['data_type'],
       id: FileCentricDocumentField['data_type'],
       accessorKey: 'dataType',
       size: 180,
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['file_type'],
       id: FileCentricDocumentField['file_type'],
       accessorKey: 'fileType',
       size: 80,
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
       id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
       accessorKey: 'experimentalStrategy',
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['file.size'],
       id: FileCentricDocumentField['file.size'],
       accessorKey: 'size',
@@ -288,6 +309,7 @@ const FileTable = () => {
       ),
     },
     {
+      ...defaultColumn,
       header: fieldDisplayNames['object_id'],
       id: FileCentricDocumentField['object_id'],
       accessorKey: 'objectId',
@@ -326,17 +348,7 @@ const FileTable = () => {
     //     );
     //   },
     // },
-  ].map((column) => ({
-    ...column,
-    meta: { customCell: true },
-    ...(column.cell
-      ? {}
-      : {
-          cell: ({ row: { original }, cell }) => (
-            <RowSelectionCellWrapper original={original}>{cell.getValue()}</RowSelectionCellWrapper>
-          ),
-        }),
-  }));
+  ];
 
   const tableData: FileRepositoryRecord[] = records?.file?.hits
     ? records.file.hits.edges.map(({ node }) => ({

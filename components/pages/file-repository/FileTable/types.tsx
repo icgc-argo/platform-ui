@@ -20,6 +20,7 @@
 import { FileRepoFiltersType } from '../utils/types';
 import { SortingRule, TableSortOrder } from 'global/types/table';
 import { FileCentricDocumentField } from '../types';
+import { CellContext } from '@icgc-argo/uikit';
 
 export type FileRepositoryRecord = {
   objectId: string;
@@ -87,3 +88,5 @@ export type FileRepositoryRecordSort = TableSortOrder & {
 export type FileRepositorySortingState = SortingRule & {
   id: FileCentricDocumentField;
 };
+
+export type FileRepositoryCoreCell = CellContext<FileRepositoryRecord, FileRepositoryRecord>;
