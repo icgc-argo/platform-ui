@@ -88,7 +88,7 @@ const PIPELINE_COLORS: { [k: string]: keyof ThemeColorNames } = {
 
 // these are used to sort columns with multiple fields.
 // the order of the fields is the order of sorting.
-const MULTI_SORT_COLUMN_IDS: Partial<DonorSummaryMultiSortColumnIds> = {
+const multiSortColumnIds: Partial<DonorSummaryMultiSortColumnIds> = {
   alignmentsCompleted: ['alignmentsRunning', 'alignmentsFailed'],
   mutectCompleted: ['mutectRunning', 'mutectFailed'],
   openAccessCompleted: ['openAccessRunning', 'openAccessFailed'],
@@ -100,7 +100,7 @@ const MULTI_SORT_COLUMN_IDS: Partial<DonorSummaryMultiSortColumnIds> = {
   sangerVcsCompleted: ['sangerVcsRunning', 'sangerVcsFailed'],
 };
 const setupMultiSort = (columnId: DonorSummaryEntryFields) => ({
-  // use ID to get multiple fields from MULTI_SORT_COLUMN_IDS for multi-sorting in onSortingChange
+  // use ID to get multiple fields from multiSortColumnIds for multi-sorting in onSortingChange
   // must have accessorKey in the column definition to enable sorting.
   // ID & accessorKey must be identical keys from the data, in order to
   // show the blue sorting indicator in the table.
@@ -141,7 +141,7 @@ const DonorSummaryTable = ({
     const newSort = getSorts();
     const sorts = newSort.reduce(
       (accSorts: Array<DonorSummarySortingState>, sortRule: DonorSummarySortingState) => {
-        const fields = [sortRule.id, ...(MULTI_SORT_COLUMN_IDS[sortRule.id] || [])];
+        const fields = [sortRule.id, ...(multiSortColumnIds[sortRule.id] || [])];
         const nextSorts = fields.map((field: DonorSummaryEntrySortField) => {
           const currentState = find(sortingState, { id: field });
           const currentDesc = currentState ? currentState.desc : sortRule.desc;
