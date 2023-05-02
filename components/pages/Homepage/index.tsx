@@ -50,11 +50,11 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
-    title: 'April 10, 2023',
+    title: 'May 3, 2023',
     text: (
       <>
-        We are excited to announce that two new features are now available on our platform: the
-        Submitted Data Page and the Program Level Clinical Exception.
+        We are excited to announce that a new feature is now available on our platform: the
+        Submitted Data Page.
       </>
     ),
   },
