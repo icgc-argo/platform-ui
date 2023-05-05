@@ -50,6 +50,39 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'May 3, 2023',
+    text: (
+      <>
+        We are excited to announce that a new feature is now available on our platform: the
+        Submitted Data Page.
+      </>
+    ),
+  },
+  {
+    title: 'April 5, 2023',
+    text: (
+      <>
+        We are excited to announce{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-60"
+        >
+          Data Release 6.0
+        </Link>{' '}
+        on the ICGC ARGO Data Platform, including the first release of a new RNA-Seq analysis
+        workflow:{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/analysis-workflows/rna-alignment"
+        >
+          RNA Seq Alignment
+        </Link>
+        , available now for transcriptome sequencing data from Australian Pancreatic Cancer
+        Initiative (APGI-AU).
+      </>
+    ),
+  },
+  {
     title: 'January 30, 2023',
     text: (
       <>
@@ -293,7 +326,7 @@ export default function Homepage() {
                 // primary sites is hidden for initial release
                 // { quantity: stats.primarySites, description: 'CANCER PRIMARY SITES' },
               ]}
-              version={{ date: 'March 7, 2022', releaseIteration: 5 }}
+              version={{ date: 'April, 2023', releaseIteration: 6 }}
             />
           )}
         </div>

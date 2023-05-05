@@ -42,13 +42,11 @@ import {
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
-  CoreCompletionFields,
   defaultClinicalEntityFilters,
   emptyResponse,
   emptySearchResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
-  reverseLookUpEntityAlias,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
@@ -127,6 +125,8 @@ const completionColumnHeaders = {
   treatments: 'TR',
   followUps: 'FO',
 };
+
+const coreCompletionFields = Object.keys(completionColumnHeaders);
 
 const getColumnWidth = memoize<
   (keyString: string, showCompletionStats: boolean, noData: boolean) => number
@@ -430,7 +430,7 @@ const ClinicalEntityDataTable = ({
             } else {
               const { coreCompletion, entityData: completionEntityData } = completionRecord;
 
-              CoreCompletionFields.forEach((field) => {
+              coreCompletionFields.forEach((field) => {
                 const completionField = completionColumnHeaders[field];
                 const isSpecimenField =
                   completionField === completionColumnHeaders['normalSpecimens'] ||
@@ -452,16 +452,18 @@ const ClinicalEntityDataTable = ({
 
                   if (coreCompletionPercentage === 1) {
                     clinicalRecord[completionField] = 1;
-                  } else if (completionField === completionColumnHeaders['normalSpecimens']) {
-                    clinicalRecord[completionField] =
-                      normalSpecimensPercentage === 1 || normalSpecimensPercentage === 0
+                  } else {
+                    const currentPercentage =
+                      completionField === completionColumnHeaders['normalSpecimens']
                         ? normalSpecimensPercentage
-                        : normalSubmissions;
-                  } else if (completionField === completionColumnHeaders['tumourSpecimens']) {
-                    clinicalRecord[completionField] =
-                      tumourSpecimensPercentage === 1 || tumourSpecimensPercentage === 0
-                        ? tumourSpecimensPercentage
+                        : tumourSpecimensPercentage;
+                    const currentSubmissions =
+                      completionField === completionColumnHeaders['normalSpecimens']
+                        ? normalSubmissions
                         : tumourSubmissions;
+                    const hasErrors = currentPercentage !== 1;
+                    const value = hasErrors ? currentSubmissions : currentPercentage;
+                    clinicalRecord[completionField] = value;
                   }
                 }
               });
@@ -529,11 +531,20 @@ const ClinicalEntityDataTable = ({
         isCompletionCell &&
         completionData.find((stat) => stat.donorId === parseInt(originalDonorId.substr(2)));
 
-      hasCompletionErrors =
-        !(
-          original[completionColumnHeaders.normalSpecimens] === 1 &&
-          original[completionColumnHeaders.tumourSpecimens] === 1
-        ) || !(completionRecord?.coreCompletion.specimens === 1);
+      if (completionRecord) {
+        const { entityData: completionEntityData } = completionRecord;
+
+        const {
+          specimens: { normalSpecimensPercentage, tumourSpecimensPercentage },
+        } = completionEntityData;
+
+        const currentPercentage =
+          id === completionColumnHeaders['normalSpecimens']
+            ? normalSpecimensPercentage
+            : tumourSpecimensPercentage;
+
+        hasCompletionErrors = currentPercentage !== 1;
+      }
     }
 
     const specificErrorValue =
