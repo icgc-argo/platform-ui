@@ -25,11 +25,8 @@ import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
 import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
-import {
-  donorAndFileCountsByDataCategory,
-  donorAndFileCountsByExperimentalStrategy,
-  programSummaryData,
-} from './util';
+import { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy } from './util';
+import { ProgramSummaryQuery } from '../type';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -44,8 +41,22 @@ const PaddedColumn = styled(Col)`
   align-items: stretch;
 `;
 
-const ProgramCardsLayout: ComponentType<{}> = () => {
+const ProgramCardsLayout: ComponentType<{ programSummaryQuery: ProgramSummaryQuery }> = ({
+  programSummaryQuery,
+}) => {
   const theme = useTheme();
+
+  const programSummaryData = {
+    'Program Shortname': programSummaryQuery.shortName,
+    'Full Program Name': programSummaryQuery.name,
+    Description: programSummaryQuery.description,
+    Countries: programSummaryQuery.countries,
+    'Primary Sites': programSummaryQuery.primarySites,
+    Website: programSummaryQuery.website,
+    Institutions: programSummaryQuery.institutions,
+    'Processing Regions': programSummaryQuery.regions,
+    'Cancer Types': programSummaryQuery.cancerTypes,
+  };
 
   return (
     <div
