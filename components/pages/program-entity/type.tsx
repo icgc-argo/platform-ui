@@ -22,9 +22,9 @@ export type ProgramSummaryQuery = {
   description: string;
   name: string;
   website: string;
-  institutions: string;
-  countries: string;
-  regions: string;
-  cancerTypes: string;
-  primarySites: string;
+  institutions: string[];
+  countries: string[];
+  regions: string[];
+  cancerTypes: string[];
+  primarySites: string[];
 };
