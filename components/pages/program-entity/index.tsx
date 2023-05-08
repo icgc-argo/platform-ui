@@ -27,7 +27,14 @@ import clsx from 'clsx';
 import ProgramCardsLayout from './ProgramCardsLayout';
 import { ProgramTitleBar } from './ProgramTitleBar';
 
+import PROGRAM_SUMMARY_QUERY from './gql/PROGRAM_SUMMARY_QUERY';
+import { useQuery } from '@apollo/client';
+
 const ProgramEntity = ({ programId }: { programId: string }) => {
+  const { data: { program = null } = {}, loading } = useQuery(PROGRAM_SUMMARY_QUERY, {
+    variables: { shortName: programId },
+  });
+
   return (
     <PageContainer>
       <Head title={'ICGC ARGO'} />
@@ -38,7 +45,7 @@ const ProgramEntity = ({ programId }: { programId: string }) => {
             <ProgramTitleBar programId={programId} />
           </ContentHeader>
           <ContentBody>
-            <ProgramCardsLayout />
+            <ProgramCardsLayout programSummaryQuery={loading ? [] : program} />
           </ContentBody>
           <Footer />
         </PageContent>

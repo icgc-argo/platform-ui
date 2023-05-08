@@ -53,8 +53,13 @@ const newsItems: NewsItem[] = [
     title: 'May 3, 2023',
     text: (
       <>
-        We are excited to announce that a new feature is now available on our platform: the
-        Submitted Data Page.
+        We are excited to announce that a new feature is now available on our platform: the{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/submission/viewing-clinical-data"
+        >
+          Submitted Data Page.
+        </Link>
       </>
     ),
   },
