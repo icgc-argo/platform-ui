@@ -22,14 +22,13 @@ import { css } from '@icgc-argo/uikit';
 import ProgramSummaryLink from './ProgramSummaryLink';
 import PROGRAM_SUMMARY_LINK_QUERY from '../../gql/PROGRAM_SUMMARY_LINK_QUERY';
 import { useQuery } from '@apollo/client';
+import sqonBuilder from 'sqon-builder';
 
 const ProgramSummaryLinkContainer = ({ programId }: { programId: string }) => {
+  const programFilterSqon = sqonBuilder.has('study_id', programId).build();
   const { data: { file = null } = {}, loading } = useQuery(PROGRAM_SUMMARY_LINK_QUERY, {
     variables: {
-      SQON: {
-        content: [{ content: { field: 'study_id', value: programId }, op: 'in' }],
-        op: 'and',
-      },
+      SQON: programFilterSqon,
     },
   });
 
