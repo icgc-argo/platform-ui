@@ -128,7 +128,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const sideMenuQueryDonorIds =
     urlDonorQueryStrings.length > 0
       ? currentDonors
-      : searchResults.length > 0
+      : searchResults.length > 0 && keyword.length > 0
       ? searchResultIds
       : [];
 
