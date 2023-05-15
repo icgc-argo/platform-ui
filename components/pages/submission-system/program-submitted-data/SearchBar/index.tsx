@@ -134,8 +134,9 @@ export default function SearchBar({
         const { donorId, submitterDonorId } = result;
         return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
       })
-      .filter((result) => !!result)
-      .slice(0, 20) || [];
+      .filter((result) => !!result) || [];
+
+  const searchResultDisplayItems = searchResultItems.slice(0, 20);
 
   const titleText =
     currentDonors.length === 1
@@ -239,7 +240,7 @@ export default function SearchBar({
                 ref={menuItemDropdownRef}
               />
               <SearchResultsMenu
-                searchData={searchResultItems}
+                searchData={searchResultDisplayItems}
                 isLoading={loading}
                 onSelect={setFilterValue}
               />
