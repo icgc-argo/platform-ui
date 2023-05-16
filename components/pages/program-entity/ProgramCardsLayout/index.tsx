@@ -25,8 +25,11 @@ import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
 import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
-import { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy } from './util';
 import { ProgramSummaryQuery } from '../type';
+
+import { useQuery } from '@apollo/client';
+import sqonBuilder from 'sqon-builder';
+import DONOR_AND_FILE_COUNT_TABLES_QUERY from '../gql/DONOR_AND_FILE_COUNT_TABLES_QUERY';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -58,6 +61,102 @@ const ProgramCardsLayout: ComponentType<{
     'Processing Regions': programSummaryQuery.regions,
     'Cancer Types': programSummaryQuery.cancerTypes,
   };
+
+  const SQON_QC = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Quality Control Metrics').has('study_id', programId))
+    .build();
+  const SQON_SN = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Simple Nucleotide Variation').has('study_id', programId))
+    .build();
+  const SQON_CNUM = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Copy Number Variation').has('study_id', programId))
+    .build();
+  const SQON_STRUC = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Structural Variation').has('study_id', programId))
+    .build();
+  const SQON_TP = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Transciptome Profiling').has('study_id', programId))
+    .build();
+  const SQON_WXS = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'WXS')
+        .has('study_id', programId),
+    )
+    .build();
+  const SQON_WGS = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'WGS')
+        .has('study_id', programId),
+    )
+    .build();
+  const SQON_RSEQ = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'RNA-Seq')
+        .has('study_id', programId),
+    )
+    .build();
+
+  const { data: { file = null } = {}, loading } = useQuery(DONOR_AND_FILE_COUNT_TABLES_QUERY, {
+    variables: {
+      SQON_QC,
+      SQON_SN,
+      SQON_CNUM,
+      SQON_STRUC,
+      SQON_TP,
+      SQON_WXS,
+      SQON_WGS,
+      SQON_RSEQ,
+    },
+  });
+
+  const donorAndFileCountsByDataCategory = [
+    {
+      Category: 'Quality Control Metrics',
+      Donors: file?.quality_control_metrics?.donors__donor_id?.bucket_count,
+      Files: file?.quality_control_metrics.file_id.bucket_count,
+    },
+    {
+      Category: 'Simple Nucleotide Variation',
+      Donors: file?.simple_nucleotide_variation?.donors__donor_id?.bucket_count,
+      Files: file?.simple_nucleotide_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Copy Number Variation',
+      Donors: file?.copy_number_variation?.donors__donor_id?.bucket_count,
+      Files: file?.copy_number_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Structural Variation',
+      Donors: file?.structural_variation?.donors__donor_id?.bucket_count,
+      Files: file?.structural_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Transciptome Profiling',
+      Donors: file?.transciptome_profiling?.donors__donor_id?.bucket_count,
+      Files: file?.transciptome_profiling?.file_id?.bucket_count,
+    },
+  ];
+
+  const donorAndFileCountsByExperimentalStrategy = [
+    {
+      Strategies: 'WXS',
+      Donors: file?.wxs?.donors__donor_id?.bucket_count,
+      Files: file?.wxs?.file_id?.bucket_count,
+    },
+    {
+      Strategies: 'WGS',
+      Donors: file?.wgs?.donors__donor_id?.bucket_count,
+      Files: file?.wgs?.file_id?.bucket_count,
+    },
+    {
+      Strategies: 'RNA-Seq',
+      Donors: file?.rna_seq?.donors__donor_id?.bucket_count,
+      Files: file?.rna_seq?.file_id?.bucket_count,
+    },
+  ];
 
   return (
     <div
