@@ -41,9 +41,10 @@ const PaddedColumn = styled(Col)`
   align-items: stretch;
 `;
 
-const ProgramCardsLayout: ComponentType<{ programSummaryQuery: ProgramSummaryQuery }> = ({
-  programSummaryQuery,
-}) => {
+const ProgramCardsLayout: ComponentType<{
+  programSummaryQuery: ProgramSummaryQuery;
+  programId: string;
+}> = ({ programSummaryQuery, programId }) => {
   const theme = useTheme();
 
   const programSummaryData = {
@@ -80,7 +81,7 @@ const ProgramCardsLayout: ComponentType<{ programSummaryQuery: ProgramSummaryQue
             `}
           >
             <ProgramSummaryTable data={programSummaryData} title={'Program Summary'} />
-            <ProgramSummaryLinkContainer />
+            <ProgramSummaryLinkContainer programId={programId} />
           </Container>
         </PaddedColumn>
       </PaddedRow>

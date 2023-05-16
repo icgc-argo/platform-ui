@@ -20,39 +20,42 @@
 import { css } from '@icgc-argo/uikit';
 
 import ProgramSummaryLink from './ProgramSummaryLink';
+import PROGRAM_SUMMARY_LINK_QUERY from '../../gql/PROGRAM_SUMMARY_LINK_QUERY';
+import { useQuery } from '@apollo/client';
+import sqonBuilder from 'sqon-builder';
 
-const ProgramSummaryLinkContainer = () => {
+const ProgramSummaryLinkContainer = ({ programId }: { programId: string }) => {
+  const programFilterSqon = sqonBuilder.has('study_id', programId).build();
+  const { data: { file = null } = {}, loading } = useQuery(PROGRAM_SUMMARY_LINK_QUERY, {
+    variables: {
+      SQON: programFilterSqon,
+    },
+  });
+
   return (
     <div
       css={css`
         width: 30%;
-        margin: 14px 0px 4px 35px;
+        margin: 35px 0px 29px 35px;
+        padding-left: 10px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-evenly;
       `}
     >
       <ProgramSummaryLink
         circleFill={'secondary_3'}
         iconName={'testtube'}
         iconFill={'secondary'}
-        totalNum={1039}
-        subtitle={'Total Registered Donors'}
-      />
-
-      <ProgramSummaryLink
-        circleFill={'accent2_3'}
-        iconName={'workflow'}
-        iconFill={'accent2_dark'}
-        totalNum={1039}
-        subtitle={'Donors with Clinical Data'}
+        totalNum={loading ? 'loading' : file?.aggregations.donors__donor_id.bucket_count}
+        subtitle={'Total Donors'}
       />
 
       <ProgramSummaryLink
         circleFill={'accent4_3'}
         iconName={'download'}
         iconFill={'accent4_dark'}
-        totalNum={1039}
+        totalNum={loading ? 'loading' : file?.aggregations.file_id.bucket_count}
         subtitle={'Total Files'}
       />
     </div>

@@ -128,7 +128,16 @@ export default function SearchBar({
     clinicalSearchResults: { searchResults },
   } = donorSearchResults || emptySearchResponse;
 
-  const searchResultItems =
+  const titleText =
+    currentDonors.length === 1
+      ? `DO${currentDonors[0]}`
+      : currentDonors.length > 1
+      ? `${currentDonors.length} Donors`
+      : keyword
+      ? `${searchResults.length} Donors`
+      : COMPLETION_OPTIONS[completionState].display;
+
+  const searchResultMenuItems =
     searchResults
       .map((result) => {
         const { donorId, submitterDonorId } = result;
@@ -136,15 +145,6 @@ export default function SearchBar({
       })
       .filter((result) => !!result)
       .slice(0, 20) || [];
-
-  const titleText =
-    currentDonors.length === 1
-      ? `DO${currentDonors[0]}`
-      : currentDonors.length > 1
-      ? `${currentDonors.length} Donors`
-      : keyword
-      ? `${searchResultItems.length} Donors`
-      : COMPLETION_OPTIONS[completionState].display;
 
   useEffect(() => {
     const completionDisplayText = COMPLETION_OPTIONS[completionState]
@@ -239,7 +239,7 @@ export default function SearchBar({
                 ref={menuItemDropdownRef}
               />
               <SearchResultsMenu
-                searchData={searchResultItems}
+                searchData={searchResultMenuItems}
                 isLoading={loading}
                 onSelect={setFilterValue}
               />
