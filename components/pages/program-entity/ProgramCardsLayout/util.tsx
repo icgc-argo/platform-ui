@@ -52,7 +52,7 @@ export const createSqonsVariables = (programId) => {
     .and(sqonBuilder.has('data_category', 'Structural Variation').has('study_id', programId))
     .build();
   const SQON_TP = sqonBuilder
-    .and(sqonBuilder.has('data_category', 'Transciptome Profiling').has('study_id', programId))
+    .and(sqonBuilder.has('data_category', 'Transcriptome Profiling').has('study_id', programId))
     .build();
   const SQON_WXS = sqonBuilder
     .and(
@@ -110,9 +110,9 @@ export const createCountsByDataCategoryData = (file) => {
       Files: file?.structural_variation?.file_id?.bucket_count,
     },
     {
-      Category: 'Transciptome Profiling',
-      Donors: file?.transciptome_profiling?.donors__donor_id?.bucket_count,
-      Files: file?.transciptome_profiling?.file_id?.bucket_count,
+      Category: 'Transcriptome Profiling',
+      Donors: file?.transcriptome_profiling?.donors__donor_id?.bucket_count,
+      Files: file?.transcriptome_profiling?.file_id?.bucket_count,
     },
   ];
 };

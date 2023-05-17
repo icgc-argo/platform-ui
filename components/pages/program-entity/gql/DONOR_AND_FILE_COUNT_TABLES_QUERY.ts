@@ -63,7 +63,7 @@ const DONOR_AND_FILE_COUNT_TABLES_QUERY = gql`
           bucket_count
         }
       }
-      transciptome_profiling: aggregations(filters: $SQON_TP) {
+      transcriptome_profiling: aggregations(filters: $SQON_TP) {
         donors__donor_id {
           bucket_count
         }
