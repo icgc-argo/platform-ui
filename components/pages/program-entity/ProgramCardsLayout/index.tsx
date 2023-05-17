@@ -31,10 +31,10 @@ import { useQuery } from '@apollo/client';
 import DONOR_AND_FILE_COUNT_TABLES_QUERY from '../gql/DONOR_AND_FILE_COUNT_TABLES_QUERY';
 import {
   createProgramSummaryData,
-  createSqons,
+  createSqonsVariables,
   createCountsByDataCategoryData,
   createExperimentalStrategyData,
-} from './ult';
+} from './util';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -57,20 +57,10 @@ const ProgramCardsLayout: ComponentType<{
 
   const programSummaryData = createProgramSummaryData(programSummaryQuery);
 
-  const { SQON_QC, SQON_SN, SQON_CNUM, SQON_STRUC, SQON_TP, SQON_WXS, SQON_WGS, SQON_RSEQ } =
-    createSqons(programId);
+  const variables = createSqonsVariables(programId);
 
   const { data: { file = null } = {} } = useQuery(DONOR_AND_FILE_COUNT_TABLES_QUERY, {
-    variables: {
-      SQON_QC,
-      SQON_SN,
-      SQON_CNUM,
-      SQON_STRUC,
-      SQON_TP,
-      SQON_WXS,
-      SQON_WGS,
-      SQON_RSEQ,
-    },
+    variables,
   });
   const donorAndFileCountsByDataCategory = createCountsByDataCategoryData(file);
   const donorAndFileCountsByExperimentalStrategy = createExperimentalStrategyData(file);

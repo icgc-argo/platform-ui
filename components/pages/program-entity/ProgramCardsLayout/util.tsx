@@ -16,23 +16,24 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { Link } from '@icgc-argo/uikit';
 import sqonBuilder from 'sqon-builder';
 
-const createProgramSummaryData = (programSummaryQuery) => {
+export const createProgramSummaryData = (programSummaryQuery) => {
   return {
     'Program Shortname': programSummaryQuery.shortName,
     'Full Program Name': programSummaryQuery.name,
     Description: programSummaryQuery.description,
     Countries: programSummaryQuery.countries,
     'Primary Sites': programSummaryQuery.primarySites,
-    Website: programSummaryQuery.website,
+    Website: <Link href={programSummaryQuery.website}>{`${programSummaryQuery.website}`}</Link>,
     Institutions: programSummaryQuery.institutions,
     'Processing Regions': programSummaryQuery.regions,
     'Cancer Types': programSummaryQuery.cancerTypes,
   };
 };
 
-const createSqons = (programId) => {
+export const createSqonsVariables = (programId) => {
   const SQON_QC = sqonBuilder
     .and(sqonBuilder.has('data_category', 'Quality Control Metrics').has('study_id', programId))
     .build();
@@ -81,7 +82,7 @@ const createSqons = (programId) => {
   };
 };
 
-const createCountsByDataCategoryData = (file) => {
+export const createCountsByDataCategoryData = (file) => {
   return [
     {
       Category: 'Quality Control Metrics',
@@ -111,7 +112,7 @@ const createCountsByDataCategoryData = (file) => {
   ];
 };
 
-const createExperimentalStrategyData = (file) => {
+export const createExperimentalStrategyData = (file) => {
   return [
     {
       Strategies: 'WXS',
@@ -129,11 +130,4 @@ const createExperimentalStrategyData = (file) => {
       Files: file?.rna_seq?.file_id?.bucket_count,
     },
   ];
-};
-
-export {
-  createProgramSummaryData,
-  createSqons,
-  createCountsByDataCategoryData,
-  createExperimentalStrategyData,
 };
