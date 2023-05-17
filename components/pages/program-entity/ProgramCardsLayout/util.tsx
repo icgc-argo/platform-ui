@@ -16,19 +16,123 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { Link } from '@icgc-argo/uikit';
+import sqonBuilder from 'sqon-builder';
 
-const donorAndFileCountsByDataCategory = [
-  { Category: 'Quality Control Metrics', Donors: 245, Files: 245 },
-  { Category: 'Simple Nucleotide Variation', Donors: 245, Files: 245 },
-  { Category: 'Copy Number Variation', Donors: 245, Files: 245 },
-  { Category: 'Structural Variation', Donors: 245, Files: 245 },
-  { Category: 'Transciptome Profiling', Donors: 245, Files: 245 },
-];
+export const createProgramSummaryData = (programSummaryQuery) => {
+  return {
+    'Program Shortname': programSummaryQuery.shortName,
+    'Full Program Name': programSummaryQuery.name,
+    Description: programSummaryQuery.description,
+    Countries: programSummaryQuery.countries,
+    'Primary Sites': programSummaryQuery.primarySites,
+    Website: (
+      <Link
+        href={programSummaryQuery.website}
+        target="_blank"
+      >{`${programSummaryQuery.website}`}</Link>
+    ),
+    Institutions: programSummaryQuery.institutions,
+    'Processing Regions': programSummaryQuery.regions,
+    'Cancer Types': programSummaryQuery.cancerTypes,
+  };
+};
 
-const donorAndFileCountsByExperimentalStrategy = [
-  { Strategies: 'WXS', Donors: 245, Files: 245 },
-  { Strategies: 'WGS', Donors: 245, Files: 245 },
-  { Strategies: 'RNA-Seq', Donors: 245, Files: 245 },
-];
+export const createSqonsVariables = (programId) => {
+  const SQON_QC = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Quality Control Metrics').has('study_id', programId))
+    .build();
+  const SQON_SN = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Simple Nucleotide Variation').has('study_id', programId))
+    .build();
+  const SQON_CNUM = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Copy Number Variation').has('study_id', programId))
+    .build();
+  const SQON_STRUC = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Structural Variation').has('study_id', programId))
+    .build();
+  const SQON_TP = sqonBuilder
+    .and(sqonBuilder.has('data_category', 'Transciptome Profiling').has('study_id', programId))
+    .build();
+  const SQON_WXS = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'WXS')
+        .has('study_id', programId),
+    )
+    .build();
+  const SQON_WGS = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'WGS')
+        .has('study_id', programId),
+    )
+    .build();
+  const SQON_RSEQ = sqonBuilder
+    .and(
+      sqonBuilder
+        .has('analysis.experiment.experimental_strategy', 'RNA-Seq')
+        .has('study_id', programId),
+    )
+    .build();
+  return {
+    SQON_QC,
+    SQON_SN,
+    SQON_CNUM,
+    SQON_STRUC,
+    SQON_TP,
+    SQON_WXS,
+    SQON_WGS,
+    SQON_RSEQ,
+  };
+};
 
-export { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy };
+export const createCountsByDataCategoryData = (file) => {
+  return [
+    {
+      Category: 'Quality Control Metrics',
+      Donors: file?.quality_control_metrics?.donors__donor_id?.bucket_count,
+      Files: file?.quality_control_metrics.file_id.bucket_count,
+    },
+    {
+      Category: 'Simple Nucleotide Variation',
+      Donors: file?.simple_nucleotide_variation?.donors__donor_id?.bucket_count,
+      Files: file?.simple_nucleotide_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Copy Number Variation',
+      Donors: file?.copy_number_variation?.donors__donor_id?.bucket_count,
+      Files: file?.copy_number_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Structural Variation',
+      Donors: file?.structural_variation?.donors__donor_id?.bucket_count,
+      Files: file?.structural_variation?.file_id?.bucket_count,
+    },
+    {
+      Category: 'Transciptome Profiling',
+      Donors: file?.transciptome_profiling?.donors__donor_id?.bucket_count,
+      Files: file?.transciptome_profiling?.file_id?.bucket_count,
+    },
+  ];
+};
+
+export const createExperimentalStrategyData = (file) => {
+  return [
+    {
+      Strategies: 'WXS',
+      Donors: file?.wxs?.donors__donor_id?.bucket_count,
+      Files: file?.wxs?.file_id?.bucket_count,
+    },
+    {
+      Strategies: 'WGS',
+      Donors: file?.wgs?.donors__donor_id?.bucket_count,
+      Files: file?.wgs?.file_id?.bucket_count,
+    },
+    {
+      Strategies: 'RNA-Seq',
+      Donors: file?.rna_seq?.donors__donor_id?.bucket_count,
+      Files: file?.rna_seq?.file_id?.bucket_count,
+    },
+  ];
+};

@@ -48,6 +48,7 @@ const ProgramEntity = ({ programId }: { programId: string }) => {
             <ProgramCardsLayout
               programSummaryQuery={loading ? [] : program}
               programId={programId}
+              loading={loading}
             />
           </ContentBody>
           <Footer />

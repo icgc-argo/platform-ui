@@ -25,8 +25,16 @@ import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
 import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
-import { donorAndFileCountsByDataCategory, donorAndFileCountsByExperimentalStrategy } from './util';
 import { ProgramSummaryQuery } from '../type';
+
+import { useQuery } from '@apollo/client';
+import DONOR_AND_FILE_COUNT_TABLES_QUERY from '../gql/DONOR_AND_FILE_COUNT_TABLES_QUERY';
+import {
+  createProgramSummaryData,
+  createSqonsVariables,
+  createCountsByDataCategoryData,
+  createExperimentalStrategyData,
+} from './util';
 
 const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -44,20 +52,17 @@ const PaddedColumn = styled(Col)`
 const ProgramCardsLayout: ComponentType<{
   programSummaryQuery: ProgramSummaryQuery;
   programId: string;
-}> = ({ programSummaryQuery, programId }) => {
-  const theme = useTheme();
+  loading: boolean;
+}> = ({ programSummaryQuery, programId, loading }) => {
+  const programSummaryData = createProgramSummaryData(programSummaryQuery);
 
-  const programSummaryData = {
-    'Program Shortname': programSummaryQuery.shortName,
-    'Full Program Name': programSummaryQuery.name,
-    Description: programSummaryQuery.description,
-    Countries: programSummaryQuery.countries,
-    'Primary Sites': programSummaryQuery.primarySites,
-    Website: programSummaryQuery.website,
-    Institutions: programSummaryQuery.institutions,
-    'Processing Regions': programSummaryQuery.regions,
-    'Cancer Types': programSummaryQuery.cancerTypes,
-  };
+  const countsQuerySqons = createSqonsVariables(programId);
+
+  const { data: { file = null } = {} } = useQuery(DONOR_AND_FILE_COUNT_TABLES_QUERY, {
+    variables: countsQuerySqons,
+  });
+  const donorAndFileCountsByDataCategory = createCountsByDataCategoryData(file);
+  const donorAndFileCountsByExperimentalStrategy = createExperimentalStrategyData(file);
 
   return (
     <div
@@ -80,7 +85,10 @@ const ProgramCardsLayout: ComponentType<{
               height: 100%;
             `}
           >
-            <ProgramSummaryTable data={programSummaryData} title={'Program Summary'} />
+            <ProgramSummaryTable
+              data={loading ? { ...programSummaryData, Website: 'loading' } : programSummaryData}
+              title={'Program Summary'}
+            />
             <ProgramSummaryLinkContainer programId={programId} />
           </Container>
         </PaddedColumn>
