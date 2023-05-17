@@ -53,8 +53,6 @@ const ProgramCardsLayout: ComponentType<{
   programSummaryQuery: ProgramSummaryQuery;
   programId: string;
 }> = ({ programSummaryQuery, programId }) => {
-  const theme = useTheme();
-
   const programSummaryData = createProgramSummaryData(programSummaryQuery);
 
   const variables = createSqonsVariables(programId);
