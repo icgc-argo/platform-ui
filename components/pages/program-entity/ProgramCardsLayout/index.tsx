@@ -56,10 +56,10 @@ const ProgramCardsLayout: ComponentType<{
 }> = ({ programSummaryQuery, programId, loading }) => {
   const programSummaryData = createProgramSummaryData(programSummaryQuery);
 
-  const variables = createSqonsVariables(programId);
+  const countsQuerySqons = createSqonsVariables(programId);
 
   const { data: { file = null } = {} } = useQuery(DONOR_AND_FILE_COUNT_TABLES_QUERY, {
-    variables,
+    variables: countsQuerySqons,
   });
   const donorAndFileCountsByDataCategory = createCountsByDataCategoryData(file);
   const donorAndFileCountsByExperimentalStrategy = createExperimentalStrategyData(file);
