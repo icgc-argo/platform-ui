@@ -52,7 +52,8 @@ const PaddedColumn = styled(Col)`
 const ProgramCardsLayout: ComponentType<{
   programSummaryQuery: ProgramSummaryQuery;
   programId: string;
-}> = ({ programSummaryQuery, programId }) => {
+  loading: boolean;
+}> = ({ programSummaryQuery, programId, loading }) => {
   const programSummaryData = createProgramSummaryData(programSummaryQuery);
 
   const variables = createSqonsVariables(programId);
@@ -84,7 +85,10 @@ const ProgramCardsLayout: ComponentType<{
               height: 100%;
             `}
           >
-            <ProgramSummaryTable data={programSummaryData} title={'Program Summary'} />
+            <ProgramSummaryTable
+              data={loading ? { ...programSummaryData, Website: 'loading' } : programSummaryData}
+              title={'Program Summary'}
+            />
             <ProgramSummaryLinkContainer programId={programId} />
           </Container>
         </PaddedColumn>

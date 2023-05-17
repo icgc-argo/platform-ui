@@ -26,7 +26,12 @@ export const createProgramSummaryData = (programSummaryQuery) => {
     Description: programSummaryQuery.description,
     Countries: programSummaryQuery.countries,
     'Primary Sites': programSummaryQuery.primarySites,
-    Website: <Link href={programSummaryQuery.website}>{`${programSummaryQuery.website}`}</Link>,
+    Website: (
+      <Link
+        href={programSummaryQuery.website}
+        target="_blank"
+      >{`${programSummaryQuery.website}`}</Link>
+    ),
     Institutions: programSummaryQuery.institutions,
     'Processing Regions': programSummaryQuery.regions,
     'Cancer Types': programSummaryQuery.cancerTypes,
