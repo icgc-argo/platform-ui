@@ -26,8 +26,8 @@ import { ERROR_STATUS_KEY } from 'pages/_error';
 export default createPage<{ egoJwt: string }>({
   isPublic: true,
   getInitialProps: async () => {
-    const { FEATURE_DONOR_ENTITY_ENABLED } = getConfig();
-    if (!FEATURE_DONOR_ENTITY_ENABLED) {
+    const { FEATURE_PROGRAM_ENTITY_ENABLED } = getConfig();
+    if (!FEATURE_PROGRAM_ENTITY_ENABLED) {
       const err = new Error('Page Not Found') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 404;
       throw err;
