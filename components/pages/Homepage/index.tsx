@@ -50,6 +50,21 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'June , 2023',
+    text: (
+      <>
+        We are thrilled to announce the release of Clinical Exceptions, a new features that allows
+        programs to request program and entity level data exceptions. When enabled, clinical
+        exceptions will significantly accelerate the clinical data submission process.
+        <br />
+        <br />
+        Another new feature is also available on our platform: The Program Entity Page. Accessible
+        from the File Repository, this page presents a summary of the programs, offering a
+        high-level overview of donor and file statistics.
+      </>
+    ),
+  },
+  {
     title: 'May 3, 2023',
     text: (
       <>
