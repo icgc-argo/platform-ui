@@ -50,7 +50,7 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
-    title: 'June , 2023',
+    title: 'June 8, 2023',
     text: (
       <>
         We are thrilled to announce the release of Clinical Exceptions, a new features that allows
