@@ -50,6 +50,21 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'June 8, 2023',
+    text: (
+      <>
+        We are thrilled to announce the release of Clinical Exceptions, a new features that allows
+        programs to request program and entity level data exceptions. When enabled, clinical
+        exceptions will significantly accelerate the clinical data submission process.
+        <br />
+        <br />
+        Another new feature is also available on our platform: The Program Entity Page. Accessible
+        from the File Repository, this page presents a summary of the programs, offering a
+        high-level overview of donor and file statistics.
+      </>
+    ),
+  },
+  {
     title: 'May 3, 2023',
     text: (
       <>
@@ -125,58 +140,6 @@ const newsItems: NewsItem[] = [
           Software Release UI 1.119.1 - API 3.38.1
         </Link>{' '}
         are now available.
-      </>
-    ),
-  },
-  {
-    title: 'June 8, 2022',
-    text: (
-      <>
-        Data submitters can now submit supplemental surgery data for donors that have this specified
-        treatment in the new{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-          Surgery clinical table
-        </Link>
-        .
-      </>
-    ),
-  },
-  {
-    title: 'March 7, 2022',
-    text: (
-      <>
-        We are excited to announce{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
-          Data Release 5.0
-        </Link>
-        , which includes{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/analysis-workflows/dna-open-access-filtering"
-        >
-          Open Access Variant Filtered
-        </Link>{' '}
-        data in the File Repository for{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22APGI-AU%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          APGI-AU
-        </Link>
-        ,{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PACA-CA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          PACA-CA
-        </Link>
-        ,{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22OCCAMS-GB%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          OCCAMS-GB
-        </Link>
-        ,{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22PTC-SA%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          PTC-SA
-        </Link>
-        , and{' '}
-        <Link href="https://platform.icgc-argo.org/repository?filters=%7B%22content%22%3A%5B%7B%22content%22%3A%7B%22field%22%3A%22file_access%22%2C%22value%22%3A%22open%22%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22study_id%22%2C%22value%22%3A%22LUCA-KR%22%7D%2C%22op%22%3A%22in%22%7D%5D%2C%22op%22%3A%22and%22%7D">
-          LUCA-KR
-        </Link>
-        .
       </>
     ),
   },
