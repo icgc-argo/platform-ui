@@ -17,10 +17,27 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const ARGO_ROOT = 'https://www.icgc-argo.org';
+import { createPage } from 'global/utils/pages';
+import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
+import ErrorPage from 'pages/_error';
+import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import { getConfig } from 'global/config';
 
-export const ARGO_PRIVACY_PAGE = `${ARGO_ROOT}/page/2/privacy`;
-export const ARGO_TERMS_PAGE = `${ARGO_ROOT}/page/1/terms-and-conditions`;
-export const ARGO_PUBLICATION_PAGE = `${ARGO_ROOT}/page/77/e3-publication-policy`;
+export default createPage({
+  isPublic: false,
+  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
+    const {
+      query: { shortName },
+    } = ctx;
+    return (
+      canReadProgram({ permissions, programId: String(shortName) }) &&
+      canWriteProgramData({ permissions, programId: String(shortName) })
+    );
+  },
+  startWithGlobalLoader: true,
+})((props) => {
+  const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
 
-export const RDPC_PORTAL_URL = `http://localhost:3000`;
+  if (!FEATURE_SUBMIT_CLINICAL_ENABLED) return <ErrorPage statusCode={404} />;
+  return <ProgramClinicalData {...props} />;
+});
