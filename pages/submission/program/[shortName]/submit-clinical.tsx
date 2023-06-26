@@ -39,5 +39,5 @@ export default createPage({
   const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
 
   if (!FEATURE_SUBMIT_CLINICAL_ENABLED) return <ErrorPage statusCode={404} />;
-  return <ProgramClinicalData {...props} />;
+  return <>Submit Clinical</>;
 });

@@ -43,6 +43,7 @@ export const PROGRAM_DASHBOARD_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHOR
 export const PROGRAM_SAMPLE_REGISTRATION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/sample-registration`;
 export const PROGRAM_CLINICAL_SUBMISSION_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-submission`;
 export const PROGRAM_CLINICAL_DATA_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/clinical-data`;
+export const PROGRAM_SUBMIT_CLINICAL_PATH = `${SUBMISSION_PATH}/program/${PROGRAM_SHORT_NAME_PATH}/submit-clinical`;
 export const INVITE_ID = `[inviteId]`;
 export const PROGRAM_JOIN_DETAILS_PATH = `${SUBMISSION_PATH}/program/join/details/${INVITE_ID}`;
 export const PROGRAM_JOIN_LOGIN_PATH = `${SUBMISSION_PATH}/program/join/login/${INVITE_ID}`;

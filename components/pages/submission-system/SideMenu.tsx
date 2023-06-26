@@ -36,6 +36,7 @@ import {
   PROGRAMS_LIST_PATH,
   PROGRAM_CLINICAL_DATA_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
+  PROGRAM_SUBMIT_CLINICAL_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_MANAGE_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
@@ -112,7 +113,7 @@ type SampleRegistrationQueryResponse = {
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
-  const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
+  const { FEATURE_SUBMITTED_DATA_ENABLED, FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(
     SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
     {
@@ -172,7 +173,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       })
     );
   }, [egoJwt]);
-
+  console.log(
+    `${PROGRAM_CLINICAL_DATA_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}`,
+  );
+  console.log(PROGRAM_SUBMIT_CLINICAL_PATH);
   return (
     <div>
       <NextLink
@@ -272,6 +276,23 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
                 }
                 selected={
                   PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
+                }
+              />
+            </NextLink>
+          )}
+          {FEATURE_SUBMIT_CLINICAL_ENABLED && (
+            <NextLink
+              as={`${PROGRAM_SUBMIT_CLINICAL_PATH.replace(
+                PROGRAM_SHORT_NAME_PATH,
+                props.program.shortName,
+              )}`}
+              href={PROGRAM_SUBMIT_CLINICAL_PATH}
+            >
+              <MenuItem
+                level={3}
+                content={<StatusMenuItem>Submit Clinical Data</StatusMenuItem>}
+                selected={
+                  PROGRAM_SUBMIT_CLINICAL_PATH === pageContext.pathname && props.isCurrentlyViewed
                 }
               />
             </NextLink>
