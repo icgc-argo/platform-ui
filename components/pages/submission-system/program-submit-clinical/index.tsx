@@ -45,7 +45,7 @@ export default function ProgramSubmitClinical() {
     variables: { shortName: programShortName },
   });
 
-  const programSummaryData = loading ? [] : createProgramSummaryData(program);
+  const programSummaryData = loading ? {} : createProgramSummaryData(program);
 
   return (
     <SubmissionLayout
