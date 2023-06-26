@@ -18,7 +18,7 @@
  */
 
 import { createPage } from 'global/utils/pages';
-import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
+import ProgramSubmitClinical from 'components/pages/submission-system/program-submit-clinical';
 import ErrorPage from 'pages/_error';
 import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
 import { getConfig } from 'global/config';
@@ -39,5 +39,5 @@ export default createPage({
   const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
 
   if (!FEATURE_SUBMIT_CLINICAL_ENABLED) return <ErrorPage statusCode={404} />;
-  return <>Submit Clinical</>;
+  return <ProgramSubmitClinical {...props} />;
 });
