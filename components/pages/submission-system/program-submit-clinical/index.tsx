@@ -17,20 +17,35 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
+import { useQuery } from '@apollo/client';
+import { css, Container, Link, styled, TitleBar } from '@icgc-argo/uikit';
+import { useRouter } from 'next/router';
+import { Row, Col, setConfiguration } from 'react-grid-system';
 
 import { RDPC_PORTAL_URL } from 'global/constants/argoPages';
-import { useRouter } from 'next/router';
 
-import { Row, setConfiguration } from 'react-grid-system';
-
+import PROGRAM_SUMMARY_QUERY from 'components/pages/program-entity/gql/PROGRAM_SUMMARY_QUERY';
+import ProgramSummaryTable from 'components/pages/program-entity/ProgramCardsLayout/ProgramSummaryTable';
+import { createProgramSummaryData } from 'components/pages/program-entity/ProgramCardsLayout/util';
 import SubmissionLayout from '../layout';
 
 setConfiguration({ gutterWidth: 9 });
 
+const PaddedRow = styled(Row)`
+  padding-bottom: 8px;
+`;
+
+const PaddedColumn = styled(Col)`
+  padding-bottom: 8px;
+`;
+
 export default function ProgramSubmitClinical() {
   const programShortName = useRouter().query.shortName as string;
-  const theme = useTheme();
+  const { data: { program = [] } = {}, loading } = useQuery(PROGRAM_SUMMARY_QUERY, {
+    variables: { shortName: programShortName },
+  });
+
+  const programSummaryData = loading ? [] : createProgramSummaryData(program);
 
   return (
     <SubmissionLayout
@@ -71,6 +86,35 @@ export default function ProgramSubmitClinical() {
           </Link>
         </div>
       }
-    ></SubmissionLayout>
+    >
+      <div
+        css={css`
+          margin: 0 5%;
+        `}
+      >
+        <PaddedRow
+          css={css`
+            display: flex;
+            align-content: center;
+          `}
+        >
+          <PaddedColumn md={12} sm={12}>
+            <Container
+              css={css`
+                display: flex;
+                padding: 20px;
+                padding-top: 0px;
+                height: 100%;
+              `}
+            >
+              <ProgramSummaryTable
+                data={loading ? { ...programSummaryData, Website: 'loading' } : programSummaryData}
+                title={'Program Summary'}
+              />
+            </Container>
+          </PaddedColumn>
+        </PaddedRow>
+      </div>
+    </SubmissionLayout>
   );
 }
