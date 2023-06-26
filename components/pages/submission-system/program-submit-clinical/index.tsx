@@ -18,7 +18,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { css, Container, Link, styled, TitleBar } from '@icgc-argo/uikit';
+import { Banner, css, Container, Icon, Link, styled, TitleBar, useTheme } from '@icgc-argo/uikit';
 import { useRouter } from 'next/router';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 
@@ -46,6 +46,7 @@ export default function ProgramSubmitClinical() {
   });
 
   const programSummaryData = loading ? {} : createProgramSummaryData(program);
+  const theme = useTheme();
 
   return (
     <SubmissionLayout
@@ -98,6 +99,49 @@ export default function ProgramSubmitClinical() {
             align-content: center;
           `}
         >
+          <PaddedColumn md={12} sm={12}>
+            <Banner
+              title={
+                <Link
+                  target="_blank"
+                  href={RDPC_PORTAL_URL}
+                  bold
+                  withChevron
+                  css={css`
+                    font-size: 20px;
+                  `}
+                >
+                  Submit Data: Access RDPC Portal to submit clinical and molecular data.
+                </Link>
+              }
+              css={css`
+                padding: 20px;
+              `}
+              icon={
+                <div
+                  css={css`
+                    border-radius: 100%;
+                    background-color: ${theme.colors.secondary};
+                    width: 44px;
+                    height: 44px;
+                    position: relative;
+                  `}
+                >
+                  <Icon
+                    name={'programs'}
+                    fill={theme.colors.white}
+                    width={'22px'}
+                    height={'22px'}
+                    css={css`
+                      position: absolute;
+                      left: 25%;
+                      top: 25%;
+                    `}
+                  />
+                </div>
+              }
+            />
+          </PaddedColumn>
           <PaddedColumn md={12} sm={12}>
             <Container
               css={css`
