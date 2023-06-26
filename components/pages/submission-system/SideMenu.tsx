@@ -173,10 +173,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       })
     );
   }, [egoJwt]);
-  console.log(
-    `${PROGRAM_CLINICAL_DATA_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}`,
-  );
-  console.log(PROGRAM_SUBMIT_CLINICAL_PATH);
+
   return (
     <div>
       <NextLink
