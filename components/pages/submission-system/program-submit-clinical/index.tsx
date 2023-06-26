@@ -106,7 +106,6 @@ export default function ProgramSubmitClinical() {
                   target="_blank"
                   href={RDPC_PORTAL_URL}
                   bold
-                  withChevron
                   css={css`
                     font-size: 20px;
                   `}
