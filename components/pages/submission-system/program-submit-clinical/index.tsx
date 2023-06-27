@@ -102,21 +102,34 @@ export default function ProgramSubmitClinical() {
           <PaddedColumn md={12} sm={12}>
             <Banner
               title={
-                <Link
-                  target="_blank"
-                  href={RDPC_PORTAL_URL}
-                  bold
+                <div
                   css={css`
-                    font-size: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                   `}
                 >
-                  Submit Data: Access RDPC Portal to submit clinical and molecular data.
-                </Link>
+                  <Link
+                    target="_blank"
+                    href={RDPC_PORTAL_URL}
+                    bold
+                    css={css`
+                      font-size: 20px;
+                    `}
+                  >
+                    Submit Data: Access RDPC Portal to submit clinical and molecular data.
+                  </Link>
+                  <Icon
+                    name={'chevron_right'}
+                    fill={theme.colors.secondary}
+                    width={'22px'}
+                    height={'22px'}
+                  />
+                </div>
               }
               css={css`
                 padding: 20px;
                 display: flex;
-                align-items: center;
               `}
               icon={
                 <div
