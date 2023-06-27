@@ -115,6 +115,8 @@ export default function ProgramSubmitClinical() {
               }
               css={css`
                 padding: 20px;
+                display: flex;
+                align-items: center;
               `}
               icon={
                 <div
