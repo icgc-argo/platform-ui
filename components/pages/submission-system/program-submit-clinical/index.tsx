@@ -118,13 +118,17 @@ export default function ProgramSubmitClinical() {
                     `}
                   >
                     Submit Data: Access RDPC Portal to submit clinical and molecular data.
+                    <Icon
+                      name={'chevron_right'}
+                      fill={theme.colors.secondary}
+                      width={'22px'}
+                      height={'22px'}
+                      css={css`
+                        position: absolute;
+                        right: 20px;
+                      `}
+                    />
                   </Link>
-                  <Icon
-                    name={'chevron_right'}
-                    fill={theme.colors.secondary}
-                    width={'22px'}
-                    height={'22px'}
-                  />
                 </div>
               }
               css={css`
