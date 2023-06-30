@@ -81,6 +81,7 @@ const nextConfig = withPlugins([withImages, withTM], {
     GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     DOCS_URL_ROOT: process.env.DOCS_URL_ROOT,
     DACO_URL: process.env.DACO_URL,
+    RDPC_PORTAL_URL: process.env.RDPC_PORTAL_URL,
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     MAINTENANCE_MODE_ON: process.env.MAINTENANCE_MODE_ON,
     FEATURE_DONOR_ENTITY_ENABLED: process.env.FEATURE_DONOR_ENTITY_ENABLED,

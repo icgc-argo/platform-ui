@@ -22,7 +22,7 @@ import { Banner, css, Container, Icon, Link, styled, TitleBar, useTheme } from '
 import { useRouter } from 'next/router';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 
-import { RDPC_PORTAL_URL } from 'global/constants/argoPages';
+import { getConfig } from 'global/config';
 
 import PROGRAM_SUMMARY_QUERY from 'components/pages/program-entity/gql/PROGRAM_SUMMARY_QUERY';
 import ProgramSummaryTable from 'components/pages/program-entity/ProgramCardsLayout/ProgramSummaryTable';
@@ -46,6 +46,7 @@ export default function ProgramSubmitClinical() {
   });
 
   const programSummaryData = loading ? {} : createProgramSummaryData(program);
+  const { RDPC_PORTAL_URL } = getConfig();
   const theme = useTheme();
 
   return (

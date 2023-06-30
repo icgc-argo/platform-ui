@@ -37,6 +37,7 @@ export const getConfig = () => {
     ),
     DACO_URL: publicConfig.DACO_URL || '',
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org',
+    RDPC_PORTAL_URL: publicConfig.RDPC_PORTAL_URL || 'http://localhost:3000',
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
@@ -60,6 +61,7 @@ export const getConfig = () => {
     EGO_URL: string;
     DOCS_URL_ROOT: string;
     DACO_URL: string;
+    RDPC_PORTAL_URL: string;
     RECAPTCHA_SITE_KEY: string;
     MAINTENANCE_MODE_ON: boolean;
     FEATURE_DONOR_ENTITY_ENABLED: boolean;
