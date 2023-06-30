@@ -17,27 +17,22 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import ProgramSubmitClinical from 'components/pages/submission-system/program-submit-clinical';
-import ErrorPage from 'pages/_error';
-import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
 import { getConfig } from 'global/config';
+import { createPage } from 'global/utils/pages';
+import { ERROR_STATUS_KEY } from 'pages/_error';
 
 export default createPage({
   isPublic: false,
-  isAccessible: async ({ ctx, initialPermissions: permissions }) => {
-    const {
-      query: { shortName },
-    } = ctx;
-    return (
-      canReadProgram({ permissions, programId: String(shortName) }) &&
-      canWriteProgramData({ permissions, programId: String(shortName) })
-    );
+  getInitialProps: async () => {
+    const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
+    if (!FEATURE_SUBMIT_CLINICAL_ENABLED) {
+      const err = new Error('Page Not Found') as Error & { statusCode?: number };
+      err[ERROR_STATUS_KEY] = 404;
+      throw err;
+    }
   },
   startWithGlobalLoader: true,
 })((props) => {
-  const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
-
-  if (!FEATURE_SUBMIT_CLINICAL_ENABLED) return <ErrorPage statusCode={404} />;
   return <ProgramSubmitClinical {...props} />;
 });
