@@ -139,8 +139,6 @@ export default function CreateProgramForm({
 
   const { data: { programOptions = undefined } = {}, loading } = useQuery(PROGRAM_VALUES_QUERY);
 
-  const regionOptions = get(programOptions, 'regions', []);
-
   /* ****************** *
    * On Change Handlers
    * ****************** */
@@ -151,18 +149,7 @@ export default function CreateProgramForm({
     validateField({ key: fieldKey });
   };
 
-  const handleCheckboxGroupChange =
-    (selectedItems: any[], fieldName: keyof typeof seedFormData) => (event) => {
-      const value = event.target?.defaultValue;
-
-      if (selectedItems.includes(value)) {
-        setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
-      } else {
-        setData({ key: fieldName, val: [...selectedItems, value] });
-      }
-    };
-
-  const submitForm = async (formData) => {
+  const submitForm = async () => {
     try {
       const validData = await validateForm();
       onSubmit(validData);
@@ -429,34 +416,6 @@ export default function CreateProgramForm({
                   Please indicate the region(s) where data can be processed
                 </InputLabel>
                 <ErrorText error={validationErrors.processingRegions} />
-                <RadioCheckboxGroup
-                  id="checkbox-group-processing-regions"
-                  hasError={false}
-                  onChange={handleCheckboxGroupChange(
-                    form.processingRegions as any[],
-                    'processingRegions',
-                  )}
-                  isChecked={(item) => form.processingRegions.includes(item)}
-                >
-                  <Row>
-                    <Col>
-                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map((name) => (
-                        <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
-                          {name}
-                        </FormCheckbox>
-                      ))}
-                    </Col>
-                    <Col>
-                      {regionOptions
-                        .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
-                        .map((name) => (
-                          <FormCheckbox value={name} key={name}>
-                            {name}
-                          </FormCheckbox>
-                        ))}
-                    </Col>
-                  </Row>
-                </RadioCheckboxGroup>
               </Col>
             </Row>
             <Row>
