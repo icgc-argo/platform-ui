@@ -32,7 +32,7 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
 ];
 
 // Regions
-export const PROCESSING_REGIONS = [{ content: 'Canada', value: 'CANADA' }];
+export const PROCESSING_REGIONS = ['Canada'];
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
 export const PROGRAM_USER_ROLES = [

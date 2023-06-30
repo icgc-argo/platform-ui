@@ -55,10 +55,11 @@ const baseValidations: yup.ObjectSchema<any> = yup.object({
     .required(),
   website: yup.string().label('Website').trim().url(),
   description: yup.string().label('Description').trim(),
-  processingRegion: yup
-    .string()
+  processingRegions: yup
+    .array()
+    //.of(yup.string())
+    .of(yup.string().oneOf(PROCESSING_REGIONS))
     .label('Processing Regions')
-    .oneOf(PROCESSING_REGIONS.map((type) => type.value))
     .required(),
 });
 
