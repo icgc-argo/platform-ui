@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { COUNTRIES, PROCESSING_REGIONS, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import yup from 'global/utils/validations';
-import { CANCER_TYPES, COUNTRIES, PRIMARY_SITES, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 
 const baseValidations: yup.ObjectSchema<any> = yup.object({
   programName: yup.string().label('Program Name').trim().required(),
@@ -55,7 +55,11 @@ const baseValidations: yup.ObjectSchema<any> = yup.object({
     .required(),
   website: yup.string().label('Website').trim().url(),
   description: yup.string().label('Description').trim(),
-  processingRegions: yup.array().of(yup.string()).label('Processing Regions').required(),
+  processingRegion: yup
+    .string()
+    .label('Processing Regions')
+    .oneOf(PROCESSING_REGIONS.map((type) => type.value))
+    .required(),
 });
 
 const adminValidations = yup.object().shape({
