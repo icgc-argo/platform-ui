@@ -18,13 +18,15 @@
  */
 
 import { NextPageContext } from 'next';
-import { DocumentNode } from 'graphql';
 import { IsGlobalLoading } from 'components/GlobalLoader';
 import { ComponentType } from 'react';
 
 export type GetInitialPropsContext = NextPageContext & {
   res?: NextPageContext['res'] & {
     redirect?: (s: string) => void;
+  };
+  query: NextPageContext['query'] & {
+    shortName: string;
   };
 };
 export type ClientSideGetInitialPropsContext = {

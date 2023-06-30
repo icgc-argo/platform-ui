@@ -30,8 +30,8 @@ export default createPage({
       query: { shortName },
     } = ctx;
     return (
-      canReadProgram({ permissions, programId: String(shortName) }) &&
-      canWriteProgramData({ permissions, programId: String(shortName) })
+      canReadProgram({ permissions, programId: shortName }) &&
+      canWriteProgramData({ permissions, programId: shortName })
     );
   },
   getInitialProps: async () => {
