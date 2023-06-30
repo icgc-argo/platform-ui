@@ -57,7 +57,6 @@ const baseValidations: yup.ObjectSchema<any> = yup.object({
   description: yup.string().label('Description').trim(),
   processingRegions: yup
     .array()
-    //.of(yup.string())
     .of(yup.string().oneOf(PROCESSING_REGIONS))
     .label('Processing Regions')
     .required(),
