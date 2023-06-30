@@ -51,7 +51,7 @@ export default function ProgramSubmitClinical() {
 
   return (
     <SubmissionLayout
-      subtitle={`${programShortName} Dashboard`}
+      subtitle={`${programShortName} Submit Clinical Data`}
       contentHeader={
         <div
           css={css`
@@ -89,11 +89,7 @@ export default function ProgramSubmitClinical() {
         </div>
       }
     >
-      <div
-        css={css`
-          margin: 0 5%;
-        `}
-      >
+      <div>
         <PaddedRow
           css={css`
             display: flex;
