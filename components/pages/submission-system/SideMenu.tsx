@@ -279,10 +279,10 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           )}
           {FEATURE_SUBMIT_CLINICAL_ENABLED && (
             <NextLink
-              as={`${PROGRAM_SUBMIT_CLINICAL_PATH.replace(
+              as={PROGRAM_SUBMIT_CLINICAL_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
-              )}`}
+              )}
               href={PROGRAM_SUBMIT_CLINICAL_PATH}
             >
               <MenuItem
