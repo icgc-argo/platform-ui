@@ -20,22 +20,19 @@
 import { useQuery } from '@apollo/client';
 import {
   Button,
-  FormCheckbox,
   FormControl,
   FormHelperText,
   Input,
   InputLabel,
   MultiSelect,
   Option,
-  RadioCheckboxGroup,
   Select,
   Textarea,
   Typography,
   css,
 } from '@icgc-argo/uikit';
-import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import { PROCESSING_REGIONS, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
-import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 
@@ -43,8 +40,8 @@ import { Col, Row } from 'react-grid-system';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
 import { xor } from 'lodash';
+import { ComponentType, PropsWithChildren } from 'react';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
-import { PropsWithChildren, ComponentType } from 'react';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -403,18 +400,28 @@ export default function CreateProgramForm({
               </Col>
             </Row>
           </FormControl>
+
           <Row>
             <Col>
-              <SectionTitle>Processing Regions</SectionTitle>
+              <SectionTitle>Processing Region</SectionTitle>
             </Col>
           </Row>
 
           <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
-                <InputLabel htmlFor="Processing Regions">
-                  Please indicate the region(s) where data can be processed
+                <InputLabel htmlFor="Processing Region">
+                  Please indicate the region where data can be processed.
                 </InputLabel>
+                <Select
+                  aria-label="Processing Region"
+                  id="checkbox-group-processing-region"
+                  options={PROCESSING_REGIONS.map((value) => ({ content: value, value }))}
+                  onChange={(val) => setData({ key: 'processingRegions', val: [val] })}
+                  onBlur={handleInputBlur('processingRegion')}
+                  value={form.processingRegions[0] || ''}
+                  size="lg"
+                />
                 <ErrorText error={validationErrors.processingRegions} />
               </Col>
             </Row>
