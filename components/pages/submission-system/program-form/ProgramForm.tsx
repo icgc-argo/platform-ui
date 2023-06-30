@@ -62,22 +62,6 @@ const InputLabelWrapper = ({ sm = 3, children }: PropsWithChildren<{ sm?: number
 const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperText> : null);
 
 /* *************************************** *
- * Reshape form data for gql input
- * *************************************** */
-const createUpdateProgramInput = (formData) => ({
-  name: formData.programName,
-  description: formData.description,
-  commitmentDonors: parseInt(formData.commitmentLevel),
-  website: formData.website,
-  institutions: formData.institutions,
-  countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
-  membershipType: formData.membershipType,
-  cancerTypes: formData.cancerTypes,
-  primarySites: formData.primarySites,
-});
-
-/* *************************************** *
  * Form data validation
  * *************************************** */
 type FormModel = ReturnType<typeof useFormHook>;
