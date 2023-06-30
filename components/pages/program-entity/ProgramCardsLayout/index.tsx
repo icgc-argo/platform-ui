@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container, css, styled, useTheme } from '@icgc-argo/uikit';
+import { Container, css, styled } from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 
@@ -25,7 +25,7 @@ import ProgramDonorAndFileCountsTable from './ProgramDonorAndFileCountsTable';
 import ProgramSummaryLinkContainer from './ProgramSummaryLinkContatiner';
 import ProgramSummaryTable from './ProgramSummaryTable';
 
-import { ProgramSummaryQuery } from '../type';
+import { ProgramSummaryQuery } from '../types';
 
 import { useQuery } from '@apollo/client';
 import DONOR_AND_FILE_COUNT_TABLES_QUERY from '../gql/DONOR_AND_FILE_COUNT_TABLES_QUERY';
