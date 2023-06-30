@@ -51,7 +51,7 @@ const PaddedColumn = styled(Col)`
 
 export default function ProgramSubmitClinical() {
   const programShortName = useRouter().query.shortName as string;
-  const { data: { program = [] } = {}, loading } = useQuery(PROGRAM_SUMMARY_QUERY, {
+  const { data: { program = {} } = {}, loading } = useQuery(PROGRAM_SUMMARY_QUERY, {
     variables: { shortName: programShortName },
   });
 
