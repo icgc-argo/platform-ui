@@ -18,7 +18,17 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { Banner, css, Container, Icon, Link, styled, TitleBar, useTheme } from '@icgc-argo/uikit';
+import {
+  Banner,
+  css,
+  Container,
+  DnaLoader,
+  Icon,
+  Link,
+  styled,
+  TitleBar,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { useRouter } from 'next/router';
 import { Row, Col, setConfiguration } from 'react-grid-system';
 
@@ -167,10 +177,20 @@ export default function ProgramSubmitClinical() {
                 height: 100%;
               `}
             >
-              <ProgramSummaryTable
-                data={loading ? { ...programSummaryData, Website: 'loading' } : programSummaryData}
-                title={'Program Summary'}
-              />
+              {loading ? (
+                <div
+                  css={css`
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                  `}
+                >
+                  <DnaLoader />
+                </div>
+              ) : (
+                <ProgramSummaryTable data={programSummaryData} title={'Program Summary'} />
+              )}
             </Container>
           </PaddedColumn>
         </PaddedRow>
