@@ -20,14 +20,12 @@
 import { useQuery } from '@apollo/client';
 import {
   Button,
-  FormCheckbox,
   FormControl,
   FormHelperText,
   Input,
   InputLabel,
   MultiSelect,
   Option,
-  RadioCheckboxGroup,
   Select,
   Textarea,
   Typography,
@@ -35,7 +33,6 @@ import {
 } from '@icgc-argo/uikit';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
-import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 
@@ -43,8 +40,8 @@ import { Col, Row } from 'react-grid-system';
 import { createProgramSchema, updateProgramSchema } from './validations';
 
 import { xor } from 'lodash';
+import { ComponentType, PropsWithChildren } from 'react';
 import PROGRAM_VALUES_QUERY from '../gql/PROGRAM_VALUES_QUERY';
-import { PropsWithChildren, ComponentType } from 'react';
 
 /* ********************************* *
  * Repeated Component Styles/Layouts
@@ -60,22 +57,6 @@ const InputLabelWrapper = ({ sm = 3, children }: PropsWithChildren<{ sm?: number
 );
 
 const ErrorText = ({ error }) => (error ? <FormHelperText>{error}</FormHelperText> : null);
-
-/* *************************************** *
- * Reshape form data for gql input
- * *************************************** */
-const createUpdateProgramInput = (formData) => ({
-  name: formData.programName,
-  description: formData.description,
-  commitmentDonors: parseInt(formData.commitmentLevel),
-  website: formData.website,
-  institutions: formData.institutions,
-  countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
-  membershipType: formData.membershipType,
-  cancerTypes: formData.cancerTypes,
-  primarySites: formData.primarySites,
-});
 
 /* *************************************** *
  * Form data validation
@@ -167,18 +148,7 @@ export default function CreateProgramForm({
     validateField({ key: fieldKey });
   };
 
-  const handleCheckboxGroupChange =
-    (selectedItems: any[], fieldName: keyof typeof seedFormData) => (event) => {
-      const value = event.target?.defaultValue;
-
-      if (selectedItems.includes(value)) {
-        setData({ key: fieldName, val: filter(selectedItems, (item) => item !== value) });
-      } else {
-        setData({ key: fieldName, val: [...selectedItems, value] });
-      }
-    };
-
-  const submitForm = async (formData) => {
+  const submitForm = async () => {
     try {
       const validData = await validateForm();
       onSubmit(validData);
@@ -432,47 +402,29 @@ export default function CreateProgramForm({
               </Col>
             </Row>
           </FormControl>
+
           <Row>
             <Col>
-              <SectionTitle>Processing Regions</SectionTitle>
+              <SectionTitle>Processing Region</SectionTitle>
             </Col>
           </Row>
 
           <FormControl error={validationErrors.processingRegions} required={true}>
             <Row>
               <Col>
-                <InputLabel htmlFor="Processing Regions">
-                  Please indicate the region(s) where data can be processed
+                <InputLabel htmlFor="Processing Region">
+                  Please indicate the region where data can be processed.
                 </InputLabel>
+                <Select
+                  aria-label="Processing Region"
+                  id="checkbox-group-processing-region"
+                  options={regionOptions.map((name) => ({ content: name, value: name }))}
+                  onChange={(val) => setData({ key: 'processingRegions', val: [val] })}
+                  onBlur={handleInputBlur('processingRegion')}
+                  value={form.processingRegions[0] || ''}
+                  size="lg"
+                />
                 <ErrorText error={validationErrors.processingRegions} />
-                <RadioCheckboxGroup
-                  id="checkbox-group-processing-regions"
-                  hasError={false}
-                  onChange={handleCheckboxGroupChange(
-                    form.processingRegions as any[],
-                    'processingRegions',
-                  )}
-                  isChecked={(item) => form.processingRegions.includes(item)}
-                >
-                  <Row>
-                    <Col>
-                      {regionOptions.slice(0, Math.ceil(regionOptions.length / 2)).map((name) => (
-                        <FormCheckbox value={name} key={name.replace(/\s/g, '')}>
-                          {name}
-                        </FormCheckbox>
-                      ))}
-                    </Col>
-                    <Col>
-                      {regionOptions
-                        .slice(Math.ceil(regionOptions.length / 2), regionOptions.length)
-                        .map((name) => (
-                          <FormCheckbox value={name} key={name}>
-                            {name}
-                          </FormCheckbox>
-                        ))}
-                    </Col>
-                  </Row>
-                </RadioCheckboxGroup>
               </Col>
             </Row>
             <Row>
