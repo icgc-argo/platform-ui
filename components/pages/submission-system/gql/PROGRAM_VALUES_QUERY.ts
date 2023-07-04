@@ -25,6 +25,7 @@ const PROGRAM_VALUES_QUERY = gql`
       cancerTypes
       primarySites
       institutions
+      regions
       countries
     }
   }

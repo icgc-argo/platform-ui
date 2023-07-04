@@ -31,7 +31,7 @@ import {
   Typography,
   css,
 } from '@icgc-argo/uikit';
-import { PROCESSING_REGIONS, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
+import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
@@ -135,6 +135,8 @@ export default function CreateProgramForm({
   } = formModel;
 
   const { data: { programOptions = undefined } = {}, loading } = useQuery(PROGRAM_VALUES_QUERY);
+
+  const regionOptions = get(programOptions, 'regions', []);
 
   /* ****************** *
    * On Change Handlers
@@ -416,7 +418,7 @@ export default function CreateProgramForm({
                 <Select
                   aria-label="Processing Region"
                   id="checkbox-group-processing-region"
-                  options={PROCESSING_REGIONS.map((value) => ({ content: value, value }))}
+                  options={regionOptions.map((name) => ({ content: name, value: name }))}
                   onChange={(val) => setData({ key: 'processingRegions', val: [val] })}
                   onBlur={handleInputBlur('processingRegion')}
                   value={form.processingRegions[0] || ''}

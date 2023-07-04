@@ -31,9 +31,6 @@ export const PROGRAM_MEMBERSHIP_TYPES = [
   { content: 'Associate', value: 'ASSOCIATE' },
 ];
 
-// Regions
-export const PROCESSING_REGIONS = ['Canada'];
-
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER';
 export const PROGRAM_USER_ROLES = [
   { content: 'Administrator', value: 'ADMIN' as RoleKey },
