@@ -109,7 +109,7 @@ const ClinicalDownloadButton = ({
 
     setButtonLoadingState(true);
 
-    downloadFileWithEgoToken(url)
+    downloadFileWithEgoToken(url, { method: 'post' })
       .then(() => {
         setButtonLoadingState(false);
       })
