@@ -18,23 +18,26 @@
  */
 import { Link } from '@icgc-argo/uikit';
 import sqonBuilder from 'sqon-builder';
+import type { ProgramSummaryQuery } from '../types';
 
-export const createProgramSummaryData = (programSummaryQuery) => {
+export const createProgramSummaryData = (programSummaryQuery: ProgramSummaryQuery) => {
   return {
-    'Program Shortname': programSummaryQuery.shortName,
-    'Full Program Name': programSummaryQuery.name,
-    Description: programSummaryQuery.description,
-    Countries: programSummaryQuery.countries,
-    'Primary Sites': programSummaryQuery.primarySites,
-    Website: (
+    'Program Shortname': programSummaryQuery?.shortName || '',
+    'Full Program Name': programSummaryQuery?.name || '',
+    Description: programSummaryQuery?.description || '',
+    Countries: programSummaryQuery?.countries || '',
+    'Primary Sites': programSummaryQuery?.primarySites || '',
+    Website: programSummaryQuery.website ? (
       <Link
         href={programSummaryQuery.website}
         target="_blank"
       >{`${programSummaryQuery.website}`}</Link>
+    ) : (
+      ''
     ),
-    Institutions: programSummaryQuery.institutions,
-    'Processing Regions': programSummaryQuery.regions,
-    'Cancer Types': programSummaryQuery.cancerTypes,
+    Institutions: programSummaryQuery?.institutions || '',
+    'Processing Regions': programSummaryQuery?.regions || '',
+    'Cancer Types': programSummaryQuery?.cancerTypes || '',
   };
 };
 

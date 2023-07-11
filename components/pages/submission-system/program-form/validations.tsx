@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { COUNTRIES, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import yup from 'global/utils/validations';
-import { CANCER_TYPES, COUNTRIES, PRIMARY_SITES, PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 
 const baseValidations: yup.ObjectSchema<any> = yup.object({
   programName: yup.string().label('Program Name').trim().required(),

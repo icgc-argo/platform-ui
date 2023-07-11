@@ -37,6 +37,7 @@ export const getConfig = () => {
     ),
     DACO_URL: publicConfig.DACO_URL || '',
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org',
+    RDPC_PORTAL_URL: publicConfig.RDPC_PORTAL_URL || 'http://localhost:3000',
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
@@ -49,6 +50,7 @@ export const getConfig = () => {
     FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED:
       publicConfig.FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED === 'true',
     FEATURE_REACT_TABLE_V8_ENABLED: publicConfig.FEATURE_REACT_TABLE_V8_ENABLED === 'true',
+    FEATURE_SUBMIT_CLINICAL_ENABLED: publicConfig.FEATURE_SUBMIT_CLINICAL_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -59,6 +61,7 @@ export const getConfig = () => {
     EGO_URL: string;
     DOCS_URL_ROOT: string;
     DACO_URL: string;
+    RDPC_PORTAL_URL: string;
     RECAPTCHA_SITE_KEY: string;
     MAINTENANCE_MODE_ON: boolean;
     FEATURE_DONOR_ENTITY_ENABLED: boolean;
@@ -69,5 +72,6 @@ export const getConfig = () => {
     FEATURE_SUBMITTED_DATA_ENABLED: boolean;
     FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED: boolean;
     FEATURE_REACT_TABLE_V8_ENABLED: boolean;
+    FEATURE_SUBMIT_CLINICAL_ENABLED: boolean;
   };
 };
