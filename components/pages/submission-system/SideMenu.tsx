@@ -21,6 +21,7 @@ import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 
+import { RDPC_PREFIX } from '@icgc-argo/ego-token-utils';
 import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 
 import { getConfig } from 'global/config';
@@ -390,12 +391,28 @@ export default function SideMenu() {
   );
 
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
-
   const isDcc = useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
   const isRdpc = useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
-  const canSeeDcc = isDcc;
+
+  console.log('programs', programs);
+  console.log('permissions', permissions);
+  console.log('isDcc', isDcc);
+  console.log('isRdpc', isRdpc);
+
+  // list of programs where user is authorized to submit data
+  const programSubmitPermissions = programs?.map((program) => {
+    if (isDcc) return program;
+
+    const userPermissions = isRdpc
+      ? permissions.filter((code) => code.startsWith('RDPC'))
+      : permissions;
+    // test if this returns too many results
+    const hasProgramPermissions = userPermissions.find((code) => code.includes(program));
+
+    return hasProgramPermissions;
+  });
 
   return (
     <SubMenu>
@@ -417,7 +434,7 @@ export default function SideMenu() {
         )
       ) : (
         <>
-          {canSeeDcc && (
+          {isDcc && (
             <NextLink href={DCC_DASHBOARD_PATH}>
               <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
             </NextLink>
