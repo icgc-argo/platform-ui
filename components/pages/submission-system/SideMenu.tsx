@@ -53,8 +53,18 @@ import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITT
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 import { useState, useMemo, ReactNode } from 'react';
 
+const USER_ROLES = {
+  ADMIN: 'ADMIN',
+  COLLAB: 'COLLAB',
+};
+
+const RDPC_REGION_CODES = {
+  Canada: 'CA',
+};
+
 type SideMenuProgram = {
   shortName: string;
+  regions: string[];
 };
 
 const Loader = () => (
@@ -111,10 +121,40 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
+// Determine if User is authorized to submit data
+const getProgramAuthLevel = (program: SideMenuProgram, isRdpc: boolean, permissions: string[]) => {
+  const { shortName, regions } = program;
+
+  if (isRdpc) {
+    const programRegionCode = RDPC_REGION_CODES[regions[0]];
+    const rdpcRegionPermissions = permissions
+      .filter((authCode) => authCode.startsWith(RDPC_PREFIX))
+      .filter((authCode) => authCode.includes(programRegionCode));
+
+    return rdpcRegionPermissions.some((egoCode) => egoCode.includes('WRITE'))
+      ? USER_ROLES.ADMIN
+      : USER_ROLES.COLLAB;
+  }
+
+  const programPermissions = permissions.filter((authCode) => authCode.includes(shortName));
+
+  return programPermissions.some((egoCode) => egoCode.includes('WRITE'))
+    ? USER_ROLES.ADMIN
+    : USER_ROLES.COLLAB;
+};
+
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
   const { FEATURE_SUBMITTED_DATA_ENABLED, FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
+
+  const isDcc = useMemo(() => isDccMember(permissions), [permissions]);
+  const isRdpc = useMemo(() => isRdpcMember(permissions), [permissions]);
+
+  const programAuth = isDcc
+    ? USER_ROLES.ADMIN
+    : getProgramAuthLevel(props.program, isRdpc, permissions);
+
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(
     SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
     {
@@ -395,24 +435,6 @@ export default function SideMenu() {
   const isRdpc = useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
-
-  console.log('programs', programs);
-  console.log('permissions', permissions);
-  console.log('isDcc', isDcc);
-  console.log('isRdpc', isRdpc);
-
-  // list of programs where user is authorized to submit data
-  const programSubmitPermissions = programs?.map((program) => {
-    if (isDcc) return program;
-
-    const userPermissions = isRdpc
-      ? permissions.filter((code) => code.startsWith('RDPC'))
-      : permissions;
-    // test if this returns too many results
-    const hasProgramPermissions = userPermissions.find((code) => code.includes(program));
-
-    return hasProgramPermissions;
-  });
 
   return (
     <SubMenu>
