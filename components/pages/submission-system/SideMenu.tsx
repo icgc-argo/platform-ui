@@ -52,27 +52,6 @@ import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITT
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
 import { useState, useMemo, ReactNode } from 'react';
 
-const USER_ROLES = {
-  ADMIN: 'ADMIN',
-  COLLAB: 'COLLAB',
-};
-
-const RDPC_REGION_CODES = {
-  Canada: 'CA',
-};
-
-const SERVICE_CODES = [
-  'CLINICALSERVICE',
-  'FILESERVICE',
-  'DACO-REVIEW',
-  'DC-REGISTRY',
-  'DICTIONARY',
-  'PROGRAMSERVICE',
-  'RDPC-collab',
-  'song',
-  'score',
-];
-
 type SideMenuProgram = {
   shortName: string;
   regions: string[];
