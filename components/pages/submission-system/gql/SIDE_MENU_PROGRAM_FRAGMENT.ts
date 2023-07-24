@@ -22,7 +22,6 @@ import { gql } from '@apollo/client';
 const SIDE_MENU_PROGRAM_FRAGMENT = gql`
   fragment SideMenuProgram on Program {
     shortName
-    regions
   }
 `;
 

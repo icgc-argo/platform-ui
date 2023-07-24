@@ -54,7 +54,6 @@ import { useState, useMemo, ReactNode } from 'react';
 
 type SideMenuProgram = {
   shortName: string;
-  regions: string[];
 };
 
 const Loader = () => (
