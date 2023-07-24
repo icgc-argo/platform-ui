@@ -146,7 +146,11 @@ const getProgramAuthLevel = (program: SideMenuProgram, isRdpc: boolean, permissi
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
-  const { FEATURE_SUBMITTED_DATA_ENABLED, FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
+  const {
+    FEATURE_SUBMITTED_DATA_ENABLED,
+    FEATURE_SUBMIT_CLINICAL_ENABLED,
+    FEATURE_FEDERATED_RDPC,
+  } = getConfig();
 
   const isDcc = useMemo(() => isDccMember(permissions), [permissions]);
   const isRdpc = useMemo(() => isRdpcMember(permissions), [permissions]);
