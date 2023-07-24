@@ -62,6 +62,18 @@ const RDPC_REGION_CODES = {
   Canada: 'CA',
 };
 
+const SERVICE_CODES = [
+  'CLINICALSERVICE',
+  'FILESERVICE',
+  'DACO-REVIEW',
+  'DC-REGISTRY',
+  'DICTIONARY',
+  'PROGRAMSERVICE',
+  'RDPC-collab',
+  'song',
+  'score',
+];
+
 type SideMenuProgram = {
   shortName: string;
   regions: string[];
@@ -125,9 +137,13 @@ type SampleRegistrationQueryResponse = {
 const getProgramAuthLevel = (program: SideMenuProgram, isRdpc: boolean, permissions: string[]) => {
   const { shortName, regions } = program;
 
+  const programPermissionCodes = permissions.filter(
+    (code) => !SERVICE_CODES.includes(code.split('.')[0]),
+  );
+
   if (isRdpc) {
     const programRegionCode = RDPC_REGION_CODES[regions[0]];
-    const rdpcRegionPermissions = permissions
+    const rdpcRegionPermissions = programPermissionCodes
       .filter((authCode) => authCode.startsWith(RDPC_PREFIX))
       .filter((authCode) => authCode.includes(programRegionCode));
 
@@ -135,8 +151,9 @@ const getProgramAuthLevel = (program: SideMenuProgram, isRdpc: boolean, permissi
       ? USER_ROLES.ADMIN
       : USER_ROLES.COLLAB;
   }
-
-  const programPermissions = permissions.filter((authCode) => authCode.includes(shortName));
+  const programPermissions = programPermissionCodes.filter((authCode) =>
+    authCode.includes(shortName),
+  );
 
   return programPermissions.some((egoCode) => egoCode.includes('WRITE'))
     ? USER_ROLES.ADMIN
@@ -155,6 +172,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const isDcc = useMemo(() => isDccMember(permissions), [permissions]);
   const isRdpc = useMemo(() => isRdpcMember(permissions), [permissions]);
 
+  console.log(getProgramAuthLevel(props.program, isRdpc, permissions));
   const programAuth = isDcc
     ? USER_ROLES.ADMIN
     : getProgramAuthLevel(props.program, isRdpc, permissions);
