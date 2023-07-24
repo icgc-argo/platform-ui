@@ -21,7 +21,6 @@ import { useQuery } from '@apollo/client';
 import orderBy from 'lodash/orderBy';
 import NextLink from 'next/link';
 
-import { RDPC_PREFIX } from '@icgc-argo/ego-token-utils';
 import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-argo/uikit';
 
 import { getConfig } from 'global/config';
@@ -133,33 +132,6 @@ type SampleRegistrationQueryResponse = {
   };
 };
 
-// Determine if User is authorized to submit data
-const getProgramAuthLevel = (program: SideMenuProgram, isRdpc: boolean, permissions: string[]) => {
-  const { shortName, regions } = program;
-
-  const programPermissionCodes = permissions.filter(
-    (code) => !SERVICE_CODES.includes(code.split('.')[0]),
-  );
-
-  if (isRdpc) {
-    const programRegionCode = RDPC_REGION_CODES[regions[0]];
-    const rdpcRegionPermissions = programPermissionCodes
-      .filter((authCode) => authCode.startsWith(RDPC_PREFIX))
-      .filter((authCode) => authCode.includes(programRegionCode));
-
-    return rdpcRegionPermissions.some((egoCode) => egoCode.includes('WRITE'))
-      ? USER_ROLES.ADMIN
-      : USER_ROLES.COLLAB;
-  }
-  const programPermissions = programPermissionCodes.filter((authCode) =>
-    authCode.includes(shortName),
-  );
-
-  return programPermissions.some((egoCode) => egoCode.includes('WRITE'))
-    ? USER_ROLES.ADMIN
-    : USER_ROLES.COLLAB;
-};
-
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
@@ -168,14 +140,6 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     FEATURE_SUBMIT_CLINICAL_ENABLED,
     FEATURE_FEDERATED_RDPC,
   } = getConfig();
-
-  const isDcc = useMemo(() => isDccMember(permissions), [permissions]);
-  const isRdpc = useMemo(() => isRdpcMember(permissions), [permissions]);
-
-  console.log(getProgramAuthLevel(props.program, isRdpc, permissions));
-  const programAuth = isDcc
-    ? USER_ROLES.ADMIN
-    : getProgramAuthLevel(props.program, isRdpc, permissions);
 
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(
     SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
