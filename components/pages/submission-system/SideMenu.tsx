@@ -221,129 +221,129 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   return (
     <div>
-      <NextLink
-        as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
-        href={PROGRAM_DASHBOARD_PATH}
-      >
-        <MenuItem
-          level={3}
-          content="Dashboard"
-          selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
-        />
-      </NextLink>
-      {canSeeCollaboratorView && (
+      {!FEATURE_FEDERATED_RDPC && (
         <>
           <NextLink
-            as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
-              PROGRAM_SHORT_NAME_PATH,
-              props.program.shortName,
-            )}
-            href={PROGRAM_SAMPLE_REGISTRATION_PATH}
+            as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
+            href={PROGRAM_DASHBOARD_PATH}
           >
             <MenuItem
               level={3}
-              content={
-                <StatusMenuItem>
-                  Register Samples
-                  {isSubmissionSystemDisabled ? (
-                    <Icon name="lock" fill="accent3_dark" width="15px" />
-                  ) : clinicalRegistrationHasError ? (
-                    <Icon name="exclamation" fill="error" width="15px" />
-                  ) : clinicalRegistrationInProgress ? (
-                    <Icon name="ellipses" fill="warning" width="15px" />
-                  ) : null}
-                </StatusMenuItem>
-              }
-              selected={
-                PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname && props.isCurrentlyViewed
-              }
+              content="Dashboard"
+              selected={PROGRAM_DASHBOARD_PATH === pageContext.pathname && props.isCurrentlyViewed}
             />
           </NextLink>
-          {FEATURE_SUBMIT_CLINICAL_ENABLED ? (
+          {canSeeCollaboratorView && (
             <NextLink
-              as={PROGRAM_SUBMIT_CLINICAL_PATH.replace(
+              as={PROGRAM_SAMPLE_REGISTRATION_PATH.replace(
                 PROGRAM_SHORT_NAME_PATH,
                 props.program.shortName,
               )}
-              href={PROGRAM_SUBMIT_CLINICAL_PATH}
-            >
-              <MenuItem
-                level={3}
-                content={<StatusMenuItem>Submit Clinical Data</StatusMenuItem>}
-                selected={
-                  PROGRAM_SUBMIT_CLINICAL_PATH === pageContext.pathname && props.isCurrentlyViewed
-                }
-              />
-            </NextLink>
-          ) : (
-            <NextLink
-              as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                props.program.shortName,
-              )}
-              href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+              href={PROGRAM_SAMPLE_REGISTRATION_PATH}
             >
               <MenuItem
                 level={3}
                 content={
                   <StatusMenuItem>
-                    Submit Clinical Data
+                    Register Samples
                     {isSubmissionSystemDisabled ? (
                       <Icon name="lock" fill="accent3_dark" width="15px" />
-                    ) : (
-                      (
-                        {
-                          OPEN: clinicalSubmissionHasSchemaErrors ? (
-                            <Icon name="exclamation" fill="error" width="15px" />
-                          ) : (
-                            <Icon name="ellipses" fill="warning" width="15px" />
-                          ),
-                          VALID: <Icon name="ellipses" fill="warning" width="15px" />,
-                          INVALID: <Icon name="exclamation" fill="error" width="15px" />,
-                          INVALID_BY_MIGRATION: (
-                            <Icon name="exclamation" fill="error" width="15px" />
-                          ),
-                          PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
-                          // submission state remains as null and rejects creating open state with initial invalid upload
-                          // if errors exist, error icon should still show up despite the null state
-                          [null as any]: clinicalSubmissionHasSchemaErrors ? (
-                            <Icon name="exclamation" fill="error" width="15px" />
-                          ) : null,
-                        } as { [k in typeof data.clinicalSubmissions.state]: ReactNode }
-                      )[data ? data.clinicalSubmissions.state : null]
-                    )}
+                    ) : clinicalRegistrationHasError ? (
+                      <Icon name="exclamation" fill="error" width="15px" />
+                    ) : clinicalRegistrationInProgress ? (
+                      <Icon name="ellipses" fill="warning" width="15px" />
+                    ) : null}
                   </StatusMenuItem>
                 }
                 selected={
-                  PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname &&
+                  PROGRAM_SAMPLE_REGISTRATION_PATH === pageContext.pathname &&
                   props.isCurrentlyViewed
                 }
               />
             </NextLink>
           )}
-          {FEATURE_SUBMITTED_DATA_ENABLED && (
-            <NextLink
-              as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
-                PROGRAM_SHORT_NAME_PATH,
-                props.program.shortName,
-              )}?tab=donor`}
-              href={PROGRAM_CLINICAL_DATA_PATH}
-            >
-              <MenuItem
-                level={3}
-                content={
-                  <StatusMenuItem>
-                    Submitted Data{' '}
-                    {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
-                  </StatusMenuItem>
-                }
-                selected={
-                  PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
-                }
-              />
-            </NextLink>
-          )}
         </>
+      )}
+      {FEATURE_SUBMIT_CLINICAL_ENABLED ? (
+        <NextLink
+          as={PROGRAM_SUBMIT_CLINICAL_PATH.replace(
+            PROGRAM_SHORT_NAME_PATH,
+            props.program.shortName,
+          )}
+          href={PROGRAM_SUBMIT_CLINICAL_PATH}
+        >
+          <MenuItem
+            level={3}
+            content={<StatusMenuItem>Submit Clinical Data</StatusMenuItem>}
+            selected={
+              PROGRAM_SUBMIT_CLINICAL_PATH === pageContext.pathname && props.isCurrentlyViewed
+            }
+          />
+        </NextLink>
+      ) : (
+        <NextLink
+          as={PROGRAM_CLINICAL_SUBMISSION_PATH.replace(
+            PROGRAM_SHORT_NAME_PATH,
+            props.program.shortName,
+          )}
+          href={PROGRAM_CLINICAL_SUBMISSION_PATH}
+        >
+          <MenuItem
+            level={3}
+            content={
+              <StatusMenuItem>
+                Submit Clinical Data
+                {isSubmissionSystemDisabled ? (
+                  <Icon name="lock" fill="accent3_dark" width="15px" />
+                ) : (
+                  (
+                    {
+                      OPEN: clinicalSubmissionHasSchemaErrors ? (
+                        <Icon name="exclamation" fill="error" width="15px" />
+                      ) : (
+                        <Icon name="ellipses" fill="warning" width="15px" />
+                      ),
+                      VALID: <Icon name="ellipses" fill="warning" width="15px" />,
+                      INVALID: <Icon name="exclamation" fill="error" width="15px" />,
+                      INVALID_BY_MIGRATION: <Icon name="exclamation" fill="error" width="15px" />,
+                      PENDING_APPROVAL: <Icon name="lock" fill="accent3_dark" width="15px" />,
+                      // submission state remains as null and rejects creating open state with initial invalid upload
+                      // if errors exist, error icon should still show up despite the null state
+                      [null as any]: clinicalSubmissionHasSchemaErrors ? (
+                        <Icon name="exclamation" fill="error" width="15px" />
+                      ) : null,
+                    } as { [k in typeof data.clinicalSubmissions.state]: ReactNode }
+                  )[data ? data.clinicalSubmissions.state : null]
+                )}
+              </StatusMenuItem>
+            }
+            selected={
+              PROGRAM_CLINICAL_SUBMISSION_PATH === pageContext.pathname && props.isCurrentlyViewed
+            }
+          />
+        </NextLink>
+      )}
+      {!FEATURE_FEDERATED_RDPC && FEATURE_SUBMITTED_DATA_ENABLED && (
+        <NextLink
+          as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
+            PROGRAM_SHORT_NAME_PATH,
+            props.program.shortName,
+          )}?tab=donor`}
+          href={PROGRAM_CLINICAL_DATA_PATH}
+        >
+          <MenuItem
+            level={3}
+            content={
+              <StatusMenuItem>
+                Submitted Data{' '}
+                {clinicalDataHasErrors && <Icon name="exclamation" fill="error" width="15px" />}
+              </StatusMenuItem>
+            }
+            selected={
+              PROGRAM_CLINICAL_DATA_PATH === pageContext.pathname && props.isCurrentlyViewed
+            }
+          />
+        </NextLink>
       )}
       {canWriteToProgram && (
         <NextLink
