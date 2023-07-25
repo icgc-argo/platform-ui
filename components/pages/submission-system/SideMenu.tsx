@@ -26,7 +26,7 @@ import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-ar
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { canWriteProgram, isCollaborator, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import { isCollaborator, isDccMember, isProgramAdmin, isRdpcMember } from 'global/utils/egoJwt';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
 import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
@@ -50,7 +50,7 @@ import {
 } from './program-submitted-data/common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo } from 'react';
 
 type SideMenuProgram = {
   shortName: string;
@@ -169,10 +169,11 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
       })
     );
   }, [egoJwt]);
-  const canWriteToProgram = useMemo(() => {
+
+  const canManageProgram = useMemo(() => {
     return (
       egoJwt &&
-      canWriteProgram({
+      isProgramAdmin({
         permissions,
         programId: props.program.shortName,
       })
@@ -305,7 +306,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           />
         </NextLink>
       )}
-      {canWriteToProgram && (
+      {canManageProgram && (
         <NextLink
           as={PROGRAM_MANAGE_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
           href={PROGRAM_MANAGE_PATH}
