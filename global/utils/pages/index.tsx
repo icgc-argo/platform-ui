@@ -19,17 +19,13 @@
 
 import orderBy from 'lodash/orderBy';
 import {
-  LOGIN_PAGE_PATH,
   PROGRAMS_LIST_PATH,
   USER_PAGE_PATH,
-  PROGRAM_MANAGE_PATH,
   PROGRAM_SHORT_NAME_PATH,
-  RDPC_PATH,
   PROGRAM_DASHBOARD_PATH,
 } from 'global/constants/pages';
 import {
   isDccMember,
-  isRdpcMember,
   canReadSomeProgram,
   getReadableProgramShortNames,
   getAuthorizedProgramScopes,

@@ -1087,7 +1087,7 @@ export type Query = {
   /** Retrieve all stored Clinical Entity and Donor Completion data for a program */
   clinicalData: ClinicalData;
   /** Retrieve all stored Clinical Migration Errors for a program */
-  clinicalErrors: ClinicalData;
+  clinicalErrors: Array<ClinicalErrors>;
   /** Retrieve current stored Clinical Registration data for a program */
   clinicalRegistration: ClinicalRegistrationData;
   /** Retrieve DonorIds + Submitter Donor Ids for given Clinical Entity and Program */
@@ -1132,7 +1132,7 @@ export type QueryClinicalDataArgs = {
 
 
 export type QueryClinicalErrorsArgs = {
-  filters: ClinicalInput;
+  donorIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   programShortName: Scalars['String'];
 };
 

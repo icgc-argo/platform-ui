@@ -51,6 +51,7 @@ export const getConfig = () => {
       publicConfig.FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED === 'true',
     FEATURE_REACT_TABLE_V8_ENABLED: publicConfig.FEATURE_REACT_TABLE_V8_ENABLED === 'true',
     FEATURE_SUBMIT_CLINICAL_ENABLED: publicConfig.FEATURE_SUBMIT_CLINICAL_ENABLED === 'true',
+    FEATURE_FEDERATED_RDPC: publicConfig.FEATURE_FEDERATED_RDPC === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -73,5 +74,6 @@ export const getConfig = () => {
     FEATURE_PROGRAM_DASHBOARD_RNA_ENABLED: boolean;
     FEATURE_REACT_TABLE_V8_ENABLED: boolean;
     FEATURE_SUBMIT_CLINICAL_ENABLED: boolean;
+    FEATURE_FEDERATED_RDPC: boolean;
   };
 };
