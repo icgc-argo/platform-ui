@@ -81,10 +81,12 @@ const ClinicalDownloadButton = ({
   const [buttonLoadingState, setButtonLoadingState] = React.useState(false);
   const { donorIds, submitterDonorIds } = tsvDownloadIds;
 
-  const query = queryString.stringify(
-    { donorIds, submitterDonorIds, entityTypes, completionState },
-    { arrayFormat: 'comma' },
-  );
+  const query = JSON.stringify({
+    donorIds,
+    submitterDonorIds,
+    entityTypes,
+    completionState,
+  });
 
   const handleDownloadAllError = () => {
     toaster.addToast({
@@ -104,12 +106,15 @@ const ClinicalDownloadButton = ({
       `/clinical/program/`,
       programShortName,
       `/clinical-data-tsv`,
-      `?${query}`,
     );
 
     setButtonLoadingState(true);
 
-    downloadFileWithEgoToken(url, { method: 'post' })
+    downloadFileWithEgoToken(url, {
+      method: 'post',
+      body: query,
+      headers: { 'Content-Type': 'application/json' },
+    })
       .then(() => {
         setButtonLoadingState(false);
       })
