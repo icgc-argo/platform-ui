@@ -121,6 +121,7 @@ export default function ProgramSubmitClinical() {
                     href={RDPC_PORTAL_URL}
                     bold
                     css={css`
+                      color: ${theme.colors.primary};
                       font-size: 20px;
                     `}
                   >
