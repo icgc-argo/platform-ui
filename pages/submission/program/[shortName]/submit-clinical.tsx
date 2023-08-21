@@ -19,7 +19,7 @@
 
 import ProgramSubmitClinical from 'components/pages/submission-system/program-submit-clinical';
 import { getConfig } from 'global/config';
-import { canReadProgram, canWriteProgramData } from 'global/utils/egoJwt';
+import { canReadProgram } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 
