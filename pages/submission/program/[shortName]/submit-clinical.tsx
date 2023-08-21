@@ -29,10 +29,7 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return (
-      canReadProgram({ permissions, programId: shortName }) &&
-      canWriteProgramData({ permissions, programId: shortName })
-    );
+    return canReadProgram({ permissions, programId: shortName });
   },
   getInitialProps: async () => {
     const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
