@@ -123,6 +123,7 @@ export default function ProgramSubmitClinical() {
                     css={css`
                       color: ${theme.colors.primary};
                       font-size: 20px;
+                      margin-left: 20px;
                     `}
                   >
                     Submit Data: Access RDPC Portal to submit clinical and molecular data.
