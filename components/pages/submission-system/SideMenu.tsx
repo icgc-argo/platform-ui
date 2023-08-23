@@ -26,7 +26,13 @@ import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-ar
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { isCollaborator, isDccMember, isProgramAdmin, isRdpcMember } from 'global/utils/egoJwt';
+import {
+  isCollaborator,
+  isDccMember,
+  isProgramAdmin,
+  isRdpcMember,
+  isRdpcAdmin,
+} from 'global/utils/egoJwt';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
 import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
@@ -173,10 +179,11 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const canManageProgram = useMemo(() => {
     return (
       egoJwt &&
-      isProgramAdmin({
+      (isProgramAdmin({
         permissions,
         programId: props.program.shortName,
-      })
+      }) ||
+        isRdpcAdmin(permissions))
     );
   }, [egoJwt]);
 

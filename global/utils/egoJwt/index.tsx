@@ -67,6 +67,8 @@ export const isProgramAdmin: (args: { permissions: string[]; programId: string }
   args,
 ) => TokenUtils.isProgramAdmin(args);
 
+export const isRdpcAdmin = (permissions: string[]): boolean => TokenUtils.isRdpcAdmin(permissions);
+
 export const getReadableProgramShortNames = (scopes: PermissionScopeObj[]): Array<string> =>
   TokenUtils.getReadableProgramShortNames(scopes);
 
