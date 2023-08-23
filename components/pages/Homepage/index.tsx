@@ -137,7 +137,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
         >
-          Software Release UI 1.119.1 - API 3.38.1
+          Software Release UI 1.124.1 - API 3.40.0
         </Link>{' '}
         are now available.
       </>
