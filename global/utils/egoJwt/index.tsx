@@ -26,7 +26,7 @@ const TokenUtils = createEgoUtils(getConfig().EGO_PUBLIC_KEY);
 
 type PermissionScopeObj = {
   policy: string;
-  permission: 'READ' | 'WRITE' | 'ADMIN' | 'DENY';
+  permission: 'READ' | 'WRITE' | 'DENY';
 };
 
 export const decodeToken = memoize((egoJwt?: string) =>
