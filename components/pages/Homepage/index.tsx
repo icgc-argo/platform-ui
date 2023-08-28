@@ -114,35 +114,6 @@ const newsItems: NewsItem[] = [
       </>
     ),
   },
-  {
-    title: 'New Features',
-    text: (
-      <>
-        Program dashboards have been updated with new features to view the submitted RNA Sequencing
-        data.
-        <br />
-        <br />
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
-        >
-          ARGO Data Dictionary 1.18
-        </Link>
-        ,{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
-          Data Release 6.0
-        </Link>
-        , and{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
-        >
-          Software Release UI 1.124.1 - API 3.40.0
-        </Link>{' '}
-        are now available.
-      </>
-    ),
-  },
 ];
 
 const SeparationLine: ComponentType<{}> = () => {
