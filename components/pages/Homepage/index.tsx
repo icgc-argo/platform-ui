@@ -114,6 +114,31 @@ const newsItems: NewsItem[] = [
       </>
     ),
   },
+  {
+    title: '',
+    text: (
+      <>
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
+        >
+          ARGO Data Dictionary 1.18
+        </Link>
+        ,{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
+          Data Release 6.0
+        </Link>
+        , and{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
+        >
+          Software Release UI 1.124.1 - API 3.40.0
+        </Link>{' '}
+        are now available.
+      </>
+    ),
+  },
 ];
 
 const SeparationLine: ComponentType<{}> = () => {
