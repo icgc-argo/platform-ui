@@ -50,6 +50,18 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'August 25, 2023',
+    text: (
+      <>
+        We are excited to announce{' '}
+        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
+          Dictionary 1.18{' '}
+        </Link>{' '}
+        is now available.
+      </>
+    ),
+  },
+  {
     title: 'June 8, 2023',
     text: (
       <>
@@ -103,18 +115,6 @@ const newsItems: NewsItem[] = [
     ),
   },
   {
-    title: 'January 30, 2023',
-    text: (
-      <>
-        We are excited to announce{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-          Dictionary 1.16
-        </Link>{' '}
-        is now available.
-      </>
-    ),
-  },
-  {
     title: 'New Features',
     text: (
       <>
@@ -124,13 +124,13 @@ const newsItems: NewsItem[] = [
         <br />
         <Link
           target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-116"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
         >
-          ARGO Data Dictionary 1.16
+          ARGO Data Dictionary 1.18
         </Link>
         ,{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
-          Data Release 5.0
+          Data Release 6.0
         </Link>
         , and{' '}
         <Link
