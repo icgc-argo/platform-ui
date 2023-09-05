@@ -47,6 +47,7 @@ import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
 import {
   ClinicalEntityQueryResponse,
   defaultClinicalEntityFilters,
+  emptyClinicalDataResponse,
 } from './program-submitted-data/common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
@@ -137,15 +138,14 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
     },
   );
 
-  const { data: sideMenuQuery } =
-    FEATURE_SUBMITTED_DATA_ENABLED &&
+  const { data: sideMenuQuery } = (FEATURE_SUBMITTED_DATA_ENABLED &&
     useQuery<ClinicalEntityQueryResponse>(SUBMITTED_DATA_SIDE_MENU_QUERY, {
       errorPolicy: 'all',
       variables: {
         programShortName: props.program.shortName,
         filters: defaultClinicalEntityFilters,
       },
-    });
+    })) || { data: emptyClinicalDataResponse };
   const clinicalDataHasErrors = sideMenuQuery?.clinicalData.clinicalErrors.length > 0;
 
   const clinicalRegistration = clinicalData && clinicalData.clinicalRegistration;

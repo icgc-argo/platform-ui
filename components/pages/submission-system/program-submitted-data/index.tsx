@@ -46,7 +46,7 @@ import {
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
   defaultClinicalEntityFilters,
-  emptyResponse,
+  emptyClinicalDataResponse,
   CompletionStates,
   emptySearchResponse,
   hasClinicalErrors,
@@ -153,7 +153,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   }, [sideMenuLoading]);
 
   const sideMenuData =
-    sideMenuQuery == undefined || sideMenuLoading ? emptyResponse : sideMenuQuery;
+    sideMenuQuery == undefined || sideMenuLoading ? emptyClinicalDataResponse : sideMenuQuery;
 
   const { clinicalData } = sideMenuData;
 

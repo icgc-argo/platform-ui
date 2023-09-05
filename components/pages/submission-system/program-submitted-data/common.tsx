@@ -209,7 +209,7 @@ export const hasClinicalErrors = (
       ),
   ).length > 0;
 
-export const emptyResponse: ClinicalEntityQueryResponse = {
+export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
   clinicalData: {
     clinicalEntities: [],
     clinicalErrors: [],
