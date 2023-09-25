@@ -43,7 +43,7 @@ import {
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
   defaultClinicalEntityFilters,
-  emptyResponse,
+  emptyClinicalDataResponse,
   emptySearchResponse,
   clinicalEntityDisplayNames,
   CompletionStates,
@@ -291,7 +291,7 @@ const ClinicalEntityDataTable = ({
   );
 
   const { clinicalData } =
-    clinicalEntityData == undefined || loading ? emptyResponse : clinicalEntityData;
+    clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
 
   const noTableData = noData || clinicalData.clinicalEntities.length === 0;
 
