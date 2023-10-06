@@ -103,7 +103,7 @@ const ClinicalDownloadButton = ({
 
     const url = urlJoin(
       GATEWAY_API_ROOT,
-      `/clinical/program/`,
+      `/clinical/proxy/program/`,
       programShortName,
       `/clinical-data-tsv`,
     );
