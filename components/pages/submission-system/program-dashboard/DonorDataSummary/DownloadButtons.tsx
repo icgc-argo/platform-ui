@@ -88,7 +88,9 @@ const DownloadButtons = () => {
 
     const url = urlJoin(
       GATEWAY_API_ROOT,
-      `/clinical/program/${programShortName}/all-clinical-data`,
+      `/clinical/proxy/program`,
+      programShortName,
+      `all-clinical-data`,
     );
 
     setButtonLoadingState(true);
