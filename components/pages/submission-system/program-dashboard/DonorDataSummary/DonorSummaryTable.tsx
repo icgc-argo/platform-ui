@@ -478,10 +478,14 @@ const DonorSummaryTable = ({
 
   const errorLinkData = clinicalErrorData
     ? donorsWithErrors.map((donorId) => {
+        // There is currently  an edge case where there are multiple entries in the clinicalErrors list with the same donorId,
+        //  and in a subset of these cases one of those can have an empty `errors` list. Filtering to only find clinicalError
+        //  objects with entries in the errors list will prevent a crash when this data is returned. A proper fix is ticketed
+        //  for work in the clinical service api https://github.com/icgc-argo/argo-clinical/issues/1084
         const currentDonor = clinicalErrorData.clinicalData.clinicalErrors.find(
-          (donor) => donorId === donor.donorId,
+          (donor) => donorId === donor.donorId && donor.errors && donor.errors.length,
         );
-        const entity = currentDonor?.errors[0].entityName;
+        const entity = currentDonor?.errors[0]?.entityName;
         return { donorId, entity };
       })
     : [];
