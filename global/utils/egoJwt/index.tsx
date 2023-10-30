@@ -26,7 +26,7 @@ const TokenUtils = createEgoUtils(getConfig().EGO_PUBLIC_KEY);
 
 type PermissionScopeObj = {
   policy: string;
-  permission: 'READ' | 'WRITE' | 'ADMIN' | 'DENY';
+  permission: 'READ' | 'WRITE' | 'DENY';
 };
 
 export const decodeToken = memoize((egoJwt?: string) =>
@@ -112,5 +112,8 @@ export const isCollaborator: (args: { permissions: string[]; programId: string }
   canReadProgram({ permissions, programId }) &&
   !canWriteProgramData({ permissions, programId });
 
-export const getProgramMembershipAccessLevel = (permissions: string[]): any =>
+export const getProgramMembershipAccessLevel = (permissions: string[]) =>
   TokenUtils.getProgramMembershipAccessLevel({ permissions });
+
+export const hasDacoAccess = (permissions: string[]): boolean =>
+  TokenUtils.isDacoApproved(permissions);
