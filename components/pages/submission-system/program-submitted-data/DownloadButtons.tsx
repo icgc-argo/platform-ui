@@ -87,11 +87,6 @@ const ClinicalDownloadButton = ({
     completionState,
   });
 
-  const handleDownloadAllError = () => {
-    toaster.onDownloadError(err.message);
-    setButtonLoadingState(false);
-  };
-
   const onClickDownloadAll = () => {
     const { GATEWAY_API_ROOT } = getConfig();
 
@@ -112,7 +107,10 @@ const ClinicalDownloadButton = ({
       .then(() => {
         setButtonLoadingState(false);
       })
-      .catch(handleDownloadAllError);
+      .catch((error) => {
+        toaster.onDownloadError(error);
+        setButtonLoadingState(false);
+      });
   };
 
   return (
