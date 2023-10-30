@@ -87,7 +87,6 @@ const DownloadDropdown: ComponentType<{
       }
       case DropdownOptions.FILE: {
         const downloadUrl = urljoin(GATEWAY_API_ROOT, API_PATH_DOWNLOAD_FILE, props.objectId);
-        // window.location.assign(tsvdownloadUrl);
         downloadFileWithEgoToken(downloadUrl)
           .then(() => setLoading(false))
           .catch((err) => {
