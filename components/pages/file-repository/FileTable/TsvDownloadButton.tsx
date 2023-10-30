@@ -63,8 +63,6 @@ const TsvDownloadButton = ({
 }: {
   allFilesSelected: boolean;
   selectedFilesCount: number;
-  // selectedDonorsCount: number;
-  // selectedFilesWithClinicalData: string[];
   selectedFilesObjectIds: string[];
   unSelectedFilesObjectIds: string[];
 }) => {
