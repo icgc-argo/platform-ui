@@ -22,15 +22,16 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { ComponentType, useState } from 'react';
 
-import sqonBuilder from 'sqon-builder';
-import { FileCentricDocumentFields } from '../file-repository/types';
-import DownloadDropdown from './DownloadDropdown';
-import urljoin from 'url-join';
-import { DownloadIcon } from './common';
+import useCommonToasters from 'components/useCommonToasters';
 import {
   API_PATH_DOWNLOAD_FILE,
   API_PATH_DOWNLOAD_MANIFEST,
 } from 'global/constants/gatewayApiPaths';
+import sqonBuilder from 'sqon-builder';
+import urljoin from 'url-join';
+import { FileCentricDocumentFields } from '../file-repository/types';
+import { DownloadIcon } from './common';
+import DownloadDropdown from './DownloadDropdown';
 
 const { FEATURE_CLINICAL_DOWNLOAD, MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
@@ -103,6 +104,7 @@ export const FileTitleBar: ComponentType<{
   fileObjectId,
 }) => {
   const theme = useTheme();
+  const toaster = useCommonToasters();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
   const filter = sqonBuilder.has(FileCentricDocumentFields['file_id'], fileId).build();
@@ -172,8 +174,11 @@ export const FileTitleBar: ComponentType<{
                   );
 
                   await downloadFileWithEgoToken(downloadUrl)
-                    .catch((err) => console.error(err))
-                    .finally(() => setIsDownloading(false));
+                    .then(() => setIsDownloading(false))
+                    .catch((err) => {
+                      setIsDownloading(false);
+                      toaster.onDownloadError(err.message);
+                    });
                 }}
               >
                 <DownloadIcon />
