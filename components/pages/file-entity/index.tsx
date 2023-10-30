@@ -62,7 +62,6 @@ const FileEntity = ({ fileId }) => {
   const isFileDownloadEnabled =
     size < MAX_FILE_DOWNLOAD_SIZE &&
     (access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true);
-  console.log(`isFileDownloadEnabled`, isFileDownloadEnabled);
 
   const isClinicalDownloadEnabled = data?.summary?.hasClinicalData && isDacoApproved;
 
