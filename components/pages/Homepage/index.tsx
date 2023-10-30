@@ -53,7 +53,7 @@ const newsItems: NewsItem[] = [
     title: 'October 18, 2023',
     text: (
       <>
-        We are excited to announce the Lost to follow up feature and{' '}
+        We are excited to announce the Lost to Follow Up feature and{' '}
         <Link href="https://docs.icgc-argo.org/dictionary" target="_blank">
           Dictionary 1.19
         </Link>{' '}
