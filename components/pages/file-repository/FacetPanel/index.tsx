@@ -26,6 +26,7 @@ import {
   Input,
   MenuItem,
   NumberRangeFacet,
+  OptionsListFilterOption,
   styled,
   SubMenu,
   Tab,
@@ -44,7 +45,7 @@ import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
-import { FileCentricDocumentField } from '../types';
+import { FileCentricDocumentFields } from '../types';
 import {
   currentFieldValue,
   getDisplayName,
@@ -52,6 +53,7 @@ import {
   inCurrentFilters,
   removeFilter,
   replaceFilter,
+  clinicalDisplayValues,
   toDisplayValue,
   toggleFilter,
 } from '../utils';
@@ -92,75 +94,81 @@ const createPresetFacets = (
     name: displayNames['embargo_stage'],
     facetPath: FileFacetPath.embargo_stage,
     variant: 'Tooltip',
-    esDocumentField: FileCentricDocumentField.embargo_stage,
+    esDocumentField: FileCentricDocumentFields.embargo_stage,
     highlight: true,
   },
   {
     name: displayNames['release_state'],
     facetPath: FileFacetPath.release_state,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.release_state,
+    esDocumentField: FileCentricDocumentFields.release_state,
     highlight: true,
   },
   {
     name: displayNames['study_id'],
     facetPath: FileFacetPath.study_id,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.study_id,
+    esDocumentField: FileCentricDocumentFields.study_id,
   },
   {
     name: displayNames['donors.specimens.specimen_type'],
     facetPath: FileFacetPath.donors__specimens__specimen_type,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_type'],
+    esDocumentField: FileCentricDocumentFields['donors.specimens.specimen_type'],
   },
   {
     name: displayNames['donors.specimens.specimen_tissue_source'],
     facetPath: FileFacetPath.donors__specimens__specimen_tissue_source,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['donors.specimens.specimen_tissue_source'],
+    esDocumentField: FileCentricDocumentFields['donors.specimens.specimen_tissue_source'],
+  },
+  {
+    name: displayNames['has_clinical_data'],
+    facetPath: FileFacetPath.has_clinical_data,
+    variant: 'ClinicalData',
+    esDocumentField: FileCentricDocumentFields.has_clinical_data,
   },
   {
     name: displayNames['analysis.experiment.experimental_strategy'],
     facetPath: FileFacetPath.analysis__experiment__experimental_strategy,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+    esDocumentField: FileCentricDocumentFields['analysis.experiment.experimental_strategy'],
   },
   {
     name: displayNames['data_category'],
     facetPath: FileFacetPath.data_category,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['data_category'],
+    esDocumentField: FileCentricDocumentFields['data_category'],
   },
   {
     name: displayNames['data_type'],
     facetPath: FileFacetPath.data_type,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['data_type'],
+    esDocumentField: FileCentricDocumentFields['data_type'],
   },
   {
     name: displayNames['file_type'],
     facetPath: FileFacetPath.file_type,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_type,
+    esDocumentField: FileCentricDocumentFields.file_type,
   },
   {
     name: displayNames['file_access'],
     facetPath: FileFacetPath.file_access,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField.file_access,
+    esDocumentField: FileCentricDocumentFields.file_access,
   },
   {
     name: displayNames['analysis.workflow.workflow_name'],
     facetPath: FileFacetPath.analysis__workflow__workflow_name,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis.workflow.workflow_name'],
+    esDocumentField: FileCentricDocumentFields['analysis.workflow.workflow_name'],
   },
   {
     name: displayNames['analysis_tools'],
     facetPath: FileFacetPath.analysis_tools,
     variant: 'Basic',
-    esDocumentField: FileCentricDocumentField['analysis_tools'],
+    esDocumentField: FileCentricDocumentFields['analysis_tools'],
   },
 ];
 
@@ -169,15 +177,14 @@ const legacyDefaultTabs = [
   FileFacetPath.study_id,
   FileFacetPath.donors__specimens__specimen_type,
   FileFacetPath.donors__specimens__specimen_tissue_source,
-  FileFacetPath.release_state,
-  FileFacetPath.embargo_stage,
   FileFacetPath.analysis__experiment__experimental_strategy,
   FileFacetPath.data_category,
   FileFacetPath.data_type,
+  FileFacetPath.has_clinical_data,
   FileFacetPath.file_type,
   FileFacetPath.file_access,
   FileFacetPath.analysis__workflow__workflow_name,
-  FileCentricDocumentField.analysis_tools,
+  FileCentricDocumentFields.analysis_tools,
   FileFacetPath.release_state,
   FileFacetPath.embargo_stage,
 ];
@@ -185,6 +192,7 @@ const legacyDefaultTabs = [
 const facetTabs = {
   clinical: [
     FileFacetPath.study_id,
+    FileFacetPath.has_clinical_data,
     FileFacetPath.donors__specimens__specimen_type,
     FileFacetPath.donors__specimens__specimen_tissue_source,
     FileFacetPath.release_state,
@@ -197,7 +205,7 @@ const facetTabs = {
     FileFacetPath.file_type,
     FileFacetPath.file_access,
     FileFacetPath.analysis__workflow__workflow_name,
-    FileCentricDocumentField.analysis_tools,
+    FileCentricDocumentFields.analysis_tools,
     FileFacetPath.release_state,
     FileFacetPath.embargo_stage,
   ],
@@ -247,8 +255,8 @@ export const useDonorIdSearchQuery = (
             content: {
               value: `*${searchValue}*`,
               fields: [
-                FileCentricDocumentField['donors.donor_id'],
-                FileCentricDocumentField['donors.submitter_donor_id'],
+                FileCentricDocumentFields['donors.donor_id'],
+                FileCentricDocumentFields['donors.submitter_donor_id'],
               ],
             },
           },
@@ -258,7 +266,7 @@ export const useDonorIdSearchQuery = (
               {
                 op: 'in' as ArrayFieldKeys,
                 content: {
-                  field: FileCentricDocumentField['donors.donor_id'],
+                  field: FileCentricDocumentFields['donors.donor_id'],
                   value: excludedIds,
                 },
               },
@@ -270,7 +278,7 @@ export const useDonorIdSearchQuery = (
               {
                 op: 'in' as ArrayFieldKeys,
                 content: {
-                  field: FileCentricDocumentField['donors.submitter_donor_id'],
+                  field: FileCentricDocumentFields['donors.submitter_donor_id'],
                   value: excludedIds,
                 },
               },
@@ -307,7 +315,7 @@ const useFileIdSearchQuery = (
   const fileIDQueryFilter = FEATURE_FACET_TABS_ENABLED
     ? {
         value: `*${searchValue}*`,
-        fields: [FileCentricDocumentField['object_id'], FileCentricDocumentField['file_id']],
+        fields: [FileCentricDocumentFields['object_id'], FileCentricDocumentFields['file_id']],
       }
     : {
         value: `*${searchValue.toLowerCase()}*`,
@@ -334,7 +342,7 @@ const useFileIdSearchQuery = (
               {
                 op: 'in' as ArrayFieldKeys,
                 content: {
-                  field: FileCentricDocumentField['object_id'],
+                  field: FileCentricDocumentFields['object_id'],
                   value: excludedIds,
                 },
               },
@@ -346,7 +354,7 @@ const useFileIdSearchQuery = (
               {
                 op: 'in' as ArrayFieldKeys,
                 content: {
-                  field: FileCentricDocumentField['file_id'],
+                  field: FileCentricDocumentFields['file_id'],
                   value: excludedIds,
                 },
               },
@@ -377,7 +385,7 @@ const fileIDSearch: FacetDetails = {
   searchQuery: useFileIdSearchQuery,
   facetPath: FileFacetPath.file_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField.file_id,
+  esDocumentField: FileCentricDocumentFields.file_id,
   placeholderText: 'e.g. FL13796, 009f4750-e167...',
   tooltipContent: 'Enter a File ID or Object ID.',
 };
@@ -387,7 +395,7 @@ const donorIDSearch: FacetDetails = {
   searchQuery: useDonorIdSearchQuery,
   facetPath: FileFacetPath.donor_id,
   variant: 'Other',
-  esDocumentField: FileCentricDocumentField['donors.donor_id'],
+  esDocumentField: FileCentricDocumentFields['donors.donor_id'],
   placeholderText: 'e.g. DO35083, PCSI_0103...',
   tooltipContent: 'Enter a Donor ID or Submitter Donor ID.',
 };
@@ -411,7 +419,7 @@ const FacetPanel = () => {
   const [expandedFacets, setExpandedFacets] = useState(
     [...presetFacets, fileIDSearch, donorIDSearch].map((facet) => facet.facetPath),
   );
-  const uploadDisabled = false; // TODO: implement correctly
+
   const theme = useTheme();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
@@ -419,7 +427,8 @@ const FacetPanel = () => {
 
   const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
-      setAggregations(data ? data.file.aggregations : {});
+      console.log('useFileFacetQuery complete', data);
+      setAggregations(data ? data?.file?.aggregations : {});
     },
   });
 
@@ -439,7 +448,7 @@ const FacetPanel = () => {
 
   const excludedIds = (currentFieldValue({
     filters,
-    dotField: FileCentricDocumentField[currentSearch.esDocumentField],
+    dotField: FileCentricDocumentFields[currentSearch.esDocumentField],
     op: 'in',
   }) || []) as Array<string>;
 
@@ -450,15 +459,21 @@ const FacetPanel = () => {
     excludedIds,
   );
 
-  const getOptions: GetAggregationResult = (facet) => {
-    const options = (aggregations[facet.facetPath] || { buckets: [] }).buckets.map((bucket) => ({
-      ...bucket,
-      isChecked: inCurrentFilters({
-        currentFilters: filters,
-        value: bucket.key,
-        dotField: facet.esDocumentField,
-      }),
-    }));
+  const getOptions = (facet: FacetDetails) => {
+    const options: OptionsListFilterOption[] = (
+      aggregations[facet.facetPath] || { buckets: [] }
+    ).buckets.map((bucket) => {
+      const bucketKey = bucket.key_as_string ? bucket.key_as_string : bucket.key;
+      return {
+        ...bucket,
+        key: bucketKey,
+        isChecked: inCurrentFilters({
+          currentFilters: filters,
+          value: bucketKey,
+          dotField: facet.esDocumentField,
+        }),
+      };
+    });
 
     // Control ordering of options for specific facets
     switch (facet.facetPath) {
@@ -592,7 +607,7 @@ const FacetPanel = () => {
   `;
   const onRemoveSelectedId = (id: string) => {
     const idFilterToRemove = SqonBuilder.has(
-      FileCentricDocumentField[currentSearch.esDocumentField],
+      FileCentricDocumentFields[currentSearch.esDocumentField],
       id,
     ).build();
     replaceAllFilters(toggleFilter(idFilterToRemove, filters));
@@ -732,7 +747,7 @@ const FacetPanel = () => {
                       isLoading={idSearchLoading}
                       onSelect={(value) => {
                         setFilterFromFieldAndValue({
-                          field: FileCentricDocumentField[currentSearch.esDocumentField],
+                          field: FileCentricDocumentFields[currentSearch.esDocumentField],
                           value,
                         });
                         setSearchQuery('');
@@ -762,18 +777,19 @@ const FacetPanel = () => {
           presetFacets
             // Conditionally filter embargo_stage facet
             .filter((f) => {
-              return embargoStageEnabled || f.facetPath !== FileFacetPath.embargo_stage;
+              return f.facetPath === FileFacetPath.embargo_stage ? embargoStageEnabled : true;
             })
             //Conditionally filter release_state facet
             .filter((f) => {
-              return releaseStateEnabled || f.facetPath !== FileFacetPath.release_state;
+              return f.facetPath === FileFacetPath.release_state ? releaseStateEnabled : true;
             })
             .filter((f) => {
+              // show facets based on tabs if this feature is enabled.
               return FEATURE_FACET_TABS_ENABLED
                 ? facetTabs[currentTab].includes(f.facetPath)
                 : legacyDefaultTabs.includes(f.facetPath);
             })
-            .map((facetDetails) => {
+            .map((facetDetails, index) => {
               const facetProps = commonFacetProps(facetDetails);
               const highlightCss = facetDetails.highlight
                 ? css`
@@ -795,7 +811,11 @@ const FacetPanel = () => {
                 : css``;
 
               return (
-                <FacetRow key={facetDetails.name} className={'FacetRow'} css={highlightCss}>
+                <FacetRow
+                  key={`${facetDetails.name}-${index}`}
+                  className={'FacetRow'}
+                  css={highlightCss}
+                >
                   {facetDetails.variant === 'Basic' && (
                     <Facet
                       {...facetProps}
@@ -825,6 +845,17 @@ const FacetPanel = () => {
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
                       parseDisplayValue={(key) => getDisplayName(facetDetails.esDocumentField, key)}
                       tooltipContent={getTooltipContent(facetDetails.facetPath)}
+                    />
+                  )}
+                  {facetDetails.variant === 'ClinicalData' && (
+                    <Facet
+                      {...facetProps}
+                      key={facetDetails.name}
+                      options={getOptions(facetDetails)}
+                      countUnit={'files'}
+                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      parseDisplayValue={clinicalDisplayValues}
                     />
                   )}
                 </FacetRow>

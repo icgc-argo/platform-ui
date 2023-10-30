@@ -31,6 +31,7 @@ export const dummyFileSummaryInfo: FileSummaryInfo = {
   fileName: 'sd87fsdsdf798sdf87dfs9dsff97sdf987sdf987sdff798sdf798fds',
   objectId: '6329334b-dcd5-53c8-98fd-9812ac386d30',
   fileFormat: 'FASTQ',
+  hasClinicalData: false,
   size: 7720000,
   access: FileAccessState.CONTROLLED,
   program: 'Pancreatic Cancer - CA (PACA-CA) ',

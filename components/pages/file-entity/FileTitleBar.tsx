@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -19,14 +19,21 @@
 
 import { Button, css, Legend, Tag, TitleBar, Tooltip, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { ComponentType, useState } from 'react';
 
+import useCommonToasters from 'components/useCommonToasters';
+import {
+  API_PATH_DOWNLOAD_FILE,
+  API_PATH_DOWNLOAD_MANIFEST,
+} from 'global/constants/gatewayApiPaths';
 import sqonBuilder from 'sqon-builder';
-import urlJoin from 'url-join';
-import { FileCentricDocumentField } from '../file-repository/types';
+import urljoin from 'url-join';
+import { FileCentricDocumentFields } from '../file-repository/types';
 import { DownloadIcon } from './common';
+import DownloadDropdown from './DownloadDropdown';
+
+const { FEATURE_CLINICAL_DOWNLOAD, MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
 const FileDownloadTooltip = ({
   isDownloadEnabled,
@@ -37,7 +44,6 @@ const FileDownloadTooltip = ({
 }) => {
   const { egoJwt } = useAuthContext();
   const isUserLoggedIn = !!egoJwt;
-  const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
   if (isDownloadEnabled) {
     return null;
@@ -83,15 +89,25 @@ const FileDownloadTooltip = ({
 export const FileTitleBar: ComponentType<{
   programShortName: string;
   fileId: string;
-  isDownloadEnabled: boolean;
+  isFileDownloadEnabled: boolean;
+  isClinicalDownlaodEnabled: boolean;
   accessTier?: string;
   fileSize?: number;
   fileObjectId?: string;
-}> = ({ programShortName, fileId, isDownloadEnabled, accessTier, fileSize, fileObjectId }) => {
+}> = ({
+  programShortName,
+  fileId,
+  isFileDownloadEnabled,
+  isClinicalDownlaodEnabled,
+  accessTier,
+  fileSize,
+  fileObjectId,
+}) => {
   const theme = useTheme();
+  const toaster = useCommonToasters();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
-  const filter = sqonBuilder.has(FileCentricDocumentField['file_id'], fileId).build();
+  const filter = sqonBuilder.has(FileCentricDocumentFields['file_id'], fileId).build();
   const [isDownloading, setIsDownloading] = useState(false);
 
   return (
@@ -128,51 +144,63 @@ export const FileTitleBar: ComponentType<{
         `}
       >
         <Legend />
+        {FEATURE_CLINICAL_DOWNLOAD ? (
+          <DownloadDropdown
+            objectId={fileObjectId}
+            fileDownloadEnabled={isFileDownloadEnabled}
+            clinicalDownloadEnabled={isClinicalDownlaodEnabled}
+          />
+        ) : (
+          <>
+            <Tooltip
+              disabled={isFileDownloadEnabled}
+              unmountHTMLWhenHide
+              position="bottom"
+              interactive
+              html={FileDownloadTooltip({ isDownloadEnabled: isFileDownloadEnabled, fileSize })}
+            >
+              <Button
+                css={css`
+                  margin-right: 8px;
+                `}
+                disabled={!isFileDownloadEnabled || isDownloading}
+                onClick={async () => {
+                  setIsDownloading(true);
 
-        <Tooltip
-          disabled={isDownloadEnabled}
-          unmountHTMLWhenHide
-          position="bottom"
-          interactive
-          html={FileDownloadTooltip({ isDownloadEnabled, fileSize })}
-        >
-          <Button
-            css={css`
-              margin-right: 8px;
-            `}
-            disabled={!isDownloadEnabled || isDownloading}
-            onClick={async () => {
-              setIsDownloading(true);
+                  const downloadUrl = urljoin(
+                    GATEWAY_API_ROOT,
+                    API_PATH_DOWNLOAD_FILE,
+                    fileObjectId,
+                  );
 
-              const downloadUrl = urlJoin(
-                GATEWAY_API_ROOT,
-                'storage-api/download-file',
-                fileObjectId,
-              );
+                  await downloadFileWithEgoToken(downloadUrl)
+                    .then(() => setIsDownloading(false))
+                    .catch((err) => {
+                      setIsDownloading(false);
+                      toaster.onDownloadError(err.message);
+                    });
+                }}
+              >
+                <DownloadIcon />
+                FILE
+              </Button>
+            </Tooltip>
 
-              await downloadFileWithEgoToken(downloadUrl)
-                .catch((err) => console.error(err))
-                .finally(() => setIsDownloading(false));
-            }}
-          >
-            <DownloadIcon />
-            FILE
-          </Button>
-        </Tooltip>
-
-        <Button
-          onClick={() => {
-            const downloadUrl = urlJoin(
-              GATEWAY_API_ROOT,
-              MANIFEST_DOWNLOAD_PATH,
-              `?filter=${encodeURIComponent(JSON.stringify(filter))}`,
-            );
-            downloadFileWithEgoToken(downloadUrl);
-          }}
-        >
-          <DownloadIcon />
-          MANIFEST
-        </Button>
+            <Button
+              onClick={() => {
+                const downloadUrl = urljoin(
+                  GATEWAY_API_ROOT,
+                  API_PATH_DOWNLOAD_MANIFEST,
+                  `?filter=${encodeURIComponent(JSON.stringify(filter))}`,
+                );
+                downloadFileWithEgoToken(downloadUrl);
+              }}
+            >
+              <DownloadIcon />
+              MANIFEST
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

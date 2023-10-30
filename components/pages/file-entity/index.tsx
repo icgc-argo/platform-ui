@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useQuery } from '@apollo/client';
 import {
   ContentBody,
   ContentHeader,
@@ -28,9 +27,8 @@ import {
 } from '@icgc-argo/uikit';
 import clsx from 'clsx';
 import { getConfig } from 'global/config';
-import USER_PROFILE_QUERY from 'global/gql/USER_PROFILE_QUERY';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { get } from 'lodash';
+import { hasDacoAccess } from 'global/utils/egoJwt';
 import Footer from '../../Footer';
 import NavBar from '../../NavBar';
 import Head from '../head';
@@ -51,21 +49,21 @@ const FileEntity = ({ fileId }) => {
   } = useEntityData({
     fileId,
   });
-  const { egoJwt } = useAuthContext();
-  const { data: userProfile, loading: profileLoading } = useQuery(USER_PROFILE_QUERY);
+  const { egoJwt, permissions } = useAuthContext();
+
   const { MAX_FILE_DOWNLOAD_SIZE } = getConfig();
 
-  const loading = profileLoading || fileLoading;
+  const loading = fileLoading;
 
-  const isDacoApproved = get(userProfile, 'self.isDacoApproved');
+  const isDacoApproved = hasDacoAccess(permissions);
 
   const isUserLoggedIn = !!egoJwt;
-  const isDownloadEnabled =
-    size > MAX_FILE_DOWNLOAD_SIZE
-      ? false
-      : access === FileAccessState.CONTROLLED
-      ? isUserLoggedIn && isDacoApproved
-      : true;
+
+  const isFileDownloadEnabled =
+    size < MAX_FILE_DOWNLOAD_SIZE &&
+    (access === FileAccessState.CONTROLLED ? isUserLoggedIn && isDacoApproved : true);
+
+  const isClinicalDownloadEnabled = data?.summary?.hasClinicalData && isDacoApproved;
 
   const accessTier = embargoStage !== 'PUBLIC' ? EmbargoStageDisplayNames[embargoStage] : null;
   return (
@@ -91,7 +89,8 @@ const FileEntity = ({ fileId }) => {
                 <FileTitleBar
                   programShortName={programShortName}
                   fileId={fileId}
-                  isDownloadEnabled={isDownloadEnabled}
+                  isFileDownloadEnabled={isFileDownloadEnabled}
+                  isClinicalDownlaodEnabled={isClinicalDownloadEnabled}
                   accessTier={accessTier}
                   fileSize={size}
                   fileObjectId={data.summary.objectId}

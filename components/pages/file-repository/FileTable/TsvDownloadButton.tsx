@@ -17,22 +17,34 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
+import {
+  css,
+  DownloadButtonProps,
+  DropdownButton,
+  Icon,
+  TOAST_VARIANTS,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { FILE_TABLE_DOWNLOAD_PATH, MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import {
+  API_PATH_DOWNLOAD_FILETABLE,
+  API_PATH_DOWNLOAD_MANIFEST,
+} from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import pluralize from 'pluralize';
 import { useState } from 'react';
 
-import urlJoin from 'url-join';
+import useCommonToasters from 'components/useCommonToasters';
+import { default as urlJoin, default as urljoin } from 'url-join';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from '../../submission-system/common';
 import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
-import { FileCentricDocumentField } from '../types';
+import { FileCentricDocumentFields } from '../types';
 import { fileRepoTableTSVColumns } from '../utils/constants';
 import { RecursiveFilter } from '../utils/types';
+import { sortByField } from 'global/utils/arrayUtils';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -40,6 +52,8 @@ enum DownloadOptionValues {
   CLINICAL_DATA = 'CLINICAL_DATA',
   FILE_TABLE = 'FILE_TABLE',
 }
+
+const { FEATURE_CLINICAL_DOWNLOAD, GATEWAY_API_ROOT } = getConfig();
 
 const TsvDownloadButton = ({
   allFilesSelected,
@@ -53,7 +67,8 @@ const TsvDownloadButton = ({
   unSelectedFilesObjectIds: string[];
 }) => {
   const theme = useTheme();
-  const { GATEWAY_API_ROOT } = getConfig();
+  const toaster = useCommonToasters();
+
   const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
   const [loading, setLoading] = useState(false);
@@ -77,11 +92,14 @@ const TsvDownloadButton = ({
           },
         ]
       : []),
-    // only manifest download enabled for initial File Repo release
-    // {
-    //   display: 'Clinical Data',
-    //   value: DownloadOptionValues.CLINICAL_DATA,
-    // },
+    ...(!!selectedFilesCount && FEATURE_CLINICAL_DOWNLOAD
+      ? [
+          {
+            display: 'Clinical Data',
+            value: DownloadOptionValues.CLINICAL_DATA,
+          },
+        ]
+      : []),
     {
       display: 'File Manifest',
       value: DownloadOptionValues.SCORE_MANIFEST,
@@ -90,7 +108,7 @@ const TsvDownloadButton = ({
       display: 'Table (TSV)',
       value: DownloadOptionValues.FILE_TABLE,
     },
-  ];
+  ].sort(sortByField('display'));
 
   const downloadFilter: RecursiveFilter = {
     op: 'and',
@@ -103,7 +121,7 @@ const TsvDownloadButton = ({
               {
                 op: 'in',
                 content: {
-                  field: FileCentricDocumentField['object_id'],
+                  field: FileCentricDocumentFields['object_id'],
                   value: unSelectedFilesObjectIds,
                 },
               },
@@ -113,7 +131,7 @@ const TsvDownloadButton = ({
         ? {
             op: 'in',
             content: {
-              field: FileCentricDocumentField['object_id'],
+              field: FileCentricDocumentFields['object_id'],
               value: selectedFilesObjectIds,
             },
           }
@@ -127,22 +145,49 @@ const TsvDownloadButton = ({
       case DownloadOptionValues.SCORE_MANIFEST:
         const downloadUrl = urlJoin(
           GATEWAY_API_ROOT,
-          MANIFEST_DOWNLOAD_PATH,
+          API_PATH_DOWNLOAD_MANIFEST,
           `?filter=${encodeURIComponent(JSON.stringify(downloadFilter))}`,
         );
-        downloadFileWithEgoToken(downloadUrl).finally(() => setLoading(false));
+        downloadFileWithEgoToken(downloadUrl)
+          .then(() => setLoading(false))
+          .catch((err) => {
+            setLoading(false);
+            toaster.onDownloadError(err.message);
+          });
         break;
       case DownloadOptionValues.FILE_TABLE:
         const tsvdownloadUrl = urlJoin(
           GATEWAY_API_ROOT,
-          FILE_TABLE_DOWNLOAD_PATH,
+          API_PATH_DOWNLOAD_FILETABLE,
           `?filter=${encodeURIComponent(
             JSON.stringify(downloadFilter),
           )}&columns=${encodeURIComponent(JSON.stringify(fileRepoTableTSVColumns))}`,
         );
         // window.location.assign(tsvdownloadUrl);
-        downloadFileWithEgoToken(tsvdownloadUrl).finally(() => setLoading(false));
+        downloadFileWithEgoToken(tsvdownloadUrl)
+          .then(() => setLoading(false))
+          .catch((err) => {
+            setLoading(false);
+            toaster.onDownloadError(err.message);
+          });
         break;
+      case DownloadOptionValues.CLINICAL_DATA: {
+        const downloadUrl = urljoin(GATEWAY_API_ROOT, 'clinical/api/donors/data-for-files');
+
+        downloadFileWithEgoToken(downloadUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            objectIds: selectedFilesObjectIds,
+          }),
+        })
+          .then(() => setLoading(false))
+          .catch((err) => {
+            setLoading(false);
+            toaster.onDownloadError(err.message);
+          });
+        break;
+      }
       default:
         console.log(`Selection from download dropdown '${item.value}' has no action defined.`);
         setLoading(false);

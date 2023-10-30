@@ -23,6 +23,20 @@ import { useToaster } from 'global/hooks/toaster';
 export default function useCommonToasters() {
   const toaster = useToaster();
   return {
+    onDownloadError: (error?: string) => {
+      toaster.addToast({
+        variant: TOAST_VARIANTS.ERROR,
+        title: `Download Error`,
+        content: error || 'An error occurred, the file could not be downloaded.',
+      });
+    },
+    onSave: () =>
+      toaster.addToast({
+        title: 'Success!',
+        variant: TOAST_VARIANTS.SUCCESS,
+        content: 'Your changes have been saved.',
+        interactionType: 'CLOSE',
+      }),
     unknownError: () =>
       toaster.addToast({
         title: '',
@@ -34,13 +48,6 @@ export default function useCommonToasters() {
         variant: 'ERROR',
         title: 'Something went wrong',
         content: 'Uh oh! It looks like something went wrong. This page has been reloaded.',
-      }),
-    onSave: () =>
-      toaster.addToast({
-        title: 'Success!',
-        variant: TOAST_VARIANTS.SUCCESS,
-        content: 'Your changes have been saved.',
-        interactionType: 'CLOSE',
       }),
   };
 }
