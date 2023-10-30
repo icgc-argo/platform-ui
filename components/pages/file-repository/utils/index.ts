@@ -244,13 +244,7 @@ export const toDisplayValue = (value: string, field?: string): string => {
 
   // Custom display values for `has_clinical_data` boolean field
   if (field === 'has_clinical_data') {
-    return value === 'false'
-      ? 'Not Available'
-      : value === 'true'
-      ? 'Available'
-      : value === IS_MISSING
-      ? 'No Data'
-      : value;
+    return clinicalDisplayValues(value);
   }
 
   // Display values for Boolean fields
