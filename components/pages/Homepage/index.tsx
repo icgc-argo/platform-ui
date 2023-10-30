@@ -50,6 +50,15 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'October 18, 2023',
+    text: (
+      <>
+        We are excited to announce the Lost to follow up feature and [Dictionary
+        1.19](https://docs.icgc-argo.org/dictionary) are now available.
+      </>
+    ),
+  },
+  {
     title: 'August 25, 2023',
     text: (
       <>
@@ -91,30 +100,6 @@ const newsItems: NewsItem[] = [
     ),
   },
   {
-    title: 'April 5, 2023',
-    text: (
-      <>
-        We are excited to announce{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-60"
-        >
-          Data Release 6.0
-        </Link>{' '}
-        on the ICGC ARGO Data Platform, including the first release of a new RNA-Seq analysis
-        workflow:{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/analysis-workflows/rna-alignment"
-        >
-          RNA Seq Alignment
-        </Link>
-        , available now for transcriptome sequencing data from Australian Pancreatic Cancer
-        Initiative (APGI-AU).
-      </>
-    ),
-  },
-  {
     title: '',
     text: (
       <>
@@ -122,7 +107,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
         >
-          ARGO Data Dictionary 1.18
+          ARGO Data Dictionary 1.19
         </Link>
         ,{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
@@ -133,7 +118,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
         >
-          Software Release UI 1.124.1 - API 3.40.0
+          Software Release UI 1.124.6 - API 3.41.0
         </Link>{' '}
         are now available.
       </>
