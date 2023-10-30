@@ -30,72 +30,91 @@ const FILE_REPOSITORY_FACETS_QUERY = gql`
         study_id {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         analysis__experiment__experimental_strategy {
           buckets {
             key
+            key_as_string
+            doc_count
+          }
+        }
+        has_clinical_data {
+          buckets {
+            key
+            key_as_string
             doc_count
           }
         }
         file_type {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         file_access {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         analysis_tools {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         data_category {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         data_type {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         donors__specimens__specimen_type {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         donors__specimens__specimen_tissue_source {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         analysis__workflow__workflow_name {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         embargo_stage {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }
         release_state {
           buckets {
             key
+            key_as_string
             doc_count
           }
         }

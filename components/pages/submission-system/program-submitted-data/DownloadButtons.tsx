@@ -17,16 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { Row, Col } from 'react-grid-system';
-import queryString from 'query-string';
-import urlJoin from 'url-join';
-import { useToaster } from 'global/hooks/toaster';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import useAuthContext from 'global/hooks/useAuthContext';
+import { Button, Icon, css } from '@icgc-argo/uikit';
+import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import React from 'react';
+import { Col, Row } from 'react-grid-system';
+import urlJoin from 'url-join';
 import { CompletionStates, TsvDownloadIds } from './common';
-import { Button, css, Icon, TOAST_VARIANTS } from '@icgc-argo/uikit';
 
 const DownloadButton = ({
   text,
@@ -73,7 +72,7 @@ const ClinicalDownloadButton = ({
   completionState: CompletionStates;
   disabled?: boolean;
 }) => {
-  const toaster = useToaster();
+  const toaster = useCommonToasters();
 
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { downloadFileWithEgoToken } = useAuthContext();
@@ -89,12 +88,7 @@ const ClinicalDownloadButton = ({
   });
 
   const handleDownloadAllError = () => {
-    toaster.addToast({
-      interactionType: 'CLOSE',
-      title: `Download Error`,
-      variant: TOAST_VARIANTS.ERROR,
-      content: 'File failed to download.',
-    });
+    toaster.onDownloadError(err.message);
     setButtonLoadingState(false);
   };
 

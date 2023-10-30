@@ -18,10 +18,12 @@ export enum FileFacetPath {
   analysis__workflow__workflow_name = 'analysis__workflow__workflow_name',
   release_state = 'release_state',
   embargo_stage = 'embargo_stage',
+  has_clinical_data = 'has_clinical_data',
 }
 
 type BucketAggregation = {
   key: string;
+  key_as_string: string;
   doc_count: number;
 };
 
@@ -36,7 +38,7 @@ export type SearchMenuDataNode = {
 export type FacetDetails = {
   name: string;
   facetPath: FileFacetPath;
-  variant: 'Basic' | 'Number' | 'Tooltip' | 'Other';
+  variant: 'Basic' | 'Number' | 'Tooltip' | 'ClinicalData' | 'Other';
   esDocumentField: FileCentricDocumentField;
   highlight?: boolean;
   placeholderText?: string;

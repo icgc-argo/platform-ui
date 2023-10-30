@@ -32,6 +32,7 @@ const FILE_ENTITY_QUERY = gql`
             data_type
             file_type
             file_access
+            has_clinical_data
             study_id
             analysis_tools
             embargo_stage

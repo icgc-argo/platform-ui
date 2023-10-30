@@ -227,9 +227,38 @@ export const removeFilter: TRemoveFilter = (field, filters) => {
     : defaultEmptyFilters;
 };
 
-export const toDisplayValue: (value: string, field?: string) => string = (value, field) => {
+export const clinicalDisplayValues = (value: string) => {
+  return value === 'false'
+    ? 'Not Available'
+    : value === 'true'
+    ? 'Available'
+    : value === IS_MISSING
+    ? 'No Data'
+    : value;
+};
+
+export const toDisplayValue = (value: string, field?: string): string => {
   if (value === IS_MISSING) {
     return 'No Data';
+  }
+
+  // Custom display values for `has_clinical_data` boolean field
+  if (field === 'has_clinical_data') {
+    return value === 'false'
+      ? 'Not Available'
+      : value === 'true'
+      ? 'Available'
+      : value === IS_MISSING
+      ? 'No Data'
+      : value;
+  }
+
+  // Display values for Boolean fields
+  if (value === 'false') {
+    return 'False';
+  }
+  if (value === 'true') {
+    return 'True';
   }
 
   if (!!field && !!value) {

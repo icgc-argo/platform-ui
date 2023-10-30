@@ -27,6 +27,7 @@ export type FileSummaryInfo = {
   fileName: string;
   objectId: string;
   fileFormat: string;
+  hasClinicalData: boolean;
   size: number;
   access: FileAccessState;
   program: string;

@@ -19,7 +19,7 @@
 
 import { useQuery } from '@apollo/client';
 import sqonBuilder from 'sqon-builder';
-import { FileCentricDocumentField } from '../file-repository/types';
+import { FileCentricDocumentFields } from '../file-repository/types';
 import { dummyDonorQuery, noData } from './dummyData';
 import DONOR_ENTITY_QUERY from './gql/DONOR_ENTITY_QUERY';
 import { DonorCentricRecord } from './types';
@@ -32,7 +32,7 @@ export type DonorEntityData = {
 };
 
 const useEntityData = (donorId: string): DonorEntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField['donors.donor_id'], donorId).build();
+  const filters = sqonBuilder.has(FileCentricDocumentFields['donors.donor_id'], donorId).build();
   const { data, loading, error } = useQuery(DONOR_ENTITY_QUERY, {
     variables: {
       filters,

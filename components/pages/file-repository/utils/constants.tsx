@@ -1,6 +1,6 @@
 import { css } from '@icgc-argo/uikit';
 import { ReactNode } from 'react';
-import { FileCentricDocumentField, FileRepositoryTSVColumn } from '../types';
+import { FileCentricDocumentFields, FileRepositoryTSVColumn } from '../types';
 
 export const tooltipContent: { [key: string]: ReactNode } = {
   embargo_stage: (
@@ -34,7 +34,7 @@ export enum EmbargoStageDisplayNames {
 
 // enums are real objects at runtime
 export const facetDisplayNames: { [key: string]: {} } = {
-  [FileCentricDocumentField.embargo_stage]: EmbargoStageDisplayNames,
+  [FileCentricDocumentFields.embargo_stage]: EmbargoStageDisplayNames,
 };
 
 export const fileRepoTableTSVColumns: FileRepositoryTSVColumn[] = [
