@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2023 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -53,11 +53,15 @@ const newsItems: NewsItem[] = [
     title: 'October 18, 2023',
     text: (
       <>
-        We are excited to announce the Lost to Follow Up feature and{' '}
+        This release sees the addition of a new optional field called{' '}
+        <span css={{ fontWeight: 'bold' }}>lost_to_followup_after_clinical_event_id</span> to the
+        Donor table, allowing data submitters to indicate when a donor was lost to follow up after a
+        clinical event. Information on additional metadata fields can be found in the
         <Link href="https://docs.icgc-argo.org/dictionary" target="_blank">
-          Dictionary 1.19
-        </Link>{' '}
-        are now available.
+          {' '}
+          ARGO Dictionary
+        </Link>
+        .
       </>
     ),
   },
@@ -110,7 +114,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
           href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
         >
-          ARGO Data Dictionary 1.19
+          ARGO Data Dictionary 1.20
         </Link>
         ,{' '}
         <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
