@@ -54,9 +54,9 @@ const newsItems: NewsItem[] = [
     text: (
       <>
         This release sees the addition of a new optional field called{' '}
-        <span css={{ fontWeight: 'bold' }}>lost_to_followup_after_clinical_event_id</span> to the
-        Donor table, allowing data submitters to indicate when a donor was lost to follow up after a
-        clinical event. Information on additional metadata fields can be found in the
+        <code>lost_to_followup_after_clinical_event_id</code> to the Donor table, allowing data
+        submitters to indicate when a donor was lost to follow up after a clinical event.
+        Information on additional metadata fields can be found in the
         <Link href="https://docs.icgc-argo.org/dictionary" target="_blank">
           {' '}
           ARGO Dictionary
