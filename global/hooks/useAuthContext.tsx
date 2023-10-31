@@ -36,18 +36,18 @@ declare global {
   }
 }
 
-type T_AuthContext = {
+type AuthContext = {
   egoJwt?: string;
   logOut: (path?: string) => void;
   updateToken: () => Promise<string | void>;
   data: ReturnType<typeof decodeToken> | null;
   fetchWithEgoToken: typeof fetch;
-  downloadFileWithEgoToken: (input: RequestInfo, init?: RequestInit) => Promise<void>;
+  downloadFileWithEgoToken: (...inputs: Parameters<typeof fetch>) => Promise<void>;
   permissions: string[];
   isLoggingOut: boolean;
 };
 
-const AuthContext = createContext<T_AuthContext>({
+const AuthContext = createContext<AuthContext>({
   egoJwt: undefined,
   logOut: () => {},
   updateToken: async () => {},
@@ -85,7 +85,7 @@ export function AuthProvider({
 
   const router = useRouter();
 
-  const logOut: T_AuthContext['logOut'] = async (path) => {
+  const logOut: AuthContext['logOut'] = async (path) => {
     // this will be reset to false when user logs in again, and AuthContext is re-instantiated
     setIsLoggingOut(true);
     removeToken();
@@ -99,7 +99,7 @@ export function AuthProvider({
     }
   };
 
-  const fetchWithEgoToken: T_AuthContext['fetchWithEgoToken'] = async (uri, options) => {
+  const fetchWithEgoToken: AuthContext['fetchWithEgoToken'] = async (uri, options) => {
     const modifiedOption = {
       ...(options || {}),
       headers: { ...((options && options.headers) || {}), authorization: `Bearer ${egoJwt || ''}` },
@@ -121,11 +121,20 @@ export function AuthProvider({
     }
   };
 
-  const downloadFileWithEgoToken: T_AuthContext['downloadFileWithEgoToken'] = async (
+  const downloadFileWithEgoToken: AuthContext['downloadFileWithEgoToken'] = async (
     uri,
     options,
   ) => {
     const response = await fetchWithEgoToken(uri, options);
+
+    if (!response.ok) {
+      const data = await response.json().catch((_) => {
+        console.log(`Download request failed and returned non-json response.`);
+      });
+      throw new Error(
+        data?.error || 'Something went wrong with the attempted download. Please try again later.',
+      );
+    }
     const data = await response.blob();
 
     const contentDispositionHeader = response.headers.get('content-disposition');
@@ -187,7 +196,7 @@ export function AuthProvider({
       });
   };
 
-  const authData = {
+  const authData: AuthContext = {
     egoJwt,
     logOut,
     data: egoJwt ? decodeToken(egoJwt || '') : null,

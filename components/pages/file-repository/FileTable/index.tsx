@@ -20,11 +20,11 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import {
   Container,
-  css,
   Link,
   SelectTable,
   TableColumnConfig,
   Typography,
+  css,
   useSelectTableSelectionState,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -44,12 +44,13 @@ import NextLink from 'next/link';
 import pluralize from 'pluralize';
 import { createRef, useEffect, useState } from 'react';
 
+import { hasDacoAccess } from 'global/utils/egoJwt';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
-import { FileCentricDocumentField } from '../types';
+import { FileCentricDocumentField, FileCentricDocumentFields } from '../types';
 import { FileRepoFiltersType } from '../utils/types';
-import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
 import TsvDownloadButton from './TsvDownloadButton';
+import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
 import {
   FileRepositoryRecord,
   FileRepositoryRecordSort,
@@ -63,7 +64,7 @@ const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_PAGE_OFFSET = 0;
 const DEFAULT_SORT = [
   {
-    field: FileCentricDocumentField.file_number,
+    field: FileCentricDocumentFields.file_number,
     order: 'desc' as FileRepositoryRecordSortOrder,
   },
 ];
@@ -129,8 +130,8 @@ const useFileRepoPaginationState = () => {
 
         // When sorting by file_id, use file_number as the sort field to make the numeric sorting work
         const sortField =
-          sortRule.id === FileCentricDocumentField.file_id
-            ? FileCentricDocumentField.file_number
+          sortRule.id === FileCentricDocumentFields.file_id
+            ? FileCentricDocumentFields.file_number
             : sortRule.id;
 
         return accSort.concat({
@@ -160,7 +161,6 @@ const useFileRepoPaginationState = () => {
 const FileTable = () => {
   const { FEATURE_DONOR_ENTITY_ENABLED, FEATURE_PROGRAM_ENTITY_ENABLED } = getConfig();
 
-  const { egoJwt } = useAuthContext();
   const { filters } = useFiltersContext();
   const theme = useTheme();
 
@@ -183,27 +183,13 @@ const FileTable = () => {
   const totalEntries = records ? records.file.hits.total : 0;
   const pageCount = Math.ceil(totalEntries / pagingState.pageSize);
 
-  const fileDownloader = (objectId: String) => {
-    //todo
-  };
-
-  const getDownloadStatus = (isDownloadable: boolean) => {
-    const canUserDownload = egoJwt && isDownloadable;
-    const toolTipText = egoJwt
-      ? isDownloadable
-        ? 'Download file'
-        : 'You do not have permission to download this file'
-      : 'Please log in to access controlled files';
-    return { canUserDownload, toolTipText };
-  };
-
   const tableColumns: Array<
     TableColumnConfig<FileRepositoryRecord> & { id: FileCentricDocumentField }
   > = [
     {
       Header: 'File ID',
       headerClassName: pagingState.sort == DEFAULT_SORT ? '-sort-desc' : '',
-      id: FileCentricDocumentField.file_id,
+      id: FileCentricDocumentFields.file_id,
       accessor: 'fileId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return (
@@ -219,7 +205,7 @@ const FileTable = () => {
     },
     {
       Header: fieldDisplayNames['donors.donor_id'],
-      id: FileCentricDocumentField['donors.donor_id'],
+      id: FileCentricDocumentFields['donors.donor_id'],
       accessor: 'donorId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_DONOR_ENTITY_ENABLED ? (
@@ -237,12 +223,12 @@ const FileTable = () => {
     },
     {
       Header: fieldDisplayNames['donors.submitter_donor_id'],
-      id: FileCentricDocumentField['donors.submitter_donor_id'],
+      id: FileCentricDocumentFields['donors.submitter_donor_id'],
       accessor: 'submitterDonorId',
     },
     {
       Header: fieldDisplayNames['study_id'],
-      id: FileCentricDocumentField['study_id'],
+      id: FileCentricDocumentFields['study_id'],
       accessor: 'programId',
       Cell: ({ original }: { original: FileRepositoryRecord }) => {
         return FEATURE_PROGRAM_ENTITY_ENABLED ? (
@@ -260,32 +246,40 @@ const FileTable = () => {
     },
     {
       Header: fieldDisplayNames['data_type'],
-      id: FileCentricDocumentField['data_type'],
+      id: FileCentricDocumentFields['data_type'],
       accessor: 'dataType',
       width: 180,
     },
     {
       Header: fieldDisplayNames['file_type'],
-      id: FileCentricDocumentField['file_type'],
+      id: FileCentricDocumentFields['file_type'],
       accessor: 'fileType',
       width: 80,
     },
     {
       Header: fieldDisplayNames['analysis.experiment.experimental_strategy'],
-      id: FileCentricDocumentField['analysis.experiment.experimental_strategy'],
+      id: FileCentricDocumentFields['analysis.experiment.experimental_strategy'],
       accessor: 'experimentalStrategy',
     },
     {
       Header: fieldDisplayNames['file.size'],
-      id: FileCentricDocumentField['file.size'],
+      id: FileCentricDocumentFields['file.size'],
       accessor: 'size',
       Cell: ({ original }: { original: FileRepositoryRecord }) => filesize(original.size),
     },
     {
       Header: fieldDisplayNames['object_id'],
-      id: FileCentricDocumentField['object_id'],
+      id: FileCentricDocumentFields['object_id'],
       accessor: 'objectId',
       width: 260,
+    },
+    {
+      Header: 'Clinical Data',
+      id: FileCentricDocumentFields.has_clinical_data,
+      accessor: 'hasClinicalData',
+      Cell: ({ original: file }: { original: FileRepositoryRecord }) => {
+        return file.hasClinicalData ? 'Available' : 'Not Available';
+      },
     },
     // disabled for initial File Repo release
     // {
@@ -335,6 +329,8 @@ const FileTable = () => {
         fileType: node.file_type,
         size: node.file.size,
         isDownloadable: false, // mocked, column will be temporarily hidden in https://github.com/icgc-argo/platform-ui/issues/1553
+        hasClinicalData: node.has_clinical_data,
+        access: node.file_access,
       }))
     : [];
 
@@ -431,7 +427,7 @@ const FileTable = () => {
               unSelectedFilesObjectIds={unselectedRows}
               selectedFilesCount={selectedRowsCount}
             />
-            {/* disabled for initial File Repo release */}
+            {/* disabled for initial File Repo release - Allows customization of shown columns */}
             {/* <DropdownButton
               variant="secondary"
               size="sm"

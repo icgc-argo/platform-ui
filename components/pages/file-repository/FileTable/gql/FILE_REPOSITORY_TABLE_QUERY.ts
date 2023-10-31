@@ -28,6 +28,7 @@ const FILE_REPOSITORY_TABLE_QUERY = gql`
           node {
             object_id
             data_type
+            file_access
             file_type
             analysis {
               experiment {
@@ -35,6 +36,7 @@ const FILE_REPOSITORY_TABLE_QUERY = gql`
               }
             }
             study_id
+            has_clinical_data
             file {
               size
             }

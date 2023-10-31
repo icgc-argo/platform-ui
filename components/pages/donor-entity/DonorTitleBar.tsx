@@ -17,15 +17,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
+import {
+  Button,
+  css,
+  Icon,
+  Legend,
+  Link,
+  TitleBar,
+  TOAST_VARIANTS,
+  useTheme,
+} from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
-import { MANIFEST_DOWNLOAD_PATH } from 'global/constants/gatewayApiPaths';
+import { API_PATH_DOWNLOAD_MANIFEST } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { ComponentType } from 'react';
 import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DownloadIcon } from '../file-entity/common';
-import { FileCentricDocumentField } from '../file-repository/types';
+import { FileCentricDocumentFields } from '../file-repository/types';
+import useCommonToasters from 'components/useCommonToasters';
 
 export const DonorTitleBar: ComponentType<{
   programId: string;
@@ -33,9 +43,10 @@ export const DonorTitleBar: ComponentType<{
   isDownloadEnabled: boolean;
 }> = ({ programId, donorId, isDownloadEnabled }) => {
   const theme = useTheme();
+  const toaster = useCommonToasters();
   const { downloadFileWithEgoToken } = useAuthContext();
   const { GATEWAY_API_ROOT } = getConfig();
-  const filter = sqonBuilder.has(FileCentricDocumentField['donor_id'], donorId).build();
+  const filter = sqonBuilder.has(FileCentricDocumentFields['donor_id'], donorId).build();
 
   return (
     <div
@@ -107,10 +118,12 @@ export const DonorTitleBar: ComponentType<{
           onClick={() => {
             const downloadUrl = urlJoin(
               GATEWAY_API_ROOT,
-              MANIFEST_DOWNLOAD_PATH,
+              API_PATH_DOWNLOAD_MANIFEST,
               `?filter=${encodeURIComponent(JSON.stringify(filter))}`,
             );
-            downloadFileWithEgoToken(downloadUrl);
+            downloadFileWithEgoToken(downloadUrl).catch((err) => {
+              toaster.onDownloadError(err.message);
+            });
           }}
         >
           <DownloadIcon />

@@ -95,7 +95,7 @@ export type BucketTop_HitsArgs = {
 export type ClinicalData = {
   __typename?: 'ClinicalData';
   clinicalEntities: Array<Maybe<ClinicalDataEntities>>;
-  clinicalErrors?: Maybe<Array<Maybe<ClinicalErrors>>>;
+  clinicalErrors: Array<Maybe<ClinicalErrors>>;
   completionStats?: Maybe<Array<Maybe<CompletionStats>>>;
   programShortName: Scalars['String'];
 };
@@ -1538,6 +1538,7 @@ export type FileAggregations = {
   file_id?: Maybe<Aggregations>;
   file_number?: Maybe<NumericAggregations>;
   file_type?: Maybe<Aggregations>;
+  has_clinical_data?: Maybe<Aggregations>;
   meta__embargo_stage?: Maybe<Aggregations>;
   meta__release_state?: Maybe<Aggregations>;
   meta__study_id?: Maybe<Aggregations>;
@@ -2319,6 +2320,7 @@ export type FileNode = Node & {
   file_id?: Maybe<Scalars['String']>;
   file_number?: Maybe<Scalars['Float']>;
   file_type?: Maybe<Scalars['String']>;
+  has_clinical_data?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   meta?: Maybe<FileMeta>;
   metrics?: Maybe<FileMetrics>;

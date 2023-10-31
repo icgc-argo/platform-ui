@@ -28,7 +28,7 @@ import {
 } from './types';
 import FILE_ENTITY_QUERY from 'components/pages/file-entity/gql/FILE_ENTITY_QUERY';
 import sqonBuilder from 'sqon-builder';
-import { FileCentricDocumentField } from '../file-repository/types';
+import { FileCentricDocumentFields } from '../file-repository/types';
 
 type EntityData = {
   programShortName: string;
@@ -50,7 +50,7 @@ const isValidMetricsObject = (metrics: any) => {
 };
 
 const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
-  const filters = sqonBuilder.has(FileCentricDocumentField.file_id, fileId).build();
+  const filters = sqonBuilder.has(FileCentricDocumentFields.file_id, fileId).build();
   const { data, loading, error } = useQuery(FILE_ENTITY_QUERY, {
     variables: {
       filters,
@@ -81,6 +81,7 @@ const useEntityData = ({ fileId }: { fileId: string }): EntityData => {
       fileName: entity.file.name,
       objectId: entity.object_id,
       fileFormat: entity.file_type,
+      hasClinicalData: entity.has_clinical_data,
       size,
       access,
       program: entity.study_id,

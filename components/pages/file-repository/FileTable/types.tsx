@@ -32,6 +32,8 @@ export type FileRepositoryRecord = {
   fileType: string;
   size: number; //in bytes
   isDownloadable: boolean;
+  hasClinicalData: boolean;
+  access: string;
 };
 
 type FileSize = { size: number };
@@ -51,6 +53,7 @@ type FileRepoQueryNode = {
   node: {
     object_id: string;
     data_type: string;
+    file_access: string;
     file_id: string;
     file_type: string;
     study_id: string;
@@ -61,6 +64,7 @@ type FileRepoQueryNode = {
       };
     };
     analysis: Strategy;
+    has_clinical_data: boolean;
   };
 };
 

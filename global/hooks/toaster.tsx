@@ -40,8 +40,6 @@ export const useToastState = () => {
   const [toastStack, setToastStack] = useState<(ToastConfig & { id: string })[]>([]);
 
   const addToast = (toast: ToastConfig & { timeout?: number }) => {
-    console.log(`🔥🍞🍞🍞🍞🍞🍞🔥`);
-    console.log(`🔥🔥🔥🔥🔥🔥🔥🔥`);
     const id = String(Math.random());
     const DEFAULT_TOAST_CONFIGS: Partial<ToastConfig> = {
       variant: TOAST_VARIANTS.INFO as ToastConfig['variant'],

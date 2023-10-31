@@ -52,6 +52,7 @@ export const getConfig = () => {
     FEATURE_REACT_TABLE_V8_ENABLED: publicConfig.FEATURE_REACT_TABLE_V8_ENABLED === 'true',
     FEATURE_SUBMIT_CLINICAL_ENABLED: publicConfig.FEATURE_SUBMIT_CLINICAL_ENABLED === 'true',
     FEATURE_FEDERATED_RDPC: publicConfig.FEATURE_FEDERATED_RDPC === 'true',
+    FEATURE_CLINICAL_DOWNLOAD: publicConfig.FEATURE_CLINICAL_DOWNLOAD === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -75,5 +76,6 @@ export const getConfig = () => {
     FEATURE_REACT_TABLE_V8_ENABLED: boolean;
     FEATURE_SUBMIT_CLINICAL_ENABLED: boolean;
     FEATURE_FEDERATED_RDPC: boolean;
+    FEATURE_CLINICAL_DOWNLOAD: boolean;
   };
 };
