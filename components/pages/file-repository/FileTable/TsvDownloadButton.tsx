@@ -17,14 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  css,
-  DownloadButtonProps,
-  DropdownButton,
-  Icon,
-  TOAST_VARIANTS,
-  useTheme,
-} from '@icgc-argo/uikit';
+import { css, DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import {
   API_PATH_DOWNLOAD_FILETABLE,
@@ -35,6 +28,8 @@ import pluralize from 'pluralize';
 import { useState } from 'react';
 
 import useCommonToasters from 'components/useCommonToasters';
+import { sortByField } from 'global/utils/arrayUtils';
+import { hasDacoAccess } from 'global/utils/egoJwt';
 import { default as urlJoin, default as urljoin } from 'url-join';
 import {
   instructionBoxButtonContentStyle,
@@ -44,7 +39,6 @@ import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
 import { FileCentricDocumentFields } from '../types';
 import { fileRepoTableTSVColumns } from '../utils/constants';
 import { RecursiveFilter } from '../utils/types';
-import { sortByField } from 'global/utils/arrayUtils';
 
 enum DownloadOptionValues {
   ALL_FILES = 'ALL_FILES',
@@ -68,10 +62,19 @@ const TsvDownloadButton = ({
 }) => {
   const theme = useTheme();
   const toaster = useCommonToasters();
+  const { permissions } = useAuthContext();
 
   const { downloadFileWithEgoToken } = useAuthContext();
   const { filters: repoFilters } = useFiltersContext();
   const [loading, setLoading] = useState(false);
+
+  // only show clinical download option if:
+  // - download clinical feature is enabled
+  // - user is logged in and has DACO access
+  // - files are selected (TODO: download all by filter)
+  const showClinicalDownload =
+    FEATURE_CLINICAL_DOWNLOAD && hasDacoAccess(permissions) && selectedFilesCount > 0;
+
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
       ? [
@@ -92,7 +95,7 @@ const TsvDownloadButton = ({
           },
         ]
       : []),
-    ...(!!selectedFilesCount && FEATURE_CLINICAL_DOWNLOAD
+    ...(showClinicalDownload
       ? [
           {
             display: 'Clinical Data',
