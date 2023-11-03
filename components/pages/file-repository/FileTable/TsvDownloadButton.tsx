@@ -69,7 +69,7 @@ const TsvDownloadButton = ({
   const [loading, setLoading] = useState(false);
 
   // only show clinical download option if:
-  // - downlaod clinical feature is enabled
+  // - download clinical feature is enabled
   // - user is logged in and has DACO access
   // - files are selected (TODO: download all by filter)
   const showClinicalDownload =
