@@ -26,23 +26,24 @@ import { css, DnaLoader, Icon, Input, MenuItem, styled, SubMenu } from '@icgc-ar
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePersistentState from 'global/hooks/usePersistentContext';
-import { isCollaborator, isDccMember, isProgramAdmin, isRdpcMember } from 'global/utils/egoJwt';
+import { canWriteProgram, isCollaborator, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY from './gql/SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY';
 import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 
 import {
   DCC_DASHBOARD_PATH,
-  PROGRAMS_LIST_PATH,
   PROGRAM_CLINICAL_DATA_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
-  PROGRAM_SUBMIT_CLINICAL_PATH,
   PROGRAM_DASHBOARD_PATH,
   PROGRAM_MANAGE_PATH,
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
+  PROGRAM_SUBMIT_CLINICAL_PATH,
+  PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
+import { useMemo, useState } from 'react';
 import { ClinicalSubmissionStatus } from './program-clinical-submission/types';
 import {
   ClinicalEntityQueryResponse,
@@ -51,7 +52,6 @@ import {
 } from './program-submitted-data/common';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './program-submitted-data/gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import { useSubmissionSystemDisabled } from './SubmissionSystemLockedNotification';
-import { useState, useMemo } from 'react';
 
 type SideMenuProgram = {
   shortName: string;
@@ -173,7 +173,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
   const canManageProgram = useMemo(() => {
     return (
       egoJwt &&
-      isProgramAdmin({
+      canWriteProgram({
         permissions,
         programId: props.program.shortName,
       })
