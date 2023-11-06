@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import ProgramManagement from 'components/pages/submission-system/program-management';
-import { isRdpcMember, isProgramAdmin } from 'global/utils/egoJwt';
 import { useProgramCheckEffect } from 'global/hooks/useProgramCheckEffect';
+import { canWriteProgram } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: false,
@@ -28,7 +28,7 @@ export default createPage({
     const {
       query: { shortName },
     } = ctx;
-    return isProgramAdmin({ permissions, programId: String(shortName) });
+    return canWriteProgram({ permissions, programId: String(shortName) });
   },
   startWithGlobalLoader: true,
 })((props) => {
