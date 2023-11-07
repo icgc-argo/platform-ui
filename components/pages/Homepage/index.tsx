@@ -50,16 +50,40 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'November 6, 2023',
+    text: (
+      <>
+        <br />
+        Clinical data is now available to download! You can access the clinical data that
+        corresponds to any file's donor through the download dropdown of the File Repository.
+        <br />
+        <br />
+        Additionally, a new version of the Treatment schema has been released which includes
+        validation changes that permit clinical exceptions for <code>treatment_type</code>:{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-120"
+          target="_blank"
+        >
+          ARGO Dictionary 1.20
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
     title: 'October 18, 2023',
     text: (
       <>
+        <br />
         This release sees the addition of a new optional field called{' '}
         <code>lost_to_followup_after_clinical_event_id</code> to the Donor table, allowing data
         submitters to indicate when a donor was lost to follow up after a clinical event.
-        Information on additional metadata fields can be found in the
-        <Link href="https://docs.icgc-argo.org/dictionary" target="_blank">
-          {' '}
-          ARGO Dictionary
+        Information on additional metadata fields can be found in{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-119"
+          target="_blank"
+        >
+          ARGO Dictionary 1.19
         </Link>
         .
       </>
@@ -69,9 +93,13 @@ const newsItems: NewsItem[] = [
     title: 'August 25, 2023',
     text: (
       <>
+        <br />
         We are excited to announce{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/dictionary">
-          Dictionary 1.18{' '}
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-118"
+        >
+          Dictionary 1.18
         </Link>{' '}
         is now available.
       </>
@@ -81,6 +109,7 @@ const newsItems: NewsItem[] = [
     title: 'June 8, 2023',
     text: (
       <>
+        <br />
         We are thrilled to announce the release of Clinical Exceptions, a new features that allows
         programs to request program and entity level data exceptions. When enabled, clinical
         exceptions will significantly accelerate the clinical data submission process.
@@ -93,37 +122,26 @@ const newsItems: NewsItem[] = [
     ),
   },
   {
-    title: 'May 3, 2023',
-    text: (
-      <>
-        We are excited to announce that a new feature is now available on our platform: the{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/submission/viewing-clinical-data"
-        >
-          Submitted Data Page.
-        </Link>
-      </>
-    ),
-  },
-  {
     title: '',
     text: (
       <>
         <Link
           target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases"
+          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-120"
         >
           ARGO Data Dictionary 1.20
         </Link>
         ,{' '}
-        <Link target="_blank" href="https://docs.icgc-argo.org/docs/release-notes/data-releases">
+        <Link
+          target="_blank"
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-60"
+        >
           Data Release 6.0
         </Link>
         , and{' '}
         <Link
           target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases"
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#october-18-2023-lost-to-followup"
         >
           Software Release UI 1.124.6 - API 3.41.0
         </Link>{' '}
