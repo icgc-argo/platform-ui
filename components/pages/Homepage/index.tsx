@@ -134,16 +134,16 @@ const newsItems: NewsItem[] = [
         ,{' '}
         <Link
           target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-60"
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-70"
         >
-          Data Release 6.0
+          Data Release 7.0
         </Link>
         , and{' '}
         <Link
           target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#october-18-2023-lost-to-followup"
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#november-6-2023-clinical-downloads"
         >
-          Software Release UI 1.124.6 - API 3.41.0
+          Software Release UI 1.125.1 - API 3.42.0
         </Link>{' '}
         are now available.
       </>
