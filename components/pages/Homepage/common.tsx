@@ -100,28 +100,14 @@ export const DataReleaseBar: ComponentType<{
   ) : (
     <div
       css={css`
-        margin: 20px 0px 40px;
+        border-top: 4px solid ${theme.colors.accent3_2};
+        margin: 40px 0px;
         width: 80%;
       `}
     >
-      <div
-        css={css`
-          margin-bottom: 5px;
-        `}
-      >
-        <Typography color={theme.colors.white} variant={'data'}>
-          Data Release {version.releaseIteration} - {version.date}
-        </Typography>
-      </div>
-      <div
-        css={css`
-          border-top: 4px solid ${theme.colors.accent3_2};
-        `}
-      >
-        <Row nogutter justify={'center'}>
-          {formattedStats}
-        </Row>
-      </div>
+      <Row nogutter justify={'center'}>
+        {formattedStats}
+      </Row>
     </div>
   );
 };
@@ -296,16 +282,6 @@ export const NewsContainer: ComponentType<{ newsItems: NewsItem[] }> = ({ newsIt
                 border-bottom: 1px solid ${theme.colors.grey_2};
               `}
             >
-              <Typography
-                bold
-                component="h3"
-                variant="paragraph"
-                css={css`
-                  margin: 0;
-                `}
-              >
-                Announcements:
-              </Typography>
               {newsItems.map((newsItem: NewsItem, index: number) => (
                 <Typography
                   key={`newsItem-${index}`}

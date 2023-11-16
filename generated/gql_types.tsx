@@ -401,6 +401,23 @@ export type CoreCompletionStatusCount = {
   noData: Scalars['Int'];
 };
 
+export type DataCenter = {
+  __typename?: 'DataCenter';
+  analysisScoreUrl?: Maybe<Scalars['String']>;
+  analysisSongCode?: Maybe<Scalars['String']>;
+  analysisSongUrl?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  gatewayUrl?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  organization?: Maybe<Scalars['String']>;
+  shortName: Scalars['String'];
+  submissionScoreUrl?: Maybe<Scalars['String']>;
+  submissionSongCode?: Maybe<Scalars['String']>;
+  submissionSongUrl?: Maybe<Scalars['String']>;
+  uiUrl?: Maybe<Scalars['String']>;
+};
+
 export type DataSubmissionStatus = {
   __typename?: 'DataSubmissionStatus';
   dataSubmitted: Scalars['Int'];
@@ -1100,6 +1117,8 @@ export type Query = {
   clinicalSubmissionTypesList?: Maybe<Array<Scalars['String']>>;
   /** Retrieve current stored Clinical Submission data for a program */
   clinicalSubmissions: ClinicalSubmissionData;
+  /** retrieve all DataCenters */
+  dataCenters?: Maybe<Array<Maybe<DataCenter>>>;
   file?: Maybe<File>;
   /** retrieve join program invitation by id */
   joinProgramInvite?: Maybe<JoinProgramInvite>;
@@ -1118,10 +1137,6 @@ export type Query = {
   self?: Maybe<Profile>;
   sets?: Maybe<Sets>;
   systemAlerts?: Maybe<Array<Maybe<SystemAlert>>>;
-  /** retrieve User data by id */
-  user?: Maybe<User>;
-  /** retrieve paginated list of user data */
-  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -1150,6 +1165,11 @@ export type QueryClinicalSearchResultsArgs = {
 
 export type QueryClinicalSubmissionsArgs = {
   programShortName: Scalars['String'];
+};
+
+
+export type QueryDataCentersArgs = {
+  shortName?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1189,20 +1209,6 @@ export type QueryProgramDonorSummaryArgs = {
 export type QueryQueryArgs = {
   query?: InputMaybe<Scalars['String']>;
   types?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryUsersArgs = {
-  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  pageNum?: InputMaybe<Scalars['Int']>;
-  query?: InputMaybe<Scalars['String']>;
-  sort?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryResults = {
