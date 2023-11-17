@@ -67,6 +67,24 @@ const newsItems: NewsItem[] = [
           ARGO Dictionary 1.20
         </Link>
         .
+        <br />
+        <br />
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-70"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 7.0
+        </Link>
+        , and{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#november-6-2023-clinical-downloads"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Software Release UI 1.125.1 - API 3.42.0
+        </Link>{' '}
+        are also available now.
       </>
     ),
   },
@@ -102,50 +120,6 @@ const newsItems: NewsItem[] = [
           Dictionary 1.18
         </Link>{' '}
         is now available.
-      </>
-    ),
-  },
-  {
-    title: 'June 8, 2023',
-    text: (
-      <>
-        <br />
-        We are thrilled to announce the release of Clinical Exceptions, a new features that allows
-        programs to request program and entity level data exceptions. When enabled, clinical
-        exceptions will significantly accelerate the clinical data submission process.
-        <br />
-        <br />
-        Another new feature is also available on our platform: The Program Entity Page. Accessible
-        from the File Repository, this page presents a summary of the programs, offering a
-        high-level overview of donor and file statistics.
-      </>
-    ),
-  },
-  {
-    title: '',
-    text: (
-      <>
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-120"
-        >
-          ARGO Data Dictionary 1.20
-        </Link>
-        ,{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-70"
-        >
-          Data Release 7.0
-        </Link>
-        , and{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#november-6-2023-clinical-downloads"
-        >
-          Software Release UI 1.125.1 - API 3.42.0
-        </Link>{' '}
-        are now available.
       </>
     ),
   },
@@ -200,6 +174,7 @@ export default function Homepage() {
   return (
     <DefaultLayout>
       <Head subtitle="Homepage"></Head>
+
       <HeroDiv>
         <div
           css={css`
@@ -222,6 +197,7 @@ export default function Homepage() {
           >
             ICGC ARGO Data Platform
           </Typography>
+
           <Typography
             as="p"
             variant="title"
@@ -239,6 +215,7 @@ export default function Homepage() {
             <b>uniformly analyze specimens from 100,000 donors with high quality clinical data </b>
             in order to address outstanding questions that are vital to the quest to defeat cancer.
           </Typography>
+
           <div
             css={css`
               display: flex;
@@ -305,6 +282,7 @@ export default function Homepage() {
           )}
         </div>
       </HeroDiv>
+
       <div
         css={css`
           padding: 24px 10%;
@@ -332,7 +310,9 @@ export default function Homepage() {
               controlled molecular data in the ARGO Data Platform.
             </DataCallout>
           </Col>
+
           <SeparationLine />
+
           <Col sm={12} md={3.8}>
             <DataCallout
               iconName={'download'}
@@ -348,7 +328,9 @@ export default function Homepage() {
               <b> Molecular data</b> can be downloaded after obtaining DACO approval.
             </DataCallout>
           </Col>
+
           <SeparationLine />
+
           <Col sm={12} md={3.8}>
             <DataCallout
               iconName={'workflow'}
@@ -365,7 +347,9 @@ export default function Homepage() {
             </DataCallout>
           </Col>
         </Row>
+
         <NewsContainer newsItems={newsItems} />
+
         <div
           css={css`
             background-image: url('/images/icgc-globe-bg.svg');
