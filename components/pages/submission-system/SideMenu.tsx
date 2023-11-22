@@ -114,11 +114,7 @@ type SampleRegistrationQueryResponse = {
 const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: boolean }) => {
   const pageContext = usePageContext();
   const { egoJwt, permissions } = useAuthContext();
-  const {
-    FEATURE_SUBMITTED_DATA_ENABLED,
-    FEATURE_SUBMIT_CLINICAL_ENABLED,
-    FEATURE_FEDERATED_RDPC,
-  } = getConfig();
+  const { FEATURE_SUBMITTED_DATA_ENABLED, FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED } = getConfig();
 
   const { data } = useQuery<ClinicalSubmissionQueryResponse>(
     SIDE_MENU_CLINICAL_SUBMISSION_STATE_QUERY,
@@ -199,7 +195,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 
   return (
     <div>
-      {!FEATURE_FEDERATED_RDPC && (
+      {!FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED && (
         <>
           <NextLink
             as={PROGRAM_DASHBOARD_PATH.replace(PROGRAM_SHORT_NAME_PATH, props.program.shortName)}
@@ -242,7 +238,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           )}
         </>
       )}
-      {FEATURE_SUBMIT_CLINICAL_ENABLED ? (
+      {FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED ? (
         <NextLink
           as={PROGRAM_SUBMIT_CLINICAL_PATH.replace(
             PROGRAM_SHORT_NAME_PATH,
@@ -284,7 +280,7 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
           />
         </NextLink>
       )}
-      {!FEATURE_FEDERATED_RDPC && FEATURE_SUBMITTED_DATA_ENABLED && (
+      {!FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED && FEATURE_SUBMITTED_DATA_ENABLED && (
         <NextLink
           as={`${PROGRAM_CLINICAL_DATA_PATH.replace(
             PROGRAM_SHORT_NAME_PATH,

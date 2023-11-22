@@ -32,8 +32,8 @@ export default createPage({
     return canReadProgram({ permissions, programId: shortName });
   },
   getInitialProps: async () => {
-    const { FEATURE_SUBMIT_CLINICAL_ENABLED } = getConfig();
-    if (!FEATURE_SUBMIT_CLINICAL_ENABLED) {
+    const { FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED } = getConfig();
+    if (!FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED) {
       const err = new Error('Page Not Found') as Error & { statusCode?: number };
       err[ERROR_STATUS_KEY] = 404;
       throw err;

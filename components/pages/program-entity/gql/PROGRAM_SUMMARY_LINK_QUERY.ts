@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_SUMMARY_LINK_QUERY = gql`
-  query ($SQON: JSON) {
+  query ProgramSummaryQuery($SQON: JSON) {
     file {
       aggregations(filters: $SQON) {
         donors__donor_id {

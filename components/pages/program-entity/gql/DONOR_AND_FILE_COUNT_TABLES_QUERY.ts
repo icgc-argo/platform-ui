@@ -19,8 +19,8 @@
 
 import { gql } from '@apollo/client';
 
-const DONOR_AND_FILE_COUNT_TABLES_QUERY = gql`
-  query (
+export default gql`
+  query DonorAndFileCount(
     $SQON_QC: JSON
     $SQON_SN: JSON
     $SQON_CNUM: JSON
@@ -98,5 +98,3 @@ const DONOR_AND_FILE_COUNT_TABLES_QUERY = gql`
     }
   }
 `;
-
-export default DONOR_AND_FILE_COUNT_TABLES_QUERY;
