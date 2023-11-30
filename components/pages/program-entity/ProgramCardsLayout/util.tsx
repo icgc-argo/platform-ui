@@ -21,7 +21,6 @@ import sqonBuilder from 'sqon-builder';
 import type { ProgramSummaryQuery } from '../types';
 
 export const createProgramSummaryData = (programSummaryQuery: ProgramSummaryQuery) => {
-  console.log('programSummaryQuery!!!!', programSummaryQuery);
   return {
     'Program Shortname': programSummaryQuery?.shortName || '',
     'Full Program Name': programSummaryQuery?.name || '',
