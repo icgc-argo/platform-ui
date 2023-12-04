@@ -74,6 +74,27 @@ const newsItems: NewsItem[] = [
         .
         <br />
         <br />
+        <>
+          To ensure proper service during submissions and downloads, please upgrade your{' '}
+          <Link
+            href="https://github.com/overture-stack/score/tree/develop/score-client"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            score-client
+          </Link>{' '}
+          to v5.10.0 and{' '}
+          <Link
+            href="https://github.com/icgc-argo/argo-data-submission"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            argo-data-submission
+          </Link>{' '}
+          workflow to v1.1.0.
+        </>
+        <br />
+        <br />
         For additional support please contact our{' '}
         <Link href="https://platform.icgc-argo.org/contact">helpdesk</Link>.
       </>
