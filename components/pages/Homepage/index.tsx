@@ -50,6 +50,57 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'November 30, 2023',
+    text: (
+      <>
+        <br />
+        The Toronto Data Center has moved to new infrastructure. There are minor changes to the data
+        upload and download processes, so please review the documentation for{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/submission/submitting-molecular-data"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Molecular Data Submission
+        </Link>{' '}
+        and{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/data-access/data-download"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          File Download
+        </Link>
+        .
+        <br />
+        <br />
+        <>
+          To ensure proper service during submissions and downloads, please upgrade your{' '}
+          <Link
+            href="https://github.com/overture-stack/score/tree/develop/score-client"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            score-client
+          </Link>{' '}
+          to v5.10.0 and{' '}
+          <Link
+            href="https://github.com/icgc-argo/argo-data-submission"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            argo-data-submission
+          </Link>{' '}
+          workflow to v1.1.0.
+        </>
+        <br />
+        <br />
+        For additional support please contact our{' '}
+        <Link href="https://platform.icgc-argo.org/contact">helpdesk</Link>.
+      </>
+    ),
+  },
+  {
     title: 'November 6, 2023',
     text: (
       <>
@@ -62,6 +113,7 @@ const newsItems: NewsItem[] = [
         validation changes that permit clinical exceptions for <code>treatment_type</code>:{' '}
         <Link
           href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-120"
+          rel="noopener noreferrer"
           target="_blank"
         >
           ARGO Dictionary 1.20
@@ -104,22 +156,6 @@ const newsItems: NewsItem[] = [
           ARGO Dictionary 1.19
         </Link>
         .
-      </>
-    ),
-  },
-  {
-    title: 'August 25, 2023',
-    text: (
-      <>
-        <br />
-        We are excited to announce{' '}
-        <Link
-          target="_blank"
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-118"
-        >
-          Dictionary 1.18
-        </Link>{' '}
-        is now available.
       </>
     ),
   },
