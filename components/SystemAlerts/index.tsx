@@ -40,8 +40,6 @@ const getLocalStorage = () => {
   } catch {
     return [];
   }
-
-  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY)) || [];
 };
 const setLocalStorage = (ids: string[]) => {
   localStorage.setItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY, JSON.stringify(ids));
