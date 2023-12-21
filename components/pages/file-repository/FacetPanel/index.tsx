@@ -427,7 +427,6 @@ const FacetPanel = () => {
 
   const { data, loading } = useFileFacetQuery(filters, {
     onCompleted: (data) => {
-      console.log('useFileFacetQuery complete', data);
       setAggregations(data ? data?.file?.aggregations : {});
     },
   });
