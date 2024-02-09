@@ -398,12 +398,6 @@ export default function CreateProgramForm({
             </Row>
           </FormControl>
 
-          <Row>
-            <Col>
-              <SectionTitle>Processing Region</SectionTitle>
-            </Col>
-          </Row>
-
           {!isEditing && (
             <>
               <Row>
