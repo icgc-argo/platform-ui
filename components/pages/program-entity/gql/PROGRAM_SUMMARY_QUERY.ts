@@ -28,7 +28,6 @@ const PROGRAM_SUMMARY_QUERY = gql`
       website
       institutions
       countries
-      regions
       cancerTypes
       primarySites
     }

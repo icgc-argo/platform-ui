@@ -72,7 +72,6 @@ const createUpdateProgramInput = (formData) => ({
   website: formData.website,
   institutions: formData.institutions,
   countries: formData.countries,
-  regions: Array.from(formData.processingRegions),
   membershipType: formData.membershipType,
   cancerTypes: formData.cancerTypes,
   primarySites: formData.primarySites,

@@ -81,7 +81,6 @@ export default function CreateProgramForm({
     membershipType?: string;
     website?: string;
     description?: string;
-    regions?: string[];
   };
   onSubmit: (data: any) => any;
 }) {
@@ -96,7 +95,6 @@ export default function CreateProgramForm({
     membershipType: string;
     website: string;
     description: string;
-    processingRegions: string[];
     adminFirstName?: string;
     adminLastName?: string;
     adminEmail?: string;
@@ -111,7 +109,6 @@ export default function CreateProgramForm({
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
-    processingRegions: program.regions || [],
     adminFirstName: '',
     adminLastName: '',
     adminEmail: '',
@@ -135,8 +132,6 @@ export default function CreateProgramForm({
   } = formModel;
 
   const { data: { programOptions = undefined } = {}, loading } = useQuery(PROGRAM_VALUES_QUERY);
-
-  const regionOptions = get(programOptions, 'regions', []);
 
   /* ****************** *
    * On Change Handlers
@@ -409,28 +404,6 @@ export default function CreateProgramForm({
             </Col>
           </Row>
 
-          <FormControl error={validationErrors.processingRegions} required={true}>
-            <Row>
-              <Col>
-                <InputLabel htmlFor="Processing Region">
-                  Please indicate the region where data can be processed.
-                </InputLabel>
-                <Select
-                  aria-label="Processing Region"
-                  id="checkbox-group-processing-region"
-                  options={regionOptions.map((name) => ({ content: name, value: name }))}
-                  onChange={(val) => setData({ key: 'processingRegions', val: [val] })}
-                  onBlur={handleInputBlur('processingRegion')}
-                  value={form.processingRegions[0] || ''}
-                  size="lg"
-                />
-                <ErrorText error={validationErrors.processingRegions} />
-              </Col>
-            </Row>
-            <Row>
-              <Col />
-            </Row>
-          </FormControl>
           {!isEditing && (
             <>
               <Row>

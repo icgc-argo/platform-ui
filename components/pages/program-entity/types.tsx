@@ -24,7 +24,6 @@ export type ProgramSummaryQuery = {
   website: string;
   institutions: string[];
   countries: string[];
-  regions: string[];
   cancerTypes: string[];
   primarySites: string[];
 };

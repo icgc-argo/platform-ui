@@ -31,7 +31,6 @@ const PROGRAM_QUERY = gql`
       website
       institutions
       countries
-      regions
       membershipType
       cancerTypes
       primarySites
