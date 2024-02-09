@@ -46,14 +46,7 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 
 const dateFormat = 'yyyy-MM-dd';
 export const displayDate = (date: string | Date) => {
-  // Dates stored as UTC need to be converted to milliseconds; breaks on localhost
-  const jsDate =
-    typeof date === 'string'
-      ? parseInt(date)
-        ? new Date(parseInt(date) * 1000)
-        : new Date(date)
-      : date;
-
+  const jsDate = typeof date === 'string' ? new Date(date) : date;
   return formatDate(jsDate, dateFormat);
 };
 
@@ -91,7 +84,7 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
     include: includeKeys = allKeys,
     order = allKeys,
     fileName = 'data.tsv',
-    headerDisplays = allKeys.reduce<(typeof options)['headerDisplays']>(
+    headerDisplays = allKeys.reduce<typeof options['headerDisplays']>(
       (acc, key) => ({
         ...acc,
         [key]: options.headerDisplays ? options.headerDisplays[key] : key,
