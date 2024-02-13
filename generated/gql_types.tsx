@@ -667,7 +667,7 @@ export type Mutation = {
   createJiraTicketWithReCaptcha: TicketCreationResponse;
   /**
    * Create new program
-   * For lists (Cancer Type, Primary Site, Institution, Regions, Countries) the entire new value must be provided, not just values being added.
+   * For lists (Cancer Type, Primary Site, Institution, Countries) the entire new value must be provided, not just values being added.
    * Returns Program object details of created program
    */
   createProgram?: Maybe<Program>;
@@ -854,7 +854,6 @@ export type Program = {
   membershipType?: Maybe<MembershipType>;
   name?: Maybe<Scalars['String']>;
   primarySites?: Maybe<Array<Maybe<Scalars['String']>>>;
-  regions?: Maybe<Array<Maybe<Scalars['String']>>>;
   shortName: Scalars['String'];
   submittedDonors?: Maybe<Scalars['Int']>;
   users?: Maybe<Array<Maybe<ProgramUser>>>;
@@ -1061,7 +1060,6 @@ export type ProgramInput = {
   membershipType: MembershipType;
   name: Scalars['String'];
   primarySites: Array<InputMaybe<Scalars['String']>>;
-  regions: Array<Scalars['String']>;
   shortName: Scalars['String'];
   website: Scalars['String'];
 };
@@ -1072,7 +1070,6 @@ export type ProgramOptions = {
   countries: Array<Maybe<Scalars['String']>>;
   institutions: Array<Maybe<Scalars['String']>>;
   primarySites: Array<Maybe<Scalars['String']>>;
-  regions: Array<Maybe<Scalars['String']>>;
 };
 
 export type ProgramUser = {
@@ -1320,7 +1317,6 @@ export type UpdateProgramInput = {
   membershipType?: InputMaybe<MembershipType>;
   name?: InputMaybe<Scalars['String']>;
   primarySites?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  regions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   website?: InputMaybe<Scalars['String']>;
 };
 

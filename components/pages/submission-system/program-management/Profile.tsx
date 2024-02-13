@@ -24,8 +24,6 @@ import join from 'lodash/join';
 import replace from 'lodash/replace';
 import { Col, Row } from 'react-grid-system';
 
-const REGIONS = ['Africa', 'North America', 'Asia', 'Europe', 'Oceania', 'South America'];
-
 const MISSING_ENTRY_TEXT = '--';
 
 const arrayToText = (array) => (isEmpty(array) ? MISSING_ENTRY_TEXT : join(array, ', '));
@@ -40,7 +38,6 @@ type Program = {
   membershipType?: string;
   description?: string;
   institutions?: string;
-  regions?: string;
 };
 function ProfileView({ program = {} as Program }) {
   const theme = useTheme();
@@ -159,58 +156,6 @@ function ProfileView({ program = {} as Program }) {
           <InputLabel>Institutions</InputLabel>
         </Left>
         <Right>{arrayToText(program.institutions)}</Right>
-      </Row>
-
-      <SectionTitle>Processing Regions</SectionTitle>
-      <Row>
-        <Col
-          css={css`
-            padding: 7px 0;
-          `}
-        >
-          <InputLabel>
-            The data for this program CAN be processed in the following regions:
-          </InputLabel>
-        </Col>
-      </Row>
-      <Row>
-        <Col
-          css={css`
-            padding: 7px 0;
-          `}
-        >
-          <Icon width="15px" height="15px" name="checkmark" fill="success_dark" />
-          &nbsp;{replace(program.regions, ',(?! )', ', ')}
-        </Col>
-      </Row>
-
-      <Row>
-        <Col
-          css={css`
-            padding: 7px 0;
-          `}
-        >
-          <InputLabel>
-            The data for this program CANNOT be processed in the following regions:
-          </InputLabel>
-        </Col>
-      </Row>
-      <Row>
-        <Col
-          css={css`
-            padding: 7px 0;
-          `}
-        >
-          <Icon width="15px" height="15px" name="times" fill="error_dark" />
-          &nbsp;
-          {program.regions &&
-            join(
-              filter(REGIONS, (region) => {
-                return !program.regions.includes(region);
-              }),
-              ', ',
-            )}
-        </Col>
       </Row>
     </div>
   );
