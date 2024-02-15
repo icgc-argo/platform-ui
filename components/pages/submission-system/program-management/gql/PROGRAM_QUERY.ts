@@ -43,6 +43,21 @@ const PROGRAM_QUERY = gql`
         inviteAcceptedAt
         inviteStatus
       }
+      dataCenter {
+        id
+        shortName
+        name
+        organization
+        email
+        uiUrl
+        gatewayUrl
+        analysisSongCode
+        analysisSongUrl
+        analysisScoreUrl
+        submissionSongCode
+        submissionSongUrl
+        submissionScoreUrl
+      }
     }
   }
 `;

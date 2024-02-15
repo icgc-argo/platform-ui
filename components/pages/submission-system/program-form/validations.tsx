@@ -55,6 +55,7 @@ const baseValidations: yup.ObjectSchema<any> = yup.object({
     .required(),
   website: yup.string().label('Website').trim().url(),
   description: yup.string().label('Description').trim(),
+  dataCenter: yup.array().of(yup.string()).label('Data Center').required(),
 });
 
 const adminValidations = yup.object().shape({

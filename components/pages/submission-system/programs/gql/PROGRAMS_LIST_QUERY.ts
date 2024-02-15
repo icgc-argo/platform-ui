@@ -30,6 +30,21 @@ const PROGRAMS_LIST_QUERY = gql`
       genomicDonors
       submittedDonors
       commitmentDonors
+      dataCenter {
+        id
+        shortName
+        name
+        organization
+        email
+        uiUrl
+        gatewayUrl
+        analysisSongCode
+        analysisSongUrl
+        analysisScoreUrl
+        submissionSongCode
+        submissionSongUrl
+        submissionScoreUrl
+      }
     }
   }
 `;
