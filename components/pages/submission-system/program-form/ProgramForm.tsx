@@ -31,6 +31,7 @@ import {
   Typography,
   css,
 } from '@icgc-argo/uikit';
+import { DataCenter } from 'generated/gql_types';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
 import get from 'lodash/get';
@@ -78,7 +79,7 @@ export default function CreateProgramForm({
     primarySites?: string[];
     commitmentDonors?: number;
     institutions?: string[];
-    dataCenter?: string;
+    dataCenter?: DataCenter;
     membershipType?: string;
     website?: string;
     description?: string;
@@ -108,7 +109,7 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
-    dataCenter: program.dataCenter || '',
+    dataCenter: program.dataCenter?.shortName || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
@@ -420,9 +421,9 @@ export default function CreateProgramForm({
                     content: name,
                     value: shortName,
                   }))}
-                  onChange={(val) => setData({ key: 'dataCenter', val: [val] })}
+                  onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}
-                  value={form.dataCenter[0] || ''}
+                  value={form.dataCenter || ''}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.dataCenter} />
