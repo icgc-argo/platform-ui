@@ -416,7 +416,7 @@ export default function CreateProgramForm({
                 <Select
                   aria-label="Data Center"
                   id="checkbox-group-data-center"
-                  options={programOptions.dataCenters.map(({ name, shortName }) => ({
+                  options={get(programOptions, 'dataCenters', []).map(({ name, shortName }) => ({
                     content: name,
                     value: shortName,
                   }))}

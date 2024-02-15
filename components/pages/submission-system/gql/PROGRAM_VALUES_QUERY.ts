@@ -26,6 +26,10 @@ const PROGRAM_VALUES_QUERY = gql`
       primarySites
       institutions
       countries
+      dataCenters {
+        shortName
+        name
+      }
     }
   }
 `;

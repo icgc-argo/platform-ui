@@ -28,6 +28,21 @@ const PROGRAM_SUMMARY_QUERY = gql`
       website
       institutions
       countries
+      dataCenter {
+        id
+        shortName
+        name
+        organization
+        email
+        uiUrl
+        gatewayUrl
+        analysisSongCode
+        analysisSongUrl
+        analysisScoreUrl
+        submissionSongCode
+        submissionSongUrl
+        submissionScoreUrl
+      }
       cancerTypes
       primarySites
     }
