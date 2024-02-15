@@ -78,7 +78,7 @@ export default function CreateProgramForm({
     primarySites?: string[];
     commitmentDonors?: number;
     institutions?: string[];
-    dataCenters?: string[];
+    dataCenter?: string;
     membershipType?: string;
     website?: string;
     description?: string;
@@ -93,7 +93,7 @@ export default function CreateProgramForm({
     primarySites: string[];
     commitmentLevel: number;
     institutions: string[];
-    dataCenters: string[];
+    dataCenter: string;
     membershipType: string;
     website: string;
     description: string;
@@ -108,7 +108,7 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
-    dataCenters: program.dataCenters || [],
+    dataCenter: program.dataCenter || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
@@ -403,26 +403,29 @@ export default function CreateProgramForm({
 
           <Row>
             <Col>
-              <SectionTitle>Processing Region</SectionTitle>
+              <SectionTitle>Processing Data Center</SectionTitle>
             </Col>
           </Row>
 
-          <FormControl error={validationErrors.dataCenters} required={true}>
+          <FormControl error={validationErrors.dataCenter} required={true}>
             <Row>
               <Col>
                 <InputLabel htmlFor="Data Center">
                   Please indicate the data center where data can be processed.
                 </InputLabel>
                 <Select
-                  aria-label="Processing Region"
+                  aria-label="Data Center"
                   id="checkbox-group-data-center"
-                  // options={dataCenters.map((name) => ({ content: name, value: name }))}
-                  // onChange={(val) => setData({ key: 'dataCenter', val: [val] })}
-                  onBlur={handleInputBlur('processingRegion')}
-                  //value={form.dataCenters[0] || ''}
+                  options={programOptions.dataCenters.map(({ name, shortName }) => ({
+                    content: name,
+                    value: shortName,
+                  }))}
+                  onChange={(val) => setData({ key: 'dataCenter', val: [val] })}
+                  onBlur={handleInputBlur('dataCenter')}
+                  value={form.dataCenter[0] || ''}
                   size="lg"
                 />
-                <ErrorText error={validationErrors.processingRegions} />
+                <ErrorText error={validationErrors.dataCenter} />
               </Col>
             </Row>
             <Row>
