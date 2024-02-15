@@ -788,7 +788,6 @@ export type MutationSaveSetArgs = {
 
 
 export type MutationUpdateProgramArgs = {
-  dataCenterShortName?: InputMaybe<Scalars['String']>;
   shortName: Scalars['String'];
   updates: UpdateProgramInput;
 };
