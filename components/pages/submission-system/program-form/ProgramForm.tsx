@@ -167,7 +167,7 @@ export default function CreateProgramForm({
       return seedVal === formVal;
     });
   };
-
+  console.log('\n programOptions', programOptions);
   return (
     <>
       <form name="createProgram">
@@ -417,9 +417,9 @@ export default function CreateProgramForm({
                 <Select
                   aria-label="Data Center"
                   id="checkbox-group-data-center"
-                  options={get(programOptions, 'dataCenters', []).map(({ name, shortName }) => ({
+                  options={get(programOptions, 'dataCenters', []).map(({ name, id }) => ({
                     content: name,
-                    value: shortName,
+                    value: id,
                   }))}
                   onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}

@@ -29,6 +29,7 @@ const PROGRAM_VALUES_QUERY = gql`
       dataCenters {
         shortName
         name
+        id
       }
     }
   }
