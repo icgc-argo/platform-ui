@@ -17,6 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { DataCenter } from 'generated/gql_types';
+
 export type ProgramSummaryQuery = {
   shortName: string;
   description: string;
@@ -24,6 +26,7 @@ export type ProgramSummaryQuery = {
   website: string;
   institutions: string[];
   countries: string[];
+  dataCenter: DataCenter;
   cancerTypes: string[];
   primarySites: string[];
 };

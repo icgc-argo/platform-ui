@@ -52,6 +52,7 @@ const createProgramInput = (formData) => ({
   website: formData.website,
   institutions: formData.institutions,
   countries: formData.countries,
+  dataCenter: formData.dataCenter,
   membershipType: formData.membershipType,
   admins: [
     {
