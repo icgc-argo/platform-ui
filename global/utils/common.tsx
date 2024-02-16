@@ -46,15 +46,16 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 
 const dateFormat = 'yyyy-MM-dd';
 export const displayDate = (date: string | Date) => {
-  // Dates stored as UTC need to be converted to milliseconds; breaks on localhost
-  const jsDate =
-    typeof date === 'string'
-      ? parseInt(date)
-        ? new Date(parseInt(date) * 1000)
-        : new Date(date)
-      : date;
+  if (typeof date === 'string') {
+    // Dates stored as numeric timestamps need to be converted to milliseconds
+    const isTimestamp = parseInt(date) && !Date.parse(date);
 
-  return formatDate(jsDate, dateFormat);
+    const jsDate = isTimestamp ? new Date(parseInt(date) * 1000) : new Date(date);
+
+    return formatDate(jsDate, dateFormat);
+  } else {
+    return formatDate(date, dateFormat);
+  }
 };
 
 const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
