@@ -32,16 +32,6 @@ const PROGRAM_SUMMARY_QUERY = gql`
         id
         shortName
         name
-        organization
-        email
-        uiUrl
-        gatewayUrl
-        analysisSongCode
-        analysisSongUrl
-        analysisScoreUrl
-        submissionSongCode
-        submissionSongUrl
-        submissionScoreUrl
       }
       cancerTypes
       primarySites
