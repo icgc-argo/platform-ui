@@ -28,6 +28,11 @@ const PROGRAM_SUMMARY_QUERY = gql`
       website
       institutions
       countries
+      dataCenter {
+        id
+        shortName
+        name
+      }
       cancerTypes
       primarySites
     }

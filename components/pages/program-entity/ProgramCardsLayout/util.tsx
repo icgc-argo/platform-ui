@@ -36,6 +36,7 @@ export const createProgramSummaryData = (programSummaryQuery: ProgramSummaryQuer
       ''
     ),
     Institutions: programSummaryQuery?.institutions?.join(', ') || '',
+    'Data Center': programSummaryQuery?.dataCenter?.name || '',
     'Cancer Types': programSummaryQuery?.cancerTypes?.join(', ') || '',
   };
 };

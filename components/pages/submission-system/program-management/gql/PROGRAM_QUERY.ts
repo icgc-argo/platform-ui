@@ -43,6 +43,11 @@ const PROGRAM_QUERY = gql`
         inviteAcceptedAt
         inviteStatus
       }
+      dataCenter {
+        id
+        shortName
+        name
+      }
     }
   }
 `;

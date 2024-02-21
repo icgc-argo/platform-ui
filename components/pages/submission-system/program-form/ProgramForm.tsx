@@ -31,6 +31,7 @@ import {
   Typography,
   css,
 } from '@icgc-argo/uikit';
+import { DataCenter } from 'generated/gql_types';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
 import get from 'lodash/get';
@@ -78,6 +79,7 @@ export default function CreateProgramForm({
     primarySites?: string[];
     commitmentDonors?: number;
     institutions?: string[];
+    dataCenter?: DataCenter;
     membershipType?: string;
     website?: string;
     description?: string;
@@ -92,6 +94,7 @@ export default function CreateProgramForm({
     primarySites: string[];
     commitmentLevel: number;
     institutions: string[];
+    dataCenter: string;
     membershipType: string;
     website: string;
     description: string;
@@ -106,6 +109,7 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
+    dataCenter: program.dataCenter?.shortName || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
@@ -395,6 +399,38 @@ export default function CreateProgramForm({
                 </MultiSelect>
                 <ErrorText error={validationErrors.institutions} />
               </Col>
+            </Row>
+          </FormControl>
+
+          <Row>
+            <Col>
+              <SectionTitle>Processing Data Center</SectionTitle>
+            </Col>
+          </Row>
+
+          <FormControl error={validationErrors.dataCenter} required={true}>
+            <Row>
+              <Col>
+                <InputLabel htmlFor="Data Center">
+                  Please indicate the data center where data can be processed.
+                </InputLabel>
+                <Select
+                  aria-label="Data Center"
+                  id="checkbox-group-data-center"
+                  options={get(programOptions, 'dataCenters', []).map(({ name, id }) => ({
+                    content: name,
+                    value: id,
+                  }))}
+                  onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
+                  onBlur={handleInputBlur('dataCenter')}
+                  value={form.dataCenter || ''}
+                  size="lg"
+                />
+                <ErrorText error={validationErrors.dataCenter} />
+              </Col>
+            </Row>
+            <Row>
+              <Col />
             </Row>
           </FormControl>
 
