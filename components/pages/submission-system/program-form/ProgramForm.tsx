@@ -167,6 +167,8 @@ export default function CreateProgramForm({
       return seedVal === formVal;
     });
   };
+  console.log(programOptions);
+  console.log(form.dataCenter);
   return (
     <>
       <form name="createProgram">
@@ -422,7 +424,7 @@ export default function CreateProgramForm({
                   }))}
                   onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}
-                  value={form.dataCenter || undefined}
+                  value={form.dataCenter}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.dataCenter} />
