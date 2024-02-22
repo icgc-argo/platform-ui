@@ -422,8 +422,7 @@ export default function CreateProgramForm({
                   }))}
                   onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}
-                  placeholder={isEditing ? form.dataCenter : undefined}
-                  value={form.dataCenter || ''}
+                  value={form.dataCenter || undefined}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.dataCenter} />
