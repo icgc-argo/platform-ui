@@ -109,7 +109,7 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
-    dataCenter: program.dataCenter?.shortName || '',
+    dataCenter: program.dataCenter?.id || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
@@ -167,7 +167,8 @@ export default function CreateProgramForm({
       return seedVal === formVal;
     });
   };
-
+  console.log('isEditing', isEditing);
+  console.log('form', form);
   return (
     <>
       <form name="createProgram">
@@ -423,6 +424,7 @@ export default function CreateProgramForm({
                   }))}
                   onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}
+                  placeholder={form.dataCenter}
                   value={form.dataCenter || ''}
                   size="lg"
                 />
