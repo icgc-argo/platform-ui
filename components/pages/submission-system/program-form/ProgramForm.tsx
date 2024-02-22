@@ -167,8 +167,6 @@ export default function CreateProgramForm({
       return seedVal === formVal;
     });
   };
-  console.log('isEditing', isEditing);
-  console.log('form', form);
   return (
     <>
       <form name="createProgram">
