@@ -109,7 +109,7 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
-    dataCenter: program.dataCenter?.shortName || '',
+    dataCenter: program.dataCenter?.id || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
@@ -423,7 +423,7 @@ export default function CreateProgramForm({
                   }))}
                   onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
                   onBlur={handleInputBlur('dataCenter')}
-                  value={form.dataCenter || ''}
+                  value={form.dataCenter}
                   size="lg"
                 />
                 <ErrorText error={validationErrors.dataCenter} />
