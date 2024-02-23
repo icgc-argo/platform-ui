@@ -167,8 +167,7 @@ export default function CreateProgramForm({
       return seedVal === formVal;
     });
   };
-  console.log(programOptions);
-  console.log(form.dataCenter);
+
   return (
     <>
       <form name="createProgram">
