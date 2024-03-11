@@ -50,7 +50,7 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
-    title: 'March 07, 2024',
+    title: 'March 11, 2024',
     text: (
       <>
         <br />
