@@ -50,6 +50,38 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'March 07, 2024',
+    text: (
+      <>
+        <br />
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 8.0
+        </Link>{' '}
+        is now available, adding molecular and clinical data for 515 new donors from{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          MUTO-INTL
+        </Link>{' '}
+        and{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          P1000-US
+        </Link>{' '}
+        Programs.
+      </>
+    ),
+  },
+  {
     title: 'November 30, 2023',
     text: (
       <>
@@ -137,25 +169,6 @@ const newsItems: NewsItem[] = [
           Software Release UI 1.125.1 - API 3.42.0
         </Link>{' '}
         are also available now.
-      </>
-    ),
-  },
-  {
-    title: 'October 18, 2023',
-    text: (
-      <>
-        <br />
-        This release sees the addition of a new optional field called{' '}
-        <code>lost_to_followup_after_clinical_event_id</code> to the Donor table, allowing data
-        submitters to indicate when a donor was lost to follow up after a clinical event.
-        Information on additional metadata fields can be found in{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-119"
-          target="_blank"
-        >
-          ARGO Dictionary 1.19
-        </Link>
-        .
       </>
     ),
   },
