@@ -54,8 +54,14 @@ const newsItems: NewsItem[] = [
     text: (
       <>
         <br />
-        Data Release 8.0 is now available, adding molecular and clinical data for 515 new donors
-        from{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 8.0
+        </Link>{' '}
+        is now available, adding molecular and clinical data for 515 new donors from{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
           rel="noopener noreferrer"
