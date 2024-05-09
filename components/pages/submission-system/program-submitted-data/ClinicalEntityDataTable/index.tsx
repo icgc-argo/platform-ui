@@ -151,8 +151,8 @@ const defaultEntityPageSettings = {
 const defaultDonorSettings = {
   ...defaultEntityPageSettings,
   sorted: [
-    { id: 'schemaMetadata.isValid', desc: false },
     { id: 'completionStats.coreCompletionPercentage', desc: false },
+    { id: 'schemaMetadata.isValid', desc: false },
   ],
 };
 
