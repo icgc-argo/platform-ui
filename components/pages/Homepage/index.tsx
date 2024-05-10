@@ -50,6 +50,17 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'April 24, 2024',
+    text: (
+      <>
+        <br />
+        Downloads of ARGO clinical data will now include an Exceptions Manifest file. This new file
+        includes a detailed list of any exceptions to the ARGO data dictionary that affect the
+        donors included in the download.
+      </>
+    ),
+  },
+  {
     title: 'March 11, 2024',
     text: (
       <>
@@ -129,46 +140,6 @@ const newsItems: NewsItem[] = [
         <br />
         For additional support please contact our{' '}
         <Link href="https://platform.icgc-argo.org/contact">helpdesk</Link>.
-      </>
-    ),
-  },
-  {
-    title: 'November 6, 2023',
-    text: (
-      <>
-        <br />
-        Clinical data is now available to download! You can access the clinical data that
-        corresponds to any file's donor through the download dropdown of the File Repository.
-        <br />
-        <br />
-        Additionally, a new version of the Treatment schema has been released which includes
-        validation changes that permit clinical exceptions for <code>treatment_type</code>:{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/dictionary-releases#release-120"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          ARGO Dictionary 1.20
-        </Link>
-        .
-        <br />
-        <br />
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-70"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 7.0
-        </Link>
-        , and{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/software-releases#november-6-2023-clinical-downloads"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Software Release UI 1.125.1 - API 3.42.0
-        </Link>{' '}
-        are also available now.
       </>
     ),
   },
