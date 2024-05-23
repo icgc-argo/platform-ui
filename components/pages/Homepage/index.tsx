@@ -50,6 +50,46 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'May 23, 2024',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 9.0
+        </Link>{' '}
+        adds 1,223 new donors and 43,107 new molecular files and clinical data. This includes the
+        first release of data from the BC Cancer Personalised OncoGenics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA)
+        </Link>{' '}
+        and updates from the CRUK Grand Challenge-Autographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>{' '}
+        and Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>{' '}
+        programs.
+      </>
+    ),
+  },
+  {
     title: 'April 24, 2024',
     text: (
       <>
