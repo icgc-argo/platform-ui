@@ -50,6 +50,46 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'May 23, 2024',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 9.0
+        </Link>{' '}
+        adds 1,223 new donors and 43,107 new molecular files and clinical data. This includes the
+        first release of data from the BC Cancer Personalised OncoGenics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA)
+        </Link>{' '}
+        and updates from the CRUK Grand Challenge-Autographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>{' '}
+        and Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>{' '}
+        programs.
+      </>
+    ),
+  },
+  {
     title: 'April 24, 2024',
     text: (
       <>
@@ -89,57 +129,6 @@ const newsItems: NewsItem[] = [
           P1000-US
         </Link>{' '}
         Programs.
-      </>
-    ),
-  },
-  {
-    title: 'November 30, 2023',
-    text: (
-      <>
-        <br />
-        The Toronto Data Center has moved to new infrastructure. There are minor changes to the data
-        upload and download processes, so please review the documentation for{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/submission/submitting-molecular-data"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Molecular Data Submission
-        </Link>{' '}
-        and{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/data-access/data-download"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          File Download
-        </Link>
-        .
-        <br />
-        <br />
-        <>
-          To ensure proper service during submissions and downloads, please upgrade your{' '}
-          <Link
-            href="https://github.com/overture-stack/score/tree/develop/score-client"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            score-client
-          </Link>{' '}
-          to v5.10.0 and{' '}
-          <Link
-            href="https://github.com/icgc-argo/argo-data-submission"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            argo-data-submission
-          </Link>{' '}
-          workflow to v1.1.0.
-        </>
-        <br />
-        <br />
-        For additional support please contact our{' '}
-        <Link href="https://platform.icgc-argo.org/contact">helpdesk</Link>.
       </>
     ),
   },
