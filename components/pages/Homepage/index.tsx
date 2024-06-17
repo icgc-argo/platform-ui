@@ -61,7 +61,7 @@ const newsItems: NewsItem[] = [
           Data Release 9.0
         </Link>{' '}
         adds 1,223 new donors and 43,107 new molecular files and clinical data. This includes the
-        first release of data from the BC Cancer Personalised OncoGenics Program{' '}
+        first release of data from the BC Cancer Personalized OncoGenomics Program{' '}
         <Link
           href="https://www.icgc-argo.org/page/97/bc-pogp"
           rel="noopener noreferrer"
@@ -69,7 +69,7 @@ const newsItems: NewsItem[] = [
         >
           (POG-CA)
         </Link>{' '}
-        and updates from the CRUK Grand Challenge-Autographs{' '}
+        and updates from the CRUK Grand Challenge-Mutographs{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
           rel="noopener noreferrer"
