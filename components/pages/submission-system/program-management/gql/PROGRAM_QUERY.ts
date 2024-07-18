@@ -31,7 +31,6 @@ const PROGRAM_QUERY = gql`
       website
       institutions
       countries
-      regions
       membershipType
       cancerTypes
       primarySites
@@ -43,6 +42,11 @@ const PROGRAM_QUERY = gql`
         isDacoApproved
         inviteAcceptedAt
         inviteStatus
+      }
+      dataCenter {
+        id
+        shortName
+        name
       }
     }
   }

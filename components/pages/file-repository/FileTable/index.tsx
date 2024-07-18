@@ -38,13 +38,11 @@ import {
   PROGRAM_ENTITY_ID_PATH,
   PROGRAM_ENTITY_PATH,
 } from 'global/constants/pages';
-import useAuthContext from 'global/hooks/useAuthContext';
 import { SortedChangeFunction } from 'global/types/table';
 import NextLink from 'next/link';
 import pluralize from 'pluralize';
 import { createRef, useEffect, useState } from 'react';
 
-import { hasDacoAccess } from 'global/utils/egoJwt';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField, FileCentricDocumentFields } from '../types';

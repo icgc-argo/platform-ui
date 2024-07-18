@@ -31,6 +31,7 @@ import {
   Typography,
   css,
 } from '@icgc-argo/uikit';
+import { DataCenter } from 'generated/gql_types';
 import { PROGRAM_MEMBERSHIP_TYPES } from 'global/constants';
 import useFormHook from 'global/hooks/useFormHook';
 import get from 'lodash/get';
@@ -78,10 +79,10 @@ export default function CreateProgramForm({
     primarySites?: string[];
     commitmentDonors?: number;
     institutions?: string[];
+    dataCenter?: DataCenter;
     membershipType?: string;
     website?: string;
     description?: string;
-    regions?: string[];
   };
   onSubmit: (data: any) => any;
 }) {
@@ -93,10 +94,10 @@ export default function CreateProgramForm({
     primarySites: string[];
     commitmentLevel: number;
     institutions: string[];
+    dataCenter: string;
     membershipType: string;
     website: string;
     description: string;
-    processingRegions: string[];
     adminFirstName?: string;
     adminLastName?: string;
     adminEmail?: string;
@@ -108,10 +109,10 @@ export default function CreateProgramForm({
     primarySites: program.primarySites || [],
     commitmentLevel: program.commitmentDonors,
     institutions: program.institutions || [],
+    dataCenter: program.dataCenter?.id || '',
     membershipType: program.membershipType || '',
     website: program.website || '',
     description: program.description || '',
-    processingRegions: program.regions || [],
     adminFirstName: '',
     adminLastName: '',
     adminEmail: '',
@@ -135,8 +136,6 @@ export default function CreateProgramForm({
   } = formModel;
 
   const { data: { programOptions = undefined } = {}, loading } = useQuery(PROGRAM_VALUES_QUERY);
-
-  const regionOptions = get(programOptions, 'regions', []);
 
   /* ****************** *
    * On Change Handlers
@@ -405,32 +404,36 @@ export default function CreateProgramForm({
 
           <Row>
             <Col>
-              <SectionTitle>Processing Region</SectionTitle>
+              <SectionTitle>Processing Data Center</SectionTitle>
             </Col>
           </Row>
 
-          <FormControl error={validationErrors.processingRegions} required={true}>
+          <FormControl error={validationErrors.dataCenter} required={true}>
             <Row>
               <Col>
-                <InputLabel htmlFor="Processing Region">
-                  Please indicate the region where data can be processed.
+                <InputLabel htmlFor="Data Center">
+                  Please indicate the data center where data can be processed.
                 </InputLabel>
                 <Select
-                  aria-label="Processing Region"
-                  id="checkbox-group-processing-region"
-                  options={regionOptions.map((name) => ({ content: name, value: name }))}
-                  onChange={(val) => setData({ key: 'processingRegions', val: [val] })}
-                  onBlur={handleInputBlur('processingRegion')}
-                  value={form.processingRegions[0] || ''}
+                  aria-label="Data Center"
+                  id="checkbox-group-data-center"
+                  options={get(programOptions, 'dataCenters', []).map(({ name, id }) => ({
+                    content: name,
+                    value: id,
+                  }))}
+                  onChange={(val) => setData({ key: 'dataCenter', val: val || '' })}
+                  onBlur={handleInputBlur('dataCenter')}
+                  value={form.dataCenter}
                   size="lg"
                 />
-                <ErrorText error={validationErrors.processingRegions} />
+                <ErrorText error={validationErrors.dataCenter} />
               </Col>
             </Row>
             <Row>
               <Col />
             </Row>
           </FormControl>
+
           {!isEditing && (
             <>
               <Row>

@@ -667,7 +667,7 @@ export type Mutation = {
   createJiraTicketWithReCaptcha: TicketCreationResponse;
   /**
    * Create new program
-   * For lists (Cancer Type, Primary Site, Institution, Regions, Countries) the entire new value must be provided, not just values being added.
+   * For lists (Cancer Type, Primary Site, Institution, Countries) the entire new value must be provided, not just values being added.
    * Returns Program object details of created program
    */
   createProgram?: Maybe<Program>;
@@ -848,13 +848,13 @@ export type Program = {
   cancerTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   commitmentDonors?: Maybe<Scalars['Int']>;
   countries?: Maybe<Array<Maybe<Scalars['String']>>>;
+  dataCenter?: Maybe<DataCenter>;
   description?: Maybe<Scalars['String']>;
   genomicDonors?: Maybe<Scalars['Int']>;
   institutions?: Maybe<Array<Maybe<Scalars['String']>>>;
   membershipType?: Maybe<MembershipType>;
   name?: Maybe<Scalars['String']>;
   primarySites?: Maybe<Array<Maybe<Scalars['String']>>>;
-  regions?: Maybe<Array<Maybe<Scalars['String']>>>;
   shortName: Scalars['String'];
   submittedDonors?: Maybe<Scalars['Int']>;
   users?: Maybe<Array<Maybe<ProgramUser>>>;
@@ -1051,17 +1051,24 @@ export type ProgramDonorSummaryStats = {
   sangerStatusCount: WorkflowStatusCount;
 };
 
+/**
+ * ProgramInput will throw a bad user input error in the following cases:
+ * if using name that is already in the database,
+ * if using a shortName format that is not "NAME-AREA", a working example is "BOB-CA"
+ * using cancerTypes or countries that doesn't exist or is not in the same format as the database ex. a working example of cancerTypes is "Lung cancer". Bad example are "lung", "lung cancer"
+ * admin's email must be in an email format ex. use @
+ */
 export type ProgramInput = {
   admins: Array<ProgramUserInput>;
   cancerTypes: Array<InputMaybe<Scalars['String']>>;
   commitmentDonors: Scalars['Int'];
   countries: Array<Scalars['String']>;
+  dataCenter?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   institutions: Array<Scalars['String']>;
   membershipType: MembershipType;
   name: Scalars['String'];
   primarySites: Array<InputMaybe<Scalars['String']>>;
-  regions: Array<Scalars['String']>;
   shortName: Scalars['String'];
   website: Scalars['String'];
 };
@@ -1070,9 +1077,9 @@ export type ProgramOptions = {
   __typename?: 'ProgramOptions';
   cancerTypes: Array<Maybe<Scalars['String']>>;
   countries: Array<Maybe<Scalars['String']>>;
+  dataCenters: Array<Maybe<DataCenter>>;
   institutions: Array<Maybe<Scalars['String']>>;
   primarySites: Array<Maybe<Scalars['String']>>;
-  regions: Array<Maybe<Scalars['String']>>;
 };
 
 export type ProgramUser = {
@@ -1083,7 +1090,7 @@ export type ProgramUser = {
   inviteStatus?: Maybe<InviteStatus>;
   isDacoApproved?: Maybe<Scalars['Boolean']>;
   lastName: Scalars['String'];
-  role: UserRole;
+  role?: Maybe<UserRole>;
 };
 
 export type ProgramUserInput = {
@@ -1206,6 +1213,11 @@ export type QueryProgramDonorSummaryArgs = {
 };
 
 
+export type QueryProgramsArgs = {
+  dataCenter?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryQueryArgs = {
   query?: InputMaybe<Scalars['String']>;
   types?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -1315,12 +1327,12 @@ export type UpdateProgramInput = {
   cancerTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   commitmentDonors?: InputMaybe<Scalars['Int']>;
   countries?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  dataCenter?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   institutions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   membershipType?: InputMaybe<MembershipType>;
   name?: InputMaybe<Scalars['String']>;
   primarySites?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  regions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   website?: InputMaybe<Scalars['String']>;
 };
 

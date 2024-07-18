@@ -142,12 +142,18 @@ const getColumnWidth = memoize<
 const defaultEntityPageSettings = {
   page: defaultClinicalEntityFilters.page,
   pageSize: defaultClinicalEntityFilters.pageSize,
-  sorted: [{ id: 'donorId', desc: true }],
+  sorted: [
+    { id: 'schemaMetadata.isValid', desc: false },
+    { id: 'donorId', desc: true },
+  ],
 };
 
 const defaultDonorSettings = {
   ...defaultEntityPageSettings,
-  sorted: [{ id: 'completionStats.coreCompletionPercentage', desc: false }],
+  sorted: [
+    { id: 'completionStats.coreCompletionPercentage', desc: false },
+    { id: 'schemaMetadata.isValid', desc: false },
+  ],
 };
 
 const defaultErrorPageSettings = {

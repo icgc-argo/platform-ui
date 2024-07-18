@@ -25,8 +25,8 @@ export const createProgramSummaryData = (programSummaryQuery: ProgramSummaryQuer
     'Program Shortname': programSummaryQuery?.shortName || '',
     'Full Program Name': programSummaryQuery?.name || '',
     Description: programSummaryQuery?.description || '',
-    Countries: programSummaryQuery?.countries || '',
-    'Primary Sites': programSummaryQuery?.primarySites || '',
+    Countries: programSummaryQuery?.countries?.join(', ') || '',
+    'Primary Sites': programSummaryQuery?.primarySites?.join(', ') || '',
     Website: programSummaryQuery.website ? (
       <Link
         href={programSummaryQuery.website}
@@ -35,9 +35,9 @@ export const createProgramSummaryData = (programSummaryQuery: ProgramSummaryQuer
     ) : (
       ''
     ),
-    Institutions: programSummaryQuery?.institutions || '',
-    'Processing Regions': programSummaryQuery?.regions || '',
-    'Cancer Types': programSummaryQuery?.cancerTypes || '',
+    Institutions: programSummaryQuery?.institutions?.join(', ') || '',
+    'Data Center': programSummaryQuery?.dataCenter?.name || '',
+    'Cancer Types': programSummaryQuery?.cancerTypes?.join(', ') || '',
   };
 };
 

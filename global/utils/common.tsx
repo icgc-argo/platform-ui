@@ -46,8 +46,16 @@ export const asEnum = (obj, { name = 'enum' } = {}) =>
 
 const dateFormat = 'yyyy-MM-dd';
 export const displayDate = (date: string | Date) => {
-  const jsDate = typeof date === 'string' ? new Date(date) : date;
-  return formatDate(jsDate, dateFormat);
+  if (typeof date === 'string') {
+    // Dates stored as numeric timestamps need to be converted to milliseconds
+    const isTimestamp = parseInt(date) && !Date.parse(date);
+
+    const jsDate = isTimestamp ? new Date(parseInt(date) * 1000) : new Date(date);
+
+    return formatDate(jsDate, dateFormat);
+  } else {
+    return formatDate(date, dateFormat);
+  }
 };
 
 const dateTimeFormat = { date: 'MMMM d, yyyy', time: 'h:mm a' };
@@ -84,7 +92,7 @@ export const exportToTsv = <Data extends { [k: string]: string | number }>(
     include: includeKeys = allKeys,
     order = allKeys,
     fileName = 'data.tsv',
-    headerDisplays = allKeys.reduce<typeof options['headerDisplays']>(
+    headerDisplays = allKeys.reduce<(typeof options)['headerDisplays']>(
       (acc, key) => ({
         ...acc,
         [key]: options.headerDisplays ? options.headerDisplays[key] : key,

@@ -30,6 +30,11 @@ const PROGRAMS_LIST_QUERY = gql`
       genomicDonors
       submittedDonors
       commitmentDonors
+      dataCenter {
+        id
+        shortName
+        name
+      }
     }
   }
 `;
