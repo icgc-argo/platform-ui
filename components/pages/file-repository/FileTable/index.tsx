@@ -346,11 +346,6 @@ const FileTable = () => {
     selectionKeyField: 'objectId',
   });
 
-  // When allRowsSelected is true, selectedRows is empty, so objectIds need to be populated
-  const selectedFilesObjectIds = allRowsSelected
-    ? fileRepoEntries.map((record) => record['objectId'])
-    : selectedRows;
-
   const tableElement = (
     <div
       ref={containerRef}
@@ -426,7 +421,7 @@ const FileTable = () => {
           >
             <TsvDownloadButton
               allFilesSelected={allRowsSelected}
-              selectedFilesObjectIds={selectedFilesObjectIds}
+              selectedFilesObjectIds={selectedRows}
               unSelectedFilesObjectIds={unselectedRows}
               selectedFilesCount={selectedRowsCount}
             />
