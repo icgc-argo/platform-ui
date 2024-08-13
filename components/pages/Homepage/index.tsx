@@ -333,8 +333,7 @@ export default function Homepage() {
                 href: DOCS_DATA_DOWNLOAD_PAGE,
               }}
             >
-              ICGC ARGO <b>clinical data </b>will be available for download in the File Repository.
-              <b> Molecular data</b> can be downloaded after obtaining DACO approval.
+              ICGC ARGO <b>clinical and molecular data </b>can be downloaded after obtaining DACO approval.
             </DataCallout>
           </Col>
 
