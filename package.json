@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.125.8",
+  "version": "1.125.10",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
