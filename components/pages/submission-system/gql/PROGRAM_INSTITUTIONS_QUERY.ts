@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -19,22 +19,12 @@
 
 import { gql } from '@apollo/client';
 
-const GET_JOIN_PROGRAM_INFO_QUERY = gql`
-  query GetJoinProgramInfo($inviteId: ID!) {
-    joinProgramInvite(id: $inviteId) {
-      program {
-        name
-        shortName
-      }
-      user {
-        role
-        email
-        firstName
-        lastName
-      }
-      status
+const PROGRAM_INSTITUTIONS_QUERY = gql`
+  query ListInstitutions {
+    programOptions {
+      institutions
     }
   }
 `;
 
-export default GET_JOIN_PROGRAM_INFO_QUERY;
+export default PROGRAM_INSTITUTIONS_QUERY;

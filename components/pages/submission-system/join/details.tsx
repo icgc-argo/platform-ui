@@ -34,8 +34,9 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 import { ERROR_STATUS_KEY } from 'pages/_error';
-import { useState, ComponentProps, useEffect } from 'react';
+import { ComponentProps, useEffect, useState } from 'react';
 
+import PROGRAM_INSTITUTIONS_QUERY from '../gql/PROGRAM_INSTITUTIONS_QUERY';
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';
 import JOIN_PROGRAM_MUTATION from './gql/JOIN_PROGRAM_MUTATION';
@@ -56,25 +57,31 @@ const JoinProgramDetailsPage = ({ firstName, lastName, authorizedPrograms = [] }
 
   const [notFound, setNotFound] = useState(false);
 
-  const {
-    data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
-    loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO_QUERY, {
-    variables: { inviteId },
-    onCompleted: (data) => {
-      if (!data.joinProgramInvite) {
-        return;
-      }
+  const { data: { joinProgramInvite = {} as any } = {}, loading: loadingInvite } = useQuery(
+    GET_JOIN_PROGRAM_INFO_QUERY,
+    {
+      variables: { inviteId },
+      onCompleted: (data) => {
+        if (!data.joinProgramInvite) {
+          return;
+        }
+      },
+      onError: (error) => {
+        if (error.message.includes('NOT_FOUND')) {
+          setNotFound(true);
+        } else {
+          error[ERROR_STATUS_KEY] = 500;
+          throw new Error(error.message);
+        }
+      },
     },
-    onError: (error) => {
-      if (error.message.includes('NOT_FOUND')) {
-        setNotFound(true);
-      } else {
-        error[ERROR_STATUS_KEY] = 500;
-        throw new Error(error.message);
-      }
-    },
-  });
+  );
+  const { data: { programOptions: { institutions = [] } = {} } = {}, loading: loadingInsitutions } =
+    useQuery(PROGRAM_INSTITUTIONS_QUERY);
+
+  const loading = loadingInvite || loadingInsitutions;
+
+  //programOptions: { institutions = [] } = {}
 
   const incorrectEmail =
     !loading && get(userModel, 'context.user.email') !== get(joinProgramInvite, 'user.email');
