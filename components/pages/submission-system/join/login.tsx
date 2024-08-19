@@ -37,17 +37,17 @@ const JoinProgramLoginPage = () => {
   const { inviteId } = router.query;
 
   const [notFound, setNotFound] = useState(false);
-  const {
-    data: { joinProgramInvite = {} as any, programOptions: { institutions = [] } = {} } = {},
-    loading,
-  } = useQuery(GET_JOIN_PROGRAM_INFO_QUERY, {
-    variables: { inviteId },
-    onError: (error) => {
-      if (error.message.includes('NOT_FOUND')) {
-        setNotFound(true);
-      }
+  const { data: { joinProgramInvite = {} as any } = {}, loading } = useQuery(
+    GET_JOIN_PROGRAM_INFO_QUERY,
+    {
+      variables: { inviteId },
+      onError: (error) => {
+        if (error.message.includes('NOT_FOUND')) {
+          setNotFound(true);
+        }
+      },
     },
-  });
+  );
 
   const [fullJoinLoginRedirect, setFullJoinLoginRedirect] = useState('');
 
