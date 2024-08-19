@@ -20,7 +20,7 @@
 import { gql } from '@apollo/client';
 
 const PROGRAM_INSTITUTIONS_QUERY = gql`
-  query GetJoinProgramInfo {
+  query ListInstitutions {
     programOptions {
       institutions
     }
