@@ -50,6 +50,46 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'September 25, 2024',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 10.0
+        </Link>{' '}
+        adds 297 new donors and 18,419 new molecular files and clinical data. This includes the
+        first release of data from the BC Cancer Personalised OncoGenics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA)
+        </Link>{' '}
+        and updates from the CRUK Grand Challenge—Autographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>{' '}
+        and Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>{' '}
+        programs.
+      </>
+    ),
+  },
+  {
     title: 'May 24, 2024',
     text: (
       <>
@@ -97,38 +137,6 @@ const newsItems: NewsItem[] = [
         Downloads of ARGO clinical data will now include an Exceptions Manifest file. This new file
         includes a detailed list of any exceptions to the ARGO data dictionary that affect the
         donors included in the download.
-      </>
-    ),
-  },
-  {
-    title: 'March 11, 2024',
-    text: (
-      <>
-        <br />
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 8.0
-        </Link>{' '}
-        is now available, adding molecular and clinical data for 515 new donors from{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          MUTO-INTL
-        </Link>{' '}
-        and{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          P1000-US
-        </Link>{' '}
-        Programs.
       </>
     ),
   },
@@ -333,7 +341,8 @@ export default function Homepage() {
                 href: DOCS_DATA_DOWNLOAD_PAGE,
               }}
             >
-              ICGC ARGO <b>clinical and molecular data </b>can be downloaded after obtaining DACO approval.
+              ICGC ARGO <b>clinical and molecular data </b>can be downloaded after obtaining DACO
+              approval.
             </DataCallout>
           </Col>
 
