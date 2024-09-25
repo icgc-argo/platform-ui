@@ -68,7 +68,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (POG-CA)
-        </Link>{' '}
+        </Link>
         , CRUK Grand Challenge—Autographs{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
@@ -76,7 +76,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (MUTO-INTL)
-        </Link>{' '}
+        </Link>
         , and Polyethnic-1000{' '}
         <Link
           href="https://www.icgc-argo.org/page/115/p-1000"
