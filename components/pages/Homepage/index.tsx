@@ -60,7 +60,7 @@ const newsItems: NewsItem[] = [
         >
           Data Release 11.0
         </Link>{' '}
-        adds 396 new donors and 5,456 molecular files and clinical data. This includes updates from
+        adds 37 new donors and 6,069 molecular files and clinical data. This includes updates from
         BC Cancer Personalized OncoGenomics Program{' '}
         <Link
           href="https://www.icgc-argo.org/page/97/bc-pogp"
@@ -76,7 +76,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (MUTO-INTL)
-        </Link>{' '}
+        </Link>
         , and Polyethnic-1000{' '}
         <Link
           href="https://www.icgc-argo.org/page/115/p-1000"
