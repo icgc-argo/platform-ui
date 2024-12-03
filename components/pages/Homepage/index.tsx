@@ -50,6 +50,46 @@ import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {
+    title: 'December 3, 2024',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 11.0
+        </Link>{' '}
+        adds 37 new donors and 6,069 molecular files and clinical data. This includes updates from
+        BC Cancer Personalized OncoGenomics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA)
+        </Link>
+        , CRUK Grand Challenge—Autographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>
+        , and Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>{' '}
+        programs.
+      </>
+    ),
+  },
+  {
     title: 'September 25, 2024',
     text: (
       <>
@@ -126,17 +166,6 @@ const newsItems: NewsItem[] = [
           (P1000-US)
         </Link>{' '}
         programs.
-      </>
-    ),
-  },
-  {
-    title: 'April 24, 2024',
-    text: (
-      <>
-        <br />
-        Downloads of ARGO clinical data will now include an Exceptions Manifest file. This new file
-        includes a detailed list of any exceptions to the ARGO data dictionary that affect the
-        donors included in the download.
       </>
     ),
   },
