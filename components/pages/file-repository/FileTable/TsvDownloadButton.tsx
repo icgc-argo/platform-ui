@@ -73,7 +73,10 @@ const TsvDownloadButton = ({
   // - user is logged in and has DACO access
   // - files are selected (TODO: download all by filter)
   const showClinicalDownload =
-    FEATURE_CLINICAL_DOWNLOAD && hasDacoAccess(permissions) && selectedFilesCount > 0;
+    FEATURE_CLINICAL_DOWNLOAD &&
+    hasDacoAccess(permissions) &&
+    selectedFilesCount > 0 &&
+    !allFilesSelected;
 
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
