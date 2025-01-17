@@ -332,6 +332,8 @@ const FileTable = () => {
       }))
     : [];
 
+  const allObjectIds = fileRepoEntries.map((entry) => entry.objectId);
+
   const {
     allRowsSelected,
     isSelected,
@@ -424,6 +426,7 @@ const FileTable = () => {
               selectedFilesObjectIds={selectedRows}
               unSelectedFilesObjectIds={unselectedRows}
               selectedFilesCount={selectedRowsCount}
+              allObjectIds={allObjectIds}
             />
             {/* disabled for initial File Repo release - Allows customization of shown columns */}
             {/* <DropdownButton
