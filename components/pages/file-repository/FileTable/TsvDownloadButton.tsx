@@ -134,6 +134,7 @@ const TsvDownloadButton = ({
   const allFilesDownloadFilter: RecursiveFilter = {
     op: 'and',
     content: [
+      repoFilters,
       {
         op: 'in',
         content: {
