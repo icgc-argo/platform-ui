@@ -131,18 +131,12 @@ const TsvDownloadButton = ({
     ],
   };
 
+  /*
+   * resolve donors server side
+   */
   const allFilesDownloadFilter: RecursiveFilter = {
     op: 'and',
-    content: [
-      repoFilters,
-      {
-        op: 'in',
-        content: {
-          field: 'object_id',
-          value: allObjectIds,
-        },
-      },
-    ],
+    content: [repoFilters],
   };
 
   /*
