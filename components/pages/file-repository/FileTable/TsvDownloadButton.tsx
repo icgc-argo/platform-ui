@@ -54,13 +54,11 @@ const TsvDownloadButton = ({
   selectedFilesCount,
   selectedFilesObjectIds,
   unSelectedFilesObjectIds,
-  allObjectIds,
 }: {
   allFilesSelected: boolean;
   selectedFilesCount: number;
   selectedFilesObjectIds: string[];
   unSelectedFilesObjectIds: string[];
-  allObjectIds: string[];
 }) => {
   const theme = useTheme();
   const toaster = useCommonToasters();
@@ -152,17 +150,15 @@ const TsvDownloadButton = ({
           )
         : urljoin(GATEWAY_API_ROOT, 'clinical/api/donors/data-for-files');
 
-    const body =
-      type === 'ALL'
-        ? undefined
-        : JSON.stringify({
-            objectIds: selectedFilesObjectIds,
-          });
-
     return downloadFileWithEgoToken(downloadUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body,
+      body:
+        type === 'SELECTION'
+          ? JSON.stringify({
+              objectIds: selectedFilesObjectIds,
+            })
+          : undefined,
     });
   };
 
