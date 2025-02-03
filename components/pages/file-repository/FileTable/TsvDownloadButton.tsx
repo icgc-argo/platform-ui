@@ -145,7 +145,7 @@ const TsvDownloadButton = ({
       type === 'ALL'
         ? urljoin(
             GATEWAY_API_ROOT,
-            'clinical/api/donors/data-for-all-files',
+            'clinical/api/donors/data-for-query',
             `?filter=${encodeURIComponent(JSON.stringify(allFilesDownloadFilter))}`,
           )
         : urljoin(GATEWAY_API_ROOT, 'clinical/api/donors/data-for-files');
