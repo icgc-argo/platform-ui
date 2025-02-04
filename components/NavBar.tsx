@@ -34,6 +34,7 @@ import {
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import {
+  DATA_DISCOVERY_PATH,
   FILE_REPOSITORY_PATH,
   LOGIN_PAGE_PATH,
   SUBMISSION_PATH,
@@ -156,6 +157,13 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   const onProfilePage = path.search(USER_PAGE_PATH) === 0;
 
   const mainNavDetails: Array<NavElement> = [
+    {
+      name: 'Data Discovery',
+      href: DATA_DISCOVERY_PATH,
+      as: DATA_DISCOVERY_PATH,
+      active: path.search(DATA_DISCOVERY_PATH) === 0,
+      LinkComp: NextLink,
+    },
     {
       name: 'File Repository',
       href: FILE_REPOSITORY_PATH,

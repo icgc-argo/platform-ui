@@ -66,5 +66,8 @@ export const RDPC_PATH = '/rdpc';
 // file repository paths
 export const FILE_REPOSITORY_PATH = `/repository`;
 
+// data discovery path
+export const DATA_DISCOVERY_PATH = `/discovery`;
+
 // team page
 export const TEAM_PATH = '/team';
