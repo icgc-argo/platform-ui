@@ -203,7 +203,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
+  const NUM_ELEMENTS_IN_FIRST_SECTION = 2;
   const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
   const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
