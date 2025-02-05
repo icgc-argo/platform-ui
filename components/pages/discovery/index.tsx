@@ -24,6 +24,7 @@ import Head from '../head';
 
 import Charts from './Charts';
 import StatsCard from './components/StatsCard';
+import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -38,6 +39,8 @@ const DiscoveryPage = () => {
       <PageBody sidebarColSize="0">
         <div />
         <PageContent>
+          <QueryBarContainer />
+
           <StatsCard
             data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
             isLoading={false}
