@@ -23,6 +23,7 @@ import Card from './components/Card';
 import { donorData } from './data';
 import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarChart';
 import LineChart, { LineChartConfig } from './components/api/LineChart';
+import RangeSelector from './components/Selector';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -224,7 +225,11 @@ const Charts = () => {
         <BarChart data={donorData} config={programIDBarChart} />
       </Card>
 
-      <Card title="Track Embargo State" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
+      <Card
+        title="Track Embargo State"
+        Selector={<RangeSelector data={[{ label: '3M' }, { label: '6M' }]} activeIndex={0} />}
+        css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
+      >
         <LineChart data={lineChartData} config={lineChartConfig} />
       </Card>
 

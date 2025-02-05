@@ -20,52 +20,51 @@
  */
 
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
 
-const Card = ({
-  title,
-  children,
-  className,
-  Selector,
+const RangeSelector = ({
+  data,
+  activeIndex,
 }: {
-  title: string;
-  children: ReactNode;
-  className?: string;
-  Selector?: ReactNode;
-}): JSX.Element => (
-  <div
-    className={className}
-    css={css({
-      display: 'flex',
-      flexDirection: 'column',
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
-      background: 'white',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-    })}
-  >
+  data: { label: string; onClick: any }[];
+  activeIndex: number;
+}) => {
+  return (
     <div
       css={css({
         display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: '7px 7px 16px 7px',
+
+        'button:not(:last-child)': {
+          marginRight: '3px',
+        },
       })}
     >
-      <h2
-        css={css({
-          margin: 0,
-          color: '#0774D3',
-          fontSize: '16px',
-          fontWeight: 600,
-        })}
-      >
-        {title}
-      </h2>
-      <div css={css({ marginLeft: 'auto' })}> {Selector}</div>
-    </div>
-    {children}
-  </div>
-);
+      {data.map((d, index) => {
+        return (
+          <button
+            onClick={d.onClick}
+            css={css({
+              fontFamily: 'Lato',
+              fontWeight: 600,
+              fontSize: '10px',
+              alignSelf: 'flex-start',
+              padding: '2px 4px',
+              borderColor: index === activeIndex ? '#0774D3' : '#DCDDE1',
+              borderStyle: 'solid',
+              borderWidth: '2px',
+              borderRadius: '15px',
+              background: 'white',
 
-export default Card;
+              '&:hover': {
+                cursor: 'pointer',
+                borderColor: '#52abfa',
+              },
+            })}
+          >
+            {d.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+export default RangeSelector;
