@@ -44,9 +44,9 @@ const Card = ({
   >
     <h2
       css={css({
-        color: '#3182ce',
-        fontSize: '24px',
-        margin: '0 0 16px 0',
+        color: '#0774D3',
+        fontSize: '16px',
+        margin: '7px 7px 16px 7px',
         fontWeight: 600,
       })}
     >
