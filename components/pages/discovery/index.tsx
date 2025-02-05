@@ -17,12 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, styled } from '@icgc-argo/uikit';
+import { PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import { Row, setConfiguration } from 'react-grid-system';
 import Head from '../head';
 
 import Charts from './Charts';
+import StatsCard from './components/StatsCard';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -34,7 +35,16 @@ const DiscoveryPage = () => {
     <PageContainer>
       <Head subtitle={'Data Discovery'} />
       <NavBar />
-      <Charts />
+      <PageBody sidebarColSize="0">
+        <div />
+        <PageContent>
+          <StatsCard
+            data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
+            isLoading={false}
+          />
+          <Charts />
+        </PageContent>
+      </PageBody>
     </PageContainer>
   );
 };
