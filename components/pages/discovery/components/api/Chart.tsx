@@ -18,9 +18,9 @@
  */
 
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 
-export const Chart = ({ children, height }: { children: ReactNode; height?: any }) => (
+export const Chart = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
   <div className="scroll" css={css({ flex: 1, overflow: 'scroll' })}>
     <div css={css({ width: '100%', height: height || '100%' })}>{children}</div>
   </div>
