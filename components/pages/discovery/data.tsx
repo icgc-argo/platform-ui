@@ -17,26 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, styled } from '@icgc-argo/uikit';
-import NavBar from 'components/NavBar';
-import { Row, setConfiguration } from 'react-grid-system';
-import Head from '../head';
+const donorData = [
+  { site: 'Blood', donors: 75 },
+  { site: 'Brain', donors: 225 },
+  { site: 'Breast', donors: 250 },
+  { site: 'Liver', donors: 150 },
+  { site: 'Kidney', donors: 175 },
+  { site: 'Prostate', donors: 100 },
+  { site: 'Lung', donors: 240 },
+  { site: 'Stomach', donors: 350 },
+  { site: 'Pancreas', donors: 100 },
+  { site: 'Skin', donors: 175 },
+  { site: 'Cervix Bone', donors: 150 },
+  { site: 'Head', donors: 225 },
+  { site: 'Bladder', donors: 240 },
+  { site: 'Esophagus', donors: 90 },
+  { site: 'Colon', donors: 160 },
+];
 
-import Charts from './Charts';
+const rdpcNodeData = [
+  { city: 'Dublin', donors: 273 },
+  { city: 'Barcalona', donors: 120 },
+  { city: 'London', donors: 21173 },
+];
 
-export const PaddedRow = styled(Row)`
-  padding-bottom: 8px;
-`;
-setConfiguration({ gutterWidth: 9 });
-
-const DiscoveryPage = () => {
-  return (
-    <PageContainer>
-      <Head subtitle={'Data Discovery'} />
-      <NavBar />
-      <Charts />
-    </PageContainer>
-  );
-};
-
-export default DiscoveryPage;
+export { donorData, rdpcNodeData };

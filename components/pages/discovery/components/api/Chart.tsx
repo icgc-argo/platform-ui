@@ -17,26 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, styled } from '@icgc-argo/uikit';
-import NavBar from 'components/NavBar';
-import { Row, setConfiguration } from 'react-grid-system';
-import Head from '../head';
+import { css } from '@emotion/react';
+import { PropsWithChildren } from 'react';
 
-import Charts from './Charts';
-
-export const PaddedRow = styled(Row)`
-  padding-bottom: 8px;
-`;
-setConfiguration({ gutterWidth: 9 });
-
-const DiscoveryPage = () => {
-  return (
-    <PageContainer>
-      <Head subtitle={'Data Discovery'} />
-      <NavBar />
-      <Charts />
-    </PageContainer>
-  );
-};
-
-export default DiscoveryPage;
+export const Chart = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
+  <div css={css({ flex: 1, overflow: 'scroll' })}>
+    <div css={css({ width: '100%', height: height || '100%' })}>{children}</div>
+  </div>
+);
