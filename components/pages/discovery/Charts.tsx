@@ -22,6 +22,7 @@ import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import Card from './components/Card';
 import { donorData } from './data';
 import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarChart';
+import LineChart, { LineChartConfig } from './components/api/LineChart';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -129,6 +130,90 @@ const Charts = () => {
     theme: chartTheme.theme,
   });
 
+  const lineChartConfig: LineChartConfig = {
+    axisBottom: {
+      legend: 'Months',
+      tickValues: 6,
+      legendOffset: 34,
+      legendPosition: 'middle',
+    },
+    axisLeft: {
+      legend: 'Files',
+      renderTick: () => null,
+      legendOffset: -12,
+      legendPosition: 'middle',
+    },
+
+    margin: {
+      top: 12,
+      right: 24,
+      left: 24,
+      bottom: 56,
+    },
+
+    colors: ['#EF4110', '#4596DE'],
+
+    theme: {
+      ...chartTheme.theme,
+      legends: {
+        text: {
+          fontSize: 6,
+        },
+      },
+    },
+  };
+
+  const lineChartData = [
+    {
+      id: 'private',
+      color: '#EF4110',
+      data: [
+        {
+          x: 1,
+          y: 276,
+        },
+        {
+          x: 7,
+          y: 34,
+        },
+        {
+          x: 9,
+          y: 168,
+        },
+        {
+          x: 12,
+          y: 285,
+        },
+        {
+          x: 18,
+          y: 144,
+        },
+        {
+          x: 19,
+          y: 129,
+        },
+      ],
+    },
+    {
+      id: 'published',
+      color: '#4596DE',
+      data: [
+        {
+          x: 3,
+          y: 11,
+        },
+        {
+          x: 4,
+          y: 294,
+        },
+        {
+          x: 6,
+          y: 21,
+        },
+      ],
+    },
+  ];
+
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
@@ -140,7 +225,7 @@ const Charts = () => {
       </Card>
 
       <Card title="Track Embargo State" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <BarChart data={donorData} config={programIDBarChart} />
+        <LineChart data={lineChartData} config={lineChartConfig} />
       </Card>
 
       <Card
@@ -152,7 +237,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <BarChart data={donorData} config={programIDBarChart} />
+        <LineChart data={lineChartData} config={lineChartConfig} />
       </Card>
 
       <Card
