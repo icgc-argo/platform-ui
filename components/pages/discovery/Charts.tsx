@@ -17,10 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, PageContainer, styled, UikitTheme, useTheme } from '@icgc-argo/uikit';
-import NavBar from 'components/NavBar';
-import { Row, setConfiguration } from 'react-grid-system';
-import Head from '../head';
+import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
 
 import Card from './components/Card';
 import { donorData } from './data';
@@ -127,6 +124,7 @@ const Charts = () => {
       left: 24,
       bottom: 56,
     },
+
     colorBy: 'indexValue',
     theme: chartTheme.theme,
   });

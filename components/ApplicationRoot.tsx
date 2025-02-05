@@ -139,9 +139,6 @@ export default function ApplicationRoot({
               left: 0px;
               right: 0px;
             } 
-            svg text {
-                          font-family:Work Sans,sans-serif ;
-            }
             /* custom! */
             #__next {
               position: absolute;
