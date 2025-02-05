@@ -21,40 +21,7 @@ import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
 import { Chart } from './Chart';
 
-const data = [
-  {
-    id: 'css',
-    label: 'css',
-    value: 578,
-    color: 'hsl(18, 70%, 50%)',
-  },
-  {
-    id: 'stylus',
-    label: 'stylus',
-    value: 585,
-    color: 'hsl(256, 70%, 50%)',
-  },
-  {
-    id: 'elixir',
-    label: 'elixir',
-    value: 472,
-    color: 'hsl(112, 70%, 50%)',
-  },
-  {
-    id: 'php',
-    label: 'php',
-    value: 555,
-    color: 'hsl(135, 70%, 50%)',
-  },
-  {
-    id: 'javascript',
-    label: 'javascript',
-    value: 237,
-    color: 'hsl(240, 70%, 50%)',
-  },
-];
-
-const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
+const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
   return (
     <div
       css={css({
@@ -72,7 +39,7 @@ const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
               css={css({
                 width: '12px',
                 height: '12px',
-                backgroundColor: legend.color,
+                backgroundColor: legend.colour,
                 marginRight: '8px',
               })}
             />
@@ -84,10 +51,8 @@ const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   );
 };
 
-// marginTop
-// marginLeft
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-const MyResponsivePie = () => {
+const DoughnutChart = ({ data, config }) => {
   return (
     <Chart>
       <div
@@ -98,7 +63,7 @@ const MyResponsivePie = () => {
           height: '100%',
         })}
       >
-        <div className="s" css={css({ height: '100%', width: '70%', position: 'relative' })}>
+        <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
           <ResponsivePie
             data={data}
             isInteractive={false}
@@ -117,12 +82,11 @@ const MyResponsivePie = () => {
             className="inner"
             css={css({
               position: 'absolute',
-              //background: 'blue',
               height: '60%',
               width: '60%',
-              top: '50%',
               // set center to halfway across parent container
-              left: '50%', //'179px',
+              top: '50%',
+              left: '50%',
               // change origin to centered by moving it back half it's own width + height
               transform: 'translate(-50%,-50%)',
             })}
@@ -148,4 +112,4 @@ const MyResponsivePie = () => {
   );
 };
 
-export default MyResponsivePie;
+export default DoughnutChart;

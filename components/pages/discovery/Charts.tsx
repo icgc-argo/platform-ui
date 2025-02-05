@@ -25,6 +25,8 @@ import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarC
 import LineChart, { LineChartConfig } from './components/api/LineChart';
 import RangeSelector from './components/Selector';
 import MyResponsivePie from './components/api/Doughnut';
+import { random } from 'lodash';
+import DoughnutChart from './components/api/DoughnutChart';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -216,6 +218,28 @@ const Charts = () => {
     },
   ];
 
+  const doughnutChartData = [
+    {
+      id: 'Biliary Tract',
+      label: 'Biliary Tract',
+      colour: '#D4A268',
+      value: 68,
+    },
+    { id: 'Lung', label: 'Lung', colour: '#E66550', value: 24 },
+    { id: 'Bladder', label: 'Bladder', colour: '#8B5E9F', value: 12 },
+    { id: 'Prostate', label: 'Prostate', colour: '#B8CCE4', value: 3 },
+    { id: 'Colorectal', label: 'Colorectal', colour: '#E789F', value: 927 },
+    { id: 'Breast', label: 'Breast', colour: '#F2CBBD', value: 24 },
+    { id: 'Uterine', label: 'Uterine', colour: '#4472C4', value: 66 },
+    { id: 'Skin', label: 'Skin', colour: '#A8D08D', value: 77 },
+    { id: 'Oral', label: 'Oral', colour: '#70C4C4', value: 87 },
+    { id: 'Ovarian', label: 'Ovarian', colour: '#E371B2', value: 44 },
+    { id: 'Brain', label: 'Brain', colour: '#70AD47', value: 23 },
+    { id: 'Esophageal', label: 'Esophageal', colour: '#ED7D31', value: 11 },
+    { id: 'Liver', label: 'Liver', colour: '#D64F42', value: 88 },
+    { id: 'Thyroid', label: 'Thyroid', colour: '#4BACC6', value: 65 },
+  ];
+
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
@@ -243,7 +267,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <MyResponsivePie />
+        <DoughnutChart data={doughnutChartData} />
       </Card>
 
       <Card
