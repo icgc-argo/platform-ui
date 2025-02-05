@@ -34,6 +34,7 @@ import {
 } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import {
+  DATA_DISCOVERY_PATH,
   FILE_REPOSITORY_PATH,
   LOGIN_PAGE_PATH,
   SUBMISSION_PATH,
@@ -157,6 +158,13 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
 
   const mainNavDetails: Array<NavElement> = [
     {
+      name: 'Data Discovery',
+      href: DATA_DISCOVERY_PATH,
+      as: DATA_DISCOVERY_PATH,
+      active: path.search(DATA_DISCOVERY_PATH) === 0,
+      LinkComp: NextLink,
+    },
+    {
       name: 'File Repository',
       href: FILE_REPOSITORY_PATH,
       as: FILE_REPOSITORY_PATH,
@@ -195,7 +203,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const NUM_ELEMENTS_IN_FIRST_SECTION = 1;
+  const NUM_ELEMENTS_IN_FIRST_SECTION = 2;
   const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
   const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
