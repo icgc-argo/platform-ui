@@ -36,6 +36,7 @@
     "@icgc-argo/uikit": "2.4.0",
     "@nivo/bar": "^0.88.0",
     "@nivo/core": "^0.88.0",
+    "@nivo/line": "^0.88.0",
     "@overture-stack/arranger-components": "3.0.0-beta.11",
     "apollo-upload-client": "^11.0.0",
     "browser-fs-access": "^0.31.1",
