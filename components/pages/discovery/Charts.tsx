@@ -24,6 +24,7 @@ import { donorData } from './data';
 import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarChart';
 import LineChart, { LineChartConfig } from './components/api/LineChart';
 import RangeSelector from './components/Selector';
+import MyResponsivePie from './components/api/Doughnut';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -242,7 +243,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <LineChart data={lineChartData} config={lineChartConfig} />
+        <MyResponsivePie />
       </Card>
 
       <Card
