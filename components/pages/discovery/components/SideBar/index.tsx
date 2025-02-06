@@ -27,20 +27,28 @@ const FacetRow = styled('div')`
   justify-content: space-between;
 `;
 
+const x = [
+  'General',
+  'Demographic',
+  'Biospecimen',
+  'Diagnosis',
+  'Treatment',
+  'Assessment',
+  'Molecular',
+];
+
 const SideBar = () => {
   const theme = useTheme();
-  const [isOpen, setOpen] = useState(false);
+
   return (
     <div>
-      <FacetFolder
-        title="Bio"
-        isOpen={isOpen}
-        onClick={() => {
-          setOpen((s) => !s);
-        }}
-      >
-        hi
-      </FacetFolder>
+      {x.map((d) => {
+        return (
+          <FacetFolder title={d} onClick={() => console.log('a')}>
+            hi
+          </FacetFolder>
+        );
+      })}
       <FacetRow
         css={css`
           border-top: 1px solid ${theme.colors.grey_2};

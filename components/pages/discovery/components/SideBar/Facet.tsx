@@ -19,7 +19,7 @@
 
 import { css } from '@emotion/react';
 import { Icon } from '@icgc-argo/uikit';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 
 const styles = {
   parent: css({ ':hover': { cursor: 'pointer' } }),
@@ -39,12 +39,18 @@ const styles = {
 
 export const FacetFolder = ({
   title,
-  isOpen,
   onClick,
   children,
-}: PropsWithChildren<{ title: string; isOpen: boolean; onClick: () => void }>) => {
+}: PropsWithChildren<{ title: string; onClick: ({ isOpen }: { isOpen: boolean }) => void }>) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div css={styles.parent} onClick={onClick}>
+    <div
+      css={styles.parent}
+      onClick={() => {
+        onClick({ isOpen });
+        setIsOpen((isOpen) => !isOpen);
+      }}
+    >
       <div css={styles.folder}>
         <h2>{title}</h2>
         <Icon name={isOpen ? 'chevron_up' : 'chevron_down'} fill="white" height="8px" />
