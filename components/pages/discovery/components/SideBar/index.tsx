@@ -45,7 +45,11 @@ const SideBar = () => {
   return (
     <div>
       <button onClick={() => setExpandAll((s) => !s)}>EXPAND ALL</button>
-      <FiltersSearchBox isOpen={expandAll} onClick={() => setExpandAll((s) => !s)} />
+      <FiltersSearchBox
+        title="Filter"
+        isExpanded={expandAll}
+        onClick={() => setExpandAll((s) => !s)}
+      />
       {x.map((d) => {
         return (
           <FacetFolder title={d} onClick={() => console.log('a')} override={expandAll}>
