@@ -40,15 +40,21 @@ const x = [
 const SideBar = () => {
   const theme = useTheme();
 
+  const [expandAll, setExpandAll] = useState(false);
+
   return (
     <div>
+      <button onClick={() => setExpandAll((s) => !s)}>EXPAND ALL</button>
       {x.map((d) => {
         return (
-          <FacetFolder title={d} onClick={() => console.log('a')}>
+          <FacetFolder title={d} onClick={() => console.log('a')} override={expandAll}>
             hi
           </FacetFolder>
         );
       })}
+      <FacetFolder title={'test'} onClick={() => console.log('a')}>
+        hi
+      </FacetFolder>
       <FacetRow
         css={css`
           border-top: 1px solid ${theme.colors.grey_2};

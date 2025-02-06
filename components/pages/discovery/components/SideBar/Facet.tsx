@@ -19,7 +19,7 @@
 
 import { css } from '@emotion/react';
 import { Icon } from '@icgc-argo/uikit';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 
 const styles = {
   parent: css({ ':hover': { cursor: 'pointer' } }),
@@ -40,9 +40,20 @@ const styles = {
 export const FacetFolder = ({
   title,
   onClick,
+  override,
   children,
-}: PropsWithChildren<{ title: string; onClick: ({ isOpen }: { isOpen: boolean }) => void }>) => {
+}: PropsWithChildren<{
+  title: string;
+  onClick: ({ isOpen }: { isOpen: boolean }) => void;
+  override?: boolean;
+}>) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // example use: expand all from parent component
+  useEffect(() => {
+    setIsOpen(override);
+  }, [override]);
+
   return (
     <div
       css={styles.parent}
