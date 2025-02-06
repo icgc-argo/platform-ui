@@ -17,7 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useTheme } from '@icgc-argo/uikit';
+import { css, Icon, Input, MenuItem, styled, Tooltip, useTheme } from '@icgc-argo/uikit';
+
+const FacetRow = styled('div')`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
 const SideBar = () => {
   const theme = useTheme();
@@ -28,14 +34,12 @@ const SideBar = () => {
       `}
     >
       <MenuItem
-        onClick={(e) => clickHandler(currentSearch)}
-        selected={expandedFacets.includes(currentSearch.facetPath)}
-        className="FacetMenu"
-        content={currentSearch.name}
+        onClick={(e) => console.log('click')}
+        content={'menu content'}
         chevronOnLeftSide={true}
         isFacetVariant={true}
         RightSideComp={
-          <Tooltip position={'right'} html={currentSearch.tooltipContent}>
+          <Tooltip position={'right'} html={'tooltip'}>
             <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
           </Tooltip>
         }
@@ -54,25 +58,20 @@ const SideBar = () => {
             align-items: left;
           `}
         >
-          {excludedIds.length > 0 && (
-            <SelectedIds ids={excludedIds} onRemove={onRemoveSelectedId} />
-          )}
           <div
             css={css`
               position: relative;
               width: 250px;
             `}
-            ref={searchRef}
           >
             <Input
               size="sm"
               aria-label="search-for-files"
-              placeholder={currentSearch.placeholderText}
+              placeholder={'place hodler'}
               preset="search"
-              value={searchQuery}
+              value={'search value'}
               onChange={(e) => {
-                setSearchQuery(trim(e.target.value));
-                if (searchQuery && searchQuery.length >= 1) setSearchOpen(true);
+                console.log('input change');
               }}
               css={css`
                 &:hover {
@@ -81,34 +80,22 @@ const SideBar = () => {
                 border-radius: 8px;
               `}
             />
-            {searchQuery && searchQuery.length >= 1 && searchOpen ? (
-              <>
-                <div
-                  css={css`
-                    background: transparent;
-                    border-right: 1px solid ${theme.colors.primary_4};
-                    border-left: 1px solid ${theme.colors.primary_4};
-                    height: 18px;
-                    width: 248px;
-                    z-index: 0;
-                    position: absolute;
-                    top: 28px;
-                  `}
-                />
-                <SearchResultsMenu
-                  searchData={idSearchResults}
-                  isLoading={idSearchLoading}
-                  onSelect={(value) => {
-                    setFilterFromFieldAndValue({
-                      field: FileCentricDocumentFields[currentSearch.esDocumentField],
-                      value,
-                    });
-                    setSearchQuery('');
-                    setSearchOpen(false);
-                  }}
-                />
-              </>
-            ) : null}
+
+            <>
+              <div
+                css={css`
+                  background: transparent;
+                  border-right: 1px solid ${theme.colors.primary_4};
+                  border-left: 1px solid ${theme.colors.primary_4};
+                  height: 18px;
+                  width: 248px;
+                  z-index: 0;
+                  position: absolute;
+                  top: 28px;
+                `}
+              />
+              <div>search resulsts</div>
+            </>
           </div>
         </div>
       </MenuItem>
