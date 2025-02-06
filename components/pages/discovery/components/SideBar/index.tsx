@@ -18,7 +18,7 @@
  */
 
 import { css, Icon, Input, MenuItem, styled, Tooltip, useTheme } from '@icgc-argo/uikit';
-import { FacetFolder } from './Facet';
+import { FacetFolder, FiltersSearchBox } from './Facet';
 import { useState } from 'react';
 
 const FacetRow = styled('div')`
@@ -45,6 +45,7 @@ const SideBar = () => {
   return (
     <div>
       <button onClick={() => setExpandAll((s) => !s)}>EXPAND ALL</button>
+      <FiltersSearchBox isOpen={expandAll} onClick={() => setExpandAll((s) => !s)} />
       {x.map((d) => {
         return (
           <FacetFolder title={d} onClick={() => console.log('a')} override={expandAll}>

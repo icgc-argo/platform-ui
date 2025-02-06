@@ -19,10 +19,11 @@
 
 import { css } from '@emotion/react';
 import { Icon } from '@icgc-argo/uikit';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { Values } from 'global/utils/typeUtils';
+import { ComponentType, PropsWithChildren, useEffect, useState } from 'react';
 
 const styles = {
-  parent: css({ ':hover': { cursor: 'pointer' } }),
+  container: css({ ':hover': { cursor: 'pointer' } }),
   folder: css({
     display: 'flex',
     height: '36px',
@@ -30,24 +31,54 @@ const styles = {
     alignItems: 'center',
     backgroundColor: '#225088',
     padding: '9px',
+    color: 'white',
 
     h2: { margin: 0, fontSize: '14px', fontWeight: 400, color: 'white' },
-    svg: { marginLeft: 'auto' },
   }),
   content: (isOpen) => ({ display: isOpen ? 'block' : 'none' }),
 };
 
+const ArrowToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick?: () => void }) => {
+  return (
+    <Icon
+      onClick={onClick}
+      name={isOpen ? 'chevron_up' : 'chevron_down'}
+      fill="white"
+      height="8px"
+    />
+  );
+};
+
+const Mode = {
+  TOGGLE: 'TOGGLE',
+  OPEN: 'OPEN',
+} as const;
+type Mode = Values<typeof Mode>;
+
+/**
+ *
+ * @param param0
+ * @returns
+ */
 export const FacetFolder = ({
   title,
   onClick,
   override,
+  Toggle,
+  mode = Mode.TOGGLE,
   children,
 }: PropsWithChildren<{
   title: string;
-  onClick: ({ isOpen }: { isOpen: boolean }) => void;
+  onClick?: ({ isOpen }: { isOpen: boolean }) => void;
   override?: boolean;
+  Toggle?: ComponentType<{ isOpen: boolean; onClick?: () => void }>;
+  mode?: Mode;
 }>) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const isToggleMode = mode === Mode.TOGGLE;
+
+  const [isOpen, setIsOpen] = useState(!isToggleMode);
+
+  const ToggleComp = Toggle || ArrowToggle;
 
   // example use: expand all from parent component
   useEffect(() => {
@@ -55,19 +86,39 @@ export const FacetFolder = ({
   }, [override]);
 
   return (
-    <div
-      css={styles.parent}
-      onClick={() => {
-        onClick({ isOpen });
-        setIsOpen((isOpen) => !isOpen);
-      }}
-    >
+    <div css={styles.container}>
       <div css={styles.folder}>
         <h2>{title}</h2>
-        <Icon name={isOpen ? 'chevron_up' : 'chevron_down'} fill="white" height="8px" />
+        <div css={css({ marginLeft: 'auto' })}>
+          <ToggleComp
+            isOpen={isOpen}
+            onClick={() => {
+              onClick && onClick({ isOpen });
+              isToggleMode && setIsOpen((isOpen) => !isOpen);
+            }}
+          />
+        </div>
       </div>
-      <div css={styles.content(isOpen)}>{children}</div>
+      <div css={styles.content(isToggleMode ? isOpen : true)}>{children}</div>
     </div>
+  );
+};
+
+export const FiltersSearchBox = ({ isOpen, onClick }) => {
+  return (
+    <FacetFolder
+      title="Filters"
+      Toggle={() => {
+        return (
+          <div onClick={() => onClick()}>
+            Expand All <ArrowToggle isOpen={isOpen} />
+          </div>
+        );
+      }}
+      mode={Mode.OPEN}
+    >
+      <div> search box </div>
+    </FacetFolder>
   );
 };
 
