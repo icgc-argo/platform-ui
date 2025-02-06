@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -18,6 +18,8 @@
  */
 
 import { css, Icon, Input, MenuItem, styled, Tooltip, useTheme } from '@icgc-argo/uikit';
+import { FacetFolder } from './Facet';
+import { useState } from 'react';
 
 const FacetRow = styled('div')`
   display: flex;
@@ -27,79 +29,91 @@ const FacetRow = styled('div')`
 
 const SideBar = () => {
   const theme = useTheme();
+  const [isOpen, setOpen] = useState(false);
   return (
-    <FacetRow
-      css={css`
-        border-top: 1px solid ${theme.colors.grey_2};
-      `}
-    >
-      <MenuItem
-        onClick={(e) => console.log('click')}
-        content={'menu content'}
-        chevronOnLeftSide={true}
-        isFacetVariant={true}
-        RightSideComp={
-          <Tooltip position={'right'} html={'tooltip'}>
-            <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-          </Tooltip>
-        }
+    <div>
+      <FacetFolder
+        title="Bio"
+        isOpen={isOpen}
+        onClick={() => {
+          setOpen((s) => !s);
+        }}
+      >
+        hi
+      </FacetFolder>
+      <FacetRow
         css={css`
-          flex: 1;
+          border-top: 1px solid ${theme.colors.grey_2};
         `}
       >
-        <div
-          onClick={(e) => e.stopPropagation()}
+        <MenuItem
+          onClick={(e) => console.log('click')}
+          content={'menu content'}
+          chevronOnLeftSide={true}
+          isFacetVariant={true}
+          RightSideComp={
+            <Tooltip position={'right'} html={'tooltip'}>
+              <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
+            </Tooltip>
+          }
           css={css`
-            padding: 6px 12px;
-            border-bottom: 1px solid ${theme.colors.grey_2};
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: left;
+            flex: 1;
           `}
         >
           <div
+            onClick={(e) => e.stopPropagation()}
             css={css`
-              position: relative;
-              width: 250px;
+              padding: 6px 12px;
+              border-bottom: 1px solid ${theme.colors.grey_2};
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: left;
             `}
           >
-            <Input
-              size="sm"
-              aria-label="search-for-files"
-              placeholder={'place hodler'}
-              preset="search"
-              value={'search value'}
-              onChange={(e) => {
-                console.log('input change');
-              }}
+            <div
               css={css`
-                &:hover {
-                  background-color: white;
-                }
-                border-radius: 8px;
+                position: relative;
+                width: 250px;
               `}
-            />
-
-            <>
-              <div
+            >
+              <Input
+                size="sm"
+                aria-label="search-for-files"
+                placeholder={'place hodler'}
+                preset="search"
+                value={'search value'}
+                onChange={(e) => {
+                  console.log('input change');
+                }}
                 css={css`
-                  background: transparent;
-                  border-right: 1px solid ${theme.colors.primary_4};
-                  border-left: 1px solid ${theme.colors.primary_4};
-                  height: 18px;
-                  width: 248px;
-                  z-index: 0;
-                  position: absolute;
-                  top: 28px;
+                  &:hover {
+                    background-color: white;
+                  }
+                  border-radius: 8px;
                 `}
               />
-              <div>search resulsts</div>
-            </>
+
+              <>
+                <div
+                  css={css`
+                    background: transparent;
+                    border-right: 1px solid ${theme.colors.primary_4};
+                    border-left: 1px solid ${theme.colors.primary_4};
+                    height: 18px;
+                    width: 248px;
+                    z-index: 0;
+                    position: absolute;
+                    top: 28px;
+                  `}
+                />
+                <div>search resulsts</div>
+              </>
+            </div>
           </div>
-        </div>
-      </MenuItem>
-    </FacetRow>
+        </MenuItem>
+      </FacetRow>
+    </div>
   );
 };
 
