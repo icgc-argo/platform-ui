@@ -57,7 +57,7 @@ const baseConfig: BarChartConfig = {
     legendPosition: 'start',
   },
   animate: false,
-  enableLabel: false,
+  enableLabel: true,
   enableGridX: false,
   enableGridY: false,
   theme: {

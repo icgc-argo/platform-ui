@@ -25,8 +25,9 @@ import Head from '../head';
 import Charts from './Charts';
 import StatsCard from './components/StatsCard';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
-import SideBar from './components/SideBar';
+import Sidebar from './components/SideBar';
 import Footer from 'components/Footer';
+import { useState } from 'react';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -42,6 +43,8 @@ export const PageContainer = styled('div')`
 
 const DiscoveryPage = () => {
   const theme = useTheme();
+
+  const [isSidebarOpen, setSetbarView] = useState(true);
 
   return (
     <div
@@ -59,13 +62,13 @@ const DiscoveryPage = () => {
       <div
         css={css({
           display: 'grid',
-          gridTemplateColumns: '248px 1fr',
+          gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
           gridTemplateRows: 'calc(100vh - 116px)',
           minHeight: 0,
           overflow: 'hidden',
         })}
       >
-        <SideBar />
+        <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
         <div css={css({ overflow: 'scroll' })}>
           <QueryBarContainer />
           <StatsCard

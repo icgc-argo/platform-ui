@@ -18,14 +18,11 @@
  */
 
 import { css } from '@emotion/react';
-import { Icon, Input, UikitTheme, useTheme } from '@icgc-argo/uikit';
+import { Icon, Input } from '@icgc-argo/uikit';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 const commonStyle = {
-  container: css({
-    backgroundColor: '#04518C',
-    color: 'white',
-  }),
+  container: css({}),
   header: css({
     display: 'flex',
     flexDirection: 'row',
@@ -97,7 +94,7 @@ const filtersSearchBoxStyles = {
 
 export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
   return (
-    <div css={css([commonStyle.container])}>
+    <div css={css([commonStyle.container, css({ height: '100px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
         <h2>{title}</h2>
         <div onClick={() => onClick()}>
