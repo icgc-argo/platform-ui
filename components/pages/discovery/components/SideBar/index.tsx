@@ -17,25 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Input, MenuItem, styled, Tooltip, useTheme } from '@icgc-argo/uikit';
+import { css, Facet, Icon, Input, MenuItem, styled, Tooltip, useTheme } from '@icgc-argo/uikit';
 import { FacetFolder, FiltersSearchBox } from './Facet';
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
+import { facets } from './data';
 
-const FacetRow = styled('div')`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const x = [
-  'General',
-  'Demographic',
-  'Biospecimen',
-  'Diagnosis',
-  'Treatment',
-  'Assessment',
-  'Molecular',
-];
+const FacetRow = ({ children }: PropsWithChildren<{}>) => {
+  return (
+    <div css={css({ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' })}>
+      {children}
+    </div>
+  );
+};
 
 const SideBar = () => {
   const theme = useTheme();
@@ -50,88 +43,26 @@ const SideBar = () => {
         isExpanded={expandAll}
         onClick={() => setExpandAll((s) => !s)}
       />
-      {x.map((d) => {
+      {facets.map(({ folder, contents }) => {
         return (
-          <FacetFolder title={d} onClick={() => console.log('a')} override={expandAll}>
-            hi
+          <FacetFolder title={folder} onClick={() => console.log('a')} override={expandAll}>
+            {contents.map((facet) => {
+              return (
+                <Facet
+                  subMenuName={facet.name}
+                  options={[{ doc_count: 222, isChecked: false, key: 'a' }]}
+                  onOptionToggle={() => console.log('option toggle')}
+                  onSelectAllOptions={() => console.log('on select all')}
+                />
+              );
+            })}
           </FacetFolder>
         );
       })}
       <FacetFolder title={'test'} onClick={() => console.log('a')}>
         hi
       </FacetFolder>
-      <FacetRow
-        css={css`
-          border-top: 1px solid ${theme.colors.grey_2};
-        `}
-      >
-        <MenuItem
-          onClick={(e) => console.log('click')}
-          content={'menu content'}
-          chevronOnLeftSide={true}
-          isFacetVariant={true}
-          RightSideComp={
-            <Tooltip position={'right'} html={'tooltip'}>
-              <Icon name="question_circle" fill="primary_2" width="18px" height="18px" />
-            </Tooltip>
-          }
-          css={css`
-            flex: 1;
-          `}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            css={css`
-              padding: 6px 12px;
-              border-bottom: 1px solid ${theme.colors.grey_2};
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: left;
-            `}
-          >
-            <div
-              css={css`
-                position: relative;
-                width: 250px;
-              `}
-            >
-              <Input
-                size="sm"
-                aria-label="search-for-files"
-                placeholder={'place hodler'}
-                preset="search"
-                value={'search value'}
-                onChange={(e) => {
-                  console.log('input change');
-                }}
-                css={css`
-                  &:hover {
-                    background-color: white;
-                  }
-                  border-radius: 8px;
-                `}
-              />
-
-              <>
-                <div
-                  css={css`
-                    background: transparent;
-                    border-right: 1px solid ${theme.colors.primary_4};
-                    border-left: 1px solid ${theme.colors.primary_4};
-                    height: 18px;
-                    width: 248px;
-                    z-index: 0;
-                    position: absolute;
-                    top: 28px;
-                  `}
-                />
-                <div>search resulsts</div>
-              </>
-            </div>
-          </div>
-        </MenuItem>
-      </FacetRow>
+      <FacetRow></FacetRow>
     </div>
   );
 };
