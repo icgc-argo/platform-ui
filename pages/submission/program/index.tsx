@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import ProgramsPage from 'components/pages/submission-system/programs';
 import { isDccMember } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
-import ProgramsPage from 'components/pages/submission-system/programs';
 
 export default createPage({
   isPublic: false,

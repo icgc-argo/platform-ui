@@ -17,20 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  css,
-  Facet,
-  Icon,
-  Input,
-  MenuItem,
-  styled,
-  Tooltip,
-  UikitIconNames,
-  useTheme,
-} from '@icgc-argo/uikit';
-import { FacetFolder, FiltersSearchBox } from './Facet';
+import { css, Facet, Icon, UikitIconNames, useTheme } from '@icgc-argo/uikit';
 import { PropsWithChildren, useState } from 'react';
 import { facets } from './data';
+import { FacetFolder, FiltersSearchBox } from './Facet';
 
 const FacetRow = ({ children }: PropsWithChildren<{}>) => {
   return (

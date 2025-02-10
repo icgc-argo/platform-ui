@@ -19,14 +19,13 @@
 
 import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
 
-import Card from './components/Card';
-import { donorData } from './data';
 import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarChart';
-import LineChart, { LineChartConfig } from './components/api/LineChart';
-import RangeSelector from './components/Selector';
-import { random } from 'lodash';
 import DoughnutChart from './components/api/DoughnutChart';
+import LineChart, { LineChartConfig } from './components/api/LineChart';
+import Card from './components/Card';
 import { commonStyles } from './components/common';
+import RangeSelector from './components/Selector';
+import { donorData } from './data';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {

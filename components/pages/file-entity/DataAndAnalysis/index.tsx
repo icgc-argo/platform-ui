@@ -19,13 +19,13 @@
 
 import { css, Link, SimpleTable, useTheme } from '@icgc-argo/uikit';
 import {
+  GENOME_ANNOTATION,
+  GENOME_ANNOTATION_URL,
+  GENOME_BUILD,
+  GENOME_BUILD_URL,
   WORKFLOW_NAMES,
   WORKFLOW_NAME_URLS,
   WORKFLOW_VERSION_URLS,
-  GENOME_BUILD,
-  GENOME_BUILD_URL,
-  GENOME_ANNOTATION,
-  GENOME_ANNOTATION_URL,
 } from 'global/constants';
 import { FileCard, TableDiv } from '../common';
 import { DataAnalysisInfo, DataAnalysisWorkflowType } from '../types';

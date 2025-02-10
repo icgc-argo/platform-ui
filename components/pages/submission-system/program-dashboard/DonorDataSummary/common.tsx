@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
-import { DataTableStarIcon as StarIcon } from '../../common';
 import { ComponentProps, useEffect, useState } from 'react';
+import { DataTableStarIcon as StarIcon } from '../../common';
+import { DonorDataReleaseState, ProgramDonorReleaseStats } from './types';
 
 export const RELEASED_STATE_FILL_COLOURS: {
   [k in DonorDataReleaseState]: ComponentProps<typeof StarIcon>['fill'];

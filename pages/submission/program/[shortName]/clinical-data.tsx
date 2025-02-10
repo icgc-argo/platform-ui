@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import ProgramClinicalData from 'components/pages/submission-system/program-submitted-data';
-import ErrorPage from 'pages/_error';
-import { canReadProgram } from 'global/utils/egoJwt';
-import { usePageQuery } from 'global/hooks/usePageContext';
 import { getConfig } from 'global/config';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { canReadProgram } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
+import ErrorPage from 'pages/_error';
 
 export default createPage({
   isPublic: false,

@@ -20,11 +20,11 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import {
   Container,
+  css,
   Link,
   SelectTable,
   TableColumnConfig,
   Typography,
-  css,
   useSelectTableSelectionState,
   useTheme,
 } from '@icgc-argo/uikit';
@@ -47,8 +47,8 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentField, FileCentricDocumentFields } from '../types';
 import { FileRepoFiltersType } from '../utils/types';
-import TsvDownloadButton from './TsvDownloadButton';
 import FILE_REPOSITORY_TABLE_QUERY from './gql/FILE_REPOSITORY_TABLE_QUERY';
+import TsvDownloadButton from './TsvDownloadButton';
 import {
   FileRepositoryRecord,
   FileRepositoryRecordSort,

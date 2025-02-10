@@ -30,10 +30,10 @@ import { ProgramSummaryQuery } from '../types';
 import { useQuery } from '@apollo/client';
 import DONOR_AND_FILE_COUNT_TABLES_QUERY from '../gql/DONOR_AND_FILE_COUNT_TABLES_QUERY';
 import {
-  createProgramSummaryData,
-  createSqonsVariables,
   createCountsByDataCategoryData,
   createExperimentalStrategyData,
+  createProgramSummaryData,
+  createSqonsVariables,
 } from './util';
 
 const PaddedRow = styled(Row)`

@@ -19,28 +19,28 @@
 
 import ApplicationRoot from 'components/ApplicationRoot';
 import { EGO_JWT_KEY } from 'global/constants';
-import { decodeToken, isValidJwt, getPermissionsFromToken } from 'global/utils/egoJwt';
+import { decodeToken, getPermissionsFromToken, isValidJwt } from 'global/utils/egoJwt';
 import nextCookies from 'next-cookies';
 import Router from 'next/router';
 
-import ReactGA from 'react-ga';
-import { ERROR_STATUS_KEY } from './_error';
-import App, { AppContext } from 'next/app';
-import Cookies from 'js-cookie';
-import urlJoin from 'url-join';
-import queryString from 'query-string';
-import { get } from 'lodash';
-import DefaultLayout from '../components/pages/DefaultLayout';
 import { NormalizedCacheObject } from '@apollo/client';
+import Cookies from 'js-cookie';
+import { get } from 'lodash';
+import App, { AppContext } from 'next/app';
+import queryString from 'query-string';
+import ReactGA from 'react-ga';
+import urlJoin from 'url-join';
+import DefaultLayout from '../components/pages/DefaultLayout';
+import { ERROR_STATUS_KEY } from './_error';
 
-import { PageWithConfig, ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
-import { NextPageContext } from 'next';
-import { getConfig } from 'global/config';
 import { DnaLoader } from '@icgc-argo/uikit';
-import { sleep, OAUTH_QUERY_PARAM_NAME } from 'global/utils/common';
-import omit from 'lodash/omit';
-import refreshJwt from 'global/utils/refreshJwt';
 import MaintenancePage from 'components/pages/MaintenancePage';
+import { getConfig } from 'global/config';
+import { OAUTH_QUERY_PARAM_NAME, sleep } from 'global/utils/common';
+import { ClientSideGetInitialPropsContext, PageWithConfig } from 'global/utils/pages/types';
+import refreshJwt from 'global/utils/refreshJwt';
+import omit from 'lodash/omit';
+import { NextPageContext } from 'next';
 
 const redirect = (res, url: string) => {
   if (res) {

@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ClinicalDownloadButton from '../DownloadButtons';
 import {
   Button,
   Container,
@@ -30,15 +29,16 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { Dispatch, SetStateAction, useState, createRef, RefObject, useEffect } from 'react';
-import FilterModal from './FilterModal';
+import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
 import {
+  clinicalEntityFields,
   ClinicalEntitySearchResultResponse,
   CompletionStates,
   emptySearchResponse,
-  clinicalEntityFields,
   TsvDownloadIds,
 } from '../common';
+import ClinicalDownloadButton from '../DownloadButtons';
+import FilterModal from './FilterModal';
 import {
   searchBackgroundStyle,
   searchBarParentStyle,

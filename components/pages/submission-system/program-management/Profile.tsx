@@ -17,11 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, InputLabel, Typography, useTheme } from '@icgc-argo/uikit';
-import filter from 'lodash/filter';
+import { css, InputLabel, Typography, useTheme } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
 import join from 'lodash/join';
-import replace from 'lodash/replace';
 import { Col, Row } from 'react-grid-system';
 
 const MISSING_ENTRY_TEXT = '--';

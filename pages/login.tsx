@@ -25,7 +25,7 @@ import queryString from 'query-string';
 
 import { createRedirectURL } from 'global/utils/common';
 import { getPermissionsFromToken } from 'global/utils/egoJwt';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default createPage<{ redirect: string; egoJwt: string }>({
   isPublic: true,

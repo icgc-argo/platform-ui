@@ -18,6 +18,7 @@
  */
 
 import {
+  css,
   FormControl,
   FormHelperText,
   Icon,
@@ -26,7 +27,6 @@ import {
   Select,
   styled,
   UikitTheme,
-  css,
 } from '@icgc-argo/uikit';
 import { PROGRAM_USER_ROLES } from 'global/constants';
 import { ComponentType } from 'react';

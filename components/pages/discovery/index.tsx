@@ -17,18 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container, css, PageBody, PageContent, styled, useTheme } from '@icgc-argo/uikit';
-import NavBar from 'components/NavBar';
-import { Row, setConfiguration } from 'react-grid-system';
-import Head from '../head';
-
-import Charts from './Charts';
-import StatsCard from './components/StatsCard';
-import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
-import Sidebar from './components/SideBar';
-import Footer from 'components/Footer';
+import { css, styled, useTheme } from '@icgc-argo/uikit';
 import { useState } from 'react';
+import { Row, setConfiguration } from 'react-grid-system';
+
+import Footer from 'components/Footer';
+import NavBar from 'components/NavBar';
+import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
+import Head from '../head';
+import Charts from './Charts';
 import { commonStyles } from './components/common';
+import Sidebar from './components/SideBar';
+import StatsCard from './components/StatsCard';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;

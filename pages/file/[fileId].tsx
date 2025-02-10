@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
-import FileEntityPage from 'components/pages/file-entity';
-import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
-import { usePageQuery } from 'global/hooks/usePageContext';
-import sqonBuilder from 'sqon-builder';
 import { useQuery } from '@apollo/client';
-import VALID_FILE_ENTITY_CHECK_QUERY from 'components/pages/file-entity/gql/VALID_FILE_ENTITY_CHECK_QUERY';
-import get from 'lodash/get';
 import useGlobalLoader from 'components/GlobalLoader';
+import FileEntityPage from 'components/pages/file-entity';
+import VALID_FILE_ENTITY_CHECK_QUERY from 'components/pages/file-entity/gql/VALID_FILE_ENTITY_CHECK_QUERY';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { createPage } from 'global/utils/pages';
+import get from 'lodash/get';
+import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
+import sqonBuilder from 'sqon-builder';
 
 export default createPage({
   isPublic: true,

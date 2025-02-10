@@ -17,11 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import get from 'lodash/get';
+import Page403 from 'components/pages/403';
 import Page404 from 'components/pages/404';
 import Page500 from 'components/pages/500';
-import Page403 from 'components/pages/403';
 import ClientError from 'components/pages/ClientError';
+import get from 'lodash/get';
 import { Component } from 'react';
 
 export const ERROR_STATUS_KEY = 'statusCode';

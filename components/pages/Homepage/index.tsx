@@ -36,6 +36,7 @@ import {
   DOCS_SUBMISSION_OVERVIEW_PAGE,
 } from 'global/constants/docSitePaths';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { ComponentType } from 'react';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 import {
   DataCallout,
@@ -46,7 +47,6 @@ import {
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
-import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
   {

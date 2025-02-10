@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import HomePage from '../components/pages/Homepage';
 import { createPage } from 'global/utils/pages';
+import HomePage from '../components/pages/Homepage';
 const landingPage = HomePage;
 
 export default createPage({

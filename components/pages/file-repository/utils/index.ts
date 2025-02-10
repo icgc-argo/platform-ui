@@ -1,22 +1,16 @@
-import {
-  TMergeFilters,
-  TCombineValues,
-  TSortFilters,
-  TRemoveFilter,
-  FileRepoFiltersType,
-  FieldOperator,
-  ArrayFieldOperator,
-  ScalarField,
-  ArrayFieldKeys,
-  ArrayField,
-  ScalarFieldOperator,
-  ArrayFieldValue,
-  ScalarFieldValue,
-  FilterField,
-} from './types';
+import { ReactNode } from 'react';
 import { defaultFilters as defaultEmptyFilters } from '../hooks/useFiltersContext';
 import { facetDisplayNames, tooltipContent } from './constants';
-import { ReactNode } from 'react';
+import {
+  ArrayFieldValue,
+  FieldOperator,
+  FileRepoFiltersType,
+  ScalarFieldValue,
+  TCombineValues,
+  TMergeFilters,
+  TRemoveFilter,
+  TSortFilters,
+} from './types';
 
 const IS_MISSING = '__missing__';
 

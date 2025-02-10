@@ -17,18 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
+import { useQuery } from '@apollo/client';
+import useGlobalLoader from 'components/GlobalLoader';
 import DonorEntityPage from 'components/pages/donor-entity';
-import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
+import VALID_DONOR_ENTITY_CHECK_QUERY from 'components/pages/donor-entity/gql/VALID_DONOR_ENTITY_CHECK_QUERY';
+import useEntityData from 'components/pages/donor-entity/useEntityData';
 import { getConfig } from 'global/config';
 import { usePageQuery } from 'global/hooks/usePageContext';
+import { createPage } from 'global/utils/pages';
+import ErrorPage, { ERROR_STATUS_KEY } from 'pages/_error';
 import sqonBuilder from 'sqon-builder';
-import { useQuery } from '@apollo/client';
-import VALID_DONOR_ENTITY_CHECK_QUERY from 'components/pages/donor-entity/gql/VALID_DONOR_ENTITY_CHECK_QUERY';
-import get from 'lodash/get';
-import useGlobalLoader from 'components/GlobalLoader';
-import useEntityData from 'components/pages/donor-entity/useEntityData';
-import { instructionBoxLoadingButtonStyle } from 'components/pages/submission-system/common';
 
 export default createPage({
   isPublic: true,

@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import ProgramEntity from 'components/pages/program-entity';
-import { usePageQuery } from 'global/hooks/usePageContext';
 import { getConfig } from 'global/config';
+import { usePageQuery } from 'global/hooks/usePageContext';
+import { createPage } from 'global/utils/pages';
 import { ERROR_STATUS_KEY } from 'pages/_error';
 
 export default createPage<{ egoJwt: string }>({

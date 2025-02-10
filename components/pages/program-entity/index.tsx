@@ -27,8 +27,8 @@ import clsx from 'clsx';
 import ProgramCardsLayout from './ProgramCardsLayout';
 import { ProgramTitleBar } from './ProgramTitleBar';
 
-import PROGRAM_SUMMARY_QUERY from './gql/PROGRAM_SUMMARY_QUERY';
 import { useQuery } from '@apollo/client';
+import PROGRAM_SUMMARY_QUERY from './gql/PROGRAM_SUMMARY_QUERY';
 
 const ProgramEntity = ({ programId }: { programId: string }) => {
   const { data: { program = null } = {}, loading } = useQuery(PROGRAM_SUMMARY_QUERY, {

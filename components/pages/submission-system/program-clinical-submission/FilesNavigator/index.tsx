@@ -104,7 +104,7 @@ const FilesNavigator = ({
   const shouldShowError = !!selectedFile && !!selectedFile.schemaErrors.length;
 
   const isSubmissionValidated = (
-    ['INVALID', 'VALID', 'PENDING_APPROVAL'] as typeof submissionState[]
+    ['INVALID', 'VALID', 'PENDING_APPROVAL'] as (typeof submissionState)[]
   ).includes(submissionState);
   return !selectedFile ? (
     <ContentPlaceholder

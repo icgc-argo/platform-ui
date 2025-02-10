@@ -20,14 +20,14 @@
 import { useMutation } from '@apollo/client';
 import {
   Button,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
   css,
+  FileSelectButton,
   Icon,
   InstructionBox,
   Link,
   Typography,
-  BUTTON_SIZES,
-  BUTTON_VARIANTS,
-  FileSelectButton,
 } from '@icgc-argo/uikit';
 import { CONTACT_PAGE_PATH } from 'global/constants/pages';
 
@@ -37,6 +37,7 @@ import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import { DOCS_DICTIONARY_PAGE } from 'global/constants/docSitePaths';
 import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubmissionSchemaVersion';
+import { useState } from 'react';
 import {
   downloadTsvFileTemplate,
   instructionBoxButtonContentStyle,
@@ -44,7 +45,6 @@ import {
   instructionBoxButtonStyle,
 } from '../../common';
 import UPLOAD_REGISTRATION_MUTATION from '../gql/UPLOAD_REGISTRATION_MUTATION';
-import { useState } from 'react';
 
 function Instructions({
   uploadEnabled,

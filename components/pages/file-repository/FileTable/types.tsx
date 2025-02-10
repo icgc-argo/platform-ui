@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { FileRepoFiltersType } from '../utils/types';
 import { SortingRule } from 'global/types/table';
 import { FileCentricDocumentField } from '../types';
+import { FileRepoFiltersType } from '../utils/types';
 
 export type FileRepositoryRecord = {
   objectId: string;

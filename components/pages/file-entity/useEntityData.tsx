@@ -18,17 +18,17 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { camelCase, get, isObject, mapKeys } from 'lodash';
-import {
-  FileSummaryInfo,
-  FileAccessState,
-  DataAnalysisInfo,
-  FileEntityData,
-  DonorRecord,
-} from './types';
 import FILE_ENTITY_QUERY from 'components/pages/file-entity/gql/FILE_ENTITY_QUERY';
+import { camelCase, get, isObject, mapKeys } from 'lodash';
 import sqonBuilder from 'sqon-builder';
 import { FileCentricDocumentFields } from '../file-repository/types';
+import {
+  DataAnalysisInfo,
+  DonorRecord,
+  FileAccessState,
+  FileEntityData,
+  FileSummaryInfo,
+} from './types';
 
 type EntityData = {
   programShortName: string;

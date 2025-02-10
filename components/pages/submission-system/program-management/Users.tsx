@@ -31,10 +31,10 @@ import { useModalViewAnalyticsEffect } from 'global/hooks/analytics';
 import { useToaster } from 'global/hooks/toaster';
 import { UserModel } from '../modals/common';
 
+import { useState } from 'react';
 import EDIT_USER_MUTATION from './gql/EDIT_USER_MUTATION';
 import INVITE_USER_MUTATION from './gql/INVITE_USER_MUTATION';
 import REMOVE_USER_MUTATION from './gql/REMOVE_USER_MUTATION';
-import { useState } from 'react';
 
 export const adminRestrictionText = 'A program must have at least one Program Administrator';
 

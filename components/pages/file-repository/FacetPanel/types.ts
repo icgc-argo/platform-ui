@@ -1,6 +1,6 @@
 import { OptionsListFilterOption } from '@icgc-argo/uikit';
-import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 import { FileCentricDocumentField } from '../types';
+import { FileRepoFiltersType, RecursiveFilter } from '../utils/types';
 
 export enum FileFacetPath {
   study_id = 'study_id',

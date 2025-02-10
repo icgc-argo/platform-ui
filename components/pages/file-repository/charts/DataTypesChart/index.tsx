@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
+import { ComponentProps } from 'react';
+import useFiltersContext from '../../hooks/useFiltersContext';
+import { FileRepoFiltersType } from '../../utils/types';
 import SimpleBarChart from '../SimpleBarChart';
 import DATA_TYPES_CHART_QUERY from './gql/DATA_TYPES_CHART_QUERY';
-import { useQuery } from '@apollo/client';
-import { FileRepoFiltersType } from '../../utils/types';
-import useFiltersContext from '../../hooks/useFiltersContext';
-import { ComponentProps } from 'react';
 
 type DataTypesChartData = {
   file: {

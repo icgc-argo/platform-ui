@@ -38,9 +38,8 @@ import {
   DonorField,
   PointsCoordinates,
 } from '../types';
-import { getTooltipData, makeChartLineMeta } from './utils';
 import InfoBox from './InfoBox';
-import { getMaxY } from './utils';
+import { getMaxY, getTooltipData, makeChartLineMeta } from './utils';
 
 export type TooltipData = {
   name: string; // display text

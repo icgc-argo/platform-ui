@@ -20,7 +20,7 @@
  */
 
 import { css } from '@emotion/react';
-import { Typography, Icon, Container, useTheme } from '@icgc-argo/uikit';
+import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
 import { commonStyles } from './common';

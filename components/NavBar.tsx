@@ -50,7 +50,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
+import { createRef, RefObject, useEffect, useMemo, useState } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';

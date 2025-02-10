@@ -18,7 +18,7 @@
  */
 
 import { css, DnaLoader, Modal } from '@icgc-argo/uikit';
-import { createRef, createContext, useContext, PropsWithChildren, useState } from 'react';
+import { createContext, createRef, PropsWithChildren, useContext, useState } from 'react';
 
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';

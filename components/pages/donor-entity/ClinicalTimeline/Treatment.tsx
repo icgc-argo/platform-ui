@@ -1,7 +1,7 @@
 import { css, Table, TableV8, Typography } from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import { createRef } from 'react';
 import { TreatmentNode } from '../types';
-import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 

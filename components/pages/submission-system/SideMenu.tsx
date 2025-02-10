@@ -33,6 +33,7 @@ import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_RE
 
 import {
   DCC_DASHBOARD_PATH,
+  PROGRAMS_LIST_PATH,
   PROGRAM_CLINICAL_DATA_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -40,7 +41,6 @@ import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_SUBMIT_CLINICAL_PATH,
-  PROGRAMS_LIST_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { useMemo, useState } from 'react';

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DonorCentricRecord, DonorCentricQuery, DonorEntityData, EntityType } from './types';
+import { DonorCentricQuery, DonorCentricRecord, DonorEntityData, EntityType } from './types';
 
 export const dummyDonorEntity: DonorCentricRecord = {
   program_id: 'TEST-PR',

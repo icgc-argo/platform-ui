@@ -21,8 +21,8 @@ import { Button, css, Icon, styled, Typography, UikitTheme, useTheme } from '@ic
 import { find } from 'lodash';
 import { useState } from 'react';
 
-import { ChartType, DonorField } from './types';
 import { makeChartLineMeta } from './LineChart/utils';
+import { ChartType, DonorField } from './types';
 
 const StyledLegend = styled('div')`
   background: ${({ theme }: { theme?: UikitTheme }) => theme.colors.white};

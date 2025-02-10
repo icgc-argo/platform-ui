@@ -50,7 +50,7 @@ import { useToaster } from 'global/hooks/toaster';
 import useFormHook from 'global/hooks/useFormHook';
 import { email, firstName, lastName } from 'global/utils/form/validations';
 import yup from 'global/utils/validations';
-import { useRef, useState, ComponentProps } from 'react';
+import { ComponentProps, useRef, useState } from 'react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Col, Row } from 'react-grid-system';

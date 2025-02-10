@@ -17,9 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { email, firstName, lastName, role } from 'global/utils/form/validations';
 import yup from 'global/utils/validations';
-import { firstName, lastName, email, role } from 'global/utils/form/validations';
-import { DefaultDataShape } from 'global/hooks/useFormHook';
 
 export type RoleKey = 'ADMIN' | 'COLLABORATOR' | 'SUBMITTER' | null;
 

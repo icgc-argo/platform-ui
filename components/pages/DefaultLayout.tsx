@@ -17,9 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { PageContainer, styled } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import Footer from '../Footer';
-import { PageContainer, styled } from '@icgc-argo/uikit';
 
 const ThreeRowPageContainer = styled(PageContainer)`
   grid-template-rows: 58px 1fr 59px; /* header + content + footer + 1px border */

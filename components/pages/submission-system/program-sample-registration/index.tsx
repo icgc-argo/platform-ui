@@ -37,6 +37,7 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import union from 'lodash/union';
 
+import { ComponentProps } from 'react';
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
@@ -52,7 +53,6 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRAT
 import GET_REGISTRATION_QUERY from './gql/GET_REGISTRATION_QUERY';
 import Instructions from './Instructions';
 import { ClinicalRegistration, ClinicalRegistrationData } from './types';
-import { ComponentProps } from 'react';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],

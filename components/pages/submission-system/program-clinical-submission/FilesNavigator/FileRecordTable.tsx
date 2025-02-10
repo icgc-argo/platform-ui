@@ -25,7 +25,7 @@ import { isDataSubmitter, isDccMember } from 'global/utils/egoJwt';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 import pluralize from 'pluralize';
-import { ComponentProps, useMemo, createRef, CSSProperties } from 'react';
+import { ComponentProps, createRef, CSSProperties, useMemo } from 'react';
 
 import {
   CellContentCenter,
@@ -167,19 +167,19 @@ const FileRecordTable = ({
     } as { row: number; [k: string]: number | string; status: 'ERROR' | 'UPDATE' | 'NEW' | 'NONE' }),
   );
 
-  const recordHasError = (record: typeof tableData[0]) =>
+  const recordHasError = (record: (typeof tableData)[0]) =>
     stats.errorsFound.some((row) => row === record.row);
 
-  const rowHasUpdate = (record: typeof tableData[0]) =>
+  const rowHasUpdate = (record: (typeof tableData)[0]) =>
     stats.updated.some((row) => row === record.row);
 
-  const cellHasUpdate = (cell: { row: typeof tableData[0]; field: string }) =>
+  const cellHasUpdate = (cell: { row: (typeof tableData)[0]; field: string }) =>
     file.dataUpdates.some((update) => update.field === cell.field && update.row === cell.row.row);
 
-  const recordHasWarning = (record: typeof tableData[0]) =>
+  const recordHasWarning = (record: (typeof tableData)[0]) =>
     dataWarnings.some((dw) => dw.row === record.row);
 
-  const StatusColumCell = ({ original }: { original: typeof tableData[0] }) => {
+  const StatusColumCell = ({ original }: { original: (typeof tableData)[0] }) => {
     const hasError = recordHasError(original);
     const hasUpdate = rowHasUpdate(original);
     const isNew = stats.new.some((row) => row === original.row);
@@ -211,7 +211,7 @@ const FileRecordTable = ({
     original,
     fieldName,
   }: {
-    original: typeof tableData[0];
+    original: (typeof tableData)[0];
     fieldName: string;
   }) =>
     isDiffPreview && rowHasUpdate(original) ? (
@@ -240,7 +240,7 @@ const FileRecordTable = ({
       <>{original[fieldName]}</>
     );
 
-  const tableColumns: TableColumnConfig<typeof tableData[0]>[] = [
+  const tableColumns: TableColumnConfig<(typeof tableData)[0]>[] = [
     {
       id: REQUIRED_FILE_ENTRY_FIELDS.ROW,
       Cell: ({ original }) => (
@@ -271,13 +271,13 @@ const FileRecordTable = ({
           <StarIcon fill={FILE_STATE_COLORS.NONE} />
         </CellContentCenter>
       ),
-      sortMethod: (a: typeof tableData[0]['status'], b: typeof tableData[0]['status']) => {
+      sortMethod: (a: (typeof tableData)[0]['status'], b: (typeof tableData)[0]['status']) => {
         const priorities = {
           ERROR: 1,
           UPDATE: 2,
           NEW: 3,
           NONE: 4,
-        } as { [k in typeof tableData[0]['status']]: number };
+        } as { [k in (typeof tableData)[0]['status']]: number };
         return priorities[a] - priorities[b];
       },
       width: 50,
@@ -288,7 +288,7 @@ const FileRecordTable = ({
           accessor: fieldName,
           Header: fieldName,
           Cell: ({ original }) => <DataFieldCell original={original} fieldName={fieldName} />,
-        } as typeof tableColumns[0]),
+        } as (typeof tableColumns)[0]),
     ),
   ];
 
@@ -319,7 +319,7 @@ const FileRecordTable = ({
       />
       <Table
         parentRef={containerRef}
-        getTdProps={(_, row: { original: typeof tableData[0] }, column: { id: string }) =>
+        getTdProps={(_, row: { original: (typeof tableData)[0] }, column: { id: string }) =>
           ({
             style:
               isPendingApproval && cellHasUpdate({ row: row.original, field: column.id })
@@ -329,7 +329,7 @@ const FileRecordTable = ({
                 : {},
           } as { style: CSSProperties })
         }
-        getTrProps={(_, { original }: { original: typeof tableData[0] }) =>
+        getTrProps={(_, { original }: { original: (typeof tableData)[0] }) =>
           ({
             style: recordHasError(original)
               ? {
@@ -346,7 +346,7 @@ const FileRecordTable = ({
               : {},
           } as { style: CSSProperties })
         }
-        getTrGroupProps={(_, { original }: { original: typeof tableData[0] }) =>
+        getTrGroupProps={(_, { original }: { original: (typeof tableData)[0] }) =>
           isPendingApproval && rowHasUpdate(original)
             ? {
                 className: `updateRow`, // append this classname so parent div's css can apply style

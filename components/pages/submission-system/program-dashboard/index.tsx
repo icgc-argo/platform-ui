@@ -24,11 +24,9 @@ import {
   DOCS_MANAGING_PROGRAM_ACCESS_PAGE,
   DOCS_SUBMISSION_OVERVIEW_PAGE,
   DOCS_SUBMITTED_DATA_PAGE,
-  DOCS_SUBMITTING_CLINICAL_DATA_PAGE,
-  DOCS_SUBMITTING_MOLECULAR_DATA_PAGE,
 } from 'global/constants/docSitePaths';
 import usePageContext from 'global/hooks/usePageContext';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Col, Row, ScreenClassRender, setConfiguration } from 'react-grid-system';
 import { JUST_JOINED_PROGRAM_STORAGE_KEY } from '../join/details';

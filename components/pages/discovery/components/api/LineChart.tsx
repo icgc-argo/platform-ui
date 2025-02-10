@@ -19,7 +19,7 @@
  *
  */
 
-import { LineSvgProps, ResponsiveLine, Serie } from '@nivo/line';
+import { LineSvgProps, ResponsiveLine } from '@nivo/line';
 import { Chart } from './Chart';
 
 // Serves primarily as a wrapper around the Nivo chart library implementation of Bar charts

@@ -33,10 +33,9 @@ import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
 import useUrlParamState from 'global/hooks/useUrlParamState';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Row, setConfiguration } from 'react-grid-system';
-import ClinicalDownloadButton from './DownloadButtons';
 import SubmissionLayout from '../layout';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import {
@@ -45,15 +44,16 @@ import {
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
+  CompletionStates,
   defaultClinicalEntityFilters,
   emptyClinicalDataResponse,
-  CompletionStates,
   emptySearchResponse,
   hasClinicalErrors,
   parseDonorIdString,
   reverseLookUpEntityAlias,
   TsvDownloadIds,
 } from './common';
+import ClinicalDownloadButton from './DownloadButtons';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
@@ -265,7 +265,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                 width: 20%;
                 max-width: 170px;
                 display: inline-block;
-                border: 1px solid ${theme.colors.grey_2}; ;
+                border: 1px solid ${theme.colors.grey_2};
               `}
             >
               <VerticalTabs>{menuItems}</VerticalTabs>

@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
-import { Modal, css, Button } from '@icgc-argo/uikit/';
+import { useQuery } from '@apollo/client';
+import { Button, css, Modal } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import ModalPortal from 'components/Modal';
-import MatchResults from './MatchResults';
-import UploadButton from './UploadButton';
+import React, { useEffect, useState } from 'react';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import { useQuery } from '@apollo/client';
+import MatchResults from './MatchResults';
+import UploadButton from './UploadButton';
 
 declare global {
   interface Window {

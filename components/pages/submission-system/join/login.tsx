@@ -24,7 +24,7 @@ import { getConfig } from 'global/config';
 import { INVITE_ID, PROGRAM_JOIN_DETAILS_PATH } from 'global/constants/pages';
 import { createRedirectURL } from 'global/utils/common';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { MinimalLayout } from '../layout';
 import GET_JOIN_PROGRAM_INFO_QUERY from './gql/GET_JOIN_PROGRAM_INFO_QUERY';

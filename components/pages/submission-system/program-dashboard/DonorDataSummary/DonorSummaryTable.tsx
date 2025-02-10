@@ -46,7 +46,6 @@ import {
   Icon,
   Link,
   ListFilter,
-  styled,
   Table,
   TableColumnConfig,
   TextInputFilter,
@@ -59,6 +58,7 @@ import ContentError from 'components/placeholders/ContentError';
 import { SortedChangeFunction, SortingRule } from 'global/types/table';
 import { startCase } from 'lodash';
 
+import { getConfig } from 'global/config';
 import { createRef, PropsWithChildren, Ref, useEffect, useMemo, useRef, useState } from 'react';
 import { Row } from 'react-grid-system';
 import { useProgramDonorsSummaryQuery } from '.';
@@ -68,10 +68,9 @@ import {
   RELEASED_STATE_FILL_COLOURS,
   RELEASED_STATE_STROKE_COLOURS,
 } from './common';
-import DonorSummaryTableLegend from './DonorSummaryTableLegend';
-import { PIPELINE_COLORS, PipelineNames, PipelineTabs, usePipelines } from './PipelineTabs';
-import { getConfig } from 'global/config';
 import { DesignationCell, DesignationCellLegacy } from './DesignationCell';
+import DonorSummaryTableLegend from './DonorSummaryTableLegend';
+import { PipelineNames, PipelineTabs, PIPELINE_COLORS, usePipelines } from './PipelineTabs';
 
 type PagingState = {
   pages: number;

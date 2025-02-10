@@ -19,9 +19,9 @@
 
 import get from 'lodash/get';
 
-import { createPage } from 'global/utils/pages';
-import { decodeToken } from 'global/utils/egoJwt';
 import { UserPage } from 'components/pages/user';
+import { decodeToken } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({
   getInitialProps: async (context) => {

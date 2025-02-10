@@ -17,14 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  DownloadButtonProps,
-  DropdownButton,
-  Icon,
-  TOAST_VARIANTS,
-  css,
-  useTheme,
-} from '@icgc-argo/uikit';
+import { css, DownloadButtonProps, DropdownButton, Icon, useTheme } from '@icgc-argo/uikit';
 import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import {
@@ -33,6 +26,7 @@ import {
   API_PATH_DOWNLOAD_MANIFEST,
 } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { sortByField } from 'global/utils/arrayUtils';
 import { Values } from 'global/utils/typeUtils';
 import { ComponentType, useState } from 'react';
 import SqonBuilder from 'sqon-builder';
@@ -42,7 +36,6 @@ import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from '../submission-system/common';
-import { sortByField } from 'global/utils/arrayUtils';
 
 const DropdownOptions = {
   CLINICAL: 'CLINICAL',

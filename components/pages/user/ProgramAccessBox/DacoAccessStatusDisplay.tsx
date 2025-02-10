@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Icon, Link, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
+import { css, Icon, Link, styled, Typography } from '@icgc-argo/uikit';
 import { getConfig } from 'global/config';
 import { DOCS_DATA_ACCESS_PAGE } from 'global/constants/docSitePaths';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';

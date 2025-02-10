@@ -21,7 +21,7 @@ import { take, xor } from 'lodash';
 import { useState } from 'react';
 
 import Row from './Row';
-import { toggleSQON, replaceFilterSQON } from './utils';
+import { replaceFilterSQON, toggleSQON } from './utils';
 
 export const Bubble = ({ className = '', children, ...props }) => (
   <div className={`${className} sqon-bubble`} {...props}>

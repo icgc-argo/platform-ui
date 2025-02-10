@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { useState } from 'react';
 import { css, styled, Tab, Tabs } from '@icgc-argo/uikit';
+import { useState } from 'react';
 
 export enum PipelineNames {
   DNA = 'DNA',

@@ -20,8 +20,8 @@
 import { useQuery } from '@apollo/client';
 import {
   Banner,
-  css,
   Container,
+  css,
   DnaLoader,
   Icon,
   Link,
@@ -30,7 +30,7 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import { useRouter } from 'next/router';
-import { Row, Col, setConfiguration } from 'react-grid-system';
+import { Col, Row, setConfiguration } from 'react-grid-system';
 
 import { getConfig } from 'global/config';
 

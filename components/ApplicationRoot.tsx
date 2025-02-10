@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled, ThemeProvider, ToastStack } from '@icgc-argo/uikit';
 import { ApolloClient, ApolloLink, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
+import { css, styled, ThemeProvider, ToastStack } from '@icgc-argo/uikit';
 import { createUploadLink } from 'apollo-upload-client';
 import Head from 'components/Head';
 import { getConfig } from 'global/config';
@@ -30,7 +30,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import get from 'lodash/get';
-import { useState, ComponentType, useMemo, PropsWithChildren } from 'react';
+import { ComponentType, PropsWithChildren, useMemo, useState } from 'react';
 import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
 import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';

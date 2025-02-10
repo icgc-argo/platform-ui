@@ -33,11 +33,11 @@ import {
   Panel,
   Sidebar,
 } from '@icgc-argo/uikit';
+import { ReactNodeArray } from 'prop-types';
+import { PropsWithChildren, ReactNode, useLayoutEffect, useRef } from 'react';
 import Footer from '../../Footer';
 import Head from '../head';
 import SideMenu from './SideMenu';
-import { ReactNodeArray } from 'prop-types';
-import { PropsWithChildren, ReactNode, useRef, useLayoutEffect } from 'react';
 
 const SubmissionLayout = ({
   sideMenu = <SideMenu />,

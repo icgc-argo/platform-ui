@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
-import FILE_CENTRIC_EXTENDED_MAPPING_QUERY from './gql/FILE_CENTRIC_EXTENDED_MAPPING_QUERY';
 import { FileCentricDocumentField } from '../types';
+import FILE_CENTRIC_EXTENDED_MAPPING_QUERY from './gql/FILE_CENTRIC_EXTENDED_MAPPING_QUERY';
 
 type ExtendedMapping = {
   displayName: string;

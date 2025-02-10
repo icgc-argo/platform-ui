@@ -18,12 +18,12 @@
  */
 
 import {
-  FileSummaryInfo,
-  FileAccessState,
   DataAnalysisInfo,
   DonorRecord,
-  FileRecord,
+  FileAccessState,
   FileMetricsInfo,
+  FileRecord,
+  FileSummaryInfo,
 } from './types';
 
 export const dummyFileSummaryInfo: FileSummaryInfo = {

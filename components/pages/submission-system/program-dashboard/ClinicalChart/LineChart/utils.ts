@@ -17,10 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { DataBucket, DataItem, ProgramDonorPublishedAnalysisByDateRange } from '../types';
 import { UikitTheme } from '@icgc-argo/uikit';
-import { TooltipData } from '.';
 import { filter, find, uniq } from 'lodash';
+import { TooltipData } from '.';
+import { DataBucket, DataItem, ProgramDonorPublishedAnalysisByDateRange } from '../types';
 
 export const getMaxY = (data: DataItem[]) => {
   const yValues = data

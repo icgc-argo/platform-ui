@@ -18,7 +18,7 @@
  */
 
 import { css, Modal } from '@icgc-argo/uikit';
-import { createRef, useState, useEffect, PropsWithChildren } from 'react';
+import { createRef, PropsWithChildren, useEffect, useState } from 'react';
 
 import ReactDOM from 'react-dom';
 

@@ -39,7 +39,7 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { trim } from 'lodash';
-import { useState, useEffect, ComponentProps, createRef } from 'react';
+import { ComponentProps, createRef, useEffect, useState } from 'react';
 
 import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
@@ -47,13 +47,13 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentFields } from '../types';
 import {
+  clinicalDisplayValues,
   currentFieldValue,
   getDisplayName,
   getTooltipContent,
   inCurrentFilters,
   removeFilter,
   replaceFilter,
-  clinicalDisplayValues,
   toDisplayValue,
   toggleFilter,
 } from '../utils';
@@ -76,7 +76,6 @@ import {
   FileIdSearchQueryData,
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
-  GetAggregationResult,
   IdSearchQueryVariables,
   SearchMenuDataNode,
 } from './types';

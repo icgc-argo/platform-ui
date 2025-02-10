@@ -39,14 +39,14 @@ import {
   aliasedEntityFields,
   aliasedEntityNames,
   aliasSortNames,
+  clinicalEntityDisplayNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
+  CompletionStates,
   defaultClinicalEntityFilters,
   emptyClinicalDataResponse,
   emptySearchResponse,
-  clinicalEntityDisplayNames,
-  CompletionStates,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
@@ -55,7 +55,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { createRef, useState, useEffect } from 'react';
+import { createRef, useEffect, useState } from 'react';
 
 export type DonorEntry = {
   row: string;

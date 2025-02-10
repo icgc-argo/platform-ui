@@ -36,6 +36,7 @@ import DASHBOARD_SUMMARY_QUERY from '../gql/DASHBOARD_SUMMARY_QUERY';
 import PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY from './gql/PROGRAM_DONOR_PUBLISHED_ANALYSIS_BY_DATE_RANGE_QUERY';
 import Legend from './Legend';
 import LineChart from './LineChart';
+import { makeChartLineMeta } from './LineChart/utils';
 import RangeControlBar from './RangeControlBar';
 import {
   ChartType,
@@ -45,7 +46,6 @@ import {
   RangeButtons,
 } from './types';
 import { rangeButtons } from './utils';
-import { makeChartLineMeta } from './LineChart/utils';
 
 const CHART_HEIGHT = 220;
 const CHART_PADDING = 12;

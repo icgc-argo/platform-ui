@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, Icon, css } from '@icgc-argo/uikit';
+import { Button, css, Icon } from '@icgc-argo/uikit';
 import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';

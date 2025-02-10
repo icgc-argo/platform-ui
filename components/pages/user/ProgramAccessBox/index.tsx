@@ -35,9 +35,9 @@ import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { createRef } from 'react';
 
+import { getConfig } from 'global/config';
 import { Box } from '../common';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
-import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 

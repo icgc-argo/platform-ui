@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, Icon, Modal, styled, Typography, UikitTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, Modal, styled, Typography } from '@icgc-argo/uikit';
 import useFormHook from 'global/hooks/useFormHook';
 import uniqueId from 'lodash/uniqueId';
 import { useEffect, useState } from 'react';
@@ -63,7 +63,7 @@ const AddUserModal = ({
   dismissModal,
   users,
 }: {
-  onSubmit: (data: typeof UserModel[]) => any | void;
+  onSubmit: (data: (typeof UserModel)[]) => any | void;
   dismissModal: () => any | void;
   users: Array<typeof UserModel>;
 }) => {

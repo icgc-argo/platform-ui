@@ -17,8 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import JoinProgramLoginPage from 'components/pages/submission-system/join/login';
+import { createPage } from 'global/utils/pages';
 
 export default createPage({
   isPublic: true,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@icgc-argo/uikit/';
 import { fileOpen, supported } from 'browser-fs-access';
 

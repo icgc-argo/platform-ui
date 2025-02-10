@@ -17,16 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {
-  Button,
-  css,
-  Icon,
-  Legend,
-  Link,
-  TitleBar,
-  TOAST_VARIANTS,
-  useTheme,
-} from '@icgc-argo/uikit';
+import { Button, css, Icon, Legend, Link, TitleBar, useTheme } from '@icgc-argo/uikit';
+import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import { API_PATH_DOWNLOAD_MANIFEST } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
@@ -35,7 +27,6 @@ import sqonBuilder from 'sqon-builder';
 import urlJoin from 'url-join';
 import { DownloadIcon } from '../file-entity/common';
 import { FileCentricDocumentFields } from '../file-repository/types';
-import useCommonToasters from 'components/useCommonToasters';
 
 export const DonorTitleBar: ComponentType<{
   programId: string;

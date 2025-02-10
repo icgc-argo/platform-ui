@@ -30,7 +30,7 @@ import {
 import { TableProps } from 'global/types/table';
 import { exportToTsv } from 'global/utils/common';
 import union from 'lodash/union';
-import { ReactNode, ComponentProps, createRef } from 'react';
+import { ComponentProps, createRef, ReactNode } from 'react';
 
 import { instructionBoxButtonContentStyle, instructionBoxButtonIconStyle } from './common';
 

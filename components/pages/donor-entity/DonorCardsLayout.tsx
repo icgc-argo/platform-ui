@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { styled, css } from '@icgc-argo/uikit';
+import { css, styled } from '@icgc-argo/uikit';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
 import ClinicalTimeline from './ClinicalTimeline';
