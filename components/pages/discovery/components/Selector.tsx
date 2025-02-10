@@ -24,9 +24,11 @@ import { css } from '@emotion/react';
 const RangeSelector = ({
   data,
   activeIndex,
+  onClick,
 }: {
-  data: { label: string; onClick: any }[];
+  data: { label: string }[];
   activeIndex: number;
+  onClick: any;
 }) => {
   return (
     <div
@@ -41,7 +43,7 @@ const RangeSelector = ({
       {data.map((d, index) => {
         return (
           <button
-            onClick={d.onClick}
+            onClick={onClick}
             css={css({
               fontFamily: 'Lato',
               fontWeight: 600,

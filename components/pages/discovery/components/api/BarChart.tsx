@@ -96,13 +96,7 @@ export function createBarConfig(consumerConfig: RequiredConfig): RequiredConfig 
  *
  * @returns BarChart component
  */
-const BarChart = ({
-  data,
-  config,
-}: {
-  data: Record<string, string | number>[];
-  config: RequiredConfig | ((baseConfig: BarChartConfig) => RequiredConfig);
-}) => {
+const BarChart = ({ data, config }: { data: Record<string, string | number>[]; config: any }) => {
   const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
   const finalConfig = createBarConfig({ ...resolvedConfig, data });
 

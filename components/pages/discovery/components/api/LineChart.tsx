@@ -113,13 +113,7 @@ function createLineConfig(consumerConfig: RequiredConfig): RequiredConfig {
  * @returns LineChart component
  */
 
-const LineChart = ({
-  data,
-  config,
-}: {
-  data: Serie[];
-  config: RequiredConfig | ((baseConfig: LineChartConfig) => RequiredConfig);
-}) => {
+const LineChart = ({ data, config }: { data: any; config: any }) => {
   const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
   const finalConfig = createLineConfig({ ...resolvedConfig, data });
 
