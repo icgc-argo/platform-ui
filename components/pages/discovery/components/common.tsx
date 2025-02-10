@@ -5,7 +5,7 @@
  *  This program and the accompanying materials are made available under the terms of
  *  the GNU Affero General Public License v3.0. You should have received a copy of the
  *  GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ *   If not, see <http://www.gnu.org/licenses/>.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  *  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -21,52 +21,10 @@
 
 import { css } from '@emotion/react';
 
-const RangeSelector = ({
-  data,
-  activeIndex,
-  onClick,
-}: {
-  data: { label: string }[];
-  activeIndex: number;
-  onClick: any;
-}) => {
-  return (
-    <div
-      css={css({
-        display: 'flex',
-
-        'button:not(:last-child)': {
-          marginRight: '3px',
-        },
-      })}
-    >
-      {data.map((d, index) => {
-        return (
-          <button
-            onClick={onClick}
-            css={css({
-              fontFamily: 'Lato',
-              fontWeight: 600,
-              fontSize: '10px',
-              alignSelf: 'flex-start',
-              padding: '2px 4px',
-              borderColor: index === activeIndex ? '#0774D3' : '#DCDDE1',
-              borderStyle: 'solid',
-              borderWidth: '2px',
-              borderRadius: '15px',
-              background: 'white',
-
-              '&:hover': {
-                cursor: 'pointer',
-                borderColor: '#52abfa',
-              },
-            })}
-          >
-            {d.label}
-          </button>
-        );
-      })}
-    </div>
-  );
+export const commonStyles = {
+  block: css({
+    border: '1px solid #BABCC2',
+    borderRadius: '8px',
+    background: 'white',
+  }),
 };
-export default RangeSelector;

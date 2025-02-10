@@ -24,9 +24,9 @@ import { donorData } from './data';
 import BarChart, { BarChartConfig, createBarConfig } from './components/api/BarChart';
 import LineChart, { LineChartConfig } from './components/api/LineChart';
 import RangeSelector from './components/Selector';
-import MyResponsivePie from './components/api/Doughnut';
 import { random } from 'lodash';
 import DoughnutChart from './components/api/DoughnutChart';
+import { commonStyles } from './components/common';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -84,18 +84,21 @@ const colors = [
 
 const ChartContainer = ({ children }) => (
   <div
-    css={css({
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gridAutoRows: '175px',
-      gap: '10px',
+    css={css([
+      commonStyles.block,
+      {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridAutoRows: '175px',
+        gap: '10px',
 
-      padding: '5px',
+        padding: '20px',
 
-      '> div': {
-        minWidth: '255px',
+        '> div': {
+          minWidth: '255px',
+        },
       },
-    })}
+    ])}
   >
     {children}
   </div>
@@ -252,7 +255,13 @@ const Charts = () => {
 
       <Card
         title="Track Embargo State"
-        Selector={<RangeSelector data={[{ label: '3M' }, { label: '6M' }]} activeIndex={0} />}
+        Selector={
+          <RangeSelector
+            data={[{ label: '3M' }, { label: '6M' }]}
+            activeIndex={0}
+            onClick={() => console.log('click')}
+          />
+        }
         css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
       >
         <LineChart data={lineChartData} config={lineChartConfig} />
@@ -267,7 +276,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart data={doughnutChartData} />
+        <DoughnutChart data={doughnutChartData} config={{}} />
       </Card>
 
       <Card

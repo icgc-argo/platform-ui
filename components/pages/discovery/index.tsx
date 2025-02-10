@@ -17,25 +17,73 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { PageContainer, styled } from '@icgc-argo/uikit';
+import { Container, css, PageBody, PageContent, styled, useTheme } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import { Row, setConfiguration } from 'react-grid-system';
 import Head from '../head';
 
 import Charts from './Charts';
+import StatsCard from './components/StatsCard';
+import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
+import Sidebar from './components/SideBar';
+import Footer from 'components/Footer';
+import { useState } from 'react';
+import { commonStyles } from './components/common';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
 `;
 setConfiguration({ gutterWidth: 9 });
 
+export const PageContainer = styled('div')`
+  display: grid;
+  grid-template-rows: 58px 1fr;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.colors.grey_4};
+`;
+
 const DiscoveryPage = () => {
+  const theme = useTheme();
+
+  const [isSidebarOpen, setSetbarView] = useState(true);
+
   return (
-    <PageContainer>
-      <Head subtitle={'Data Discovery'} />
-      <NavBar />
-      <Charts />
-    </PageContainer>
+    <div
+      css={css({
+        display: 'grid',
+        gridTemplateRows: '58px 1fr 58px',
+        height: '100vh',
+        background: `${theme.colors.grey_4}`,
+      })}
+    >
+      <div>
+        <Head subtitle={'Data Discovery'} />
+        <NavBar />
+      </div>
+      <div
+        css={css({
+          display: 'grid',
+          gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
+          gridTemplateRows: 'calc(100vh - 116px)',
+          minHeight: 0,
+          overflow: 'hidden',
+        })}
+      >
+        <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
+        <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
+          <QueryBarContainer
+            text="Explore data by selecting filters."
+            css={css([commonStyles.block, { boxShadow: 'none' }])}
+          />
+          <StatsCard
+            data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
+            isLoading={false}
+          />
+          <Charts />
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 };
 

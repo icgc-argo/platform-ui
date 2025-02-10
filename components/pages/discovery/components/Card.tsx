@@ -21,6 +21,7 @@
 
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
+import { commonStyles } from './common';
 
 const Card = ({
   title,
@@ -35,14 +36,13 @@ const Card = ({
 }): JSX.Element => (
   <div
     className={className}
-    css={css({
-      display: 'flex',
-      flexDirection: 'column',
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
-      background: 'white',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-    })}
+    css={css([
+      commonStyles.block,
+      {
+        display: 'flex',
+        flexDirection: 'column',
+      },
+    ])}
   >
     <div
       css={css({
