@@ -28,6 +28,7 @@ import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Sidebar from './components/SideBar';
 import Footer from 'components/Footer';
 import { useState } from 'react';
+import { commonStyles } from './components/common';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -70,7 +71,10 @@ const DiscoveryPage = () => {
       >
         <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
         <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-          <QueryBarContainer />
+          <QueryBarContainer
+            text="Explore data by selecting filters."
+            css={css([commonStyles.block, { boxShadow: 'none' }])}
+          />
           <StatsCard
             data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
             isLoading={false}
