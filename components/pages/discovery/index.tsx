@@ -69,7 +69,7 @@ const DiscoveryPage = () => {
         })}
       >
         <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
-        <div css={css({ overflow: 'scroll' })}>
+        <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
           <QueryBarContainer />
           <StatsCard
             data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}

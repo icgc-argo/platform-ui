@@ -94,7 +94,7 @@ const filtersSearchBoxStyles = {
 
 export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
   return (
-    <div css={css([commonStyle.container, css({ height: '100px' })])}>
+    <div css={css([commonStyle.container, css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
         <h2>{title}</h2>
         <div onClick={() => onClick()}>
@@ -111,7 +111,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
         onChange={(e) => {
           console.log(e.target.value);
         }}
-        css={css({ padding: '12px 6px 0 6px' })}
+        css={css({ marginTop: '12px' })}
       />
     </div>
   );
