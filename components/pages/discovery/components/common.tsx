@@ -20,52 +20,11 @@
  */
 
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
-import { commonStyles } from './common';
 
-const Card = ({
-  title,
-  children,
-  className,
-  Selector,
-}: {
-  title: string;
-  children: ReactNode;
-  className?: string;
-  Selector?: ReactNode;
-}): JSX.Element => (
-  <div
-    className={className}
-    css={css([
-      commonStyles.block,
-      {
-        display: 'flex',
-        flexDirection: 'column',
-      },
-    ])}
-  >
-    <div
-      css={css({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: '7px 7px 16px 7px',
-      })}
-    >
-      <h2
-        css={css({
-          margin: 0,
-          color: '#0774D3',
-          fontSize: '16px',
-          fontWeight: 600,
-        })}
-      >
-        {title}
-      </h2>
-      <div css={css({ marginLeft: 'auto' })}> {Selector}</div>
-    </div>
-    {children}
-  </div>
-);
-
-export default Card;
+export const commonStyles = {
+  block: css({
+    border: '1px solid #BABCC2',
+    borderRadius: '8px',
+    background: 'white',
+  }),
+};

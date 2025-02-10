@@ -27,6 +27,7 @@ import RangeSelector from './components/Selector';
 import MyResponsivePie from './components/api/Doughnut';
 import { random } from 'lodash';
 import DoughnutChart from './components/api/DoughnutChart';
+import { commonStyles } from './components/common';
 
 const injectTheme = (injectedTheme: UikitTheme) => (config) => {
   if (Array.isArray(config)) {
@@ -84,18 +85,21 @@ const colors = [
 
 const ChartContainer = ({ children }) => (
   <div
-    css={css({
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gridAutoRows: '175px',
-      gap: '10px',
+    css={css([
+      commonStyles.block,
+      {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridAutoRows: '175px',
+        gap: '10px',
 
-      padding: '5px',
+        padding: '20px',
 
-      '> div': {
-        minWidth: '255px',
+        '> div': {
+          minWidth: '255px',
+        },
       },
-    })}
+    ])}
   >
     {children}
   </div>

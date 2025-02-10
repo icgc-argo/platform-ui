@@ -23,6 +23,7 @@ import { css } from '@emotion/react';
 import { Typography, Icon, Container, useTheme } from '@icgc-argo/uikit';
 import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
+import { commonStyles } from './common';
 
 const StatItem = ({ iconName, value }) => {
   const theme = useTheme();
@@ -56,11 +57,16 @@ const StatsCard = ({ data: { files, donors, programs, repositories }, isLoading 
   const donorsValue = `${donors} Donor${donors > 0 ? 's' : ''}`;
   const programsValue = `${programs} Program${programs > 0 ? 's' : ''}`;
   const repositoriesValue = `${repositories} ${repositories > 0 ? 'Repositories' : 'Repository'}`;
+
   return (
-    <Container
-      css={css`
-        margin-bottom: 16px;
-      `}
+    <div
+      css={css([
+        commonStyles.block,
+        {
+          padding: '8px 0',
+          marginBottom: '16px',
+        },
+      ])}
     >
       <PaddedRow
         css={css`
@@ -87,7 +93,7 @@ const StatsCard = ({ data: { files, donors, programs, repositories }, isLoading 
           </>
         )}
       </PaddedRow>
-    </Container>
+    </div>
   );
 };
 
