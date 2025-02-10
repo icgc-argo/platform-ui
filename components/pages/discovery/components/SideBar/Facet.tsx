@@ -22,7 +22,6 @@ import { Icon, Input } from '@icgc-argo/uikit';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 const commonStyle = {
-  container: css({}),
   header: css({
     display: 'flex',
     flexDirection: 'row',
@@ -69,7 +68,7 @@ export const FacetFolder = ({
 
   return (
     <div
-      css={css([commonStyle.container, facetFolderStyles.container])}
+      css={css([facetFolderStyles.container])}
       onClick={() => {
         onClick({ isOpen });
         setIsOpen((isOpen) => !isOpen);
@@ -85,16 +84,14 @@ export const FacetFolder = ({
 };
 
 const filtersSearchBoxStyles = {
-  folder: css([
-    css({
-      h2: { margin: 0, fontSize: '16px', fontWeight: 400 },
-    }),
-  ]),
+  folder: css({
+    h2: { margin: 0, fontSize: '16px', fontWeight: 400 },
+  }),
 };
 
 export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
   return (
-    <div css={css([commonStyle.container, css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
+    <div css={css([css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
         <h2>{title}</h2>
         <div onClick={() => onClick()}>

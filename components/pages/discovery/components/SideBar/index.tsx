@@ -40,20 +40,7 @@ const FacetRow = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-// const FacetContainer = styled(Container)`
-//   z-index: 1;
-//   background: ${({ theme }) => theme.colors.white};
-//   box-shadow: ${({ theme }) => theme.shadows.pageElement};
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
-//   position: relative;
-//   height: calc(100vh - 58px);
-//   max-height: calc(100vh - 58px);
-//   border-radius: 0;
-// `;
-
-const SidebarComp = ({ children }: PropsWithChildren) => {
+const SidebarComp = ({ children }: PropsWithChildren<{}>) => {
   return (
     <div
       css={css({
@@ -168,7 +155,7 @@ const Sidebar = ({ toggle, open }) => {
           css={css({
             height: '80px',
             position: 'absolute',
-            top: 'calc(50% - 40px)',
+            top: 'calc  (50% - 40px)',
             width: '40px',
           })}
         />
