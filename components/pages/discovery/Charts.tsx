@@ -19,48 +19,16 @@
 
 import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
 
-import BarChart, { BarChartConfig, createBarConfig } from 'charts/BarChart';
+import { BarChartConfig } from 'charts/Bar';
 import DoughnutChart from 'charts/DoughnutChart';
 import LineChart, { LineChartConfig } from 'charts/LineChart';
+import BarChart from 'charts/OldBarChart';
+import NBarChart from './charts/Bar';
+import { injectTheme } from './charts/util';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import RangeSelector from './components/Selector';
 import { donorData } from './data';
-
-const injectTheme = (injectedTheme: UikitTheme) => (config) => {
-  if (Array.isArray(config)) {
-    return config.map((config) => config(injectedTheme));
-  }
-  return config(injectedTheme);
-};
-
-const chartThemeFn = (injectedTheme: UikitTheme): Pick<BarChartConfig, 'theme'> => ({
-  theme: {
-    text: {
-      fontFamily: 'Work Sans,sans-serif',
-    },
-    axis: {
-      legend: {
-        text: { fontSize: 10, color: injectedTheme.colors.grey },
-      },
-      ticks: {
-        text: {
-          fontSize: 11,
-          color: 'black',
-        },
-        line: {
-          strokeWidth: 0,
-        },
-      },
-      domain: {
-        line: {
-          stroke: injectedTheme.colors.grey_2,
-          strokeWidth: 1,
-        },
-      },
-    },
-  },
-});
 
 const colors = [
   '#78BB71',
@@ -103,38 +71,36 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
+const chartThemeFn = (injectedTheme: UikitTheme): Pick<BarChartConfig, 'theme'> => ({
+  theme: {
+    text: {
+      fontFamily: 'Work Sans,sans-serif',
+    },
+    axis: {
+      legend: {
+        text: { fontSize: 10, color: injectedTheme.colors.grey },
+      },
+      ticks: {
+        text: {
+          fontSize: 11,
+          color: 'black',
+        },
+        line: {
+          strokeWidth: 0,
+        },
+      },
+      domain: {
+        line: {
+          stroke: injectedTheme.colors.grey_2,
+          strokeWidth: 1,
+        },
+      },
+    },
+  },
+});
 const Charts = () => {
   const theme = useTheme();
   const [chartTheme] = injectTheme(theme)([chartThemeFn]);
-
-  const programIDBarChart = createBarConfig({
-    data: donorData,
-    indexBy: 'site',
-    keys: ['donors'],
-    enableLabel: false,
-    axisBottom: {
-      legend: 'Donors',
-      legendPosition: 'middle',
-      tickValues: 4,
-      legendOffset: 34,
-    },
-    axisLeft: {
-      legend: 'ID',
-      legendPosition: 'middle',
-      renderTick: () => null,
-      legendOffset: -12,
-    },
-
-    margin: {
-      top: 12,
-      right: 24,
-      left: 24,
-      bottom: 56,
-    },
-
-    colorBy: 'indexValue',
-    theme: chartTheme.theme,
-  });
 
   const lineChartConfig: LineChartConfig = {
     axisBottom: {
@@ -245,11 +211,11 @@ const Charts = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <BarChart data={donorData} config={programIDBarChart} />
+        <NBarChart field="study_id" />
       </Card>
 
       <Card
@@ -287,20 +253,20 @@ const Charts = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
 
       <Card title="Age at Diagnosis">
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
       <Card title="Gender">
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
       <Card title="Vital Status">
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
       <Card title="Experimental Strategy">
-        <BarChart data={donorData} config={programIDBarChart} />
+        <BarChart data={donorData} config={{}} />
       </Card>
     </ChartContainer>
   );
