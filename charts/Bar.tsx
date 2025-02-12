@@ -1,11 +1,8 @@
 import { gql } from '@apollo/client';
 import { ResponsiveBar } from '@nivo/bar';
 import { get } from 'lodash';
-import Chart from './Chart';
+import generateChartComponent from './Chart';
 import { BUCKETS_TO_BAR_CHART } from './config';
-
-// TODO: Regular Aggregation type => Nivo Bar chart data
-// bar chart will query normal Aggregation type
 
 const generateQuery = ({ field }) => gql`
   query ChartsFileCentricAgg($filters:JSON) {
@@ -23,6 +20,7 @@ const generateQuery = ({ field }) => gql`
   }
 `;
 
+// Regular Aggregation type => Nivo Bar chart data
 const transformToBarData =
   ({ field }) =>
   (rawData) => {
@@ -33,7 +31,7 @@ const transformToBarData =
 
 const Bar = (consumerProps) => {
   const { field } = consumerProps;
-  return Chart({
+  return generateChartComponent({
     Component: ResponsiveBar,
     options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
     internalConfig: { ...BUCKETS_TO_BAR_CHART },

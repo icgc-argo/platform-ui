@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
 import { CommonChart } from './types';
 
-const Chart =
+const generateChartComponent =
   ({
     // internal
     Component,
@@ -19,6 +19,7 @@ const Chart =
     onLoad,
     onError,
   }: CommonChart) => {
+    // TODO: only when data is avail cna be passed
     const { data, loading, error } = useArrangerCharts({ options });
     console.log('data', data, 'loading', loading, 'error', error);
 
@@ -28,7 +29,15 @@ const Chart =
       }
     }, [loading, error]);
 
-    return !loading && !error && <Component {...{ data, ...internalConfig, ...consumerConfig }} />;
+    if (!loading && !error) {
+      // provides resolved data to user config function, assist in UI styling
+      const resolvedConsumerConfig =
+        typeof consumerConfig === 'function' ? consumerConfig({ data }) : consumerConfig;
+
+      return <Component {...{ data, ...internalConfig, ...resolvedConsumerConfig }} />;
+    } else {
+      return null;
+    }
   };
 
-export default Chart;
+export default generateChartComponent;
