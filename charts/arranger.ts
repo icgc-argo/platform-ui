@@ -50,7 +50,6 @@ const generateQuery = ({ field }) => gql`
 
 export const useArrangerCharts = ({ field }) => {
   const { filters } = useFiltersContext();
-  console.log('arranger', filters);
   const query = generateQuery({ field });
   return useQuery(query, { variables: { filters } });
 };

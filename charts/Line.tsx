@@ -20,6 +20,8 @@
  */
 
 import { LineSvgProps, ResponsiveLine } from '@nivo/line';
+import { useArrangerCharts } from './arranger';
+import { CommonChart } from './types';
 
 // Serves primarily as a wrapper around the Nivo chart library implementation of Bar charts
 
@@ -112,10 +114,10 @@ function createLineConfig(consumerConfig: RequiredConfig): RequiredConfig {
  * @returns LineChart component
  */
 
-const LineChart = ({ data, config }: { data: any; config: any }) => {
-  const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
-  const finalConfig = createLineConfig({ ...resolvedConfig, data });
+const LineChart = ({ field, consumerConfig, onLoad, onError }: CommonChart) => {
+  const { data: rawData, loading, error } = useArrangerCharts({ field });
+  console.log('data', rawData, 'loading', loading, 'error', error);
 
-  return <ResponsiveLine {...finalConfig} />;
+  return !loading && !error && <ResponsiveLine {...{ ...dataConfig, ...consumerConfig }} />;
 };
 export default LineChart;

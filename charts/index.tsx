@@ -19,14 +19,11 @@
  *
  */
 
-import BarChart from './Bar';
-import DoughnutChart from './DoughnutChart';
-import LineChart from './LineChart';
+import { ResponsiveBar } from '@nivo/bar';
+import Chart from './Chart';
 
 const Charts = {
-  Bar: BarChart,
-  Doughnut: DoughnutChart,
-  Line: LineChart,
+  Bar: Chart({ Chart: ResponsiveBar }),
 };
 
 export default Charts;

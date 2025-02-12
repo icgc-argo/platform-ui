@@ -89,3 +89,5 @@ export default BarChart;
  * ! provide sensible default, allow overwriting !
  * TODO: expose some meta so consumer can style eg. labels , bucket count etc
  */
+
+//   const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
