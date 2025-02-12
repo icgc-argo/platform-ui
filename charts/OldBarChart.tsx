@@ -20,7 +20,6 @@
  */
 
 import { ResponsiveBar, ResponsiveBarSvgProps } from '@nivo/bar';
-import { Chart } from './Chart';
 
 // Serves primarily as a wrapper around the Nivo chart library implementation of Bar charts
 
@@ -100,10 +99,6 @@ const BarChart = ({ data, config }: { data: Record<string, string | number>[]; c
   const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
   const finalConfig = createBarConfig({ ...resolvedConfig, data });
 
-  return (
-    <Chart height={config?.height}>
-      <ResponsiveBar {...finalConfig} />
-    </Chart>
-  );
+  return <ResponsiveBar {...finalConfig} />;
 };
 export default BarChart;

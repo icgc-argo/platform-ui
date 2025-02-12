@@ -22,13 +22,11 @@ import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
 import { BarChartConfig } from 'charts/Bar';
 import DoughnutChart from 'charts/DoughnutChart';
 import LineChart, { LineChartConfig } from 'charts/LineChart';
-import BarChart from 'charts/OldBarChart';
-import NBarChart from './charts/Bar';
+import BarChart from './charts/Bar';
 import { injectTheme } from './charts/util';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import RangeSelector from './components/Selector';
-import { donorData } from './data';
 
 const colors = [
   '#78BB71',
@@ -211,11 +209,11 @@ const Charts = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <NBarChart field="study_id" />
+        <BarChart field="study_id" />
       </Card>
 
       <Card
@@ -253,20 +251,20 @@ const Charts = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
 
       <Card title="Age at Diagnosis">
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
       <Card title="Gender">
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
       <Card title="Vital Status">
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
       <Card title="Experimental Strategy">
-        <BarChart data={donorData} config={{}} />
+        <BarChart field="study_id" />
       </Card>
     </ChartContainer>
   );

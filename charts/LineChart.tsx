@@ -19,8 +19,7 @@
  *
  */
 
-import { LineSvgProps, ResponsiveLine, Serie } from '@nivo/line';
-import { Chart } from './Chart';
+import { LineSvgProps, ResponsiveLine } from '@nivo/line';
 
 // Serves primarily as a wrapper around the Nivo chart library implementation of Bar charts
 
@@ -117,10 +116,6 @@ const LineChart = ({ data, config }: { data: any; config: any }) => {
   const resolvedConfig = typeof config === 'function' ? config(baseConfig) : config;
   const finalConfig = createLineConfig({ ...resolvedConfig, data });
 
-  return (
-    <Chart height={config?.height}>
-      <ResponsiveLine {...finalConfig} />
-    </Chart>
-  );
+  return <ResponsiveLine {...finalConfig} />;
 };
 export default LineChart;

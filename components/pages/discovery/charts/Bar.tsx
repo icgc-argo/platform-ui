@@ -1,9 +1,9 @@
 import { UikitTheme, useTheme } from '@icgc-argo/uikit';
-import Bar, { BarChartConfig } from 'charts/Bar';
-import { Chart } from 'charts/Chart';
+import Bar from 'charts/Bar';
+import { Chart } from './Chart';
 import { injectTheme } from './util';
 
-const chartThemeFn = (injectedTheme: UikitTheme): Pick<BarChartConfig, 'theme'> => ({
+const chartThemeFn = (injectedTheme: UikitTheme) => ({
   theme: {
     text: {
       fontFamily: 'Work Sans,sans-serif',
