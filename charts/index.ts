@@ -19,11 +19,12 @@
  *
  */
 
-import { ResponsiveBar } from '@nivo/bar';
-import Chart from './Chart';
+import Bar from './Bar';
+import Line from './Line';
 
 const Charts = {
-  Bar: Chart({ Chart: ResponsiveBar }),
+  Bar,
+  Line,
 };
 
 export default Charts;

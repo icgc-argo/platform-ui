@@ -48,8 +48,22 @@ const generateQuery = ({ field }) => gql`
   }
 `;
 
-export const useArrangerCharts = ({ field }) => {
+export const useArrangerCharts = ({ options: { query, variables, dataTransformer } }) => {
+  console.log('data tran', query, variables, dataTransformer);
   const { filters } = useFiltersContext();
-  const query = generateQuery({ field });
-  return useQuery(query, { variables: { filters } });
+  const {
+    data: rawData,
+    loading,
+    error,
+  } = useQuery(query, { variables: { ...variables, filters } });
+
+  const data =
+    (!error && !loading && typeof dataTransformer === 'function' && dataTransformer(rawData)) ||
+    rawData;
+
+  return {
+    data,
+    loading,
+    error,
+  };
 };
