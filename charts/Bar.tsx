@@ -22,7 +22,7 @@
 import { ResponsiveBar, ResponsiveBarSvgProps } from '@nivo/bar';
 import { get } from 'lodash';
 import { useEffect } from 'react';
-import { useArrangerCharts } from './api';
+import { useArrangerCharts } from './arranger';
 import { BUCKETS_TO_BAR_CHART } from './config';
 import { ChartConfig } from './types';
 
