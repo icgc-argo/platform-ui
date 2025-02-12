@@ -1,15 +1,26 @@
-import { ResponsiveBar } from '@nivo/bar';
-import { get } from 'lodash';
 import { useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
-import { BUCKETS_TO_BAR_CHART } from './config';
 import { CommonChart } from './types';
 
 const Chart =
-  ({ Component }) =>
-  ({ field, consumerConfig, onLoad, onError }: CommonChart) => {
-    const { data: rawData, loading, error } = useArrangerCharts({ field });
-    console.log('data', rawData, 'loading', loading, 'error', error);
+  ({
+    // internal
+    Component,
+    options,
+    internalConfig,
+  }: {
+    Component: any;
+    options: any;
+    internalConfig?: any;
+  }) =>
+  ({
+    // consumer
+    consumerConfig,
+    onLoad,
+    onError,
+  }: CommonChart) => {
+    const { data, loading, error } = useArrangerCharts({ options });
+    console.log('data', data, 'loading', loading, 'error', error);
 
     useEffect(() => {
       if (error) {
@@ -17,15 +28,7 @@ const Chart =
       }
     }, [loading, error]);
 
-    const dataConfig = {
-      ...BUCKETS_TO_BAR_CHART,
-      // TODO: correct data properties when using ArrangerV3 data fetcher
-      data: get(rawData, `file.aggregations.${field}.buckets`, []).map(
-        ({ __typename, ...rest }) => rest,
-      ),
-    };
-    console.log('dc', dataConfig);
-    return !loading && !error && <ResponsiveBar {...{ ...dataConfig, ...consumerConfig }} />;
+    return !loading && !error && <Component {...{ data, ...internalConfig, ...consumerConfig }} />;
   };
 
 export default Chart;
