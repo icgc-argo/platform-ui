@@ -18,13 +18,14 @@
  */
 
 import { css, styled, useTheme } from '@icgc-argo/uikit';
-import NavBar from 'components/NavBar';
+import { useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
-import Head from '../head';
 
 import Footer from 'components/Footer';
-import { useState } from 'react';
+import NavBar from 'components/NavBar';
+import useFiltersContext, { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
+import Head from '../head';
 import Charts from './Charts';
 import { commonStyles } from './components/common';
 import Sidebar from './components/SideBar';
@@ -42,47 +43,69 @@ export const PageContainer = styled('div')`
   background: ${({ theme }) => theme.colors.grey_4};
 `;
 
+const Test = () => {
+  const fc = useFiltersContext();
+  return (
+    <button
+      onClick={() => {
+        console.log('click', fc);
+        fc.setFilterFromFieldAndValue({
+          field: 'donors.specimens.specimen_tissue_source',
+          value: 'Esophagus',
+        });
+      }}
+    >
+      Click
+    </button>
+  );
+};
+
 const DiscoveryPage = () => {
   const theme = useTheme();
 
   const [isSidebarOpen, setSetbarView] = useState(true);
   return (
-    <div
-      css={css({
-        display: 'grid',
-        gridTemplateRows: '58px 1fr 58px',
-        height: '100vh',
-        background: `${theme.colors.grey_4}`,
-      })}
-    >
-      <div>
-        <Head subtitle={'Data Discovery'} />
-        <NavBar />
-      </div>
+    <FiltersProvider>
+      <>
+        <Test />
+      </>
       <div
         css={css({
           display: 'grid',
-          gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
-          gridTemplateRows: 'calc(100vh - 116px)',
-          minHeight: 0,
-          overflow: 'hidden',
+          gridTemplateRows: '58px 1fr 58px',
+          height: '100vh',
+          background: `${theme.colors.grey_4}`,
         })}
       >
-        <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
-        <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-          <QueryBarContainer
-            text="Explore data by selecting filters."
-            css={css([commonStyles.block, { boxShadow: 'none' }])}
-          />
-          <StatsCard
-            data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
-            isLoading={false}
-          />
-          <Charts />
+        <div>
+          <Head subtitle={'Data Discovery'} />
+          <NavBar />
         </div>
+        <div
+          css={css({
+            display: 'grid',
+            gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
+            gridTemplateRows: 'calc(100vh - 116px)',
+            minHeight: 0,
+            overflow: 'hidden',
+          })}
+        >
+          <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
+          <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
+            <QueryBarContainer
+              text="Explore data by selecting filters."
+              css={css([commonStyles.block, { boxShadow: 'none' }])}
+            />
+            <StatsCard
+              data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
+              isLoading={false}
+            />
+            <Charts />
+          </div>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </FiltersProvider>
   );
 };
 
