@@ -30,8 +30,19 @@ export type Options = {
 
 /**
  *
- * @param param0
- * @returns
+ * Higher order function to return a chart component with a standard end user api and data resolution
+ *
+ * @param generateChartConfig
+ * @param generateChartConfig.Component - A React component for a chart eg. Bar, Line
+ * @param generateChartConfig.options - Options for data resolution
+ * @param generateChartConfig.internalConfig - Additional required config for a chart
+ *
+ * @param chart
+ * @param chart.consumerConfig - A configuration for the UI of a chart
+ * @param chart.onLoad - A callback function for chart loading
+ * @param chart.onError - A callback function for chart errors
+ *
+ * @returns React chart component or null
  */
 const generateChartComponent =
   <Type extends unknown>({

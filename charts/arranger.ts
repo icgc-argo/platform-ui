@@ -19,7 +19,7 @@
 
 /**
  * This entire file is a temporary solution to target Arranger v2 server
- * It is consistent with usage across this repo
+ * It is consistent with usage across this repo eg. `useQuery` and per component querying
  * TODO: Upgrade to use Arranger v3 in the project (server and client)
  */
 
@@ -27,6 +27,19 @@ import { useQuery } from '@apollo/client';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { Options } from './Chart';
 
+/**
+ *
+ * Queries Arranger server using provided query and variables
+ * Also applies in filters if context is available
+ * On success, transforms response using provided dataTransformer
+ *
+ * @param options
+ * @param options.query - GQL query
+ * @param options.variables - GQL variables object
+ * @param options.dataTransformer - Function to transform raw query response to chart data
+ *
+ * @returns Data, loading and error states
+ */
 export const useArrangerCharts = ({ query, variables, dataTransformer }: Options) => {
   const { filters } = useFiltersContext();
   const {
