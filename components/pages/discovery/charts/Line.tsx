@@ -17,44 +17,54 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
-import generateChartComponent from 'charts/Chart';
-import { BUCKETS_TO_BAR_CHART } from 'charts/config';
-import { get } from 'lodash';
-import DoughnutChart from './ui';
+import { useTheme } from '@icgc-argo/uikit';
+import Charts from 'charts';
+import { Chart } from './Chart';
+import { chartThemeFn } from './theme';
+import { injectTheme } from './util';
 
-const generateQuery = ({ field }) => gql`
-  query ChartsFileCentricAgg($filters:JSON) {
-    file {
-      aggregations(filters: $filters) {
-        ${field} {
-          bucket_count
-          buckets {
-            doc_count
-            key
-          }
-        }
-      }
-    }
-  }
-`;
+const LineChart = ({ fields, interval }: { fields: string[]; interval: number }) => {
+  const theme = useTheme();
+  const [chartTheme] = injectTheme(theme)([chartThemeFn]);
 
-// Regular Aggregation type => chart data
-const transformToBarData =
-  ({ field }) =>
-  (rawData) => {
-    return get(rawData, `file.aggregations.${field}.buckets`, []).map(
-      ({ __typename, ...rest }) => rest,
-    );
+  const config = {
+    axisBottom: {
+      legend: 'Months',
+      tickValues: 6,
+      legendOffset: 34,
+      legendPosition: 'middle',
+    },
+    axisLeft: {
+      legend: 'Files',
+      renderTick: () => null,
+      legendOffset: -12,
+      legendPosition: 'middle',
+    },
+
+    margin: {
+      top: 12,
+      right: 24,
+      left: 24,
+      bottom: 56,
+    },
+
+    colors: ['#EF4110', '#4596DE'],
+
+    theme: {
+      ...chartTheme.theme,
+      legends: {
+        text: {
+          fontSize: 6,
+        },
+      },
+    },
   };
 
-const Doughnut = (consumerProps) => {
-  const { field } = consumerProps;
-  return generateChartComponent({
-    Component: DoughnutChart,
-    options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
-    internalConfig: { ...BUCKETS_TO_BAR_CHART },
-  })(consumerProps);
+  return (
+    <Chart>
+      <Charts.Line fields={fields} interval={interval} consumerConfig={config} />
+    </Chart>
+  );
 };
 
-export default Doughnut;
+export default LineChart;

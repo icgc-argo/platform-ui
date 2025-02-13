@@ -17,44 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
-import generateChartComponent from 'charts/Chart';
-import { BUCKETS_TO_BAR_CHART } from 'charts/config';
-import { get } from 'lodash';
-import DoughnutChart from './ui';
+import { UikitTheme } from '@icgc-argo/uikit';
 
-const generateQuery = ({ field }) => gql`
-  query ChartsFileCentricAgg($filters:JSON) {
-    file {
-      aggregations(filters: $filters) {
-        ${field} {
-          bucket_count
-          buckets {
-            doc_count
-            key
-          }
-        }
-      }
-    }
-  }
-`;
-
-// Regular Aggregation type => chart data
-const transformToBarData =
-  ({ field }) =>
-  (rawData) => {
-    return get(rawData, `file.aggregations.${field}.buckets`, []).map(
-      ({ __typename, ...rest }) => rest,
-    );
-  };
-
-const Doughnut = (consumerProps) => {
-  const { field } = consumerProps;
-  return generateChartComponent({
-    Component: DoughnutChart,
-    options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
-    internalConfig: { ...BUCKETS_TO_BAR_CHART },
-  })(consumerProps);
-};
-
-export default Doughnut;
+export const chartThemeFn = (injectedTheme: UikitTheme) => ({
+  theme: {
+    text: {
+      fontFamily: 'Work Sans,sans-serif',
+    },
+    axis: {
+      legend: {
+        text: { fontSize: 10, color: injectedTheme.colors.grey },
+      },
+      ticks: {
+        text: {
+          fontSize: 11,
+          color: 'black',
+        },
+        line: {
+          strokeWidth: 0,
+        },
+      },
+      domain: {
+        line: {
+          stroke: injectedTheme.colors.grey_2,
+          strokeWidth: 1,
+        },
+      },
+    },
+  },
+});

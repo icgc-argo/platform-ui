@@ -17,13 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, UikitTheme, useTheme } from '@icgc-argo/uikit';
+import { css } from '@icgc-argo/uikit';
 
-import { BarChartConfig } from 'charts/Bar';
-import DoughnutChart from 'charts/DoughnutChart';
-import LineChart, { LineChartConfig } from 'charts/LineChart';
 import BarChart from './charts/Bar';
-import { injectTheme } from './charts/util';
+import DoughnutChart from './charts/Doughnut';
+import LineChart from './charts/Line';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import RangeSelector from './components/Selector';
@@ -69,143 +67,7 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
-const chartThemeFn = (injectedTheme: UikitTheme): Pick<BarChartConfig, 'theme'> => ({
-  theme: {
-    text: {
-      fontFamily: 'Work Sans,sans-serif',
-    },
-    axis: {
-      legend: {
-        text: { fontSize: 10, color: injectedTheme.colors.grey },
-      },
-      ticks: {
-        text: {
-          fontSize: 11,
-          color: 'black',
-        },
-        line: {
-          strokeWidth: 0,
-        },
-      },
-      domain: {
-        line: {
-          stroke: injectedTheme.colors.grey_2,
-          strokeWidth: 1,
-        },
-      },
-    },
-  },
-});
 const Charts = () => {
-  const theme = useTheme();
-  const [chartTheme] = injectTheme(theme)([chartThemeFn]);
-
-  const lineChartConfig: LineChartConfig = {
-    axisBottom: {
-      legend: 'Months',
-      tickValues: 6,
-      legendOffset: 34,
-      legendPosition: 'middle',
-    },
-    axisLeft: {
-      legend: 'Files',
-      renderTick: () => null,
-      legendOffset: -12,
-      legendPosition: 'middle',
-    },
-
-    margin: {
-      top: 12,
-      right: 24,
-      left: 24,
-      bottom: 56,
-    },
-
-    colors: ['#EF4110', '#4596DE'],
-
-    theme: {
-      ...chartTheme.theme,
-      legends: {
-        text: {
-          fontSize: 6,
-        },
-      },
-    },
-  };
-
-  const lineChartData = [
-    {
-      id: 'private',
-      color: '#EF4110',
-      data: [
-        {
-          x: 1,
-          y: 276,
-        },
-        {
-          x: 7,
-          y: 34,
-        },
-        {
-          x: 9,
-          y: 168,
-        },
-        {
-          x: 12,
-          y: 285,
-        },
-        {
-          x: 18,
-          y: 144,
-        },
-        {
-          x: 19,
-          y: 129,
-        },
-      ],
-    },
-    {
-      id: 'published',
-      color: '#4596DE',
-      data: [
-        {
-          x: 3,
-          y: 11,
-        },
-        {
-          x: 4,
-          y: 294,
-        },
-        {
-          x: 6,
-          y: 21,
-        },
-      ],
-    },
-  ];
-
-  const doughnutChartData = [
-    {
-      id: 'Biliary Tract',
-      label: 'Biliary Tract',
-      colour: '#D4A268',
-      value: 68,
-    },
-    { id: 'Lung', label: 'Lung', colour: '#E66550', value: 24 },
-    { id: 'Bladder', label: 'Bladder', colour: '#8B5E9F', value: 12 },
-    { id: 'Prostate', label: 'Prostate', colour: '#B8CCE4', value: 3 },
-    { id: 'Colorectal', label: 'Colorectal', colour: '#E789F', value: 927 },
-    { id: 'Breast', label: 'Breast', colour: '#F2CBBD', value: 24 },
-    { id: 'Uterine', label: 'Uterine', colour: '#4472C4', value: 66 },
-    { id: 'Skin', label: 'Skin', colour: '#A8D08D', value: 77 },
-    { id: 'Oral', label: 'Oral', colour: '#70C4C4', value: 87 },
-    { id: 'Ovarian', label: 'Ovarian', colour: '#E371B2', value: 44 },
-    { id: 'Brain', label: 'Brain', colour: '#70AD47', value: 23 },
-    { id: 'Esophageal', label: 'Esophageal', colour: '#ED7D31', value: 11 },
-    { id: 'Liver', label: 'Liver', colour: '#D64F42', value: 88 },
-    { id: 'Thyroid', label: 'Thyroid', colour: '#4BACC6', value: 65 },
-  ];
-
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
@@ -227,7 +89,13 @@ const Charts = () => {
         }
         css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
       >
-        <LineChart data={lineChartData} config={lineChartConfig} />
+        <LineChart
+          fields={[
+            'analysis__analysis_version',
+            'clinical__specimens__specimen_acquisition_interval',
+          ]}
+          interval={2}
+        />
       </Card>
 
       <Card
@@ -239,7 +107,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart data={doughnutChartData} config={{}} />
+        <DoughnutChart />
       </Card>
 
       <Card
