@@ -20,7 +20,7 @@ const generateQuery = ({ field }) => gql`
   }
 `;
 
-// Regular Aggregation type => Nivo Bar chart data
+// Aggregation => Chart config
 const transformToBarData =
   ({ field }) =>
   (rawData) => {

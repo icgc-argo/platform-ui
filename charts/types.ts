@@ -23,7 +23,6 @@ export type ChartConfig = {};
 
 // TODO: rename me please =
 export type CommonChart = {
-  field: string;
   consumerConfig?: ChartConfig;
   onLoad?: any;
   onError?: any;

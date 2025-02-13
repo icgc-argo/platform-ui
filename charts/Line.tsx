@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { ResponsiveLine } from '@nivo/line';
 import { get } from 'lodash';
-import Chart from './Chart';
+import generateChartComponent from './Chart';
 import { CommonChart } from './types';
 
 type LineData = {
@@ -9,11 +9,13 @@ type LineData = {
   data: { x: number; y: number }[];
 }[];
 
-const generateQuery = ({ field }) => gql`
+const generateQuery = ({ fields }) => gql`
   query ChartsFileCentricNumericAgg($filters:JSON, $interval: Float) {
     file {
       aggregations(filters: $filters) {
-        ${field} {
+        ${fields.map(
+          (field) => `
+          ${field} {
           histogram(interval: $interval) {         
             bucket_count
             buckets {
@@ -21,18 +23,19 @@ const generateQuery = ({ field }) => gql`
               key
             }
           }
-        }
+        }`,
+        )}
       }
     }
   }
 `;
 
-//  NumericAggregation => Nivo Line chart data
+//  NumericAggregation => Chart config
 const transformToLineData =
-  ({ field }) =>
+  ({ fields }) =>
   (rawData): LineData => {
-    const data = {
-      id: 'ID',
+    return fields.map((field) => ({
+      id: field,
       data: get(rawData, `file.aggregations.${field}.histogram.buckets`, []).map(
         ({ key, doc_count }) => {
           return {
@@ -41,19 +44,17 @@ const transformToLineData =
           };
         },
       ),
-    };
-
-    return [data];
+    }));
   };
 
-const Line = (consumerProps: CommonChart & { interval: number }) => {
-  const { field, interval } = consumerProps;
+const Line = (consumerProps: CommonChart & { interval: number; fields: string[] }) => {
+  const { fields, interval } = consumerProps;
   const options = {
-    query: generateQuery({ field }),
+    query: generateQuery({ fields }),
     variables: { interval },
-    dataTransformer: transformToLineData({ field }),
+    dataTransformer: transformToLineData({ fields }),
   };
-  return Chart({ Component: ResponsiveLine, options })(consumerProps);
+  return generateChartComponent({ Component: ResponsiveLine, options })(consumerProps);
 };
 
 export default Line;
