@@ -23,31 +23,11 @@
  * TODO: Upgrade to use Arranger v3 in the project (server and client)
  */
 
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { Options } from './Chart';
 
-/**
- * TODO: update to use ArrangerV3 data providers
- * TODO: NumericAgg
- */
-const generateQuery = ({ field }) => gql`
-  query ChartsFileCentric($filters:JSON) {
-    file {
-      aggregations(filters: $filters) {
-        ${field} {
-          bucket_count
-          buckets {
-            doc_count
-            key
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const useArrangerCharts = ({ options: { query, variables, dataTransformer } }) => {
-  console.log('data tran', query, variables, dataTransformer);
+export const useArrangerCharts = ({ query, variables, dataTransformer }: Options) => {
   const { filters } = useFiltersContext();
   const {
     data: rawData,

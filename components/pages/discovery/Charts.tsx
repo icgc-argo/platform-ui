@@ -107,7 +107,7 @@ const Charts = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart />
+        <DoughnutChart field={undefined} />
       </Card>
 
       <Card

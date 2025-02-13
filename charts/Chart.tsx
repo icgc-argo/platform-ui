@@ -17,30 +17,40 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { DocumentNode } from 'graphql';
 import { useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
-import { CommonChart } from './types';
+import { Chart } from './types';
 
+export type Options = {
+  query: DocumentNode;
+  variables?: any;
+  dataTransformer?: (data: unknown) => any;
+};
+
+/**
+ *
+ * @param param0
+ * @returns
+ */
 const generateChartComponent =
-  ({
+  <Type extends unknown>({
     // internal
     Component,
     options,
     internalConfig,
   }: {
-    Component: any;
-    options: any;
-    internalConfig?: any;
+    Component: React.ComponentType<any>; // 'any' prop types
+    options: Options;
+    internalConfig?: Record<string, unknown>;
   }) =>
   ({
     // consumer
     consumerConfig,
     onLoad,
     onError,
-  }: CommonChart) => {
-    // TODO: only when data is avail cna be passed
-    const { data, loading, error } = useArrangerCharts({ options });
-    console.log('data', data, 'loading', loading, 'error', error);
+  }: Chart) => {
+    const { data, loading, error } = useArrangerCharts(options);
 
     useEffect(() => {
       if (error) {

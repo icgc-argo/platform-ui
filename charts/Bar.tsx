@@ -22,8 +22,9 @@ import { ResponsiveBar } from '@nivo/bar';
 import { get } from 'lodash';
 import generateChartComponent from './Chart';
 import { BUCKETS_TO_BAR_CHART } from './config';
+import { Chart } from './types';
 
-const generateQuery = ({ field }) => gql`
+const generateQuery = ({ field }: { field: string }) => gql`
   query ChartsFileCentricAgg($filters:JSON) {
     file {
       aggregations(filters: $filters) {
@@ -41,14 +42,14 @@ const generateQuery = ({ field }) => gql`
 
 // Aggregation => Chart config
 const transformToBarData =
-  ({ field }) =>
+  ({ field }: { field: string }) =>
   (rawData) => {
     return get(rawData, `file.aggregations.${field}.buckets`, []).map(
       ({ __typename, ...rest }) => rest,
     );
   };
 
-const Bar = (consumerProps) => {
+const Bar = (consumerProps: Chart & { field: string }) => {
   const { field } = consumerProps;
   return generateChartComponent({
     Component: ResponsiveBar,

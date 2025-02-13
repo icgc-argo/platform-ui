@@ -21,14 +21,14 @@ import { gql } from '@apollo/client';
 import { ResponsiveLine } from '@nivo/line';
 import { get } from 'lodash';
 import generateChartComponent from './Chart';
-import { CommonChart } from './types';
+import { Chart } from './types';
 
 type LineData = {
   id: string;
   data: { x: number; y: number }[];
 }[];
 
-const generateQuery = ({ fields }) => gql`
+const generateQuery = ({ fields }: { fields: string[] }) => gql`
   query ChartsFileCentricNumericAgg($filters:JSON, $interval: Float) {
     file {
       aggregations(filters: $filters) {
@@ -51,7 +51,7 @@ const generateQuery = ({ fields }) => gql`
 
 //  NumericAggregation => Chart config
 const transformToLineData =
-  ({ fields }) =>
+  ({ fields }: { fields: string[] }) =>
   (rawData): LineData => {
     return fields.map((field) => ({
       id: field,
@@ -66,7 +66,7 @@ const transformToLineData =
     }));
   };
 
-const Line = (consumerProps: CommonChart & { interval: number; fields: string[] }) => {
+const Line = (consumerProps: Chart & { fields: string[]; interval: number }) => {
   const { fields, interval } = consumerProps;
   const options = {
     query: generateQuery({ fields }),
