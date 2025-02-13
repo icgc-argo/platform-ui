@@ -20,11 +20,13 @@
  */
 
 import Bar from './Bar';
+import Doughnut from './Doughnut';
 import Line from './Line';
 
 const Charts = {
   Bar,
   Line,
+  Doughnut,
 };
 
 export default Charts;
