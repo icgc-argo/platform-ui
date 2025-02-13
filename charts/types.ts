@@ -17,7 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// TODO: chart configs are different for differnet charts
+import { ResponsiveBar } from '@nivo/bar';
+import { ResponsiveLine } from '@nivo/line';
+
+// TODO: chart configs are different for different charts
 export type ChartConfig = {};
 
 export type Chart = {
@@ -25,3 +28,5 @@ export type Chart = {
   onLoad?: () => void;
   onError?: (error: unknown) => void;
 };
+
+export type ChartComponent = typeof ResponsiveLine | typeof ResponsiveBar;

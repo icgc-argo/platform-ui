@@ -20,11 +20,11 @@
 import { DocumentNode } from 'graphql';
 import { useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
-import { Chart } from './types';
+import { Chart, ChartComponent } from './types';
 
 export type Options = {
   query: DocumentNode;
-  variables?: any;
+  variables?: Record<string, unknown>;
   dataTransformer?: (data: unknown) => any;
 };
 
@@ -45,13 +45,13 @@ export type Options = {
  * @returns React chart component or null
  */
 const generateChartComponent =
-  <Type extends unknown>({
+  ({
     // internal
     Component,
     options,
     internalConfig,
   }: {
-    Component: React.ComponentType<any>; // 'any' prop types
+    Component: ChartComponent;
     options: Options;
     internalConfig?: Record<string, unknown>;
   }) =>
