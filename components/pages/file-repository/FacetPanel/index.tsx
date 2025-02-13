@@ -39,7 +39,7 @@ import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { canReadSomeProgram, isDccMember } from 'global/utils/egoJwt';
 import { trim } from 'lodash';
-import { useState, useEffect, ComponentProps, createRef } from 'react';
+import { ComponentProps, createRef, useEffect, useState } from 'react';
 
 import SqonBuilder from 'sqon-builder';
 import useDebounce from '../hooks/useDebounce';
@@ -47,13 +47,13 @@ import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayN
 import useFiltersContext from '../hooks/useFiltersContext';
 import { FileCentricDocumentFields } from '../types';
 import {
+  clinicalDisplayValues,
   currentFieldValue,
   getDisplayName,
   getTooltipContent,
   inCurrentFilters,
   removeFilter,
   replaceFilter,
-  clinicalDisplayValues,
   toDisplayValue,
   toggleFilter,
 } from '../utils';
@@ -76,7 +76,6 @@ import {
   FileIdSearchQueryData,
   FileRepoFacetsQueryData,
   FileRepoFacetsQueryVariables,
-  GetAggregationResult,
   IdSearchQueryVariables,
   SearchMenuDataNode,
 } from './types';
@@ -224,6 +223,41 @@ const FacetContainer = styled(Container)`
   overflow-y: auto;
   border-radius: 0;
 `;
+
+// Common - used elsewhere
+export const getOptions = (
+  facet: FacetDetails,
+  filters: FileRepoFiltersType,
+  aggregations: unknown,
+) => {
+  const options: OptionsListFilterOption[] = (
+    aggregations[facet.facetPath] || { buckets: [] }
+  ).buckets.map((bucket) => {
+    const bucketKey = bucket.key_as_string ? bucket.key_as_string : bucket.key;
+    return {
+      ...bucket,
+      key: bucketKey,
+      isChecked: inCurrentFilters({
+        currentFilters: filters,
+        value: bucketKey,
+        dotField: facet.esDocumentField,
+      }),
+    };
+  });
+
+  // Control ordering of options for specific facets
+  switch (facet.facetPath) {
+    case 'embargo_stage':
+      const order = ['PROGRAM_ONLY', 'MEMBER_ACCESS', 'ASSOCIATE_ACCESS', 'PUBLIC'];
+      return order
+        .map((embargoStage) => options.find((option) => option.key === embargoStage))
+        .filter(Boolean);
+    default:
+      return options;
+  }
+};
+
+// end common
 
 const useFileFacetQuery = (
   filters: FileRepoFiltersType,
@@ -458,34 +492,6 @@ const FacetPanel = () => {
     excludedIds,
   );
 
-  const getOptions = (facet: FacetDetails) => {
-    const options: OptionsListFilterOption[] = (
-      aggregations[facet.facetPath] || { buckets: [] }
-    ).buckets.map((bucket) => {
-      const bucketKey = bucket.key_as_string ? bucket.key_as_string : bucket.key;
-      return {
-        ...bucket,
-        key: bucketKey,
-        isChecked: inCurrentFilters({
-          currentFilters: filters,
-          value: bucketKey,
-          dotField: facet.esDocumentField,
-        }),
-      };
-    });
-
-    // Control ordering of options for specific facets
-    switch (facet.facetPath) {
-      case 'embargo_stage':
-        const order = ['PROGRAM_ONLY', 'MEMBER_ACCESS', 'ASSOCIATE_ACCESS', 'PUBLIC'];
-        return order
-          .map((embargoStage) => options.find((option) => option.key === embargoStage))
-          .filter(Boolean);
-      default:
-        return options;
-    }
-  };
-
   const getRangeFilters = (facetType: string, min: number, max: number): FileRepoFiltersType => {
     return {
       op: 'and',
@@ -539,6 +545,7 @@ const FacetPanel = () => {
       replaceAllFilters(toggleFilter(currentValue, filters));
     };
   };
+
   const onFacetSelectAllOptionsToggle: (
     facetDetails: FacetDetails,
   ) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
@@ -819,7 +826,7 @@ const FacetPanel = () => {
                     <Facet
                       {...facetProps}
                       key={facetDetails.name}
-                      options={getOptions(facetDetails)}
+                      options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={onFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
@@ -838,7 +845,7 @@ const FacetPanel = () => {
                     <TooltipFacet
                       {...facetProps}
                       key={facetDetails.name}
-                      options={getOptions(facetDetails)}
+                      options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={onFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
@@ -850,7 +857,7 @@ const FacetPanel = () => {
                     <Facet
                       {...facetProps}
                       key={facetDetails.name}
-                      options={getOptions(facetDetails)}
+                      options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={onFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}

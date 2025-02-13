@@ -17,18 +17,8 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Facet, Icon, UikitIconNames, useTheme } from '@icgc-argo/uikit';
-import { PropsWithChildren, useState } from 'react';
-import { facets } from './data';
-import { FacetFolder, FiltersSearchBox } from './Facet';
-
-const FacetRow = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <div css={css({ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' })}>
-      {children}
-    </div>
-  );
-};
+import { css, Icon, UikitIconNames } from '@icgc-argo/uikit';
+import { PropsWithChildren } from 'react';
 
 const SidebarComp = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -100,42 +90,16 @@ const Toggle = ({
   );
 };
 
-const Sidebar = ({ toggle, open }) => {
-  const theme = useTheme();
-
-  const [expandAll, setExpandAll] = useState(false);
-
+const Sidebar = ({
+  toggle,
+  open,
+  children,
+}: PropsWithChildren<{ toggle: () => void; open: boolean }>) => {
   return (
     <SidebarComp>
       {open ? (
         <>
-          <FiltersSearchBox
-            title="Filter"
-            isExpanded={expandAll}
-            onClick={() => setExpandAll((s) => !s)}
-          />
-          <div css={css({ flex: 1, overflow: 'scroll' })}>
-            {facets.map(({ folder, contents }) => {
-              return (
-                <FacetFolder title={folder} onClick={() => console.log('a')} override={expandAll}>
-                  {contents.map((facet) => {
-                    return (
-                      <Facet
-                        subMenuName={facet.name}
-                        options={[{ doc_count: 222, isChecked: false, key: 'a' }]}
-                        onOptionToggle={() => console.log('option toggle')}
-                        onSelectAllOptions={() => console.log('on select all')}
-                      />
-                    );
-                  })}
-                </FacetFolder>
-              );
-            })}
-            <FacetFolder title={'test'} onClick={() => console.log('a')}>
-              hi
-            </FacetFolder>
-            <FacetRow></FacetRow>
-          </div>
+          {children}
           <Toggle onClick={toggle} size="10px" />
         </>
       ) : (
@@ -153,7 +117,5 @@ const Sidebar = ({ toggle, open }) => {
     </SidebarComp>
   );
 };
-
-//
 
 export default Sidebar;

@@ -28,6 +28,7 @@ import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
 import Charts from './Charts';
 import { commonStyles } from './components/common';
+import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 
@@ -64,6 +65,7 @@ const DiscoveryPage = () => {
   const theme = useTheme();
 
   const [isSidebarOpen, setSetbarView] = useState(true);
+
   return (
     <FiltersProvider>
       <>
@@ -81,6 +83,7 @@ const DiscoveryPage = () => {
           <Head subtitle={'Data Discovery'} />
           <NavBar />
         </div>
+
         <div
           css={css({
             display: 'grid',
@@ -90,7 +93,10 @@ const DiscoveryPage = () => {
             overflow: 'hidden',
           })}
         >
-          <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
+          <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+            <Facets />
+          </Sidebar>
+
           <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
             <QueryBarContainer
               text="Explore data by selecting filters."
