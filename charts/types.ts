@@ -19,12 +19,18 @@
 
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
+import { ComponentPropsWithoutRef } from 'react';
 
-// TODO: chart configs are different for different charts
-export type ChartConfig = {};
+export type ChartConfig<TComponent extends ChartComponent> = Omit<
+  ComponentPropsWithoutRef<TComponent>,
+  'data'
+>;
 
-export type Chart = {
-  consumerConfig?: ChartConfig;
+export type ChartData<TComponent extends ChartComponent> =
+  ComponentPropsWithoutRef<TComponent>['data'];
+
+export type Chart<TComponent extends ChartComponent> = {
+  consumerConfig?: ChartConfig<TComponent> | ((data: unknown) => ChartConfig<TComponent>);
   onLoad?: () => void;
   onError?: (error: unknown) => void;
 };

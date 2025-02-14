@@ -18,14 +18,20 @@
  */
 
 import { DocumentNode } from 'graphql';
-import { useEffect } from 'react';
+import { ComponentPropsWithoutRef, useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
-import { Chart, ChartComponent } from './types';
+import { Chart, ChartComponent, ChartData } from './types';
 
-export type Options = {
+export type Options<TComponent extends ChartComponent> = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
-  dataTransformer?: (data: unknown) => any;
+  dataTransformer: (data: unknown) => ChartData<TComponent>;
+};
+
+export type Internal<TComponent extends ChartComponent> = {
+  Component: TComponent;
+  options: Options<TComponent>;
+  internalConfig?: Omit<ComponentPropsWithoutRef<TComponent>, 'data'>;
 };
 
 /**
@@ -45,23 +51,23 @@ export type Options = {
  * @returns React chart component or null
  */
 const generateChartComponent =
-  ({
+  <TComponent extends ChartComponent>({
     // internal
     Component,
     options,
     internalConfig,
   }: {
-    Component: ChartComponent;
-    options: Options;
-    internalConfig?: Record<string, unknown>;
+    Component: TComponent;
+    options: Options<TComponent>;
+    internalConfig?: Omit<ComponentPropsWithoutRef<TComponent>, 'data'>;
   }) =>
   ({
     // consumer
     consumerConfig,
     onLoad,
     onError,
-  }: Chart) => {
-    const { data, loading, error } = useArrangerCharts(options);
+  }: Chart<TComponent>) => {
+    const { data, loading, error } = useArrangerCharts<TComponent>(options);
 
     useEffect(() => {
       if (error) {
@@ -74,7 +80,9 @@ const generateChartComponent =
       const resolvedConsumerConfig =
         typeof consumerConfig === 'function' ? consumerConfig({ data }) : consumerConfig;
 
-      return <Component {...{ data, ...internalConfig, ...resolvedConsumerConfig }} />;
+      const props = { ...{ data, ...internalConfig, ...resolvedConsumerConfig } };
+
+      return <Component {...props} />;
     } else {
       return null;
     }

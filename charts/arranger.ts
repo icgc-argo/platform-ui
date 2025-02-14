@@ -23,9 +23,12 @@
  * TODO: Upgrade to use Arranger v3 in the project (server and client)
  */
 
-import { useQuery } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { Options } from './Chart';
+import { ChartComponent } from './types';
+
+type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {};
 
 /**
  *
@@ -40,7 +43,15 @@ import { Options } from './Chart';
  *
  * @returns Data, loading and error states
  */
-export const useArrangerCharts = ({ query, variables, dataTransformer }: Options) => {
+export const useArrangerCharts = <TComponent extends ChartComponent>({
+  query,
+  variables,
+  dataTransformer,
+}: Options<TComponent>): {
+  data: ReturnType<typeof dataTransformer> | undefined;
+  loading: boolean;
+  error: ApolloError | undefined;
+} => {
   const { filters } = useFiltersContext();
   const {
     data: rawData,
@@ -48,9 +59,7 @@ export const useArrangerCharts = ({ query, variables, dataTransformer }: Options
     error,
   } = useQuery(query, { variables: { ...variables, filters } });
 
-  const data =
-    (!error && !loading && typeof dataTransformer === 'function' && dataTransformer(rawData)) ||
-    rawData;
+  const data = !error && !loading ? dataTransformer(rawData) : undefined;
 
   return {
     data,

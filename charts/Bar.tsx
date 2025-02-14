@@ -21,6 +21,7 @@ import { gql } from '@apollo/client';
 import { ResponsiveBar } from '@nivo/bar';
 import { get } from 'lodash';
 import generateChartComponent from './Chart';
+import { BUCKETS_FOR_BAR_CHART } from './config';
 import { Chart } from './types';
 
 const generateQuery = ({ field }: { field: string }) => gql`
@@ -48,7 +49,7 @@ const transformToBarData =
     );
   };
 
-const Bar = (consumerProps: Chart & { field: string }) => {
+const Bar = (consumerProps: Chart<typeof ResponsiveBar> & { field: string }) => {
   const { field } = consumerProps;
   return generateChartComponent({
     Component: ResponsiveBar,
