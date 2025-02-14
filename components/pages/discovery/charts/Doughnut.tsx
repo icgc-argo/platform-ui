@@ -19,7 +19,7 @@
 
 import { useTheme } from '@icgc-argo/uikit';
 import Doughnut from 'charts/Doughnut/ui';
-import { Chart } from './Chart';
+import { ChartContainer } from './Chart';
 import { chartThemeFn } from './theme';
 import { injectTheme } from './util';
 
@@ -88,10 +88,10 @@ const DoughnutChart = ({ field }) => {
   };
 
   return (
-    <Chart>
+    <ChartContainer>
       {/* <Charts.Doughnut field={field} consumerConfig={config} /> */}
       <Doughnut config={config} data={TEMP_DATA} />
-    </Chart>
+    </ChartContainer>
   );
 };
 

@@ -19,7 +19,7 @@
 
 import { useTheme } from '@icgc-argo/uikit';
 import Charts from 'charts';
-import { Chart } from './Chart';
+import { ChartContainer } from './Chart';
 import { chartThemeFn } from './theme';
 import { injectTheme } from './util';
 
@@ -63,9 +63,9 @@ const BarChart = ({ field }) => {
   };
 
   return (
-    <Chart>
+    <ChartContainer>
       <Charts.Bar field={field} consumerConfig={config} />
-    </Chart>
+    </ChartContainer>
   );
 };
 

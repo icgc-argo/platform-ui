@@ -67,7 +67,7 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
-const Charts = () => {
+const ChartsLayout = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
@@ -138,4 +138,4 @@ const Charts = () => {
   );
 };
 
-export default Charts;
+export default ChartsLayout;

@@ -17,20 +17,23 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, styled, useTheme } from '@icgc-argo/uikit';
-import { useState } from 'react';
-import { Row, setConfiguration } from 'react-grid-system';
+import { css, useTheme } from "@emotion/react";
+import { styled } from "@icgc-argo/uikit";
 
-import Footer from 'components/Footer';
-import NavBar from 'components/NavBar';
-import useFiltersContext, { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
-import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
-import Head from '../head';
-import Charts from './Charts';
-import { commonStyles } from './components/common';
-import Facets from './components/Facets';
-import Sidebar from './components/SideBar';
-import StatsCard from './components/StatsCard';
+import NavBar from "components/NavBar";
+import { useState } from "react";
+import { Row, setConfiguration } from "react-grid-system";
+import useFiltersContext, { FiltersProvider } from "../file-repository/hooks/useFiltersContext";
+import ChartsLayout from "./Charts";
+import { commonStyles } from "./components/common";
+import Facets from "./components/Facets";
+import StatsCard from "./components/StatsCard";
+import QueryBarContainer from "../file-repository/QueryBar/QueryBarContainer";
+import Sidebar from "./components/SideBar";
+import Footer from "components/Footer";
+import Charts from "./Charts";
+import Head from "../head";
+
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -65,7 +68,6 @@ const DiscoveryPage = () => {
   const theme = useTheme();
 
   const [isSidebarOpen, setSetbarView] = useState(true);
-
   return (
     <FiltersProvider>
       <>
@@ -82,6 +84,17 @@ const DiscoveryPage = () => {
         <div>
           <Head subtitle={'Data Discovery'} />
           <NavBar />
+        <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
+        <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
+          <QueryBarContainer
+            text="Explore data by selecting filters."
+            css={css([commonStyles.block, { boxShadow: 'none' }])}
+          />
+          <StatsCard
+            data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
+            isLoading={false}
+          />
+          <ChartsLayout />
         </div>
 
         <div
