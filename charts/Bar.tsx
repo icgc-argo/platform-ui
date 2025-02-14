@@ -21,7 +21,6 @@ import { gql } from '@apollo/client';
 import { ResponsiveBar } from '@nivo/bar';
 import { get } from 'lodash';
 import generateChartComponent from './Chart';
-import { BUCKETS_TO_BAR_CHART } from './config';
 import { Chart } from './types';
 
 const generateQuery = ({ field }: { field: string }) => gql`
@@ -54,7 +53,7 @@ const Bar = (consumerProps: Chart & { field: string }) => {
   return generateChartComponent({
     Component: ResponsiveBar,
     options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
-    internalConfig: { ...BUCKETS_TO_BAR_CHART },
+    internalConfig: { ...BUCKETS_FOR_BAR_CHART },
   })(consumerProps);
 };
 

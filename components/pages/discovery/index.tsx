@@ -25,7 +25,7 @@ import Head from '../head';
 import Footer from 'components/Footer';
 import { useState } from 'react';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
-import Charts from './Charts';
+import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
@@ -78,7 +78,7 @@ const DiscoveryPage = () => {
             data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
             isLoading={false}
           />
-          <Charts />
+          <ChartsLayout />
         </div>
       </div>
       <Footer />

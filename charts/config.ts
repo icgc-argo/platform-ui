@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const BUCKETS_TO_BAR_CHART = {
+export const BUCKETS_FOR_BAR_CHART = {
   indexBy: 'key',
   keys: ['doc_count'],
 } as const;

@@ -19,7 +19,7 @@
 
 import { useTheme } from '@icgc-argo/uikit';
 import Charts from 'charts';
-import { Chart } from './Chart';
+import { ChartContainer } from './Chart';
 import { chartThemeFn } from './theme';
 import { injectTheme } from './util';
 
@@ -61,9 +61,9 @@ const LineChart = ({ fields, interval }: { fields: string[]; interval: number })
   };
 
   return (
-    <Chart>
+    <ChartContainer>
       <Charts.Line fields={fields} interval={interval} consumerConfig={config} />
-    </Chart>
+    </ChartContainer>
   );
 };
 
