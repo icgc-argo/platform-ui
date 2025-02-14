@@ -27,7 +27,7 @@ import { Row, setConfiguration } from 'react-grid-system';
 import useFiltersContext, { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
-import { default as Charts, default as ChartsLayout } from './Charts';
+import { default as ChartsLayout } from './Charts';
 import { commonStyles } from './components/common';
 import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
@@ -83,18 +83,6 @@ const DiscoveryPage = () => {
         <div>
           <Head subtitle={'Data Discovery'} />
           <NavBar />
-          <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen} />
-          <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-            <QueryBarContainer
-              text="Explore data by selecting filters."
-              css={css([commonStyles.block, { boxShadow: 'none' }])}
-            />
-            <StatsCard
-              data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
-              isLoading={false}
-            />
-            <ChartsLayout />
-          </div>
 
           <div
             css={css({
@@ -118,7 +106,7 @@ const DiscoveryPage = () => {
                 data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
                 isLoading={false}
               />
-              <Charts />
+              <ChartsLayout />
             </div>
           </div>
           <Footer />

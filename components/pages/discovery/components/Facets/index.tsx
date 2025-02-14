@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
-import { Facet } from '@icgc-argo/uikit';
-import { getOptions } from 'components/pages/file-repository/FacetPanel';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { facets } from '../SideBar/data';
+import Facet from './Facet';
 import { FacetFolder } from './Folder';
 import { FiltersSearchBox } from './Search';
 
@@ -15,6 +14,8 @@ const FacetRow = ({ children }: PropsWithChildren<{}>) => {
 };
 
 const Facets = () => {
+  const [expandAll, setExpandAll] = useState(false);
+
   return (
     <>
       <FiltersSearchBox
@@ -29,12 +30,7 @@ const Facets = () => {
               {contents.map((facet) => {
                 return (
                   <FacetRow>
-                    <Facet
-                      subMenuName={facet.name}
-                      options={getOptions(facet, filters, aggregations)}
-                      onOptionToggle={() => console.log('option toggle')}
-                      onSelectAllOptions={() => console.log('on select all')}
-                    />
+                    <Facet facet={facet} aggregations={{}} />
                   </FacetRow>
                 );
               })}
