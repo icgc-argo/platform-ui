@@ -17,11 +17,54 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import { useTheme } from '@icgc-argo/uikit';
+import Charts from 'charts';
+import { ChartContainer } from './Chart';
+import { chartThemeFn } from './theme';
+import { injectTheme } from './util';
 
-export const Chart = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
-  <div css={css({ flex: 1, overflow: 'scroll' })}>
-    <div css={css({ width: '100%', height: height || '100%' })}>{children}</div>
-  </div>
-);
+const LineChart = ({ fields, interval }: { fields: string[]; interval: number }) => {
+  const theme = useTheme();
+  const [chartTheme] = injectTheme(theme)([chartThemeFn]);
+
+  const config = {
+    axisBottom: {
+      legend: 'Months',
+      tickValues: 6,
+      legendOffset: 34,
+      legendPosition: 'middle',
+    },
+    axisLeft: {
+      legend: 'Files',
+      renderTick: () => null,
+      legendOffset: -12,
+      legendPosition: 'middle',
+    },
+
+    margin: {
+      top: 12,
+      right: 24,
+      left: 24,
+      bottom: 56,
+    },
+
+    colors: ['#EF4110', '#4596DE'],
+
+    theme: {
+      ...chartTheme.theme,
+      legends: {
+        text: {
+          fontSize: 6,
+        },
+      },
+    },
+  };
+
+  return (
+    <ChartContainer>
+      <Charts.Line fields={fields} interval={interval} consumerConfig={config} />
+    </ChartContainer>
+  );
+};
+
+export default LineChart;

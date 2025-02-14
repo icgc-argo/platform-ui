@@ -17,18 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Container, css, PageBody, PageContent, styled, useTheme } from '@icgc-argo/uikit';
+import { css, styled, useTheme } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import { Row, setConfiguration } from 'react-grid-system';
 import Head from '../head';
 
-import Charts from './Charts';
-import StatsCard from './components/StatsCard';
-import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
-import Sidebar from './components/SideBar';
 import Footer from 'components/Footer';
 import { useState } from 'react';
+import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
+import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
+import Sidebar from './components/SideBar';
+import StatsCard from './components/StatsCard';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -46,7 +46,6 @@ const DiscoveryPage = () => {
   const theme = useTheme();
 
   const [isSidebarOpen, setSetbarView] = useState(true);
-
   return (
     <div
       css={css({
@@ -79,7 +78,7 @@ const DiscoveryPage = () => {
             data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
             isLoading={false}
           />
-          <Charts />
+          <ChartsLayout />
         </div>
       </div>
       <Footer />

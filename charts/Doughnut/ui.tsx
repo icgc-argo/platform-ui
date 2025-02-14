@@ -19,7 +19,6 @@
 
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
-import { Chart } from './Chart';
 
 const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
   return (
@@ -54,20 +53,45 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 const DoughnutChart = ({ data, config }) => {
   return (
-    <Chart>
-      <div
-        css={css({
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          height: '100%',
-        })}
-      >
-        <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
+    <div
+      css={css({
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        height: '100%',
+      })}
+    >
+      <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
+        <ResponsivePie
+          data={data}
+          isInteractive={false}
+          margin={margin}
+          innerRadius={0.75}
+          activeOuterRadiusOffset={8}
+          borderWidth={1}
+          borderColor={{
+            from: 'color',
+            modifiers: [['darker', 0.2]],
+          }}
+          enableArcLinkLabels={false}
+          enableArcLabels={false}
+        />
+        <div
+          className="inner"
+          css={css({
+            position: 'absolute',
+            height: '60%',
+            width: '60%',
+            // set center to halfway across parent container
+            top: '50%',
+            left: '50%',
+            // change origin to centered by moving it back half it's own width + height
+            transform: 'translate(-50%,-50%)',
+          })}
+        >
           <ResponsivePie
             data={data}
             isInteractive={false}
-            margin={margin}
             innerRadius={0.75}
             activeOuterRadiusOffset={8}
             borderWidth={1}
@@ -78,37 +102,10 @@ const DoughnutChart = ({ data, config }) => {
             enableArcLinkLabels={false}
             enableArcLabels={false}
           />
-          <div
-            className="inner"
-            css={css({
-              position: 'absolute',
-              height: '60%',
-              width: '60%',
-              // set center to halfway across parent container
-              top: '50%',
-              left: '50%',
-              // change origin to centered by moving it back half it's own width + height
-              transform: 'translate(-50%,-50%)',
-            })}
-          >
-            <ResponsivePie
-              data={data}
-              isInteractive={false}
-              innerRadius={0.75}
-              activeOuterRadiusOffset={8}
-              borderWidth={1}
-              borderColor={{
-                from: 'color',
-                modifiers: [['darker', 0.2]],
-              }}
-              enableArcLinkLabels={false}
-              enableArcLabels={false}
-            />
-          </div>
         </div>
-        <Legend data={data} />
       </div>
-    </Chart>
+      <Legend data={data} />
+    </div>
   );
 };
 
