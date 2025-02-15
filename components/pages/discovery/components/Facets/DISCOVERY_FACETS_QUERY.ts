@@ -22,6 +22,10 @@ import { gql } from '@apollo/client';
 const DISCOVERY_FACETS_QUERY = gql`
   query DiscoveryFacets($filters: JSON) {
     file {
+      # only place we have field => display name mapping
+      # example: "analysis.experiment.platform" => "Platform"
+      #extended
+      # data for facets
       aggregations(
         filters: $filters
         include_missing: true
