@@ -257,6 +257,14 @@ export const getOptions = (
   }
 };
 
+export const useFacetOptionToggle = (facetDetails: Pick<FacetDetails, 'esDocumentField'>) => {
+  const { replaceAllFilters, filters } = useFiltersContext();
+  return (facetValue) => {
+    const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
+    replaceAllFilters(toggleFilter(currentValue, filters));
+  };
+};
+
 // end common
 
 const useFileFacetQuery = (
@@ -535,16 +543,6 @@ const FacetPanel = () => {
     subMenuName: facetDetails.name,
     facetPath: facetDetails.facetPath,
   });
-
-  const onFacetOptionToggle: (
-    facetDetails: FacetDetails,
-  ) => ComponentProps<typeof Facet>['onOptionToggle'] = (facetDetails) => {
-    return (facetValue) => {
-      const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
-
-      replaceAllFilters(toggleFilter(currentValue, filters));
-    };
-  };
 
   const onFacetSelectAllOptionsToggle: (
     facetDetails: FacetDetails,
@@ -828,7 +826,7 @@ const FacetPanel = () => {
                       key={facetDetails.name}
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
-                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onOptionToggle={useFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
                       parseDisplayValue={toDisplayValue}
                     />
@@ -847,7 +845,7 @@ const FacetPanel = () => {
                       key={facetDetails.name}
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
-                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onOptionToggle={useFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
                       parseDisplayValue={(key) => getDisplayName(facetDetails.esDocumentField, key)}
                       tooltipContent={getTooltipContent(facetDetails.facetPath)}
@@ -859,7 +857,7 @@ const FacetPanel = () => {
                       key={facetDetails.name}
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
-                      onOptionToggle={onFacetOptionToggle(facetDetails)}
+                      onOptionToggle={useFacetOptionToggle(facetDetails)}
                       onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
                       parseDisplayValue={clinicalDisplayValues}
                     />
