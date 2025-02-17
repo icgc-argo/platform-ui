@@ -1,5 +1,9 @@
 import { css, Facet as FacetComp } from '@icgc-argo/uikit';
-import { getOptions, useFacetOptionToggle } from 'components/pages/file-repository/FacetPanel';
+import {
+  getOptions,
+  useFacetOptionToggle,
+  useFacetSelectAllOptionsToggle,
+} from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import type { Facet as F } from './data/facet';
 
@@ -9,7 +13,7 @@ const Facet = ({ facet, aggregations }: { facet: F; aggregations: unknown }) => 
   const props = {
     options: getOptions(facet, filters, aggregations),
     onOptionToggle: useFacetOptionToggle(facet),
-    onSelectAllOptions: () => console.log('on select all'),
+    onSelectAllOptions: useFacetSelectAllOptionsToggle(facet, aggregations),
   };
 
   return (

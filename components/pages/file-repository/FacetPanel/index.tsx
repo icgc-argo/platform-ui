@@ -226,10 +226,11 @@ const FacetContainer = styled(Container)`
 
 // Common - used elsewhere
 export const getOptions = (
-  facet: FacetDetails,
+  facet: Pick<FacetDetails, 'facetPath' | 'esDocumentField'>,
   filters: FileRepoFiltersType,
   aggregations: unknown,
 ) => {
+  console.log(facet, aggregations);
   const options: OptionsListFilterOption[] = (
     aggregations[facet.facetPath] || { buckets: [] }
   ).buckets.map((bucket) => {
@@ -262,6 +263,28 @@ export const useFacetOptionToggle = (facetDetails: Pick<FacetDetails, 'esDocumen
   return (facetValue) => {
     const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
     replaceAllFilters(toggleFilter(currentValue, filters));
+  };
+};
+
+export const useFacetSelectAllOptionsToggle: (
+  facetDetails: Pick<FacetDetails, 'facetPath' | 'esDocumentField'>,
+  aggregations,
+) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails, aggregations) => {
+  const { replaceAllFilters, setFilterFromFieldAndValue, filters } = useFiltersContext();
+
+  return (allOptionsSelected) => {
+    if (allOptionsSelected) {
+      const updatedFilters = removeFilter(
+        facetDetails.esDocumentField,
+        filters,
+      ) as FileRepoFiltersType;
+      replaceAllFilters(updatedFilters);
+    } else {
+      setFilterFromFieldAndValue({
+        field: facetDetails.esDocumentField,
+        value: aggregations[facetDetails.facetPath].buckets.map((v) => v.key),
+      });
+    }
   };
 };
 
@@ -544,25 +567,6 @@ const FacetPanel = () => {
     facetPath: facetDetails.facetPath,
   });
 
-  const onFacetSelectAllOptionsToggle: (
-    facetDetails: FacetDetails,
-  ) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails) => {
-    return (allOptionsSelected) => {
-      if (allOptionsSelected) {
-        const updatedFilters = removeFilter(
-          facetDetails.esDocumentField,
-          filters,
-        ) as FileRepoFiltersType;
-        replaceAllFilters(updatedFilters);
-      } else {
-        setFilterFromFieldAndValue({
-          field: facetDetails.esDocumentField,
-          value: aggregations[facetDetails.facetPath].buckets.map((v) => v.key),
-        });
-      }
-    };
-  };
-
   const onNumberRangeFacetSubmit: (
     facetDetails: FacetDetails,
   ) => ComponentProps<typeof NumberRangeFacet>['onSubmit'] = (facetDetails) => {
@@ -827,7 +831,10 @@ const FacetPanel = () => {
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={useFacetOptionToggle(facetDetails)}
-                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      onSelectAllOptions={useFacetSelectAllOptionsToggle(
+                        facetDetails,
+                        aggregations,
+                      )}
                       parseDisplayValue={toDisplayValue}
                     />
                   )}
@@ -846,7 +853,10 @@ const FacetPanel = () => {
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={useFacetOptionToggle(facetDetails)}
-                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      onSelectAllOptions={useFacetSelectAllOptionsToggle(
+                        facetDetails,
+                        aggregations,
+                      )}
                       parseDisplayValue={(key) => getDisplayName(facetDetails.esDocumentField, key)}
                       tooltipContent={getTooltipContent(facetDetails.facetPath)}
                     />
@@ -858,7 +868,10 @@ const FacetPanel = () => {
                       options={getOptions(facetDetails, filters, aggregations)}
                       countUnit={'files'}
                       onOptionToggle={useFacetOptionToggle(facetDetails)}
-                      onSelectAllOptions={onFacetSelectAllOptionsToggle(facetDetails)}
+                      onSelectAllOptions={useFacetSelectAllOptionsToggle(
+                        facetDetails,
+                        aggregations,
+                      )}
                       parseDisplayValue={clinicalDisplayValues}
                     />
                   )}
