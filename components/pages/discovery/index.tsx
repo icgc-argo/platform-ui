@@ -24,7 +24,7 @@ import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
 import { useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
-import useFiltersContext, { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
+import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
 import { default as ChartsLayout } from './Charts';
@@ -45,23 +45,6 @@ export const PageContainer = styled('div')`
   background: ${({ theme }) => theme.colors.grey_4};
 `;
 
-const Test = () => {
-  const fc = useFiltersContext();
-  return (
-    <button
-      onClick={() => {
-        console.log('click', fc);
-        fc.setFilterFromFieldAndValue({
-          field: 'donors.specimens.specimen_tissue_source',
-          value: 'Esophagus',
-        });
-      }}
-    >
-      Click
-    </button>
-  );
-};
-
 const DiscoveryPage = () => {
   const theme = useTheme();
 
@@ -69,9 +52,6 @@ const DiscoveryPage = () => {
 
   return (
     <FiltersProvider>
-      <>
-        <Test />
-      </>
       <div
         css={css({
           display: 'grid',

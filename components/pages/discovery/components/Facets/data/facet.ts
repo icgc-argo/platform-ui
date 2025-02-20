@@ -1,4 +1,13 @@
-export type Facet = { name: string; facetPath: string; esDocumentField: string };
+export type Facet = {
+  name: string;
+  facetPath: string;
+  esDocumentField: string;
+};
+
+export type FacetWithState = Facet & {
+  isExpanded: boolean;
+};
+
 type FacetsFolder = { folder: string; contents: Facet[] };
 
 export const FACET_OPTIONS: FacetsFolder[] = [
