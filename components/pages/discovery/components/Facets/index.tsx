@@ -33,6 +33,8 @@ const facetPaths = FACET_OPTIONS.flatMap((folder) =>
  * return Facet component with state and callbacks
  *
  * @param param0
+ * @param
+ * @param
  * @returns
  */
 const FacetCollection = ({ aggregations, isLoading, staticFacets }) => {
@@ -71,7 +73,7 @@ const FacetCollection = ({ aggregations, isLoading, staticFacets }) => {
 };
 
 const Facets = () => {
-  const [expandAll, setExpandAll] = useState(false);
+  const [isFacetsExpanded, setFacetsExpanded] = useState(false);
   const { filters } = useFiltersContext();
   const {
     data: responseData,
@@ -87,8 +89,8 @@ const Facets = () => {
     <>
       <FiltersSearchBox
         title="Filter"
-        isExpanded={expandAll}
-        onClick={() => setExpandAll((s) => !s)}
+        isExpanded={isFacetsExpanded}
+        onClick={() => setFacetsExpanded((isExpanded) => !isExpanded)}
       />
 
       <div css={css({ flex: 1, overflow: 'scroll' })}>

@@ -13,7 +13,17 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
     <div css={css([css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
         <h2>{title}</h2>
-        <div onClick={() => onClick()}>
+        <div
+          onClick={() => onClick()}
+          css={css({
+            display: 'flex',
+            alignItems: 'center',
+            ':hover': { cursor: 'pointer' },
+            svg: {
+              marginLeft: '3px',
+            },
+          })}
+        >
           Expand All <ArrowToggle isOpen={isExpanded} />
         </div>
       </div>
