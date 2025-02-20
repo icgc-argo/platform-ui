@@ -3,6 +3,7 @@ import { ArrowToggle, commonStyle } from './common';
 
 const filtersSearchBoxStyles = {
   folder: css({
+    color: 'white',
     h2: { margin: 0, fontSize: '16px', fontWeight: 400 },
   }),
 };

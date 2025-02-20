@@ -27,7 +27,6 @@ const SidebarComp = ({ children }: PropsWithChildren<{}>) => {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#04518C',
-        color: 'white',
       })}
     >
       {children}

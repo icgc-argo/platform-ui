@@ -7,8 +7,8 @@ import {
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { get } from 'lodash';
-import { PropsWithChildren, useRef, useState } from 'react';
-import { FACET_OPTIONS } from './data/facet';
+import { PropsWithChildren, useState } from 'react';
+import { FACET_OPTIONS } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import Facet from './Facet';
 import { FacetFolder } from './Folder';
@@ -40,8 +40,6 @@ const FacetCollection = ({ aggregations, isLoading, staticFacets }) => {
 
   const [expandedFacets, setExpandedFacets] = useState(facetPaths);
 
-  console.log('x', expandedFacets);
-
   const renderedFacets = staticFacets.map(({ folder, contents }) => {
     return (
       <FacetFolder title={folder} onClick={() => console.log('a')} override={true}>
@@ -56,7 +54,7 @@ const FacetCollection = ({ aggregations, isLoading, staticFacets }) => {
               options,
               onOptionToggle,
               onSelectAllOptions,
-              isExpanded: true, //expandedFacets.includes(facet.facetPath),
+              isExpanded: expandedFacets.includes(facet.facetPath),
             },
           };
           return (
@@ -84,9 +82,6 @@ const Facets = () => {
   });
 
   const aggregations = get(responseData, 'file.aggregations', {});
-  const agg = useRef(aggregations);
-
-  console.log('data', aggregations, error, isLoading);
 
   return (
     <>

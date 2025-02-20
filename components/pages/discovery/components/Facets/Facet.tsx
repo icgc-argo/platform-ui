@@ -5,15 +5,16 @@ import {
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
-import type { Facet as F } from './data/facet';
+import { FacetData } from '../../data/facet';
 
-const Facet = ({ facet, aggregations }: { facet: F; aggregations: unknown }) => {
+const Facet = ({ facet, aggregations }: { facet: FacetData; aggregations: unknown }) => {
   const { filters } = useFiltersContext();
-  console.log('facet', facet, filters, aggregations);
+
   const props = {
     options: getOptions(facet, filters, aggregations),
     onOptionToggle: useFacetOptionToggle(facet),
     onSelectAllOptions: useFacetSelectAllOptionsToggle(facet, aggregations),
+    ...facet,
   };
 
   return (
@@ -21,7 +22,7 @@ const Facet = ({ facet, aggregations }: { facet: F; aggregations: unknown }) => 
       subMenuName={facet.name}
       {...props}
       css={css({
-        color: '#151C3D',
+        color: 'black',
       })}
     />
   );

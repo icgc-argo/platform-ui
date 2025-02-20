@@ -226,7 +226,7 @@ const FacetContainer = styled(Container)`
 
 // Common - used elsewhere
 export const getOptions = (
-  facet: Pick<FacetDetails, 'facetPath' | 'esDocumentField'>,
+  facet: { facetPath: string; esDocumentField: string },
   filters: FileRepoFiltersType,
   aggregations: unknown,
 ) => {
@@ -267,7 +267,7 @@ export const useFacetOptionToggle = (facetDetails: Pick<FacetDetails, 'esDocumen
 };
 
 export const useFacetSelectAllOptionsToggle: (
-  facetDetails: Pick<FacetDetails, 'facetPath' | 'esDocumentField'>,
+  facetDetails: { facetPath: string; esDocumentField: string },
   aggregations,
 ) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails, aggregations) => {
   const { replaceAllFilters, setFilterFromFieldAndValue, filters } = useFiltersContext();

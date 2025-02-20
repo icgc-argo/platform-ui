@@ -27,7 +27,7 @@ const facetFolderStyles = {
     {
       height: '36px',
       padding: '9px',
-      h2: { margin: 0, fontSize: '14px', fontWeight: 400 },
+      h2: { margin: 0, fontSize: '14px', fontWeight: 400, color: 'white' },
     },
   ]),
   content: (isOpen) => ({ display: isOpen ? 'block' : 'none' }),
