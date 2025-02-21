@@ -73,6 +73,11 @@ const BarChart = ({ field }) => {
         </TooltipContainer>
       );
     },
+
+    onClick: (data) => {
+      console.log('data', data);
+      alert('Chart clicked');
+    },
   };
 
   return (
