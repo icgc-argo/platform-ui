@@ -56,20 +56,22 @@ type Actions = ActionToggleAll | ActionTogglePath | ActionToggleFolder;
 
 /**
  *
- * @param source
- * @param test
- * @returns
+ * Tests if element is in array, the logic of a toggle UI
+ * - positive, removes it, return array
+ * - negative, adds to array, return array
+ *
+ * @param source - array to test
+ * @param test - element string
+ * @returns toggled array
  */
 const toggleArray = (source, test) => {
   return source.includes(test) ? source.filter((element) => element !== test) : source.concat(test);
 };
 
 /**
- *
- * @param staticFacetOptions
- * @returns
+ * Handles toggling facet folders and facet groups
  */
-const expandedReducer =
+const visibilityReducer =
   (staticFacetOptions) =>
   (visiblePanels: TState, action: Actions): TState => {
     const allFacetPaths = staticFacetOptions.flatMap((folder) =>
@@ -118,7 +120,7 @@ export const FacetStateProvider = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   const [visiblePanels, setVisiblePanels] = useReducer(
-    expandedReducer(staticFacetOptions),
+    visibilityReducer(staticFacetOptions),
     initialState,
   );
 

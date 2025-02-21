@@ -96,6 +96,12 @@ const FacetCollection = ({
   );
 };
 
+/**
+ *
+ * External data loading and filtering
+ *
+ * @param options - hardcoded facet options
+ */
 const Facets = ({ options }) => {
   const { filters } = useFiltersContext();
   const {
@@ -124,6 +130,13 @@ const Facets = ({ options }) => {
   );
 };
 
+/**
+ *
+ * Facets panel wrapped in a state provider
+ *
+ * @param staticFacetOptions - hardcoded facet options
+ * @returns Facets panel components
+ */
 const FacetsPanel = ({ staticFacetOptions }: { staticFacetOptions: FacetPanelOptions }) => {
   return (
     <FacetStateProvider staticFacetOptions={staticFacetOptions}>

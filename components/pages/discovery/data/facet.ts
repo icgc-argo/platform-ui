@@ -11,6 +11,10 @@ export type FacetDataWithState = FacetData & {
 type FacetFolder = { name: string; contents: FacetData[] };
 
 export type FacetPanelOptions = FacetFolder[];
+
+/**
+ * Static facets to use in Arranger query
+ */
 export const FACET_OPTIONS: FacetPanelOptions = [
   {
     name: 'General',
