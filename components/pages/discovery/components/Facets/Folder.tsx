@@ -18,7 +18,7 @@
  */
 
 import { css } from '@emotion/react';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren } from 'react';
 import { ArrowToggle, commonStyle } from './common';
 
 const facetFolderStyles = {
@@ -30,39 +30,26 @@ const facetFolderStyles = {
       h2: { margin: 0, fontSize: '14px', fontWeight: 400, color: 'white' },
     },
   ]),
-  content: (isOpen) => ({ display: isOpen ? 'block' : 'none' }),
+  content: (isExpanded) => ({ display: isExpanded ? 'block' : 'none' }),
 };
 
 export const FacetFolder = ({
   title,
-  onClick,
-  override,
   children,
+  onClick,
+  isExpanded,
 }: PropsWithChildren<{
   title: string;
-  onClick: ({ isOpen }: { isOpen: boolean }) => void;
-  override?: boolean;
+  onClick;
+  isExpanded: boolean;
 }>) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // example use: expand all from parent component
-  useEffect(() => {
-    setIsOpen(override);
-  }, [override]);
-
   return (
-    <div
-      css={css([facetFolderStyles.container])}
-      onClick={() => {
-        onClick({ isOpen });
-        setIsOpen((isOpen) => !isOpen);
-      }}
-    >
+    <div css={css([facetFolderStyles.container])} onClick={onClick}>
       <div css={css([commonStyle.header, facetFolderStyles.folder])}>
         <h2>{title}</h2>
-        <ArrowToggle isOpen={isOpen} />
+        <ArrowToggle isOpen={isExpanded} />
       </div>
-      <div css={facetFolderStyles.content(isOpen)}>{children}</div>
+      <div css={facetFolderStyles.content(isExpanded)}>{children}</div>
     </div>
   );
 };

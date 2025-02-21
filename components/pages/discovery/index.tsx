@@ -32,6 +32,7 @@ import { commonStyles } from './components/common';
 import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
+import { FACET_OPTIONS } from './data/facet';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -74,7 +75,7 @@ const DiscoveryPage = () => {
             })}
           >
             <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-              <Facets />
+              <Facets staticFacetOptions={FACET_OPTIONS} />
             </Sidebar>
 
             <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>

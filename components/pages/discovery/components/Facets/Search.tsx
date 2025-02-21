@@ -18,6 +18,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
           css={css({
             display: 'flex',
             alignItems: 'center',
+            userSelect: 'none',
             ':hover': { cursor: 'pointer' },
             svg: {
               marginLeft: '3px',

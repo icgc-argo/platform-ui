@@ -5,9 +5,10 @@ import {
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { PropsWithChildren } from 'react';
 import { FacetData } from '../../data/facet';
 
-const Facet = ({ facet, aggregations }: { facet: FacetData; aggregations: unknown }) => {
+export const Facet = ({ facet, aggregations }: { facet: FacetData; aggregations: unknown }) => {
   const { filters } = useFiltersContext();
 
   const props = {
@@ -28,4 +29,10 @@ const Facet = ({ facet, aggregations }: { facet: FacetData; aggregations: unknow
   );
 };
 
-export default Facet;
+export const FacetRow = ({ children }: PropsWithChildren<{}>) => {
+  return (
+    <div css={css({ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' })}>
+      {children}
+    </div>
+  );
+};

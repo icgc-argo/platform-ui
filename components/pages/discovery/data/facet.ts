@@ -8,11 +8,12 @@ export type FacetDataWithState = FacetData & {
   isExpanded: boolean;
 };
 
-type FacetsFolder = { folder: string; contents: FacetData[] };
+type FacetFolder = { name: string; contents: FacetData[] };
 
-export const FACET_OPTIONS: FacetsFolder[] = [
+export type FacetPanelOptions = FacetFolder[];
+export const FACET_OPTIONS: FacetPanelOptions = [
   {
-    folder: 'General',
+    name: 'General',
     contents: [
       {
         name: 'Experimental Strategy',
@@ -29,10 +30,20 @@ export const FACET_OPTIONS: FacetsFolder[] = [
       { name: 'Analysis Tools', facetPath: 'analysis_tools', esDocumentField: 'analysis_tools' },
     ],
   },
-  { folder: 'Demographic', contents: [] },
-  { folder: 'Biospecimen', contents: [] },
-  { folder: 'Diagnosis', contents: [] },
-  { folder: 'Treatment', contents: [] },
-  { folder: 'Assessment', contents: [] },
-  { folder: 'Molecular', contents: [] },
+  {
+    name: 'Demographic',
+    contents: [
+      { name: 'Analysis Tools', facetPath: 'analysis_tools', esDocumentField: 'analysis_tools' },
+    ],
+  },
+  { name: 'Biospecimen', contents: [] },
+  { name: 'Diagnosis', contents: [] },
+  {
+    name: 'Treatment',
+    contents: [
+      { name: 'Analysis Tools', facetPath: 'analysis_tools', esDocumentField: 'analysis_tools' },
+    ],
+  },
+  { name: 'Assessment', contents: [] },
+  { name: 'Molecular', contents: [] },
 ] as const;

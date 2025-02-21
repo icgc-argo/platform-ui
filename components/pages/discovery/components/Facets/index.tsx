@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
+
 import {
   getOptions,
   useFacetOptionToggle,
@@ -7,24 +8,12 @@ import {
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { get } from 'lodash';
-import { PropsWithChildren, useState } from 'react';
-import { FACET_OPTIONS } from '../../data/facet';
+import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
-import Facet from './Facet';
+import { Facet, FacetRow } from './Facet';
+import { FacetStateProvider, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
 import { FiltersSearchBox } from './Search';
-
-const FacetRow = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <div css={css({ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' })}>
-      {children}
-    </div>
-  );
-};
-
-const facetPaths = FACET_OPTIONS.flatMap((folder) =>
-  folder.contents.map((facet) => facet.facetPath),
-);
 
 /**
  *
@@ -37,43 +26,58 @@ const facetPaths = FACET_OPTIONS.flatMap((folder) =>
  * @param
  * @returns
  */
-const FacetCollection = ({ aggregations, isLoading, staticFacets }) => {
+
+const FacetCollection = ({
+  aggregations,
+  isLoading,
+  staticFacets,
+}: {
+  aggregations: any;
+  isLoading: boolean;
+  staticFacets: FacetPanelOptions;
+}) => {
   const { filters } = useFiltersContext();
+  const { isFacetExpanded, isFolderExpanded, setVisiblePanels } = useFacetState();
 
-  const [expandedFacets, setExpandedFacets] = useState(facetPaths);
+  return (
+    <>
+      {staticFacets.map(({ name, contents }) => {
+        return (
+          <FacetFolder
+            title={name}
+            onClick={() => setVisiblePanels({ type: 'TOGGLE_FOLDER', name })}
+            isExpanded={isFolderExpanded(name)}
+          >
+            {contents.map((facet) => {
+              const options = getOptions(facet, filters, aggregations);
+              const onOptionToggle = useFacetOptionToggle(facet);
+              const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
 
-  const renderedFacets = staticFacets.map(({ folder, contents }) => {
-    return (
-      <FacetFolder title={folder} onClick={() => console.log('a')} override={true}>
-        {contents.map((facet) => {
-          const options = getOptions(facet, filters, aggregations);
-          const onOptionToggle = useFacetOptionToggle(facet);
-          const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
-
-          const facetProps = {
-            ...facet,
-            ...{
-              options,
-              onOptionToggle,
-              onSelectAllOptions,
-              isExpanded: expandedFacets.includes(facet.facetPath),
-            },
-          };
-          return (
-            <FacetRow>
-              <Facet facet={facetProps} aggregations={aggregations} />
-            </FacetRow>
-          );
-        })}
-      </FacetFolder>
-    );
-  });
-
-  return renderedFacets;
+              const facetProps = {
+                ...facet,
+                ...{
+                  options,
+                  onOptionToggle,
+                  onSelectAllOptions,
+                  isExpanded: isFacetExpanded(facet.facetPath),
+                  onClick: () =>
+                    setVisiblePanels({ type: 'TOGGLE_PATH', facetPath: facet.facetPath }),
+                },
+              };
+              return (
+                <FacetRow>
+                  <Facet facet={facetProps} aggregations={aggregations} />
+                </FacetRow>
+              );
+            })}
+          </FacetFolder>
+        );
+      })}
+    </>
+  );
 };
 
-const Facets = () => {
-  const [isFacetsExpanded, setFacetsExpanded] = useState(false);
+const Facets = ({ options }) => {
   const { filters } = useFiltersContext();
   const {
     data: responseData,
@@ -85,23 +89,28 @@ const Facets = () => {
 
   const aggregations = get(responseData, 'file.aggregations', {});
 
+  const { setVisiblePanels, isFacetExpanded } = useFacetState();
+
   return (
     <>
       <FiltersSearchBox
         title="Filter"
-        isExpanded={isFacetsExpanded}
-        onClick={() => setFacetsExpanded((isExpanded) => !isExpanded)}
+        isExpanded={isFacetExpanded('')}
+        onClick={() => setVisiblePanels({ type: 'TOGGLE_ALL' })}
       />
-
       <div css={css({ flex: 1, overflow: 'scroll' })}>
-        <FacetCollection
-          aggregations={aggregations}
-          staticFacets={FACET_OPTIONS}
-          isLoading={isLoading}
-        />
+        <FacetCollection aggregations={aggregations} staticFacets={options} isLoading={isLoading} />
       </div>
     </>
   );
 };
 
-export default Facets;
+const FacetsPanel = ({ staticFacetOptions }: { staticFacetOptions: FacetPanelOptions }) => {
+  return (
+    <FacetStateProvider staticFacetOptions={staticFacetOptions}>
+      <Facets options={staticFacetOptions} />
+    </FacetStateProvider>
+  );
+};
+
+export default FacetsPanel;
