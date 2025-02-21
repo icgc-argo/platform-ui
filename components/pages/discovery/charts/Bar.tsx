@@ -21,6 +21,7 @@ import { useTheme } from '@icgc-argo/uikit';
 import Charts from 'charts';
 import { ChartContainer } from './Chart';
 import { chartThemeFn } from './theme';
+import { TooltipContainer } from './Tooltip';
 import { injectTheme } from './util';
 
 const BarChart = ({ field }) => {
@@ -60,6 +61,18 @@ const BarChart = ({ field }) => {
 
     colorBy: 'indexValue',
     theme: chartTheme.theme,
+
+    tooltip: ({ data }) => {
+      const { doc_count, key } = data;
+      return (
+        <TooltipContainer>
+          <div>
+            <div>{`${key}:`}</div>
+            <div>{`${doc_count}: Donors`}</div>
+          </div>
+        </TooltipContainer>
+      );
+    },
   };
 
   return (
