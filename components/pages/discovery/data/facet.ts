@@ -46,4 +46,4 @@ export const FACET_OPTIONS: FacetPanelOptions = [
   },
   { name: 'Assessment', contents: [] },
   { name: 'Molecular', contents: [] },
-] as const;
+];

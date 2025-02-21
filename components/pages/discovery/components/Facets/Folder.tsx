@@ -19,6 +19,7 @@
 
 import { css } from '@emotion/react';
 import { PropsWithChildren } from 'react';
+
 import { ArrowToggle, commonStyle } from './common';
 
 const facetFolderStyles = {
