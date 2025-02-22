@@ -17,74 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/react';
-import { Icon, Input } from '@icgc-argo/uikit';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { css, Input } from '@icgc-argo/uikit';
 
-const commonStyle = {
-  header: css({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-
-    '> div, svg': {
-      marginLeft: 'auto',
-    },
-  }),
-};
-
-const facetFolderStyles = {
-  container: css({ ':hover': { cursor: 'pointer' } }),
-  folder: css([
-    {
-      height: '36px',
-      padding: '9px',
-      h2: { margin: 0, fontSize: '14px', fontWeight: 400 },
-    },
-  ]),
-  content: (isOpen) => ({ display: isOpen ? 'block' : 'none' }),
-};
-
-const ArrowToggle = ({ isOpen }) => {
-  return <Icon name={isOpen ? 'chevron_up' : 'chevron_down'} fill="white" height="8px" />;
-};
-
-export const FacetFolder = ({
-  title,
-  onClick,
-  override,
-  children,
-}: PropsWithChildren<{
-  title: string;
-  onClick: ({ isOpen }: { isOpen: boolean }) => void;
-  override?: boolean;
-}>) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // example use: expand all from parent component
-  useEffect(() => {
-    setIsOpen(override);
-  }, [override]);
-
-  return (
-    <div
-      css={css([facetFolderStyles.container])}
-      onClick={() => {
-        onClick({ isOpen });
-        setIsOpen((isOpen) => !isOpen);
-      }}
-    >
-      <div css={css([commonStyle.header, facetFolderStyles.folder])}>
-        <h2>{title}</h2>
-        <ArrowToggle isOpen={isOpen} />
-      </div>
-      <div css={facetFolderStyles.content(isOpen)}>{children}</div>
-    </div>
-  );
-};
+import { ArrowToggle, commonStyle } from './common';
 
 const filtersSearchBoxStyles = {
   folder: css({
+    color: 'white',
     h2: { margin: 0, fontSize: '16px', fontWeight: 400 },
   }),
 };
@@ -94,7 +33,18 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
     <div css={css([css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
         <h2>{title}</h2>
-        <div onClick={() => onClick()}>
+        <div
+          onClick={() => onClick()}
+          css={css({
+            display: 'flex',
+            alignItems: 'center',
+            userSelect: 'none',
+            ':hover': { cursor: 'pointer' },
+            svg: {
+              marginLeft: '3px',
+            },
+          })}
+        >
           Expand All <ArrowToggle isOpen={isExpanded} />
         </div>
       </div>
@@ -112,8 +62,4 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
       />
     </div>
   );
-};
-
-export const FacetGroup = ({ children }: PropsWithChildren<{}>) => {
-  return <div>{children}</div>;
 };

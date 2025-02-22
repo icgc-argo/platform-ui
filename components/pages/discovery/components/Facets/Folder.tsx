@@ -17,29 +17,40 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-type Facet = {};
-type FacetsFolder = { folder: string; contents: Facet[] };
-const facets = [
-  { folder: 'General', contents: [{ name: 'Experimental Strategy' }] },
-  { folder: 'Demographic', contents: [] },
-  { folder: 'Biospecimen', contents: [] },
-  { folder: 'Diagnosis', contents: [] },
-  { folder: 'Treatment', contents: [] },
-  { folder: 'Assessment', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  /** */
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-  { folder: 'Molecular', contents: [] },
-];
+import { css } from '@emotion/react';
+import { PropsWithChildren } from 'react';
 
-export { facets };
+import { ArrowToggle, commonStyle } from './common';
+
+const facetFolderStyles = {
+  container: css({ ':hover': { cursor: 'pointer' } }),
+  folder: css([
+    {
+      height: '36px',
+      padding: '9px',
+      h2: { margin: 0, fontSize: '14px', fontWeight: 400, color: 'white' },
+    },
+  ]),
+  content: (isExpanded) => ({ display: isExpanded ? 'block' : 'none' }),
+};
+
+export const FacetFolder = ({
+  title,
+  children,
+  onClick,
+  isExpanded,
+}: PropsWithChildren<{
+  title: string;
+  onClick;
+  isExpanded: boolean;
+}>) => {
+  return (
+    <div css={css([facetFolderStyles.container])} onClick={onClick}>
+      <div css={css([commonStyle.header, facetFolderStyles.folder])}>
+        <h2>{title}</h2>
+        <ArrowToggle isOpen={isExpanded} />
+      </div>
+      <div css={facetFolderStyles.content(isExpanded)}>{children}</div>
+    </div>
+  );
+};
