@@ -40,10 +40,10 @@ import { FiltersSearchBox } from './Search';
  * Adds in relevant state for facets
  * return Facet component with state and callbacks
  *
- * @param param0
- * @param
- * @param
- * @returns
+ * @param aggregations
+ * @param isLoading
+ * @param staticFacetss
+ * @returns Rendered facet panel
  */
 
 const FacetCollection = ({

@@ -56,7 +56,7 @@ type Actions = ActionToggleAll | ActionTogglePath | ActionToggleFolder;
 
 /**
  *
- * Tests if element is in array, the logic of a toggle UI
+ * Tests if element is in array
  * - positive, removes it, return array
  * - negative, adds to array, return array
  *
@@ -81,7 +81,7 @@ const visibilityReducer =
     const allFolderPaths = staticFacetOptions.map(({ name }) => name);
 
     switch (action.type) {
-      case 'TOGGLE_ALL': {
+      case ACTION_TYPES.TOGGLE_ALL: {
         if (visiblePanels.allPanels) {
           return {
             facets: [],
@@ -96,12 +96,12 @@ const visibilityReducer =
           };
         }
       }
-      case 'TOGGLE_PATH': {
+      case ACTION_TYPES.TOGGLE_PATH: {
         const facetPath = action.facetPath;
         const facets = toggleArray(visiblePanels.facets, facetPath);
         return { ...visiblePanels, facets, allPanels: false };
       }
-      case 'TOGGLE_FOLDER': {
+      case ACTION_TYPES.TOGGLE_FOLDER: {
         const name = action.name;
         const folders = toggleArray(visiblePanels.folders, name);
         return { ...visiblePanels, folders, allPanels: false };
