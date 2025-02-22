@@ -45,7 +45,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
             },
           })}
         >
-          Expand All <ArrowToggle isOpen={isExpanded} />
+          {isExpanded ? 'Collapse All' : 'Expand All'} <ArrowToggle isOpen={isExpanded} />
         </div>
       </div>
 

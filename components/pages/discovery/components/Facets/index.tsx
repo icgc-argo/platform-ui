@@ -30,7 +30,11 @@ import { get } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
-import { FacetStateProvider, useFacetState } from './FacetStateProvider';
+import {
+  FacetStateProvider,
+  FACET_VISIBILITY_TOGGLE_ACTIONS,
+  useFacetState,
+} from './FacetStateProvider';
 import { FacetFolder } from './Folder';
 import { FiltersSearchBox } from './Search';
 
@@ -45,7 +49,6 @@ import { FiltersSearchBox } from './Search';
  * @param staticFacetss
  * @returns Rendered facet panel
  */
-
 const FacetCollection = ({
   aggregations,
   isLoading,
@@ -60,12 +63,15 @@ const FacetCollection = ({
 
   return (
     <>
-      {staticFacets.map(({ name, contents }) => {
+      {staticFacets.map(({ name, contents }, idx) => {
         return (
           <FacetFolder
             title={name}
-            onClick={() => setVisiblePanels({ type: 'TOGGLE_FOLDER', name })}
+            onClick={() =>
+              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
+            }
             isExpanded={isFolderExpanded(name)}
+            key={`name_${idx}`}
           >
             {contents.map((facet) => {
               const options = getOptions(facet, filters, aggregations);
@@ -80,11 +86,14 @@ const FacetCollection = ({
                   onSelectAllOptions,
                   isExpanded: isFacetExpanded(facet.facetPath),
                   onClick: () =>
-                    setVisiblePanels({ type: 'TOGGLE_PATH', facetPath: facet.facetPath }),
+                    setVisiblePanels({
+                      type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
+                      facetPath: facet.facetPath,
+                    }),
                 },
               };
               return (
-                <FacetRow>
+                <FacetRow key={facet.facetPath}>
                   <Facet facet={facetProps} aggregations={aggregations} />
                 </FacetRow>
               );
@@ -114,14 +123,14 @@ const Facets = ({ options }) => {
 
   const aggregations = get(responseData, 'file.aggregations', {});
 
-  const { setVisiblePanels, isFacetExpanded } = useFacetState();
+  const { setVisiblePanels, isExpanded } = useFacetState();
 
   return (
     <>
       <FiltersSearchBox
         title="Filter"
-        isExpanded={isFacetExpanded('')}
-        onClick={() => setVisiblePanels({ type: 'TOGGLE_ALL' })}
+        isExpanded={isExpanded}
+        onClick={() => setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL })}
       />
       <div css={css({ flex: 1, overflow: 'scroll' })}>
         <FacetCollection aggregations={aggregations} staticFacets={options} isLoading={isLoading} />
