@@ -21,6 +21,7 @@ import { useTheme } from '@icgc-argo/uikit';
 import Charts from 'charts';
 import { ChartContainer } from './Chart';
 import { chartThemeFn } from './theme';
+import { TooltipContainer } from './Tooltip';
 import { injectTheme } from './util';
 
 const LineChart = ({ fields, interval }: { fields: string[]; interval: number }) => {
@@ -48,7 +49,49 @@ const LineChart = ({ fields, interval }: { fields: string[]; interval: number })
       bottom: 56,
     },
 
+    lineWidth: 1,
+    pointSize: 6,
+    enableGridX: false,
+    enableGridY: false,
+
     colors: ['#EF4110', '#4596DE'],
+
+    isInteractive: true,
+    useMesh: true,
+    enableCrosshair: false,
+    tooltip: ({ point }) => {
+      const {
+        serieId,
+        data: { x: files, y: months },
+      } = point;
+      return (
+        <TooltipContainer>
+          <div>
+            {`Files: ${files}`}
+            <br />
+            {`Months: ${months}`}
+          </div>
+        </TooltipContainer>
+      );
+    },
+
+    legends: [
+      {
+        anchor: 'bottom-right',
+        direction: 'column',
+        justify: false,
+        translateX: -20,
+        translateY: -10,
+        itemsSpacing: 0,
+        itemDirection: 'left-to-right',
+        itemWidth: 34,
+        itemHeight: 10,
+        itemOpacity: 1,
+        symbolSize: 6,
+        symbolShape: 'circle',
+        symbolBorderColor: 'rgba(0, 0, 0, .5)',
+      },
+    ],
 
     theme: {
       ...chartTheme.theme,

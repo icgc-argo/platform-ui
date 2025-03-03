@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -17,15 +17,42 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/react';
+import { css, useTheme } from '@icgc-argo/uikit';
 import { PropsWithChildren } from 'react';
 
-export const ChartContainer = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
-  <div css={css({ flex: 1, position: 'relative' })}>
+export const TooltipContainer = ({ children }: PropsWithChildren<{}>) => {
+  const theme = useTheme();
+  return (
     <div
-      css={css({ position: 'absolute', top: 0, left: 0, width: '100%', height: height || '100%' })}
+      css={css([
+        { ...theme.typography.caption },
+        {
+          borderRadius: ' 2px',
+          padding: '2px 4px',
+          color: 'white',
+          maxWidth: '100px',
+          maxHeight: '100px',
+          background: theme.colors.primary_1,
+
+          '&:before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            width: 0,
+            height: 0,
+            border: '5px solid transparent',
+            pointerEvents: 'none',
+            right: '50%',
+            top: '100%',
+            borderTopColor: theme.colors.primary_1,
+            borderLeft: '5px solid transparent',
+            borderRight: '5px solid transparent',
+            marginLeft: '-5px',
+          },
+        },
+      ])}
     >
       {children}
     </div>
-  </div>
-);
+  );
+};
