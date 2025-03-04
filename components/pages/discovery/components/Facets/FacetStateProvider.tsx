@@ -24,31 +24,31 @@ import { FacetPanelOptions } from '../../data/facet';
 type TContext = {
   isFacetExpanded: (path: string) => boolean;
   isFolderExpanded: (path: string) => boolean;
-  isPanelExpanded: boolean;
+  isExpanded: boolean;
   setVisiblePanels: (action: Actions) => void;
 };
 
-type TState = { folders: string[]; facets: string[]; allPanels: boolean };
+type TState = { folders: string[]; facets: string[] };
 
 const FacetContext = createContext<TContext | undefined>(undefined);
 
-const ACTION_TYPES = {
+export const FACET_VISIBILITY_TOGGLE_ACTIONS = {
   TOGGLE_ALL: 'TOGGLE_ALL',
   TOGGLE_PATH: 'TOGGLE_PATH',
   TOGGLE_FOLDER: 'TOGGLE_FOLDER',
 } as const;
 
 type ActionToggleAll = {
-  type: typeof ACTION_TYPES.TOGGLE_ALL;
+  type: typeof FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL;
 };
 
 type ActionTogglePath = {
-  type: typeof ACTION_TYPES.TOGGLE_PATH;
+  type: typeof FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH;
   facetPath: string;
 };
 
 type ActionToggleFolder = {
-  type: typeof ACTION_TYPES.TOGGLE_FOLDER;
+  type: typeof FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER;
   name: string;
 };
 
@@ -81,30 +81,29 @@ const visibilityReducer =
     const allFolderPaths = staticFacetOptions.map(({ name }) => name);
 
     switch (action.type) {
-      case ACTION_TYPES.TOGGLE_ALL: {
-        if (visiblePanels.allPanels) {
+      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL: {
+        const isExpanded = visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0;
+        if (isExpanded) {
           return {
             facets: [],
             folders: [],
-            allPanels: false,
           };
         } else {
           return {
             facets: allFacetPaths,
             folders: allFolderPaths,
-            allPanels: true,
           };
         }
       }
-      case ACTION_TYPES.TOGGLE_PATH: {
+      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH: {
         const facetPath = action.facetPath;
         const facets = toggleArray(visiblePanels.facets, facetPath);
-        return { ...visiblePanels, facets, allPanels: false };
+        return { ...visiblePanels, facets };
       }
-      case ACTION_TYPES.TOGGLE_FOLDER: {
+      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER: {
         const name = action.name;
         const folders = toggleArray(visiblePanels.folders, name);
-        return { ...visiblePanels, folders, allPanels: false };
+        return { ...visiblePanels, folders };
       }
       default: {
         console.error('unknown action');
@@ -112,7 +111,7 @@ const visibilityReducer =
     }
   };
 
-const initialState: TState = { folders: [], facets: [], allPanels: false };
+const initialState: TState = { folders: [], facets: [] };
 export const FacetStateProvider = ({
   staticFacetOptions,
   children,
@@ -126,12 +125,12 @@ export const FacetStateProvider = ({
 
   const isFacetExpanded = (path: string) => visiblePanels.facets.includes(path);
   const isFolderExpanded = (folder: string) => visiblePanels.folders.includes(folder);
-  const isPanelExpanded = visiblePanels.allPanels;
+  const isExpanded = visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0;
 
   const props = {
     isFacetExpanded,
     isFolderExpanded,
-    isPanelExpanded,
+    isExpanded,
     setVisiblePanels,
   };
 
