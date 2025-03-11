@@ -73,10 +73,7 @@ const TsvDownloadButton = ({
   // - user is logged in and has DACO access
   // - files are selected (TODO: download all by filter)
   const showClinicalDownload =
-    FEATURE_CLINICAL_DOWNLOAD &&
-    hasDacoAccess(permissions) &&
-    selectedFilesCount > 0 &&
-    !allFilesSelected;
+    FEATURE_CLINICAL_DOWNLOAD && hasDacoAccess(permissions) && selectedFilesCount > 0;
 
   const menuItems: DownloadButtonProps<DownloadOptionValues>['menuItems'] = [
     ...(!!selectedFilesCount
@@ -120,20 +117,7 @@ const TsvDownloadButton = ({
     op: 'and',
     content: [
       repoFilters,
-      allFilesSelected
-        ? {
-            op: 'not',
-            content: [
-              {
-                op: 'in',
-                content: {
-                  field: FileCentricDocumentFields['object_id'],
-                  value: unSelectedFilesObjectIds,
-                },
-              },
-            ],
-          }
-        : selectedFilesObjectIds.length
+      selectedFilesObjectIds.length
         ? {
             op: 'in',
             content: {
@@ -143,6 +127,39 @@ const TsvDownloadButton = ({
           }
         : defaultFilters,
     ],
+  };
+
+  /*
+   * resolve donors server side
+   */
+  const allFilesDownloadFilter: RecursiveFilter = {
+    op: 'and',
+    content: [repoFilters],
+  };
+
+  /*
+   * Use either an endpoint for multiple files or an endpoint for all files
+   */
+  const getClinicalDownload = (type: 'ALL' | 'SELECTION') => {
+    const downloadUrl =
+      type === 'ALL'
+        ? urljoin(
+            GATEWAY_API_ROOT,
+            'clinical/api/donors/data-for-query',
+            `?filter=${encodeURIComponent(JSON.stringify(allFilesDownloadFilter))}`,
+          )
+        : urljoin(GATEWAY_API_ROOT, 'clinical/api/donors/data-for-files');
+
+    return downloadFileWithEgoToken(downloadUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:
+        type === 'SELECTION'
+          ? JSON.stringify({
+              objectIds: selectedFilesObjectIds,
+            })
+          : undefined,
+    });
   };
 
   const onItemClick: DownloadButtonProps<DownloadOptionValues>['onItemClick'] = (item) => {
@@ -178,15 +195,9 @@ const TsvDownloadButton = ({
           });
         break;
       case DownloadOptionValues.CLINICAL_DATA: {
-        const downloadUrl = urljoin(GATEWAY_API_ROOT, 'clinical/api/donors/data-for-files');
+        const downloadFile = getClinicalDownload(allFilesSelected ? 'ALL' : 'SELECTION');
 
-        downloadFileWithEgoToken(downloadUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            objectIds: selectedFilesObjectIds,
-          }),
-        })
+        downloadFile
           .then(() => setLoading(false))
           .catch((err) => {
             setLoading(false);
