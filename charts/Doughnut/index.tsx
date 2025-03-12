@@ -20,6 +20,7 @@
 import { gql } from '@apollo/client';
 import generateChartComponent from 'charts/Chart';
 import { BUCKETS_FOR_BAR_CHART } from 'charts/config';
+import { Chart } from 'charts/types';
 import { get } from 'lodash';
 import DoughnutChart from './ui';
 
@@ -48,7 +49,7 @@ const transformToBarData =
     );
   };
 
-const Doughnut = (consumerProps) => {
+const Doughnut = (consumerProps: Chart & { field: string }) => {
   const { field } = consumerProps;
   return generateChartComponent({
     Component: DoughnutChart,

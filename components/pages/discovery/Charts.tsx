@@ -119,7 +119,7 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart field="study_id" />
+        <BarChart field="studyx_id" />
       </Card>
 
       <Card title="Age at Diagnosis">
