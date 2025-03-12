@@ -25,8 +25,8 @@ export type ChartConfig = {};
 
 export type Chart = {
   consumerConfig?: ChartConfig;
-  onLoad?: () => void;
-  onError?: (error: unknown) => void;
+  onLoading?: () => any;
+  onError?: (error) => any;
 };
 
 export type ChartComponent = typeof ResponsiveLine | typeof ResponsiveBar;

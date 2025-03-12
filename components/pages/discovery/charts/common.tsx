@@ -17,15 +17,31 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import { css, DnaLoader } from '@icgc-argo/uikit';
 
-export const ChartContainer = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
-  <div css={css({ flex: 1, position: 'relative' })}>
+export const Loader = () => {
+  return (
     <div
-      css={css({ position: 'absolute', top: 0, left: 0, width: '100%', height: height || '100%' })}
+      css={css({ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' })}
     >
-      {children}
+      <DnaLoader />
     </div>
-  </div>
-);
+  );
+};
+
+export const Error = () => {
+  return (
+    <div
+      css={css({
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '13px',
+        color: '#525767',
+      })}
+    >
+      No Data Available
+    </div>
+  );
+};

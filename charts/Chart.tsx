@@ -18,7 +18,7 @@
  */
 
 import { DocumentNode } from 'graphql';
-import { useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
 import { Chart, ChartComponent } from './types';
 
@@ -42,7 +42,7 @@ export type Options = {
  * @param chart.onLoad - A callback function for chart loading
  * @param chart.onError - A callback function for chart errors
  *
- * @returns React chart component or null
+ * @returns React chart component
  */
 const generateChartComponent =
   ({
@@ -58,9 +58,9 @@ const generateChartComponent =
   ({
     // consumer
     consumerConfig,
-    onLoad,
+    onLoading,
     onError,
-  }: Chart) => {
+  }: Chart): ReactElement => {
     const { data, loading, error } = useArrangerCharts(options);
 
     useEffect(() => {
@@ -69,14 +69,15 @@ const generateChartComponent =
       }
     }, [loading, error]);
 
-    if (!loading && !error) {
-      // provides resolved data to user config function, assist in UI styling
+    if (loading) {
+      return (onLoading && onLoading()) || null;
+    } else if (error) {
+      return (onError && onError(error)) || null;
+    } else {
       const resolvedConsumerConfig =
         typeof consumerConfig === 'function' ? consumerConfig({ data }) : consumerConfig;
 
       return <Component {...{ data, ...internalConfig, ...resolvedConsumerConfig }} />;
-    } else {
-      return null;
     }
   };
 

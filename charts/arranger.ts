@@ -18,9 +18,7 @@
  */
 
 /**
- * This entire file is a temporary solution to target Arranger v2 server
  * It is consistent with usage across this repo eg. `useQuery` and per component querying
- * TODO: Upgrade to use Arranger v3 in the project (server and client)
  */
 
 import { useQuery } from '@apollo/client';
