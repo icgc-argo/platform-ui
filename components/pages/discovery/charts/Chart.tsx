@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -17,18 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import NextHead from 'next/head';
+import { css } from '@emotion/react';
+import { PropsWithChildren } from 'react';
 
-export default function Head() {
-  return (
-    <NextHead>
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet"
-      ></link>
-    </NextHead>
-  );
-}
+export const ChartContainer = ({ children, height }: PropsWithChildren<{ height?: any }>) => (
+  <div css={css({ flex: 1, position: 'relative' })}>
+    <div
+      css={css({ position: 'absolute', top: 0, left: 0, width: '100%', height: height || '100%' })}
+    >
+      {children}
+    </div>
+  </div>
+);

@@ -131,13 +131,15 @@ export default function ApplicationRoot({
       <style>
         {`
             body {
+              font-family:Work Sans,sans-serif;
               margin: 0;
               position: absolute;
               top: 0px;
               bottom: 0px;
               left: 0px;
               right: 0px;
-            } /* custom! */
+            } 
+            /* custom! */
             #__next {
               position: absolute;
               top: 0px;
@@ -145,6 +147,7 @@ export default function ApplicationRoot({
               left: 0px;
               right: 0px;
             }
+            
           `}
       </style>
       <Head />
