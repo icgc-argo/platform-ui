@@ -17,11 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createPage } from 'global/utils/pages';
 import DiscoveryPage from 'components/pages/discovery';
+import { getConfig } from 'global/config';
+import { createPage } from 'global/utils/pages';
 
 export default createPage<{ egoJwt: string }>({
   isPublic: true,
 })(() => {
-  return <DiscoveryPage />;
+  const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
+  return FEATURE_DATA_DISCOVERY_ENABLED ? <DiscoveryPage /> : null;
 });

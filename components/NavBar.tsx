@@ -50,7 +50,7 @@ import { get } from 'lodash';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import queryString from 'query-string';
-import { useState, useEffect, useMemo, createRef, RefObject } from 'react';
+import { createRef, RefObject, useEffect, useMemo, useState } from 'react';
 
 import { useScreenClass } from 'react-grid-system';
 import urlJoin from 'url-join';
@@ -158,13 +158,6 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
 
   const mainNavDetails: Array<NavElement> = [
     {
-      name: 'Data Discovery',
-      href: DATA_DISCOVERY_PATH,
-      as: DATA_DISCOVERY_PATH,
-      active: path.search(DATA_DISCOVERY_PATH) === 0,
-      LinkComp: NextLink,
-    },
-    {
       name: 'File Repository',
       href: FILE_REPOSITORY_PATH,
       as: FILE_REPOSITORY_PATH,
@@ -181,6 +174,17 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
       LinkComp: NextLink,
     },
   ];
+
+  const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
+  if (FEATURE_DATA_DISCOVERY_ENABLED) {
+    mainNavDetails.unshift({
+      name: 'Data Discovery',
+      href: DATA_DISCOVERY_PATH,
+      as: DATA_DISCOVERY_PATH,
+      active: path.search(DATA_DISCOVERY_PATH) === 0,
+      LinkComp: NextLink,
+    });
+  }
 
   const profileNavDetails: Array<NavElement> = [
     {
@@ -203,7 +207,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const NUM_ELEMENTS_IN_FIRST_SECTION = 2;
+  const NUM_ELEMENTS_IN_FIRST_SECTION = FEATURE_DATA_DISCOVERY_ENABLED ? 2 : 1;
   const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
   const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
