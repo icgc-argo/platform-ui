@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,18 +17,32 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import NextHead from 'next/head';
+import { Notification } from '@icgc-argo/uikit';
 
-export default function Head() {
-  return (
-    <NextHead>
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet"
-      ></link>
-    </NextHead>
-  );
-}
+type StaticMessageProps = {
+  id: string;
+  level: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+  title: string;
+  message: string;
+};
+
+const StaticMessage = ({ id, level, title, message }: StaticMessageProps) => (
+  <Notification
+    key={id}
+    size="SM"
+    variant={level}
+    title={title}
+    content={message}
+    interactionType="NONE"
+  />
+);
+
+const submissionDisruption: StaticMessageProps = {
+  id: 'static-message-submission-disruption',
+  level: 'WARNING',
+  title: 'Upcoming Submission Disruption',
+  message:
+    'We are preparing to transition the DCC infrastructure to a new location. As part of this move, there may be a temporary interruption in services starting September 2025 to accommodate data transfer activities. To avoid any disruption to your work, we strongly encourage you to complete your data submissions before this date.',
+};
+
+export { StaticMessage, submissionDisruption };

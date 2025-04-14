@@ -41,8 +41,10 @@ import map from 'lodash/map';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import Router from 'next/router';
-import { useState, useEffect, useMemo, ComponentProps } from 'react';
+import { ComponentProps, useEffect, useMemo, useState } from 'react';
 
+import { StaticMessage, submissionDisruption } from 'components/SystemAlerts/StaticMessage';
+import { getConfig } from 'global/config';
 import { useClinicalSubmissionQuery } from '.';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
@@ -140,6 +142,7 @@ const getFileNavigatorFiles = (dataObj: ClinicalSubmissionQueryData) =>
   );
 
 const PageContent = () => {
+  const { FEATURE_SUBMISSION_BANNER_ENABLED } = getConfig();
   const { shortName: programShortName } = usePageQuery<{ shortName: string }>();
   const { setGlobalLoading } = useGlobalLoader();
 
@@ -434,6 +437,7 @@ const PageContent = () => {
         height: 100%;
       `}
     >
+      {FEATURE_SUBMISSION_BANNER_ENABLED && <StaticMessage {...submissionDisruption} />}
       {<SubmissionSystemLockedNotification />}
       {signOffModalShown && (
         <ModalPortal>

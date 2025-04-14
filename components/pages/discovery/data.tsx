@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,18 +17,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import NextHead from 'next/head';
+const donorData = [
+  { site: 'Blood', donors: 75 },
+  { site: 'Brain', donors: 225 },
+  { site: 'Breast', donors: 250 },
+  { site: 'Liver', donors: 150 },
+  { site: 'Kidney', donors: 175 },
+  { site: 'Prostate', donors: 100 },
+  { site: 'Lung', donors: 240 },
+  { site: 'Stomach', donors: 350 },
+  { site: 'Pancreas', donors: 100 },
+  { site: 'Skin', donors: 175 },
+  { site: 'Cervix Bone', donors: 150 },
+  { site: 'Head', donors: 225 },
+  { site: 'Bladder', donors: 240 },
+  { site: 'Esophagus', donors: 90 },
+  { site: 'Colon', donors: 160 },
+];
 
-export default function Head() {
-  return (
-    <NextHead>
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet"
-      ></link>
-    </NextHead>
-  );
-}
+const rdpcNodeData = [
+  { city: 'Dublin', donors: 273 },
+  { city: 'Barcalona', donors: 120 },
+  { city: 'London', donors: 21173 },
+];
+
+export { donorData, rdpcNodeData };
