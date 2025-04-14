@@ -54,6 +54,7 @@ export const getConfig = () => {
       publicConfig.FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED === 'true',
     FEATURE_CLINICAL_DOWNLOAD: publicConfig.FEATURE_CLINICAL_DOWNLOAD === 'true',
     FEATURE_SUBMISSION_BANNER_ENABLED: publicConfig.FEATURE_SUBMISSION_BANNER_ENABLED === 'true',
+    FEATURE_DATA_DISCOVERY_ENABLED: publicConfig.FEATURE_DATA_DISCOVERY_ENABLED === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -78,5 +79,6 @@ export const getConfig = () => {
     FEATURE_RDPC_CLINICAL_SUBMISSION_ENABLED: boolean;
     FEATURE_CLINICAL_DOWNLOAD: boolean;
     FEATURE_SUBMISSION_BANNER_ENABLED: boolean;
+    FEATURE_DATA_DISCOVERY_ENABLED: boolean;
   };
 };

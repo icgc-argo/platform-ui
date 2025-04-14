@@ -25,7 +25,13 @@ import QueryBar from './';
 
 import { PaddedRow } from '../index';
 
-const QueryBarContainer = () => {
+const QueryBarContainer = ({
+  text = 'Search the file repository by selecting filters',
+  className,
+}: {
+  text?: string;
+  className?: string;
+}) => {
   const theme = useTheme();
   const { filters } = useFiltersContext();
 
@@ -33,6 +39,7 @@ const QueryBarContainer = () => {
     <PaddedRow justify="around">
       <Col xl={12}>
         <Container
+          className={className}
           css={css`
             margin-bottom: 8px;
             justify-content: start;
@@ -56,7 +63,7 @@ const QueryBarContainer = () => {
                 `}
                 name="arrow_left"
               />
-              <span>Search the file repository by selecting filters</span>
+              <span>{text}</span>
             </Typography>
           ) : (
             <QueryBar filters={filters} />
