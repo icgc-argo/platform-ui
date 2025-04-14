@@ -37,6 +37,9 @@ import { toDisplayError } from 'global/utils/clinicalUtils';
 import get from 'lodash/get';
 import union from 'lodash/union';
 
+import { StaticMessage, submissionDisruption } from 'components/SystemAlerts/StaticMessage';
+import { getConfig } from 'global/config';
+import { ComponentProps } from 'react';
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
 import ErrorNotification, { getDefaultColumns } from '../ErrorNotification';
@@ -52,7 +55,6 @@ import CLEAR_CLINICAL_REGISTRATION_MUTATION from './gql/CLEAR_CLINICAL_REGISTRAT
 import GET_REGISTRATION_QUERY from './gql/GET_REGISTRATION_QUERY';
 import Instructions from './Instructions';
 import { ClinicalRegistration, ClinicalRegistrationData } from './types';
-import { ComponentProps } from 'react';
 
 const recordsToFileTable = (
   records: ClinicalRegistrationData[],
@@ -65,6 +67,7 @@ const recordsToFileTable = (
   });
 
 export default function ProgramIDRegistration() {
+  const { FEATURE_SUBMISSION_BANNER_ENABLED } = getConfig();
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -211,6 +214,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
+      {FEATURE_SUBMISSION_BANNER_ENABLED && <StaticMessage {...submissionDisruption} />}
       {<SubmissionSystemLockedNotification />}
       <Container
         css={css`
@@ -225,7 +229,6 @@ export default function ProgramIDRegistration() {
           registrationId={get(clinicalRegistration, 'id')}
         />
       </Container>
-
       {fileErrors.map(({ fileNames, message }, i) => (
         <Notification
           key={i}
@@ -240,7 +243,6 @@ export default function ProgramIDRegistration() {
           onInteraction={onErrorClose(i)}
         />
       ))}
-
       <Container
         css={css`
           ${containerStyle}
