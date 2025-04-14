@@ -38,6 +38,7 @@ import get from 'lodash/get';
 import union from 'lodash/union';
 
 import { StaticMessage, submissionDisruption } from 'components/SystemAlerts/StaticMessage';
+import { getConfig } from 'global/config';
 import { ComponentProps } from 'react';
 import { Row } from 'react-grid-system';
 import { containerStyle } from '../common';
@@ -66,6 +67,7 @@ const recordsToFileTable = (
   });
 
 export default function ProgramIDRegistration() {
+  const { FEATURE_SUBMISSION_BANNER_ENABLED } = getConfig();
   const {
     query: { shortName: programShortName },
   } = usePageContext();
@@ -212,8 +214,7 @@ export default function ProgramIDRegistration() {
         </div>
       }
     >
-      <StaticMessage {...submissionDisruption} />
-
+      {FEATURE_SUBMISSION_BANNER_ENABLED && <StaticMessage {...submissionDisruption} />}
       {<SubmissionSystemLockedNotification />}
       <Container
         css={css`
