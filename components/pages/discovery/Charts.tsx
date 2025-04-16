@@ -21,10 +21,8 @@ import { css } from '@icgc-argo/uikit';
 
 import BarChart from './charts/Bar';
 import DoughnutChart from './charts/Doughnut';
-import LineChart from './charts/Line';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
-import RangeSelector from './components/Selector';
 
 const colors = [
   '#78BB71',
@@ -78,24 +76,8 @@ const ChartsLayout = () => {
         <BarChart field="study_id" />
       </Card>
 
-      <Card
-        title="Track Embargo State"
-        Selector={
-          <RangeSelector
-            data={[{ label: '3M' }, { label: '6M' }]}
-            activeIndex={0}
-            onClick={() => console.log('click')}
-          />
-        }
-        css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
-      >
-        <LineChart
-          fields={[
-            'analysis__analysis_version',
-            'clinical__specimens__specimen_acquisition_interval',
-          ]}
-          interval={2}
-        />
+      <Card title="Age at Diagnosis">
+        <BarChart field="study_id" />
       </Card>
 
       <Card
@@ -122,9 +104,6 @@ const ChartsLayout = () => {
         <BarChart field="studyx_id" />
       </Card>
 
-      <Card title="Age at Diagnosis">
-        <BarChart field="study_id" />
-      </Card>
       <Card title="Gender">
         <BarChart field="study_id" />
       </Card>
