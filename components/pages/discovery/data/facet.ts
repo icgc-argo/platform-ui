@@ -14,6 +14,7 @@ export type FacetPanelOptions = FacetFolder[];
 
 /**
  * Static facets to use in Arranger query
+ * facetPath - used for UI visibility
  */
 export const FACET_OPTIONS: FacetPanelOptions = [
   {
