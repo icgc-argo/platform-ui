@@ -26,7 +26,7 @@ import {
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
@@ -80,7 +80,15 @@ const FacetCollection = ({
 
               const facetProps = {
                 ...facet,
+
                 ...{
+                  parseDisplayValue: (value) => {
+                    const IS_MISSING = '__missing__';
+                    if (value === IS_MISSING) {
+                      return 'No Data';
+                    }
+                    return value;
+                  },
                   options,
                   onOptionToggle,
                   onSelectAllOptions,
@@ -92,9 +100,10 @@ const FacetCollection = ({
                     }),
                 },
               };
-              return (
+
+              return isEmpty(options) ? null : (
                 <FacetRow key={facet.facetPath}>
-                  <Facet facet={facetProps} aggregations={aggregations} />
+                  <Facet {...facetProps} />
                 </FacetRow>
               );
             })}
@@ -111,6 +120,7 @@ const FacetCollection = ({
  *
  * @param options - hardcoded facet options
  */
+
 const Facets = ({ options }) => {
   const { filters } = useFiltersContext();
   const {
@@ -132,7 +142,7 @@ const Facets = ({ options }) => {
         isExpanded={isExpanded}
         onClick={() => setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL })}
       />
-      <div css={css({ flex: 1, overflow: 'scroll' })}>
+      <div css={css([{ flex: 1, overflow: 'scroll' }])}>
         <FacetCollection aggregations={aggregations} staticFacets={options} isLoading={isLoading} />
       </div>
     </>
