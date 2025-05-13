@@ -17,13 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { styled } from '@icgc-argo/uikit';
+import { createUploadLink } from 'apollo-upload-client';
 
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
-import { useState } from 'react';
+import { getConfig } from 'global/config';
+import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
+import useAuthContext from 'global/hooks/useAuthContext';
+import { useMemo, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
+import urljoin from 'url-join';
 import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
@@ -51,49 +57,65 @@ const DiscoveryPage = () => {
 
   const [isSidebarOpen, setSetbarView] = useState(true);
 
+  /**
+   * Query donor-centric Arranger instance gateway endpoint for this page
+   */
+  const { GATEWAY_API_ROOT } = getConfig();
+  const { fetchWithEgoToken } = useAuthContext();
+  const arrangerV3client = useMemo(() => {
+    const uploadLink = createUploadLink({
+      uri: urljoin(GATEWAY_API_ROOT, 'arranger-v3', GRAPHQL_PATH),
+      fetch: fetchWithEgoToken,
+    });
+    return new ApolloClient({
+      link: ApolloLink.from([uploadLink]),
+      connectToDevTools: true,
+      cache: new InMemoryCache(),
+    });
+  }, [fetchWithEgoToken]);
+
   return (
-    <FiltersProvider>
-      <div
-        css={css({
-          display: 'grid',
-          gridTemplateRows: '58px 1fr 58px',
-          height: '100vh',
-          background: `${theme.colors.grey_4}`,
-        })}
-      >
-        <div>
-          <Head subtitle={'Data Discovery'} />
-          <NavBar />
+    <ApolloProvider client={arrangerV3client}>
+      <FiltersProvider>
+        <div
+          css={css({
+            display: 'grid',
+            gridTemplateRows: '58px 1fr 58px',
+            height: '100vh',
+            background: `${theme.colors.grey_4}`,
+          })}
+        >
+          <div>
+            <Head subtitle={'Data Discovery'} />
+            <NavBar />
 
-          <div
-            css={css({
-              display: 'grid',
-              gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
-              gridTemplateRows: 'calc(100vh - 116px)',
-              minHeight: 0,
-              overflow: 'hidden',
-            })}
-          >
-            <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-              <Facets staticFacetOptions={FACET_OPTIONS} />
-            </Sidebar>
+            <div
+              css={css({
+                display: 'grid',
+                gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
+                gridTemplateRows: 'calc(100vh - 116px)',
+                minHeight: 0,
+                overflow: 'hidden',
+              })}
+            >
+              <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+                <Facets staticFacetOptions={FACET_OPTIONS} />
+              </Sidebar>
 
-            <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-              <QueryBarContainer
-                text="Explore data by selecting filters."
-                css={css([commonStyles.block, { boxShadow: 'none' }])}
-              />
-              <StatsCard
-                data={{ donors: 3, files: 1, programs: 88, repositories: 2 }}
-                isLoading={false}
-              />
-              <ChartsLayout />
+              <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
+                <QueryBarContainer
+                  text="Explore data by selecting filters."
+                  css={css([commonStyles.block, { boxShadow: 'none' }])}
+                />
+                <StatsCard />
+                <ChartsLayout />
+              </div>
             </div>
+            <Footer />
           </div>
-          <Footer />
         </div>
-      </div>
-    </FiltersProvider>
+      </FiltersProvider>
+    </ApolloProvider>
   );
 };
 
