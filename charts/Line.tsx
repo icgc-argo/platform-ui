@@ -31,7 +31,7 @@ type LineData = {
 const generateQuery = ({ fields }: { fields: string[] }) => gql`
   query ChartsFileCentricNumericAgg($filters:JSON, $interval: Float) {
     file {
-      aggregations(filters: $filters) {
+      aggregations(filters: $filters, aggregations_filter_themselves: true) {
         ${fields.map(
           (field) => `
           ${field} {
