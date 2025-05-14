@@ -29,6 +29,13 @@ const input: FacetFilter = {
       },
       op: 'in',
     },
+    {
+      content: {
+        field: 'study_id',
+        value: 'SAMR-CA',
+      },
+      op: 'in',
+    },
   ],
   op: 'and',
 };
@@ -39,6 +46,13 @@ const expectedOutput = {
       content: {
         fieldName: 'gender',
         value: 'Female',
+      },
+      op: 'in',
+    },
+    {
+      content: {
+        fieldName: 'study_id',
+        value: 'SAMR-CA',
       },
       op: 'in',
     },

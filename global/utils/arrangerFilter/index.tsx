@@ -40,24 +40,23 @@ export const toArrangerV3Filter = (inputFilter: FacetFilter) => {
     // empty filter SQON object
     return inputFilter;
   }
-  const content = inputFilter.content.reduce((acc, currentVal) => {
+  const content = inputFilter.content.map((filter) => {
     // ignore FilterField fields property as is
-    if (currentVal.content.hasOwnProperty('fields')) {
-      return { ...acc, currentVal };
+    if (filter.content.hasOwnProperty('fields')) {
+      return filter;
     } else {
       return {
-        ...acc,
-        ...currentVal,
+        ...filter,
         content: {
-          fieldName: currentVal.content.field,
-          value: currentVal.content.value,
+          fieldName: filter.content.field,
+          value: filter.content.value,
         },
       };
     }
-  }, {});
+  });
 
   return {
-    content: [content],
+    content,
     op: inputFilter.op,
   };
 };
