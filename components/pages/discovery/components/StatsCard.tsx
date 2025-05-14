@@ -23,6 +23,7 @@ import { gql, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get } from 'lodash';
 import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
@@ -132,7 +133,7 @@ const StatsCard = () => {
     loading: isLoading,
     error,
   } = useQuery(STATS_QUERY, {
-    variables: { filters },
+    variables: { filters: toArrangerV3Filter(filters) },
   });
 
   const data = {
