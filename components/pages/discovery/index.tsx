@@ -64,7 +64,7 @@ const DiscoveryPage = () => {
   const { fetchWithEgoToken } = useAuthContext();
   const arrangerV3client = useMemo(() => {
     const uploadLink = createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, 'arranger-v3', GRAPHQL_PATH),
+      uri: urljoin(GATEWAY_API_ROOT, 'discovery'),
       fetch: fetchWithEgoToken,
     });
     return new ApolloClient({
