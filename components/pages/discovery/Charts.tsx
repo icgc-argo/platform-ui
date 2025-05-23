@@ -70,7 +70,11 @@ const ChartsLayout = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart field="study_id" onClick={(config) => chartFilters.study_id(config.data.key)} />
+        <BarChart
+          field="study_id"
+          onClick={(config) => chartFilters.study_id(config.data.key)}
+          chartConfig={{ axisBottom: {}, axisLeft: {} }}
+        />
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
@@ -108,17 +112,23 @@ const ChartsLayout = () => {
         <BarChart
           field="primary_site"
           onClick={(config) => chartFilters.primary_site(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Primary Site' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
 
       <Card title="Gender">
-        <BarChart field="gender" onClick={(config) => chartFilters.gender(config.data.key)} />
+        <BarChart
+          field="gender"
+          onClick={(config) => chartFilters.gender(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Genders' }, axisBottom: { legend: 'Donors' } }}
+        />
       </Card>
 
       <Card title="Vital Status">
         <BarChart
           field="vital_status"
           onClick={(config) => chartFilters.vital_status(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Status' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
 
@@ -128,6 +138,7 @@ const ChartsLayout = () => {
           onClick={(config) =>
             chartFilters.analyses__experiment__experimental_strategy(config.data.key)
           }
+          chartConfig={{ axisLeft: { legend: 'Stategy' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
     </ChartContainer>
