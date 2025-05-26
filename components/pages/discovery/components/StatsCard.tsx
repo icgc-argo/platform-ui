@@ -19,8 +19,12 @@
  *
  */
 
+import { gql, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
+import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { get } from 'lodash';
 import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
 import { commonStyles } from './common';
@@ -51,7 +55,7 @@ const StatItem = ({ iconName, value }) => {
   );
 };
 
-const StatsCard = ({ data: { files, donors, programs, repositories }, isLoading }) => {
+const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoading }) => {
   const theme = useTheme();
   const filesValue = `${files} File${files > 0 ? 's' : ''}`;
   const donorsValue = `${donors} Donor${donors > 0 ? 's' : ''}`;
@@ -95,6 +99,58 @@ const StatsCard = ({ data: { files, donors, programs, repositories }, isLoading 
       </PaddedRow>
     </div>
   );
+};
+
+const STATS_QUERY = gql`
+  query DiscoveryStats($filters: JSON) {
+    file {
+      hits(filters: $filters) {
+        total
+      }
+      aggregations(
+        filters: $filters
+        include_missing: true
+        aggregations_filter_themselves: false
+      ) {
+        study_id {
+          bucket_count
+          buckets {
+            doc_count
+          }
+        }
+        analyses__repositories__code {
+          bucket_count
+        }
+      }
+    }
+  }
+`;
+
+const StatsCard = () => {
+  const { filters } = useFiltersContext();
+  const {
+    data: statsCardResponse,
+    loading: isLoading,
+    error,
+  } = useQuery(STATS_QUERY, {
+    variables: { filters: toArrangerV3Filter(filters) },
+  });
+
+  const data = {
+    files: get(statsCardResponse, 'file.hits.total', 0),
+    repositories: get(
+      statsCardResponse,
+      'file.aggregations.analyses__repositories__code.bucket_count',
+      0,
+    ),
+    donors: get(statsCardResponse, 'file.aggregations.study_id.buckets', []).reduce(
+      (total, bucket) => total + bucket.doc_count,
+      0,
+    ),
+    programs: get(statsCardResponse, 'file.aggregations.study_id.bucket_count', 0),
+  };
+
+  return <StatsCardComp {...{ data, isLoading }} />;
 };
 
 export default StatsCard;

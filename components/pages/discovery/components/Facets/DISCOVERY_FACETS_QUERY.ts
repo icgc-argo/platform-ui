@@ -19,111 +19,176 @@
 
 import { gql } from '@apollo/client';
 
+const aggBucketProps = `
+buckets {
+  key
+  key_as_string
+  doc_count
+}`;
+
+const numericProps = `histogram {${aggBucketProps}}`;
+
 const DISCOVERY_FACETS_QUERY = gql`
   query DiscoveryFacets($filters: JSON) {
     file {
       # only place we have field => display name mapping
       # example: "analysis.experiment.platform" => "Platform"
-      #extended
-      # data for facets
       aggregations(
         filters: $filters
         include_missing: true
         aggregations_filter_themselves: false
       ) {
-        study_id {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        # --- General
+        gender {
+          ${aggBucketProps}
         }
-        analysis__experiment__experimental_strategy {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        # TODO: Missing
+        # vital_status {
+        #  {aggBucketProps}
+        #}
+        
+        cause_of_death {
+          ${aggBucketProps}
         }
-        has_clinical_data {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+
+        # TODO Numeric
+        # survival_time {
+        #   {
+        # }
+
+        primary_site {
+          ${aggBucketProps}
         }
-        file_type {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+
+        primary_diagnosis__cancer_type_code {
+          ${aggBucketProps}
         }
-        file_access {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+
+        # --- Biospecimen
+        specimens__specimen_tissue_source {
+          ${aggBucketProps}
         }
-        analysis_tools {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__tumour_normal_designation{
+          ${aggBucketProps}
         }
-        data_category {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__specimen_type{
+          ${aggBucketProps}
         }
-        data_type {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__samples__sample_type{
+          ${aggBucketProps}
         }
-        donors__specimens__specimen_type {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__pathological_tumour_staging_system{
+          ${aggBucketProps}
         }
-        donors__specimens__specimen_tissue_source {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__pathological_t_category{
+          ${aggBucketProps}
         }
-        analysis__workflow__workflow_name {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__pathological_n_category{
+          ${aggBucketProps}
         }
-        embargo_stage {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__pathological_m_category{
+          ${aggBucketProps}
         }
-        release_state {
-          buckets {
-            key
-            key_as_string
-            doc_count
-          }
+        specimens__pathological_stage_group{
+          ${aggBucketProps}
+        }
+        # TODO Numeric
+        #specimens__specimen_acquisition_interval{
+        #  {aggBucketProps}
+        #}
+        specimens__tumour_histological_type{
+          ${aggBucketProps}
+        }
+        specimens__specimen_anatomic_location{
+          ${aggBucketProps}
+        }
+        specimens__reference_pathology_confirmed{
+          ${aggBucketProps}
+        }
+        specimens__tumour_grading_system{
+          ${aggBucketProps}
+        }
+        specimens__tumour_grade{
+          ${aggBucketProps}
+        }
+
+        # TODO Numeric
+        #specimens__percent_tumour_cells{
+        #  {aggBucketProps}
+        #}
+
+        # TODO Numeric
+        #specimens__percent_tumour_cells_measurement_method{
+        #  {aggBucketProps}
+        #}
+
+        # --- Diagnosis
+        # TODO numeric
+        #primary_diagnosis__age_at_diagnosis{
+        #  {aggBucketProps}
+        #}
+        primary_diagnosis__clinical_tumour_staging_system{
+          ${aggBucketProps}
+        }
+        primary_diagnosis__clinical_n_category{
+          ${aggBucketProps}
+        }
+        primary_diagnosis__clinical_m_category{
+          ${aggBucketProps}
+        }
+        primary_diagnosis__clinical_t_category{
+          ${aggBucketProps}
+        }
+        primary_diagnosis__clinical_stage_group{
+          ${aggBucketProps}
+        }
+
+        # --- Treatment
+        treatments__treatment_type{
+          ${aggBucketProps}
+        }
+        treatments__is_primary_treatment{
+          ${aggBucketProps}
+        }
+        treatments__treatment_intent{
+          ${aggBucketProps}
+        }
+        treatments__treatment_setting{
+          ${aggBucketProps}
+        }
+        treatments__response_to_treatment{
+          ${aggBucketProps}
+        }
+       
+        treatments__response_to_treatment_criteria_method{
+          ${aggBucketProps}
+        }
+
+        # --- Assessment
+        # TODO Numeric
+        #follow_ups__interval_of_followup{
+        #  {aggBucketProps}
+        #}
+        follow_ups__disease_status_at_followup{
+          ${aggBucketProps}
+        }
+       
+        follow_ups__relapse_type{
+          ${aggBucketProps}
+        }
+        
+        # TODO Numeric
+        #follow_ups__relapse_interval{
+        #  {aggBucketProps}
+        #}
+        follow_ups__method_of_progression_status{
+          ${aggBucketProps}
+        }
+        follow_ups__anatomic_site_progression_or_recurrences{
+          ${aggBucketProps}
         }
       }
-    }
+    } 
   }
 `;
 

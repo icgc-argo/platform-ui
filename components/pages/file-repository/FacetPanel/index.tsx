@@ -230,7 +230,6 @@ export const getOptions = (
   filters: FileRepoFiltersType,
   aggregations: unknown,
 ) => {
-  console.log(facet, aggregations);
   const options: OptionsListFilterOption[] = (
     aggregations[facet.facetPath] || { buckets: [] }
   ).buckets.map((bucket) => {

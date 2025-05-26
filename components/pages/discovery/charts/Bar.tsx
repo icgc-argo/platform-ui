@@ -25,7 +25,15 @@ import { chartThemeFn } from './theme';
 import { TooltipContainer } from './Tooltip';
 import { injectTheme } from './util';
 
-const BarChart = ({ field }) => {
+const BarChart = ({
+  field,
+  onClick,
+  chartConfig,
+}: {
+  field: string;
+  onClick?: (data) => void;
+  chartConfig?: { axisBottom: {}; axisLeft: {} };
+}) => {
   const theme = useTheme();
   const [chartTheme] = injectTheme(theme)([chartThemeFn]);
 
@@ -46,12 +54,14 @@ const BarChart = ({ field }) => {
       legendPosition: 'middle',
       tickValues: 4,
       legendOffset: 34,
+      ...chartConfig?.axisBottom,
     },
     axisLeft: {
       legend: 'ID',
       legendPosition: 'middle',
       renderTick: () => null,
       legendOffset: -12,
+      ...chartConfig?.axisLeft,
     },
     margin: {
       top: 12,
@@ -77,7 +87,7 @@ const BarChart = ({ field }) => {
 
     onClick: (data) => {
       console.log('data', data);
-      alert('Chart clicked');
+      onClick && onClick(data);
     },
   };
 

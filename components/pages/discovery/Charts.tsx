@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -19,31 +19,11 @@
 
 import { css } from '@icgc-argo/uikit';
 
+import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import BarChart from './charts/Bar';
 import DoughnutChart from './charts/Doughnut';
-import LineChart from './charts/Line';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
-import RangeSelector from './components/Selector';
-
-const colors = [
-  '#78BB71',
-  '#045093',
-  '#7F55CC',
-  '#4BCEE5',
-  '#F95D31',
-  '#24DBB4',
-  '#DF1B42',
-  '#FEA430',
-  '#9BC7ED',
-  '#A1A4B1',
-  '#CBBBEA',
-  '#FA8564',
-  '#B7EBF4',
-  '#A7F0E1',
-  '#FCBEAC',
-  '#FEE8CB',
-];
 
 const ChartContainer = ({ children }) => (
   <div
@@ -68,33 +48,43 @@ const ChartContainer = ({ children }) => (
 );
 
 const ChartsLayout = () => {
+  const chartFilter = (esDocumentField: string) => {
+    const { setFilterFromFieldAndValue } = useFiltersContext();
+    return (filterValue) => {
+      setFilterFromFieldAndValue({ field: esDocumentField, value: filterValue });
+    };
+  };
+
+  // field name: filter for field
+  const chartFilters = {
+    gender: chartFilter('gender'),
+    study_id: chartFilter('study_id'),
+    age_at_diagnosis: chartFilter('age_at_diagnosis'),
+    primary_site: chartFilter('primary_site'),
+    vital_status: chartFilter('vital_status'),
+    analyses__experiment__experimental_strategy: chartFilter(
+      'analyses__experiment__experimental_strategy',
+    ),
+  };
+
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart field="study_id" />
+        <BarChart
+          field="study_id"
+          onClick={(config) => chartFilters.study_id(config.data.key)}
+          chartConfig={{ axisBottom: {}, axisLeft: {} }}
+        />
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <BarChart field="study_id" />
+        <BarChart field="study_id" onClick={(config) => chartFilters.study_id(config.data.key)} />
       </Card>
 
-      <Card
-        title="Track Embargo State"
-        Selector={
-          <RangeSelector
-            data={[{ label: '3M' }, { label: '6M' }]}
-            activeIndex={0}
-            onClick={() => console.log('click')}
-          />
-        }
-        css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
-      >
-        <LineChart
-          fields={[
-            'analysis__analysis_version',
-            'clinical__specimens__specimen_acquisition_interval',
-          ]}
-          interval={2}
+      <Card title="Age at Diagnosis">
+        <BarChart
+          field="age_at_diagnosis"
+          onClick={(config) => chartFilters.age_at_diagnosis(config.data.key)}
         />
       </Card>
 
@@ -119,20 +109,37 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart field="studyx_id" />
+        <BarChart
+          field="primary_site"
+          onClick={(config) => chartFilters.primary_site(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Primary Site' }, axisBottom: { legend: 'Donors' } }}
+        />
       </Card>
 
-      <Card title="Age at Diagnosis">
-        <BarChart field="study_id" />
-      </Card>
       <Card title="Gender">
-        <BarChart field="study_id" />
+        <BarChart
+          field="gender"
+          onClick={(config) => chartFilters.gender(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Genders' }, axisBottom: { legend: 'Donors' } }}
+        />
       </Card>
+
       <Card title="Vital Status">
-        <BarChart field="study_id" />
+        <BarChart
+          field="vital_status"
+          onClick={(config) => chartFilters.vital_status(config.data.key)}
+          chartConfig={{ axisLeft: { legend: 'Status' }, axisBottom: { legend: 'Donors' } }}
+        />
       </Card>
+
       <Card title="Experimental Strategy">
-        <BarChart field="study_id" />
+        <BarChart
+          field="analyses__experiment__experimental_strategy"
+          onClick={(config) =>
+            chartFilters.analyses__experiment__experimental_strategy(config.data.key)
+          }
+          chartConfig={{ axisLeft: { legend: 'Stategy' }, axisBottom: { legend: 'Donors' } }}
+        />
       </Card>
     </ChartContainer>
   );

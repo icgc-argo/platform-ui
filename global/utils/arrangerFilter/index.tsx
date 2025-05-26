@@ -17,45 +17,47 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
-import { ResponsiveBar } from '@nivo/bar';
-import { get } from 'lodash';
-import generateChartComponent from './Chart';
-import { BUCKETS_FOR_BAR_CHART } from './config';
-import { Chart } from './types';
+import {
+  CombinationKeys,
+  FieldOperator,
+} from '@overture-stack/arranger-components/dist/SQONViewer/types';
+import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
+import isEmpty from 'lodash/isEmpty';
 
-const generateQuery = ({ field }: { field: string }) => gql`
-  query ChartsFileCentricAgg($filters:JSON) {
-    file {
-      aggregations(filters: $filters, aggregations_filter_themselves: true) {
-        ${field} {
-          bucket_count
-          buckets {
-            doc_count
-            key
-          }
-        }
-      }
-    }
-  }
-`;
-
-// Aggregation => Chart config
-const transformToBarData =
-  ({ field }: { field: string }) =>
-  (rawData) => {
-    return get(rawData, `file.aggregations.${field}.buckets`, []).map(
-      ({ __typename, ...rest }) => rest,
-    );
-  };
-
-const Bar = (consumerProps: Chart & { field: string }) => {
-  const { field } = consumerProps;
-  return generateChartComponent({
-    Component: ResponsiveBar,
-    options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
-    internalConfig: { ...BUCKETS_FOR_BAR_CHART },
-  })(consumerProps);
+export type FacetFilter = {
+  op: CombinationKeys;
+  content: Array<FieldOperator>;
 };
+/**
+ * Converts Arranger v2 filter to Arranger v3
+ * - changes "field" to "fieldName"
+ * - IMPORTANT: does not take into account nested filters
+ *
+ * Large amount of functionality already in use with filters.
+ * This is a quick fix to make it work with Arranger v3
+ */
+export const toArrangerV3Filter = (inputFilter: FileRepoFiltersType) => {
+  if (isEmpty(inputFilter.content)) {
+    // empty filter SQON object
+    return inputFilter;
+  }
+  const content = inputFilter.content.map((filter) => {
+    // ignore FilterField fields property as is
+    if (filter.content.hasOwnProperty('fields')) {
+      return filter;
+    } else {
+      return {
+        ...filter,
+        content: {
+          fieldName: filter.content.field,
+          value: filter.content.value,
+        },
+      };
+    }
+  });
 
-export default Bar;
+  return {
+    content,
+    op: inputFilter.op,
+  };
+};

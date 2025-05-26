@@ -23,6 +23,7 @@
 
 import { useQuery } from '@apollo/client';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { Options } from './Chart';
 
 /**
@@ -38,13 +39,21 @@ import { Options } from './Chart';
  *
  * @returns Data, loading and error states
  */
+
 export const useArrangerCharts = ({ query, variables, dataTransformer }: Options) => {
   const { filters } = useFiltersContext();
+
+  const arrangerV3Filters = toArrangerV3Filter(filters);
   const {
     data: rawData,
     loading,
     error,
-  } = useQuery(query, { variables: { ...variables, filters } });
+  } = useQuery(query, {
+    variables: {
+      ...variables,
+      filters: arrangerV3Filters,
+    },
+  });
 
   const data =
     (!error && !loading && typeof dataTransformer === 'function' && dataTransformer(rawData)) ||
