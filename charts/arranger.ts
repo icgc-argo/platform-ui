@@ -39,9 +39,10 @@ import { Options } from './Chart';
  *
  * @returns Data, loading and error states
  */
+
 export const useArrangerCharts = ({ query, variables, dataTransformer }: Options) => {
   const { filters } = useFiltersContext();
-  console.log('chart - filters', filters, toArrangerV3Filter(filters));
+
   const arrangerV3Filters = toArrangerV3Filter(filters);
   const {
     data: rawData,

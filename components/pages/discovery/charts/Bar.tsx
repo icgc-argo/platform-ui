@@ -32,7 +32,7 @@ const BarChart = ({
 }: {
   field: string;
   onClick?: (data) => void;
-  chartConfig: { axisBottom: {}; axisLeft: {} };
+  chartConfig?: { axisBottom: {}; axisLeft: {} };
 }) => {
   const theme = useTheme();
   const [chartTheme] = injectTheme(theme)([chartThemeFn]);

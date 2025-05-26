@@ -18,9 +18,10 @@
  */
 
 import { expect } from 'chai';
-import { FacetFilter, toArrangerV3Filter } from '.';
+import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
+import { toArrangerV3Filter } from '.';
 
-const input: FacetFilter = {
+const input: FileRepoFiltersType = {
   content: [
     {
       content: {
@@ -60,7 +61,7 @@ const expectedOutput = {
   op: 'and',
 };
 
-const emptyFilter: FacetFilter = {
+const emptyFilter: FileRepoFiltersType = {
   content: [],
   op: 'and',
 };
