@@ -62,6 +62,7 @@
     "next-images": "^1.8.4",
     "npm-force-resolutions": "^0.0.10",
     "pluralize": "^8.0.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "promise-queue": "^2.2.5",
     "prop-types": "^15.8.1",
     "query-string": "^8.1.0",
