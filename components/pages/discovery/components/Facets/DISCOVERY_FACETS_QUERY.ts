@@ -123,10 +123,9 @@ const DISCOVERY_FACETS_QUERY = gql`
         #}
 
         # --- Diagnosis
-        # TODO numeric
-        #primary_diagnosis__age_at_diagnosis{
-        #  {aggBucketProps}
-        #}
+        primary_diagnosis__age_at_diagnosis{
+         ${numericProps}
+        }
         primary_diagnosis__clinical_tumour_staging_system{
           ${aggBucketProps}
         }
