@@ -78,9 +78,16 @@ const FacetCollection = ({
             key={`name_${idx}`}
           >
             {contents.map((facet) => {
-              console.log('facet', facet);
               if (facet.variant === 'NumericAggregation') {
-                return <RangeFacet displayName={facet.name} />;
+                const stats = aggregations[facet.facetPath]?.stats;
+
+                return (
+                  <RangeFacet
+                    displayName={facet.name}
+                    fieldName={facet.esDocumentField}
+                    stats={stats}
+                  />
+                );
               } else {
                 // default to "Aggregation" type
                 const options = getOptions(facet, filters, aggregations);

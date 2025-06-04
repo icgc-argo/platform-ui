@@ -20,13 +20,18 @@
 import { gql } from '@apollo/client';
 
 const aggBucketProps = `
-buckets {
-  key
-  key_as_string
-  doc_count
-}`;
+  buckets {
+    key
+    key_as_string
+    doc_count
+  }`;
 
-const numericProps = `histogram {${aggBucketProps}}`;
+const numericProps = `
+  histogram {${aggBucketProps}} 
+  stats {
+    max 
+    min
+  }`;
 
 const DISCOVERY_FACETS_QUERY = gql`
   query DiscoveryFacets($filters: JSON) {

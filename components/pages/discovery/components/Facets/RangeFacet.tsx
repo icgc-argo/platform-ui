@@ -19,7 +19,9 @@
 
 import { css, MenuItem } from '@icgc-argo/uikit';
 import { useArrangerTheme } from '@overture-stack/arranger-components';
-import { RangeAgg } from '@overture-stack/arranger-components/dist/Aggs';
+import { RangeAgg } from '@overture-stack/arranger-components/dist/aggregations';
+import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { useRef } from 'react';
 
 /**
  * Using custom wrapper component for facets so only some overrides are applicable
@@ -65,19 +67,73 @@ const aggregationsStyles = {
   },
 };
 
-export const RangeFacet = ({ displayName }) => {
-  // styles side effect
+// not tested for extensive SQON usage
+const filterToArrangerV2 = (obj) => {
+  return JSON.parse(JSON.stringify(obj).replaceAll('fieldName', 'field'));
+};
+
+const filterToArrangerV3 = (obj) => {
+  return JSON.parse(JSON.stringify(obj).replaceAll('field', 'fieldName'));
+};
+
+// returns current value for a given field / operation
+const currentFieldValue = ({ sqon, dotFieldName, op }) => {
+  return sqon?.content?.find((filter) => filter.content?.field === dotFieldName && filter.op === op)
+    ?.content.value;
+};
+
+const getSQONValues = ({ filters, fieldName }) => {
+  if (Array.isArray(filters.content) && filters.content.length === 0) {
+    return { min: 0, max: 100 };
+  }
+  return {
+    min: currentFieldValue({ sqon: filters, dotFieldName: fieldName, op: '>=' }),
+    max: currentFieldValue({ sqon: filters, dotFieldName: fieldName, op: '<=' }),
+  };
+};
+
+/**
+ * !important
+ * Arranger v3 uses fieldName not field
+ */
+export const RangeFacet = ({ displayName, fieldName, stats }) => {
+  // set styles side effect
   useArrangerTheme(aggregationsStyles);
+
+  // current SQON
+  const { filters, replaceAllFilters } = useFiltersContext();
+
+  const currentSQON = getSQONValues({ filters, fieldName });
+
+  /**
+   * keep the range data across renders,
+   * aggregations data changes based on filters
+   * for range, we don't filter out values on the ui, we need the whole range to be visible
+   */
+  const statsRef = useRef({ min: 0, max: 100 });
+  if (stats) {
+    statsRef.current = stats;
+  }
+
   return (
     <RangeAgg
+      fieldName={fieldName}
       displayName={displayName}
-      handleChange={(d) => console.log('range', d)}
-      stats={{ min: 0, max: 100 }}
+      sqonValues={currentSQON}
+      handleChange={({ generateNextSQON }) => {
+        /**
+         * SQON from RangeAgg uses "fieldName"
+         * SQONViewer component in platform-ui uses v2 Arranger code that uses "field"
+         */
+        const newSQON = generateNextSQON(filterToArrangerV3(filters));
+        const newFiltersArrangerV2 = filterToArrangerV2(newSQON);
+        replaceAllFilters(newFiltersArrangerV2);
+      }}
+      stats={statsRef.current}
       WrapperComponent={({ children, displayName }) => (
         <MenuItem
           className="FacetMenu"
           content={displayName}
-          chevronOnLeftSide={true}
           css={css`
             width: 100%;
           `}

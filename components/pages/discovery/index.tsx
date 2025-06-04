@@ -39,6 +39,15 @@ import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { FACET_OPTIONS } from './data/facet';
+import {
+  Aggregations,
+  AggregationsList,
+  ArrangerDataProvider,
+  useArrangerTheme,
+} from '@overture-stack/arranger-components';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { FacetFolder } from './components/Facets/Folder';
+import { RangeFilter } from '@overture-stack/arranger-components/dist/AdvancedSqonBuilder/filterComponents';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -74,47 +83,69 @@ const DiscoveryPage = () => {
     });
   }, [fetchWithEgoToken]);
 
+  const discoveryApiUrl = urljoin(GATEWAY_API_ROOT, 'discovery');
+  const arrangerFetchWithEgoToken = async (args) => {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...args.body }),
+    };
+    try {
+      const response = await fetchWithEgoToken(discoveryApiUrl, options);
+      return response.json();
+    } catch (error) {
+      console.error(error);
+      throw Error('Error fetching chart.');
+    }
+  };
+
   return (
     <ApolloProvider client={arrangerV3client}>
-      <FiltersProvider>
-        <div
-          css={css({
-            display: 'grid',
-            gridTemplateRows: '58px 1fr 58px',
-            height: '100vh',
-            background: `${theme.colors.grey_4}`,
-          })}
-        >
-          <div>
-            <Head subtitle={'Data Discovery'} />
-            <NavBar />
+      <ArrangerDataProvider
+        documentType="file"
+        apiUrl={discoveryApiUrl}
+        customFetcher={arrangerFetchWithEgoToken}
+      >
+        <FiltersProvider>
+          <div
+            css={css({
+              display: 'grid',
+              gridTemplateRows: '58px 1fr 58px',
+              height: '100vh',
+              background: `${theme.colors.grey_4}`,
+            })}
+          >
+            <div>
+              <Head subtitle={'Data Discovery'} />
+              <NavBar />
 
-            <div
-              css={css({
-                display: 'grid',
-                gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
-                gridTemplateRows: 'calc(100vh - 116px)',
-                minHeight: 0,
-                overflow: 'hidden',
-              })}
-            >
-              <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-                <Facets staticFacetOptions={FACET_OPTIONS} />
-              </Sidebar>
+              <div
+                css={css({
+                  display: 'grid',
+                  gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
+                  gridTemplateRows: 'calc(100vh - 116px)',
+                  minHeight: 0,
+                  overflow: 'hidden',
+                })}
+              >
+                <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+                  <Facets staticFacetOptions={FACET_OPTIONS} />
+                </Sidebar>
 
-              <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-                <QueryBarContainer
-                  text="Explore data by selecting filters."
-                  css={css([commonStyles.block, { boxShadow: 'none' }])}
-                />
-                <StatsCard />
-                <ChartsLayout />
+                <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
+                  <QueryBarContainer
+                    text="Explore data by selecting filters."
+                    css={css([commonStyles.block, { boxShadow: 'none' }])}
+                  />
+                  <StatsCard />
+                  <ChartsLayout />
+                </div>
               </div>
+              <Footer />
             </div>
-            <Footer />
           </div>
-        </div>
-      </FiltersProvider>
+        </FiltersProvider>
+      </ArrangerDataProvider>
     </ApolloProvider>
   );
 };
