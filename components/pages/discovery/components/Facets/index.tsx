@@ -36,6 +36,7 @@ import {
   useFacetState,
 } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
+import { RangeFacet } from './RangeFacet';
 import { FiltersSearchBox } from './Search';
 
 /**
@@ -63,6 +64,9 @@ const FacetCollection = ({
 
   return (
     <>
+      {/* <FacetFolder isExpanded={true} onClick={() => null} title="range">
+        <RangeFacet />
+      </FacetFolder> */}
       {staticFacets.map(({ name, contents }, idx) => {
         return (
           <FacetFolder
@@ -74,38 +78,50 @@ const FacetCollection = ({
             key={`name_${idx}`}
           >
             {contents.map((facet) => {
-              const options = getOptions(facet, filters, aggregations);
-              const onOptionToggle = useFacetOptionToggle(facet);
-              const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
+              if (facet.variant === 'NumericAggregation') {
+                const stats = aggregations[facet.facetPath]?.stats;
 
-              const facetProps = {
-                ...facet,
+                return (
+                  <RangeFacet
+                    displayName={facet.name}
+                    fieldName={facet.esDocumentField}
+                    stats={stats}
+                  />
+                );
+              } else {
+                // default to "Aggregation" type
+                const options = getOptions(facet, filters, aggregations);
+                const onOptionToggle = useFacetOptionToggle(facet);
+                const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
 
-                ...{
-                  parseDisplayValue: (value) => {
-                    const IS_MISSING = '__missing__';
-                    if (value === IS_MISSING) {
-                      return 'No Data';
-                    }
-                    return value;
+                const facetProps = {
+                  ...facet,
+                  ...{
+                    parseDisplayValue: (value) => {
+                      const IS_MISSING = '__missing__';
+                      if (value === IS_MISSING) {
+                        return 'No Data';
+                      }
+                      return value;
+                    },
+                    options,
+                    onOptionToggle,
+                    onSelectAllOptions,
+                    isExpanded: isFacetExpanded(facet.facetPath),
+                    onClick: () =>
+                      setVisiblePanels({
+                        type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
+                        facetPath: facet.facetPath,
+                      }),
                   },
-                  options,
-                  onOptionToggle,
-                  onSelectAllOptions,
-                  isExpanded: isFacetExpanded(facet.facetPath),
-                  onClick: () =>
-                    setVisiblePanels({
-                      type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
-                      facetPath: facet.facetPath,
-                    }),
-                },
-              };
+                };
 
-              return isEmpty(options) ? null : (
-                <FacetRow key={facet.facetPath}>
-                  <Facet {...facetProps} />
-                </FacetRow>
-              );
+                return isEmpty(options) ? null : (
+                  <FacetRow key={facet.facetPath}>
+                    <Facet {...facetProps} />
+                  </FacetRow>
+                );
+              }
             })}
           </FacetFolder>
         );
@@ -135,6 +151,10 @@ const Facets = ({ options }) => {
 
   const { setVisiblePanels, isExpanded } = useFacetState();
 
+  /**
+   * response aggregations + static facet options
+   * this is inbuilt functionality in Arranger v3
+   */
   return (
     <>
       <FiltersSearchBox
