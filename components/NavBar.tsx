@@ -142,6 +142,10 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
+  const canAccessDataDiscovery = useMemo(() => {
+    return isDccMember(permissions);
+  }, [egoJwt]);
+
   const { asPath: path, query } = usePageContext();
   const { clearFilters } = useFiltersContext();
 
@@ -176,7 +180,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   ];
 
   const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
-  if (FEATURE_DATA_DISCOVERY_ENABLED) {
+  if (FEATURE_DATA_DISCOVERY_ENABLED && canAccessDataDiscovery) {
     mainNavDetails.unshift({
       name: 'Data Discovery',
       href: DATA_DISCOVERY_PATH,
