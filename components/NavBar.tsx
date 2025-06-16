@@ -43,7 +43,7 @@ import {
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { createRedirectURL } from 'global/utils/common';
-import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import { canReadSomeProgram, hasDacoAccess, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import ArgoLogo from 'images/argo-logo.svg';
 import { get } from 'lodash';
@@ -142,6 +142,10 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     return !!egoJwt && (canReadSomeProgram(permissions) || isRdpcMember(permissions));
   }, [egoJwt]);
 
+  const canAccessDataDiscovery = useMemo(() => {
+    return hasDacoAccess(permissions);
+  }, [egoJwt]);
+
   const { asPath: path, query } = usePageContext();
   const { clearFilters } = useFiltersContext();
 
@@ -176,7 +180,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   ];
 
   const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
-  if (FEATURE_DATA_DISCOVERY_ENABLED) {
+  const showDiscoveryButton = FEATURE_DATA_DISCOVERY_ENABLED && canAccessDataDiscovery;
+
+  if (showDiscoveryButton) {
     mainNavDetails.unshift({
       name: 'Data Discovery',
       href: DATA_DISCOVERY_PATH,
@@ -207,7 +213,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const NUM_ELEMENTS_IN_FIRST_SECTION = FEATURE_DATA_DISCOVERY_ENABLED ? 2 : 1;
+  const NUM_ELEMENTS_IN_FIRST_SECTION = showDiscoveryButton ? 2 : 1;
   const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
   const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
