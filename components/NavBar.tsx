@@ -180,7 +180,9 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   ];
 
   const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
-  if (FEATURE_DATA_DISCOVERY_ENABLED && canAccessDataDiscovery) {
+  const showDiscoveryButton = FEATURE_DATA_DISCOVERY_ENABLED && canAccessDataDiscovery;
+
+  if (showDiscoveryButton) {
     mainNavDetails.unshift({
       name: 'Data Discovery',
       href: DATA_DISCOVERY_PATH,
@@ -211,7 +213,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const NUM_ELEMENTS_IN_FIRST_SECTION = FEATURE_DATA_DISCOVERY_ENABLED ? 2 : 1;
+  const NUM_ELEMENTS_IN_FIRST_SECTION = showDiscoveryButton ? 2 : 1;
   const [usingProfileOptions, setUsingProfileOptions] = useState(true);
 
   const mobileDropdownRef = createRef() as RefObject<HTMLDivElement>;
