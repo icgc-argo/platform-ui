@@ -19,10 +19,12 @@
 
 import DiscoveryPage from 'components/pages/discovery';
 import { getConfig } from 'global/config';
+import { isDccMember } from 'global/utils/egoJwt';
 import { createPage } from 'global/utils/pages';
 
 export default createPage<{ egoJwt: string }>({
-  isPublic: true,
+  isPublic: false,
+  isAccessible: async ({ initialPermissions }) => isDccMember(initialPermissions),
 })(() => {
   const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
   return FEATURE_DATA_DISCOVERY_ENABLED ? <DiscoveryPage /> : null;
