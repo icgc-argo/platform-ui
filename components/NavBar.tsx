@@ -43,7 +43,7 @@ import {
 import useAuthContext from 'global/hooks/useAuthContext';
 import usePageContext from 'global/hooks/usePageContext';
 import { createRedirectURL } from 'global/utils/common';
-import { canReadSomeProgram, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
+import { canReadSomeProgram, hasDacoAccess, isDccMember, isRdpcMember } from 'global/utils/egoJwt';
 import { getDefaultRedirectPathForUser } from 'global/utils/pages';
 import ArgoLogo from 'images/argo-logo.svg';
 import { get } from 'lodash';
@@ -143,7 +143,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
   }, [egoJwt]);
 
   const canAccessDataDiscovery = useMemo(() => {
-    return isDccMember(permissions);
+    return hasDacoAccess(permissions);
   }, [egoJwt]);
 
   const { asPath: path, query } = usePageContext();
