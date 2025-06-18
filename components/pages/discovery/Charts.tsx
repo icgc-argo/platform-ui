@@ -24,6 +24,7 @@ import BarChart from './charts/Bar';
 import DoughnutChart from './charts/Doughnut';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
+import DoughnutChart from './charts/Doughnut';
 
 const ChartContainer = ({ children }) => (
   <div
@@ -97,7 +98,7 @@ const ChartsLayout = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart field={undefined} />
+        <DoughnutChart field="primary_diagnosis__cancer_type_code" />
       </Card>
 
       <Card
