@@ -51,7 +51,11 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
 };
 
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+
+const padAngle = 1;
+
 const DoughnutChart = ({ data, config }) => {
+  console.log('DoughnutChart', data);
   return (
     <div
       css={css({
@@ -75,10 +79,12 @@ const DoughnutChart = ({ data, config }) => {
           }}
           enableArcLinkLabels={false}
           enableArcLabels={false}
+          padAngle={padAngle}
         />
         <div
           className="inner"
           css={css({
+            opacity: 0.5,
             position: 'absolute',
             height: '60%',
             width: '60%',
@@ -101,6 +107,7 @@ const DoughnutChart = ({ data, config }) => {
             }}
             enableArcLinkLabels={false}
             enableArcLabels={false}
+            padAngle={padAngle}
           />
         </div>
       </div>

@@ -20,10 +20,14 @@
 import { css } from '@icgc-argo/uikit';
 
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
-import BarChart from './charts/Bar';
-import DoughnutChart from './charts/Doughnut';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
+
+import { Barchart as ArrangerBarchart } from '@overture-stack/arranger-charts';
+
+import { useArrangerData } from '@overture-stack/arranger-components';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import BarChart from './charts/Bar';
 import DoughnutChart from './charts/Doughnut';
 
 const ChartContainer = ({ children }) => (
@@ -49,10 +53,15 @@ const ChartContainer = ({ children }) => (
 );
 
 const ChartsLayout = () => {
+  const { setSQON } = useArrangerData();
+
   const chartFilter = (esDocumentField: string) => {
     const { setFilterFromFieldAndValue } = useFiltersContext();
     return (filterValue) => {
-      setFilterFromFieldAndValue({ field: esDocumentField, value: filterValue });
+      const value = { field: esDocumentField, value: filterValue };
+      const filter = setFilterFromFieldAndValue(value);
+      console.log('filter value', filter);
+      setSQON(toArrangerV3Filter(filter));
     };
   };
 
@@ -71,10 +80,28 @@ const ChartsLayout = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart
-          field="study_id"
-          onClick={(config) => chartFilters.study_id(config.data.key)}
-          chartConfig={{ axisBottom: {}, axisLeft: {} }}
+        <ArrangerBarchart
+          fieldName="study_id"
+          // TODO: this needs better param
+          theme={{
+            onClick: (config) => {
+              chartFilters.study_id(config.data.key);
+            },
+          }}
+        />
+      </Card>
+
+      <Card title="Gender">
+        <ArrangerBarchart
+          fieldName="gender"
+          theme={{
+            onClick: (config) => {
+              console.log('gender click', config);
+              chartFilters.gender(config.data.key);
+            },
+            axisLeft: { legend: 'Genders' },
+            axisBottom: { legend: 'Donors' },
+          }}
         />
       </Card>
 
@@ -83,10 +110,16 @@ const ChartsLayout = () => {
       </Card>
 
       <Card title="Age at Diagnosis">
-        <BarChart
-          field="age_at_diagnosis"
-          onClick={(config) => chartFilters.age_at_diagnosis(config.data.key)}
-        />
+        {/* <ArrangerBarchart
+          fieldName="age_at_diagnosis"
+          interval={30}
+          theme={{
+            interval:{30}
+            onClick: (config) => chartFilters.age_at_diagnosis(config.data.key),
+            axisLeft: { legend: 'Age' },
+            axisBottom: { legend: 'Donors' },
+          }}
+        /> */}
       </Card>
 
       <Card
@@ -100,7 +133,6 @@ const ChartsLayout = () => {
       >
         <DoughnutChart field="primary_diagnosis__cancer_type_code" />
       </Card>
-
       <Card
         title="Primary Site"
         css={css({
@@ -116,7 +148,6 @@ const ChartsLayout = () => {
           chartConfig={{ axisLeft: { legend: 'Primary Site' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
-
       <Card title="Gender">
         <BarChart
           field="gender"
@@ -124,7 +155,6 @@ const ChartsLayout = () => {
           chartConfig={{ axisLeft: { legend: 'Genders' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
-
       <Card title="Vital Status">
         <BarChart
           field="vital_status"
@@ -132,7 +162,6 @@ const ChartsLayout = () => {
           chartConfig={{ axisLeft: { legend: 'Status' }, axisBottom: { legend: 'Donors' } }}
         />
       </Card>
-
       <Card title="Experimental Strategy">
         <BarChart
           field="analyses__experiment__experimental_strategy"

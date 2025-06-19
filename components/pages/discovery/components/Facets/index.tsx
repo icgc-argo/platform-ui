@@ -20,12 +20,14 @@
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 
+import { useArrangerData } from '@overture-stack/arranger-components';
 import {
   getOptions,
   useFacetOptionToggle,
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
@@ -60,13 +62,11 @@ const FacetCollection = ({
   staticFacets: FacetPanelOptions;
 }) => {
   const { filters } = useFiltersContext();
+  const { setSQON } = useArrangerData();
   const { isFacetExpanded, isFolderExpanded, setVisiblePanels } = useFacetState();
 
   return (
     <>
-      {/* <FacetFolder isExpanded={true} onClick={() => null} title="range">
-        <RangeFacet />
-      </FacetFolder> */}
       {staticFacets.map(({ name, contents }, idx) => {
         return (
           <FacetFolder
@@ -91,8 +91,25 @@ const FacetCollection = ({
               } else {
                 // default to "Aggregation" type
                 const options = getOptions(facet, filters, aggregations);
-                const onOptionToggle = useFacetOptionToggle(facet);
-                const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
+
+                /**
+                 * toggle facet panel and ArrangerDataProvider state for charts
+                 */
+                const facetToggle = useFacetOptionToggle(facet);
+                const onOptionToggle = (facetValue) => {
+                  // set ARGO url filters (not using Arranger v3)
+                  const filter = facetToggle(facetValue);
+                  // set SQON for Arranger v3 features in use
+                  setSQON(toArrangerV3Filter(filter));
+                };
+
+                const facetAllToggle = useFacetSelectAllOptionsToggle(facet, aggregations);
+                const onSelectAllOptions = (facetValue) => {
+                  // set ARGO url filters (not using Arranger v3)
+                  const filter = facetAllToggle(facetValue);
+                  // set SQON for Arranger v3 features in use
+                  setSQON(toArrangerV3Filter(filter));
+                };
 
                 const facetProps = {
                   ...facet,
