@@ -99,11 +99,12 @@ const Sidebar = ({
       {open ? (
         <>
           {children}
-          <Toggle onClick={toggle} size="10px" />
+          <Toggle onClick={toggle} size="10px" direction="left" />
         </>
       ) : (
         <Toggle
           onClick={toggle}
+          direction="right"
           size="10px"
           css={css({
             height: '80px',
