@@ -18,17 +18,14 @@
  */
 
 import { css } from '@icgc-argo/uikit';
+import { Barchart } from '@overture-stack/arranger-charts';
+import { useArrangerData } from '@overture-stack/arranger-components';
 
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
+import DoughnutChart from './charts/Doughnut';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
-
-import { Barchart as ArrangerBarchart } from '@overture-stack/arranger-charts';
-
-import { useArrangerData } from '@overture-stack/arranger-components';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
-import BarChart from './charts/Bar';
-import DoughnutChart from './charts/Doughnut';
 
 const ChartContainer = ({ children }) => (
   <div
@@ -80,46 +77,39 @@ const ChartsLayout = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <ArrangerBarchart
+        <Barchart
           fieldName="study_id"
-          // TODO: this needs better param
           theme={{
             onClick: (config) => {
               chartFilters.study_id(config.data.key);
             },
-          }}
-        />
-      </Card>
-
-      <Card title="Gender">
-        <ArrangerBarchart
-          fieldName="gender"
-          theme={{
-            onClick: (config) => {
-              console.log('gender click', config);
-              chartFilters.gender(config.data.key);
-            },
-            axisLeft: { legend: 'Genders' },
+            axisLeft: { legend: 'ID' },
             axisBottom: { legend: 'Donors' },
           }}
         />
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <BarChart field="study_id" onClick={(config) => chartFilters.study_id(config.data.key)} />
+        <></>
+        {/* <Barchart
+          fieldName="rdpc_node"
+          theme={{
+            onClick: (config) => chartFilters.study_id(config.data.key),
+            axisLeft: { legend: 'ID' },
+            axisBottom: { legend: 'Donors' },
+          }}
+        /> */}
       </Card>
 
       <Card title="Age at Diagnosis">
-        {/* <ArrangerBarchart
-          fieldName="age_at_diagnosis"
-          interval={30}
+        <Barchart
+          fieldName="gender"
           theme={{
-            interval:{30}
             onClick: (config) => chartFilters.age_at_diagnosis(config.data.key),
             axisLeft: { legend: 'Age' },
             axisBottom: { legend: 'Donors' },
           }}
-        /> */}
+        />
       </Card>
 
       <Card
@@ -142,33 +132,44 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart
-          field="primary_site"
-          onClick={(config) => chartFilters.primary_site(config.data.key)}
-          chartConfig={{ axisLeft: { legend: 'Primary Site' }, axisBottom: { legend: 'Donors' } }}
+        <Barchart
+          fieldName="primary_site"
+          theme={{
+            onClick: (config) => chartFilters.primary_site(config.data.key),
+            axisLeft: { legend: 'Primary Site' },
+            axisBottom: { legend: 'Donors' },
+          }}
         />
       </Card>
       <Card title="Gender">
-        <BarChart
-          field="gender"
-          onClick={(config) => chartFilters.gender(config.data.key)}
-          chartConfig={{ axisLeft: { legend: 'Genders' }, axisBottom: { legend: 'Donors' } }}
+        <Barchart
+          fieldName="gender"
+          theme={{
+            onClick: (config) => chartFilters.gender(config.data.key),
+            axisLeft: { legend: 'Genders' },
+            axisBottom: { legend: 'Donors' },
+          }}
         />
       </Card>
       <Card title="Vital Status">
-        <BarChart
-          field="vital_status"
-          onClick={(config) => chartFilters.vital_status(config.data.key)}
-          chartConfig={{ axisLeft: { legend: 'Status' }, axisBottom: { legend: 'Donors' } }}
+        <Barchart
+          fieldName="vital_status"
+          theme={{
+            onClick: (config) => chartFilters.vital_status(config.data.key),
+            axisLeft: { legend: 'Status' },
+            axisBottom: { legend: 'Donors' },
+          }}
         />
       </Card>
       <Card title="Experimental Strategy">
-        <BarChart
-          field="analyses__experiment__experimental_strategy"
-          onClick={(config) =>
-            chartFilters.analyses__experiment__experimental_strategy(config.data.key)
-          }
-          chartConfig={{ axisLeft: { legend: 'Stategy' }, axisBottom: { legend: 'Donors' } }}
+        <Barchart
+          fieldName="analyses__experiment__experimental_strategy"
+          theme={{
+            onClick: (config) =>
+              chartFilters.analyses__experiment__experimental_strategy(config.data.key),
+            axisLeft: { legend: 'Stategy' },
+            axisBottom: { legend: 'Donors' },
+          }}
         />
       </Card>
     </ChartContainer>
