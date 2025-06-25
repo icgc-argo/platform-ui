@@ -29,7 +29,7 @@ import NavBar from 'components/NavBar';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
 import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
@@ -91,20 +91,24 @@ const DiscoveryPage = () => {
   }, [fetchWithEgoToken]);
 
   const discoveryApiUrl = urljoin(GATEWAY_API_ROOT, 'discovery');
-  const arrangerFetchWithEgoToken = async (args) => {
-    const options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...args.body }),
-    };
-    try {
-      const response = await fetchWithEgoToken(discoveryApiUrl, options);
-      return response.json();
-    } catch (error) {
-      console.error(error);
-      throw Error('Error fetching chart.');
-    }
-  };
+
+  const arrangerFetchWithEgoToken = useCallback(
+    async (args) => {
+      const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...args.body }),
+      };
+      try {
+        const response = await fetchWithEgoToken(discoveryApiUrl, options);
+        return response.json();
+      } catch (error) {
+        console.error(error);
+        throw Error('Error fetching chart.');
+      }
+    },
+    [fetchWithEgoToken, discoveryApiUrl],
+  );
 
   return (
     <ArrangerDataProvider
@@ -117,7 +121,6 @@ const DiscoveryPage = () => {
         theme={{
           colors:
             // https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
-
             [
               '#a6cee3',
               '#1f78b4',
