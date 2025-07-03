@@ -19,7 +19,7 @@
 
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
-import { styled } from '@icgc-argo/uikit';
+import { DnaLoader, styled } from '@icgc-argo/uikit';
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
@@ -59,7 +59,6 @@ const DiscoveryQueryBar = () => {
   return (
     <QueryBarContainer
       onClear={() => {
-        console.log('on clear');
         setSQON(toArrangerV3Filter(defaultFilters));
       }}
       text="Explore data by selecting filters."
@@ -68,9 +67,24 @@ const DiscoveryQueryBar = () => {
   );
 };
 
+// https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
+export const chartColors = [
+  '#a6cee3',
+  '#1f78b4',
+  '#b2df8a',
+  '#33a02c',
+  '#fb9a99',
+  '#e31a1c',
+  '#fdbf6f',
+  '#ff7f00',
+  '#cab2d6',
+  '#6a3d9a',
+  '#ffff99',
+  '#b15928',
+];
+
 const DiscoveryPage = () => {
   const theme = useTheme();
-
   const [isSidebarOpen, setSetbarView] = useState(true);
 
   /**
@@ -90,6 +104,7 @@ const DiscoveryPage = () => {
     });
   }, [fetchWithEgoToken]);
 
+  // proxies to Arranger with /graphql
   const discoveryApiUrl = urljoin(GATEWAY_API_ROOT, 'discovery');
 
   const arrangerFetchWithEgoToken = useCallback(
@@ -103,8 +118,7 @@ const DiscoveryPage = () => {
         const response = await fetchWithEgoToken(discoveryApiUrl, options);
         return response.json();
       } catch (error) {
-        console.error(error);
-        throw Error('Error fetching chart.');
+        console.log('Arranger Charts error', error);
       }
     },
     [fetchWithEgoToken, discoveryApiUrl],
@@ -119,22 +133,22 @@ const DiscoveryPage = () => {
     >
       <ChartsProvider
         theme={{
-          colors:
-            // https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
-            [
-              '#a6cee3',
-              '#1f78b4',
-              '#b2df8a',
-              '#33a02c',
-              '#fb9a99',
-              '#e31a1c',
-              '#fdbf6f',
-              '#ff7f00',
-              '#cab2d6',
-              '#6a3d9a',
-              '#ffff99',
-              '#b15928',
-            ],
+          components: {
+            Loader: () => (
+              <div
+                css={css({
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                })}
+              >
+                <DnaLoader />
+              </div>
+            ),
+          },
+          dataFetcher: arrangerFetchWithEgoToken,
+          colors: chartColors,
         }}
       >
         <ApolloProvider client={arrangerV3client}>
@@ -173,6 +187,7 @@ const DiscoveryPage = () => {
                     <ChartsLayout />
                   </div>
                 </div>
+
                 <Footer />
               </>
             </div>

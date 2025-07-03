@@ -85,11 +85,9 @@ const BarChart = ({
     },
 
     onClick: (data) => {
-      console.log('data', data);
       onClick && onClick(data);
     },
   };
-  console.log('bar chart platform', config);
 
   return (
     <ChartContainer>

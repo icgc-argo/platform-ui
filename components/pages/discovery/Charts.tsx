@@ -57,7 +57,6 @@ const ChartsLayout = () => {
     return (filterValue) => {
       const value = { field: esDocumentField, value: filterValue };
       const filter = setFilterFromFieldAndValue(value);
-      console.log('filter value', filter);
       setSQON(toArrangerV3Filter(filter));
     };
   };
@@ -90,20 +89,18 @@ const ChartsLayout = () => {
       </Card>
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <></>
-        {/* <Barchart
-          fieldName="rdpc_node"
+        <Barchart
+          fieldName="analyses__repositories__code"
           theme={{
-            onClick: (config) => chartFilters.study_id(config.data.key),
-            axisLeft: { legend: 'ID' },
+            axisLeft: { legend: 'Cities' },
             axisBottom: { legend: 'Donors' },
           }}
-        /> */}
+        />
       </Card>
 
       <Card title="Age at Diagnosis">
         <Barchart
-          fieldName="gender"
+          fieldName="primary_diagnosis__age_at_diagnosis"
           theme={{
             onClick: (config) => chartFilters.age_at_diagnosis(config.data.key),
             axisLeft: { legend: 'Age' },
@@ -121,7 +118,7 @@ const ChartsLayout = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart field="primary_diagnosis__cancer_type_code" />
+        <DoughnutChart fieldName="primary_diagnosis__cancer_type_code" />
       </Card>
       <Card
         title="Primary Site"

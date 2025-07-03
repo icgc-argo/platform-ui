@@ -38,7 +38,7 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
               css={css({
                 width: '12px',
                 height: '12px',
-                backgroundColor: legend.colour,
+                backgroundColor: legend.color,
                 marginRight: '8px',
               })}
             />
@@ -52,9 +52,9 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
 
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
-const padAngle = 1;
+const padAngle = 2;
 
-const DoughnutChart = ({ data, config }) => {
+export const DoughnutChart = ({ data, config }) => {
   console.log('DoughnutChart', data);
   return (
     <div
@@ -67,11 +67,12 @@ const DoughnutChart = ({ data, config }) => {
     >
       <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
         <ResponsivePie
-          data={data}
-          isInteractive={false}
+          colors={{ datum: 'data.color' }}
+          data={data.outer}
+          isInteractive={true}
           margin={margin}
           innerRadius={0.75}
-          activeOuterRadiusOffset={8}
+          activeOuterRadiusOffset={0}
           borderWidth={1}
           borderColor={{
             from: 'color',
@@ -96,10 +97,11 @@ const DoughnutChart = ({ data, config }) => {
           })}
         >
           <ResponsivePie
-            data={data}
+            colors={{ datum: 'data.color' }}
+            data={data.inner}
             isInteractive={false}
             innerRadius={0.75}
-            activeOuterRadiusOffset={8}
+            activeOuterRadiusOffset={0}
             borderWidth={1}
             borderColor={{
               from: 'color',
@@ -111,7 +113,7 @@ const DoughnutChart = ({ data, config }) => {
           />
         </div>
       </div>
-      <Legend data={data} />
+      <Legend data={data.legend} />
     </div>
   );
 };
