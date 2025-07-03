@@ -118,7 +118,7 @@
     "trailingComma": "all",
     "singleQuote": true
   },
-  "overrides": {
+  "resolutions": {
     "glob-parent": "6.0.2",
     "ini": "3.0.0",
     "ssri": "9.0.1",
