@@ -81,6 +81,7 @@ const Samples = ({ samples }: { samples: SampleNode[] }) => {
       <div ref={containerRef}>
         {FEATURE_REACT_TABLE_V8_ENABLED ? (
           <TableV8
+            // @ts-expect-error TODO: fix old TS error, breaking build
             columns={tableColumns}
             data={tableData}
             withHeaders

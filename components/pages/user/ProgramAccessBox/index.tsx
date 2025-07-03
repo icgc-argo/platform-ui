@@ -35,9 +35,9 @@ import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { createRef } from 'react';
 
+import { getConfig } from 'global/config';
 import { Box } from '../common';
 import DacoAccessStatusDisplay, { NoMemberAccess } from './DacoAccessStatusDisplay';
-import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
@@ -142,6 +142,7 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     >
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
         <TableV8
+          // @ts-expect-error TODO: unclear which is correct table type, old error, breaking build
           columns={tableColumns}
           data={props.programs}
           withHeaders

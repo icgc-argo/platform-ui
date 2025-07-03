@@ -28,9 +28,9 @@ import {
   Typography,
   useTheme,
 } from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 
@@ -135,6 +135,7 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
               accessorKey: 'id',
               id: 'id',
               header,
+              // @ts-expect-error TODO: unclear which is correct table type, old error, breaking build
               cell: (info) => info.renderValue(),
             },
           ]}
