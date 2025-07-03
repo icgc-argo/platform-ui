@@ -142,7 +142,6 @@ const ProgramTable = (props: { programs: Array<T_ProgramTableProgram> }) => {
     >
       {FEATURE_REACT_TABLE_V8_ENABLED ? (
         <TableV8
-          // @ts-expect-error TODO: unclear which is correct table type, old error, breaking build
           columns={tableColumns}
           data={props.programs}
           withHeaders

@@ -135,7 +135,6 @@ const FileTable: ComponentType<{ header: string; data: Array<any> }> = ({ header
               accessorKey: 'id',
               id: 'id',
               header,
-              // @ts-expect-error TODO: unclear which is correct table type, old error, breaking build
               cell: (info) => info.renderValue(),
             },
           ]}
