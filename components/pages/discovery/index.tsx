@@ -20,10 +20,15 @@
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { DnaLoader, styled } from '@icgc-argo/uikit';
+// @ts-expect-error lib no TS support
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
-import { ArrangerDataProvider, useArrangerData } from '@overture-stack/arranger-components';
+import {
+  ArrangerDataProvider,
+  SQONType,
+  useArrangerData,
+} from '@overture-stack/arranger-components';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
 import { getConfig } from 'global/config';
@@ -59,7 +64,7 @@ const DiscoveryQueryBar = () => {
   return (
     <QueryBarContainer
       onClear={() => {
-        setSQON(toArrangerV3Filter(defaultFilters));
+        setSQON(toArrangerV3Filter(defaultFilters) as SQONType);
       }}
       text="Explore data by selecting filters."
       css={css([commonStyles.block, { boxShadow: 'none' }])}

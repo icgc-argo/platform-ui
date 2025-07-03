@@ -25,10 +25,10 @@ import {
   TableV8,
   Typography,
 } from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import { createRef } from 'react';
 import { SampleNode } from '../types';
-import { formatTableHeader, formatTableDisplayNames, formatTableData } from './util';
-import { getConfig } from 'global/config';
+import { formatTableData, formatTableDisplayNames, formatTableHeader } from './util';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 

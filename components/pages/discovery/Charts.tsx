@@ -18,8 +18,9 @@
  */
 
 import { css } from '@icgc-argo/uikit';
+// @ts-expect-error no type info from lib yet
 import { Barchart } from '@overture-stack/arranger-charts';
-import { useArrangerData } from '@overture-stack/arranger-components';
+import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
@@ -57,7 +58,7 @@ const ChartsLayout = () => {
     return (filterValue) => {
       const value = { field: esDocumentField, value: filterValue };
       const filter = setFilterFromFieldAndValue(value);
-      setSQON(toArrangerV3Filter(filter));
+      setSQON(toArrangerV3Filter(filter) as SQONType);
     };
   };
 

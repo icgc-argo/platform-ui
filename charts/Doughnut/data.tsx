@@ -190,6 +190,12 @@ export const createCategoryMap = (cancerCodes, cancerTypeCodeMapping) => {
   return categoryMap;
 };
 
+type Segment = {
+  id: string;
+  label: string;
+  value: number | string;
+  color: string;
+};
 /**
  * Format for input into chart
  *
@@ -197,8 +203,13 @@ export const createCategoryMap = (cancerCodes, cancerTypeCodeMapping) => {
  * @returns
  */
 export const createChartInput = (categoryMap) => {
-  return Array.from(categoryMap).reduce(
+  return Array.from(categoryMap).reduce<{
+    inner: Segment[];
+    outer: Segment[];
+    legend: { label: string; color: string }[];
+  }>(
     (acc, category, index) => {
+      // @ts-ignore TS doesn't like tuple
       const [name, { codes, total }] = category;
 
       // don't show undefined values

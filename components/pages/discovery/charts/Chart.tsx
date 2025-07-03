@@ -24,7 +24,7 @@ export const ChartContainer = ({
   children,
   height,
   className,
-}: PropsWithChildren<{ height?: any }>) => (
+}: PropsWithChildren<{ height?: any; className?: string }>) => (
   <div css={css({ flex: 1, position: 'relative' })} className={className}>
     <div
       css={css({ position: 'absolute', top: 0, left: 0, width: '100%', height: height || '100%' })}

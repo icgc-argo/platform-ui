@@ -20,13 +20,14 @@
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 
-import { useArrangerData } from '@overture-stack/arranger-components';
+import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 import {
   getOptions,
   useFacetOptionToggle,
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
@@ -100,15 +101,15 @@ const FacetCollection = ({
                   // set ARGO url filters (not using Arranger v3)
                   const filter = facetToggle(facetValue);
                   // set SQON for Arranger v3 features in use
-                  setSQON(toArrangerV3Filter(filter));
+                  setSQON(toArrangerV3Filter(filter) as SQONType);
                 };
 
                 const facetAllToggle = useFacetSelectAllOptionsToggle(facet, aggregations);
                 const onSelectAllOptions = (facetValue) => {
                   // set ARGO url filters (not using Arranger v3)
-                  const filter = facetAllToggle(facetValue);
+                  const filter = facetAllToggle(facetValue) as FileRepoFiltersType;
                   // set SQON for Arranger v3 features in use
-                  setSQON(toArrangerV3Filter(filter));
+                  setSQON(toArrangerV3Filter(filter) as SQONType);
                 };
 
                 const facetProps = {

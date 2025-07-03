@@ -20,7 +20,7 @@
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
 
-const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
+const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
     <div
       css={css({

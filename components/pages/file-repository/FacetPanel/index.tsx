@@ -267,10 +267,7 @@ export const useFacetOptionToggle = (facetDetails: Pick<FacetDetails, 'esDocumen
   };
 };
 
-export const useFacetSelectAllOptionsToggle: (
-  facetDetails: { facetPath: string; esDocumentField: string },
-  aggregations,
-) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails, aggregations) => {
+export const useFacetSelectAllOptionsToggle = (facetDetails, aggregations) => {
   const { replaceAllFilters, setFilterFromFieldAndValue, filters } = useFiltersContext();
 
   return (allOptionsSelected) => {

@@ -33,7 +33,7 @@ type FiltersContextType = {
   }: {
     field: string;
     value: string | string[];
-  }) => void;
+  }) => FileRepoFiltersType | undefined;
   replaceAllFilters: (filters: FileRepoFiltersType) => void;
 };
 
@@ -45,7 +45,7 @@ export const defaultFilters: FileRepoFiltersType = {
 const FiltersContext = createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
-  setFilterFromFieldAndValue: () => {},
+  setFilterFromFieldAndValue: () => undefined,
   replaceAllFilters: () => {},
 });
 
