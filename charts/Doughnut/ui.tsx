@@ -55,7 +55,6 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 const padAngle = 2;
 
 export const DoughnutChart = ({ data, config }) => {
-  console.log('DoughnutChart', data);
   return (
     <div
       css={css({
@@ -99,7 +98,7 @@ export const DoughnutChart = ({ data, config }) => {
           <ResponsivePie
             colors={{ datum: 'data.color' }}
             data={data.inner}
-            isInteractive={false}
+            isInteractive={true}
             innerRadius={0.75}
             activeOuterRadiusOffset={0}
             borderWidth={1}
