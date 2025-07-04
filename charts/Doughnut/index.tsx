@@ -22,13 +22,14 @@ import generateChartComponent from 'charts/Chart';
 import { BUCKETS_FOR_BAR_CHART } from 'charts/config';
 import { Chart } from 'charts/types';
 import { get } from 'lodash';
+import { cancerTypeCodeMapping, createCategoryMap, createChartInput } from './data';
 import DoughnutChart from './ui';
 
-const generateQuery = ({ field }) => gql`
+const generateQuery = ({ fieldName }) => gql`
   query ChartsFileCentricAgg($filters:JSON) {
     file {
       aggregations(filters: $filters) {
-        ${field} {
+        ${fieldName} {
           bucket_count
           buckets {
             doc_count
@@ -42,18 +43,22 @@ const generateQuery = ({ field }) => gql`
 
 // Regular Aggregation type => chart data
 const transformToBarData =
-  ({ field }) =>
+  ({ fieldName }) =>
   (rawData) => {
-    return get(rawData, `file.aggregations.${field}.buckets`, []).map(
-      ({ __typename, ...rest }) => rest,
-    );
+    const cancerCodes = get(rawData, `file.aggregations.${fieldName}.buckets`, []);
+    const categoryMap = createCategoryMap(cancerCodes, cancerTypeCodeMapping);
+    const chartInput = createChartInput(categoryMap);
+    return chartInput;
   };
 
-const Doughnut = (consumerProps: Chart & { field: string }) => {
-  const { field } = consumerProps;
+const Doughnut = (consumerProps: Chart & { fieldName: string }) => {
+  const { fieldName } = consumerProps;
   return generateChartComponent({
     Component: DoughnutChart,
-    options: { query: generateQuery({ field }), dataTransformer: transformToBarData({ field }) },
+    options: {
+      query: generateQuery({ fieldName }),
+      dataTransformer: transformToBarData({ fieldName }),
+    },
     internalConfig: { ...BUCKETS_FOR_BAR_CHART },
   })(consumerProps);
 };

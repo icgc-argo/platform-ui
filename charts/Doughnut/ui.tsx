@@ -20,7 +20,7 @@
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
 
-const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
+const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
     <div
       css={css({
@@ -38,7 +38,7 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
               css={css({
                 width: '12px',
                 height: '12px',
-                backgroundColor: legend.colour,
+                backgroundColor: legend.color,
                 marginRight: '8px',
               })}
             />
@@ -51,7 +51,10 @@ const Legend = ({ data }: { data: { label: string; colour: string }[] }) => {
 };
 
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-const DoughnutChart = ({ data, config }) => {
+
+const padAngle = 2;
+
+export const DoughnutChart = ({ data, config }) => {
   return (
     <div
       css={css({
@@ -63,11 +66,12 @@ const DoughnutChart = ({ data, config }) => {
     >
       <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
         <ResponsivePie
-          data={data}
-          isInteractive={false}
+          colors={{ datum: 'data.color' }}
+          data={data.outer}
+          isInteractive={true}
           margin={margin}
           innerRadius={0.75}
-          activeOuterRadiusOffset={8}
+          activeOuterRadiusOffset={0}
           borderWidth={1}
           borderColor={{
             from: 'color',
@@ -75,10 +79,12 @@ const DoughnutChart = ({ data, config }) => {
           }}
           enableArcLinkLabels={false}
           enableArcLabels={false}
+          padAngle={padAngle}
         />
         <div
           className="inner"
           css={css({
+            opacity: 0.5,
             position: 'absolute',
             height: '60%',
             width: '60%',
@@ -90,10 +96,11 @@ const DoughnutChart = ({ data, config }) => {
           })}
         >
           <ResponsivePie
-            data={data}
-            isInteractive={false}
+            colors={{ datum: 'data.color' }}
+            data={data.inner}
+            isInteractive={true}
             innerRadius={0.75}
-            activeOuterRadiusOffset={8}
+            activeOuterRadiusOffset={0}
             borderWidth={1}
             borderColor={{
               from: 'color',
@@ -101,10 +108,11 @@ const DoughnutChart = ({ data, config }) => {
             }}
             enableArcLinkLabels={false}
             enableArcLabels={false}
+            padAngle={padAngle}
           />
         </div>
       </div>
-      <Legend data={data} />
+      <Legend data={data.legend} />
     </div>
   );
 };

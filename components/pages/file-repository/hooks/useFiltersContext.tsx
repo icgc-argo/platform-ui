@@ -17,12 +17,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import useUrlParamState from 'global/hooks/useUrlParamState';
-import sqonBuilder from 'sqon-builder';
 import stringify from 'fast-json-stable-stringify';
-import { addInFilters } from '../utils';
-import { FileRepoFiltersType, FieldOperator } from '../utils/types';
+import useUrlParamState from 'global/hooks/useUrlParamState';
 import { createContext, useContext } from 'react';
+import sqonBuilder from 'sqon-builder';
+import { addInFilters } from '../utils';
+import { FileRepoFiltersType } from '../utils/types';
 
 type FiltersContextType = {
   filters: FileRepoFiltersType;
@@ -33,7 +33,7 @@ type FiltersContextType = {
   }: {
     field: string;
     value: string | string[];
-  }) => void;
+  }) => FileRepoFiltersType | undefined;
   replaceAllFilters: (filters: FileRepoFiltersType) => void;
 };
 
@@ -45,10 +45,11 @@ export const defaultFilters: FileRepoFiltersType = {
 const FiltersContext = createContext<FiltersContextType>({
   filters: defaultFilters,
   clearFilters: () => {},
-  setFilterFromFieldAndValue: () => {},
+  setFilterFromFieldAndValue: () => undefined,
   replaceAllFilters: () => {},
 });
 
+// stringifying SQONs
 const useFilterState = () => {
   const [currentFilters, setCurrentFilters] = useUrlParamState('filters', defaultFilters, {
     serialize: (v) => stringify(v),
@@ -70,6 +71,7 @@ export function FiltersProvider({ children }) {
     const operator = sqonBuilder.has(field, value).build();
     const newFilters = addInFilters(operator, currentFilters);
     setCurrentFilters(newFilters);
+    return newFilters;
   };
 
   const data = {

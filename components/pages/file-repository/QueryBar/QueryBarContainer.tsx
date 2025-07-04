@@ -26,9 +26,11 @@ import QueryBar from './';
 import { PaddedRow } from '../index';
 
 const QueryBarContainer = ({
+  onClear,
   text = 'Search the file repository by selecting filters',
   className,
 }: {
+  onClear?: () => void;
   text?: string;
   className?: string;
 }) => {
@@ -66,7 +68,7 @@ const QueryBarContainer = ({
               <span>{text}</span>
             </Typography>
           ) : (
-            <QueryBar filters={filters} />
+            <QueryBar filters={filters} onClear={onClear} />
           )}
         </Container>
       </Col>

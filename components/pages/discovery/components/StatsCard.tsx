@@ -78,7 +78,9 @@ const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoad
         `}
       >
         {isLoading ? (
-          <Icon name={'spinner'} fill={theme.colors.grey} />
+          <div css={css({ display: 'flex', flex: 1, justifyContent: 'center' })}>
+            <Icon name={'spinner'} fill={theme.colors.grey} />
+          </div>
         ) : (
           <>
             <Col md={3} sm={6}>

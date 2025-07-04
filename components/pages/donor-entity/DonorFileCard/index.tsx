@@ -28,9 +28,9 @@ import {
   Typography,
   useTheme,
 } from '@icgc-argo/uikit';
+import { getConfig } from 'global/config';
 import { ComponentType } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { getConfig } from 'global/config';
 
 const { FEATURE_REACT_TABLE_V8_ENABLED } = getConfig();
 

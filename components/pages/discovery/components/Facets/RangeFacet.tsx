@@ -137,6 +137,8 @@ export const RangeFacet = ({ displayName, fieldName, stats }) => {
           css={css`
             width: 100%;
           `}
+          chevronOnLeftSide
+          isFacetVariant
         >
           {children}
         </MenuItem>

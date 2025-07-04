@@ -36,7 +36,6 @@ const BarChart = ({
 }) => {
   const theme = useTheme();
   const [chartTheme] = injectTheme(theme)([chartThemeFn]);
-
   const config = {
     layout: 'horizontal',
     padding: 0.3,
@@ -86,7 +85,6 @@ const BarChart = ({
     },
 
     onClick: (data) => {
-      console.log('data', data);
       onClick && onClick(data);
     },
   };

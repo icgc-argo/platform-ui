@@ -19,18 +19,25 @@
 
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
-import { styled } from '@icgc-argo/uikit';
+import { DnaLoader, styled } from '@icgc-argo/uikit';
+// @ts-expect-error lib no TS support
+import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
+import {
+  ArrangerDataProvider,
+  SQONType,
+  useArrangerData,
+} from '@overture-stack/arranger-components';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
 import { getConfig } from 'global/config';
-import { GRAPHQL_PATH } from 'global/constants/gatewayApiPaths';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { useMemo, useState } from 'react';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { useCallback, useMemo, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
-import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
+import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
 import { default as ChartsLayout } from './Charts';
@@ -39,15 +46,6 @@ import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { FACET_OPTIONS } from './data/facet';
-import {
-  Aggregations,
-  AggregationsList,
-  ArrangerDataProvider,
-  useArrangerTheme,
-} from '@overture-stack/arranger-components';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
-import { FacetFolder } from './components/Facets/Folder';
-import { RangeFilter } from '@overture-stack/arranger-components/dist/AdvancedSqonBuilder/filterComponents';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -61,9 +59,37 @@ export const PageContainer = styled('div')`
   background: ${({ theme }) => theme.colors.grey_4};
 `;
 
+const DiscoveryQueryBar = () => {
+  const { setSQON } = useArrangerData();
+  return (
+    <QueryBarContainer
+      onClear={() => {
+        setSQON(toArrangerV3Filter(defaultFilters) as SQONType);
+      }}
+      text="Explore data by selecting filters."
+      css={css([commonStyles.block, { boxShadow: 'none' }])}
+    />
+  );
+};
+
+// https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
+export const chartColors = [
+  '#a6cee3',
+  '#1f78b4',
+  '#b2df8a',
+  '#33a02c',
+  '#fb9a99',
+  '#e31a1c',
+  '#fdbf6f',
+  '#ff7f00',
+  '#cab2d6',
+  '#6a3d9a',
+  '#ffff99',
+  '#b15928',
+];
+
 const DiscoveryPage = () => {
   const theme = useTheme();
-
   const [isSidebarOpen, setSetbarView] = useState(true);
 
   /**
@@ -83,70 +109,97 @@ const DiscoveryPage = () => {
     });
   }, [fetchWithEgoToken]);
 
+  // proxies to Arranger with /graphql
   const discoveryApiUrl = urljoin(GATEWAY_API_ROOT, 'discovery');
-  const arrangerFetchWithEgoToken = async (args) => {
-    const options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...args.body }),
-    };
-    try {
-      const response = await fetchWithEgoToken(discoveryApiUrl, options);
-      return response.json();
-    } catch (error) {
-      console.error(error);
-      throw Error('Error fetching chart.');
-    }
-  };
+
+  const arrangerFetchWithEgoToken = useCallback(
+    async (args) => {
+      const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...args.body }),
+      };
+      try {
+        const response = await fetchWithEgoToken(discoveryApiUrl, options);
+        return response.json();
+      } catch (error) {
+        console.log('Arranger Charts error', error);
+      }
+    },
+    [fetchWithEgoToken, discoveryApiUrl],
+  );
 
   return (
-    <ApolloProvider client={arrangerV3client}>
-      <ArrangerDataProvider
-        documentType="file"
-        apiUrl={discoveryApiUrl}
-        customFetcher={arrangerFetchWithEgoToken}
-      >
-        <FiltersProvider>
-          <div
-            css={css({
-              display: 'grid',
-              gridTemplateRows: '58px 1fr 58px',
-              height: '100vh',
-              background: `${theme.colors.grey_4}`,
-            })}
-          >
-            <div>
-              <Head subtitle={'Data Discovery'} />
-              <NavBar />
-
+    <ArrangerDataProvider
+      documentType="file"
+      apiUrl={discoveryApiUrl}
+      // This is mandatory, no default fetcher
+      customFetcher={arrangerFetchWithEgoToken}
+    >
+      <ChartsProvider
+        theme={{
+          components: {
+            Loader: () => (
               <div
                 css={css({
-                  display: 'grid',
-                  gridTemplateColumns: isSidebarOpen ? '248px 1fr' : '20px 1fr',
-                  gridTemplateRows: 'calc(100vh - 116px)',
-                  minHeight: 0,
-                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
                 })}
               >
-                <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-                  <Facets staticFacetOptions={FACET_OPTIONS} />
-                </Sidebar>
-
-                <div css={css({ overflow: 'scroll', margin: '18px 25px 10px 25px' })}>
-                  <QueryBarContainer
-                    text="Explore data by selecting filters."
-                    css={css([commonStyles.block, { boxShadow: 'none' }])}
-                  />
-                  <StatsCard />
-                  <ChartsLayout />
-                </div>
+                <DnaLoader />
               </div>
-              <Footer />
+            ),
+          },
+          dataFetcher: arrangerFetchWithEgoToken,
+          colors: chartColors,
+        }}
+      >
+        <ApolloProvider client={arrangerV3client}>
+          <FiltersProvider>
+            <div
+              css={css({
+                display: 'grid',
+                gridTemplateRows: '58px 1fr 58px',
+                minHeight: '100vh',
+                background: `${theme.colors.grey_4}`,
+                overflow: 'hidden',
+              })}
+            >
+              <>
+                <Head subtitle={'Data Discovery'} />
+                <NavBar />
+
+                <div
+                  css={css({
+                    display: 'grid',
+                    gridTemplateColumns: isSidebarOpen
+                      ? '248px minmax(0, 1fr)'
+                      : '20px minmax(0, 1fr)',
+                    gridTemplateRows: 'calc(100vh - 116px)',
+                    minHeight: 0,
+                    overflow: 'hidden',
+                  })}
+                >
+                  <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+                    <Facets staticFacetOptions={FACET_OPTIONS} />
+                  </Sidebar>
+
+                  <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
+                    <DiscoveryQueryBar />
+                    <StatsCard />
+                    <ChartsLayout />
+                  </div>
+                </div>
+
+                <Footer />
+              </>
             </div>
-          </div>
-        </FiltersProvider>
-      </ArrangerDataProvider>
-    </ApolloProvider>
+          </FiltersProvider>
+        </ApolloProvider>
+      </ChartsProvider>
+    </ArrangerDataProvider>
   );
 };
 

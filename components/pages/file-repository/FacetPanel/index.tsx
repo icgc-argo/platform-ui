@@ -261,14 +261,13 @@ export const useFacetOptionToggle = (facetDetails: Pick<FacetDetails, 'esDocumen
   const { replaceAllFilters, filters } = useFiltersContext();
   return (facetValue) => {
     const currentValue = SqonBuilder.has(facetDetails.esDocumentField, facetValue).build();
-    replaceAllFilters(toggleFilter(currentValue, filters));
+    const newFilter = toggleFilter(currentValue, filters);
+    replaceAllFilters(newFilter);
+    return newFilter;
   };
 };
 
-export const useFacetSelectAllOptionsToggle: (
-  facetDetails: { facetPath: string; esDocumentField: string },
-  aggregations,
-) => ComponentProps<typeof Facet>['onSelectAllOptions'] = (facetDetails, aggregations) => {
+export const useFacetSelectAllOptionsToggle = (facetDetails, aggregations) => {
   const { replaceAllFilters, setFilterFromFieldAndValue, filters } = useFiltersContext();
 
   return (allOptionsSelected) => {
@@ -278,11 +277,14 @@ export const useFacetSelectAllOptionsToggle: (
         filters,
       ) as FileRepoFiltersType;
       replaceAllFilters(updatedFilters);
+      return updatedFilters;
     } else {
-      setFilterFromFieldAndValue({
+      const updatedFilters = {
         field: facetDetails.esDocumentField,
         value: aggregations[facetDetails.facetPath].buckets.map((v) => v.key),
-      });
+      };
+      setFilterFromFieldAndValue(updatedFilters);
+      return updatedFilters;
     }
   };
 };
