@@ -19,6 +19,7 @@
 
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
+import React from 'react';
 
 const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
@@ -55,8 +56,10 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 const padAngle = 2;
 
 export const DoughnutChart = ({ data, config }) => {
+  const elementRef = React.useRef(null);
   return (
     <div
+      ref={elementRef}
       css={css({
         display: 'flex',
         flexDirection: 'row',
@@ -80,6 +83,16 @@ export const DoughnutChart = ({ data, config }) => {
           enableArcLinkLabels={false}
           enableArcLabels={false}
           padAngle={padAngle}
+          onMouseEnter={() => {
+            if (elementRef.current) {
+              elementRef.current.style.cursor = 'pointer';
+            }
+          }}
+          onMouseLeave={() => {
+            if (elementRef.current) {
+              elementRef.current.style.cursor = 'auto';
+            }
+          }}
         />
         <div
           className="inner"
@@ -109,6 +122,16 @@ export const DoughnutChart = ({ data, config }) => {
             enableArcLinkLabels={false}
             enableArcLabels={false}
             padAngle={padAngle}
+            onMouseEnter={() => {
+              if (elementRef.current) {
+                elementRef.current.style.cursor = 'pointer';
+              }
+            }}
+            onMouseLeave={() => {
+              if (elementRef.current) {
+                elementRef.current.style.cursor = 'auto';
+              }
+            }}
           />
         </div>
       </div>
