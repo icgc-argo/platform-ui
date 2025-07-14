@@ -36,6 +36,7 @@ import {
   DOCS_SUBMISSION_OVERVIEW_PAGE,
 } from 'global/constants/docSitePaths';
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
+import { ComponentType } from 'react';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 import {
   DataCallout,
@@ -46,9 +47,34 @@ import {
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
-import { ComponentType } from 'react';
 
 const newsItems: NewsItem[] = [
+  {
+    title: 'July 15, 2025',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-120"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 12.0
+        </Link>{' '}
+        adds 2060 new donors and 5863 molecular files and clinical data. This includes the first
+        release of data from the Multicenter Study to Profile and Monitor Cancer-related Genomic
+        Alterations in Circulating Tumor DNA and Gut Microbiome in Advanced Solid Malignancies -
+        SCRUM-Japan MONSTAR-SCREEN{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/130/scrum-monstar"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MONSTAR-JP)
+        </Link>{' '}
+        program.
+      </>
+    ),
+  },
   {
     title: 'December 3, 2024',
     text: (
@@ -118,46 +144,6 @@ const newsItems: NewsItem[] = [
           (MUTO-INTL)
         </Link>
         , and Polyethnic-1000{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (P1000-US)
-        </Link>{' '}
-        programs.
-      </>
-    ),
-  },
-  {
-    title: 'May 24, 2024',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 9.0
-        </Link>{' '}
-        adds 1,223 new donors and 43,107 new molecular files and clinical data. This includes the
-        first release of data from the BC Cancer Personalized OncoGenomics Program{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/97/bc-pogp"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (POG-CA)
-        </Link>{' '}
-        and updates from the CRUK Grand Challenge-Mutographs{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MUTO-INTL)
-        </Link>{' '}
-        and Polyethnic-1000{' '}
         <Link
           href="https://www.icgc-argo.org/page/115/p-1000"
           rel="noopener noreferrer"
