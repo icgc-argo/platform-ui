@@ -19,7 +19,10 @@
 
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
-import React from 'react';
+import { Loader } from 'components/pages/discovery/charts/common';
+import React, { useEffect, useState } from 'react';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
@@ -57,7 +60,18 @@ const padAngle = 2;
 
 export const DoughnutChart = ({ data, config }) => {
   const elementRef = React.useRef(null);
-  return (
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    const beautifyLoading = async () => {
+      // gives time for loader comp to show, better visual
+      await delay(1800);
+      setShowContent(true);
+    };
+    beautifyLoading();
+  });
+
+  return showContent ? (
     <div
       ref={elementRef}
       css={css({
@@ -137,6 +151,8 @@ export const DoughnutChart = ({ data, config }) => {
       </div>
       <Legend data={data.legend} />
     </div>
+  ) : (
+    <Loader />
   );
 };
 
