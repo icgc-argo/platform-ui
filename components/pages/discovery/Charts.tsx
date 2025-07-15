@@ -91,10 +91,18 @@ const ChartsLayout = () => {
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
         <Barchart
-          fieldName="analyses__repositories__code"
+          fieldName="study_id"
           theme={{
             axisLeft: { legend: 'Cities' },
             axisBottom: { legend: 'Donors' },
+            onDataLoad: (data) => {
+              // Arranger Charts currently only supports aggregations, so we have to total the buckets for a total count
+              // fieldName doesn't matter as the totals add up in any aggregation
+              const totalCount = data.reduce((acc, current) => {
+                return acc + current.doc_count;
+              }, 0);
+              return [{ doc_count: totalCount, key: 'Toronto' }];
+            },
           }}
         />
       </Card>
