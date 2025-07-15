@@ -27,6 +27,7 @@ const SidebarComp = ({ children }: PropsWithChildren<{}>) => {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#04518C',
+        boxShadow: '0px 3px 8px 0px rgba(0, 0, 0, 0.10), 0px 3px 8px 0px rgba(0, 0, 0, 0.10)',
       })}
     >
       {children}
