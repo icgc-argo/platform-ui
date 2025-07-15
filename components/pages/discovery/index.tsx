@@ -40,7 +40,7 @@ import urljoin from 'url-join';
 import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
-import { default as ChartsLayout } from './Charts';
+import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
 import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
