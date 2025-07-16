@@ -147,12 +147,8 @@ const ChartsLayout = () => {
               const field = 'primary_diagnosis.age_at_diagnosis';
               const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
 
-              console.log('sqonFilter', sqonFilter, config);
-
               // fieldname, new query, current query
-              // const newSQON = replaceFieldSQON(fieldName, sb, filters);
               replaceAllFilters(sqonFilter);
-              // setFilterFromFieldAndValue(newSQON);
               setSQON(toArrangerV3Filter(sqonFilter) as SQONType);
             },
             axisLeft: { legend: 'Age' },
