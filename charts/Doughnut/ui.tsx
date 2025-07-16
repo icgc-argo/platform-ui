@@ -97,15 +97,8 @@ export const DoughnutChart = ({ data, config }) => {
           enableArcLinkLabels={false}
           enableArcLabels={false}
           padAngle={padAngle}
-          onMouseEnter={() => {
-            if (elementRef.current) {
-              elementRef.current.style.cursor = 'pointer';
-            }
-          }}
-          onMouseLeave={() => {
-            if (elementRef.current) {
-              elementRef.current.style.cursor = 'auto';
-            }
+          onMouseEnter={(_, e) => {
+            e.target.style.cursor = 'pointer';
           }}
         />
         <div
@@ -136,15 +129,8 @@ export const DoughnutChart = ({ data, config }) => {
             enableArcLinkLabels={false}
             enableArcLabels={false}
             padAngle={padAngle}
-            onMouseEnter={() => {
-              if (elementRef.current) {
-                elementRef.current.style.cursor = 'pointer';
-              }
-            }}
-            onMouseLeave={() => {
-              if (elementRef.current) {
-                elementRef.current.style.cursor = 'auto';
-              }
+            onMouseEnter={(_, e) => {
+              e.target.style.cursor = 'pointer';
             }}
           />
         </div>
