@@ -88,6 +88,33 @@ export const chartColors = [
   '#b15928',
 ];
 
+const ChartLoader = () => (
+  <div
+    css={css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+    })}
+  >
+    <DnaLoader />
+  </div>
+);
+const ChartEmptyData = () => (
+  <div
+    css={css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      fontSize: '13px',
+      color: '#525767',
+    })}
+  >
+    No Donor data is available for display
+  </div>
+);
+
 const DiscoveryPage = () => {
   const theme = useTheme();
   const [isSidebarOpen, setSetbarView] = useState(true);
@@ -139,18 +166,8 @@ const DiscoveryPage = () => {
       <ChartsProvider
         theme={{
           components: {
-            Loader: () => (
-              <div
-                css={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: '100%',
-                })}
-              >
-                <DnaLoader />
-              </div>
-            ),
+            EmptyData: ChartEmptyData,
+            Loader: ChartLoader,
           },
           dataFetcher: arrangerFetchWithEgoToken,
           colors: chartColors,
