@@ -20,7 +20,7 @@
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
 import { Loader } from 'components/pages/discovery/charts/common';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -58,8 +58,11 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
 const padAngle = 2;
 
+const onMouseEnterHandler = (_, e) => {
+  e.target.style.cursor = 'pointer';
+};
+
 export const DoughnutChart = ({ data, config }) => {
-  const elementRef = React.useRef(null);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
@@ -73,7 +76,6 @@ export const DoughnutChart = ({ data, config }) => {
 
   return showContent ? (
     <div
-      ref={elementRef}
       css={css({
         display: 'flex',
         flexDirection: 'row',
@@ -97,9 +99,7 @@ export const DoughnutChart = ({ data, config }) => {
           enableArcLinkLabels={false}
           enableArcLabels={false}
           padAngle={padAngle}
-          onMouseEnter={(_, e) => {
-            e.target.style.cursor = 'pointer';
-          }}
+          onMouseEnter={onMouseEnterHandler}
         />
         <div
           className="inner"
@@ -129,9 +129,7 @@ export const DoughnutChart = ({ data, config }) => {
             enableArcLinkLabels={false}
             enableArcLabels={false}
             padAngle={padAngle}
-            onMouseEnter={(_, e) => {
-              e.target.style.cursor = 'pointer';
-            }}
+            onMouseEnter={onMouseEnterHandler}
           />
         </div>
       </div>
