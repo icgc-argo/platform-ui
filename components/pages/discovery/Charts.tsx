@@ -148,8 +148,10 @@ const ChartsLayout = () => {
               const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
 
               // fieldname, new query, current query
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
               replaceAllFilters(sqonFilter);
-              setSQON(toArrangerV3Filter(sqonFilter) as SQONType);
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+              setSQON(toArrangerV3Filter(sqonFilter));
             },
             axisLeft: { legend: 'Age' },
             axisBottom: { legend: 'Donors' },
