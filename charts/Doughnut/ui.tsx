@@ -22,7 +22,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { Loader } from 'components/pages/discovery/charts/common';
 import { useEffect, useState } from 'react';
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
