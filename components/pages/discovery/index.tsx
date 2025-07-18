@@ -40,7 +40,7 @@ import urljoin from 'url-join';
 import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
-import { default as ChartsLayout } from './Charts';
+import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
 import Facets from './components/Facets';
 import Sidebar from './components/SideBar';
@@ -87,6 +87,33 @@ export const chartColors = [
   '#ffff99',
   '#b15928',
 ];
+
+const ChartLoader = () => (
+  <div
+    css={css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+    })}
+  >
+    <DnaLoader />
+  </div>
+);
+const ChartEmptyData = () => (
+  <div
+    css={css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      fontSize: '13px',
+      color: '#525767',
+    })}
+  >
+    No Donor data is available for display
+  </div>
+);
 
 const DiscoveryPage = () => {
   const theme = useTheme();
@@ -139,18 +166,8 @@ const DiscoveryPage = () => {
       <ChartsProvider
         theme={{
           components: {
-            Loader: () => (
-              <div
-                css={css({
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: '100%',
-                })}
-              >
-                <DnaLoader />
-              </div>
-            ),
+            EmptyData: ChartEmptyData,
+            Loader: ChartLoader,
           },
           dataFetcher: arrangerFetchWithEgoToken,
           colors: chartColors,

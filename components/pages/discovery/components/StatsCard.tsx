@@ -57,10 +57,10 @@ const StatItem = ({ iconName, value }) => {
 
 const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoading }) => {
   const theme = useTheme();
-  const filesValue = `${files} File${files > 0 ? 's' : ''}`;
-  const donorsValue = `${donors} Donor${donors > 0 ? 's' : ''}`;
-  const programsValue = `${programs} Program${programs > 0 ? 's' : ''}`;
-  const repositoriesValue = `${repositories} ${repositories > 0 ? 'Repositories' : 'Repository'}`;
+  const filesValue = `${files} File${files === 1 ? '' : 's'}`;
+  const donorsValue = `${donors} Donor${donors === 1 ? '' : 's'}`;
+  const programsValue = `${programs} Program${programs === 1 ? '' : 's'}`;
+  const repositoriesValue = `${repositories} ${repositories === 1 ? 'Repository' : 'Repositories'}`;
 
   return (
     <div
@@ -140,11 +140,7 @@ const StatsCard = () => {
 
   const data = {
     files: get(statsCardResponse, 'file.hits.total', 0),
-    repositories: get(
-      statsCardResponse,
-      'file.aggregations.analyses__repositories__code.bucket_count',
-      0,
-    ),
+    repositories: 1,
     donors: get(statsCardResponse, 'file.aggregations.study_id.buckets', []).reduce(
       (total, bucket) => total + bucket.doc_count,
       0,

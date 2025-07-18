@@ -19,6 +19,10 @@
 
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
+import { Loader } from 'components/pages/discovery/charts/common';
+import { useEffect, useState } from 'react';
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
   return (
@@ -54,8 +58,30 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
 const padAngle = 2;
 
+const onMouseEnterHandler = (_, e) => {
+  e.target.style.cursor = 'pointer';
+};
+
 export const DoughnutChart = ({ data, config }) => {
-  return (
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    const beautifyLoading = async () => {
+      // gives time for loader comp to show, better visual
+      await delay(1800);
+      if (mounted) {
+        setShowContent(true);
+      }
+    };
+    beautifyLoading();
+
+    return () => {
+      mounted = false;
+    };
+  });
+
+  return showContent ? (
     <div
       css={css({
         display: 'flex',
@@ -80,6 +106,7 @@ export const DoughnutChart = ({ data, config }) => {
           enableArcLinkLabels={false}
           enableArcLabels={false}
           padAngle={padAngle}
+          onMouseEnter={onMouseEnterHandler}
         />
         <div
           className="inner"
@@ -109,11 +136,14 @@ export const DoughnutChart = ({ data, config }) => {
             enableArcLinkLabels={false}
             enableArcLabels={false}
             padAngle={padAngle}
+            onMouseEnter={onMouseEnterHandler}
           />
         </div>
       </div>
       <Legend data={data.legend} />
     </div>
+  ) : (
+    <Loader />
   );
 };
 

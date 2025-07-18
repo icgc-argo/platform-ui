@@ -18,7 +18,7 @@
  */
 
 import { css, MenuItem } from '@icgc-argo/uikit';
-import { useArrangerTheme } from '@overture-stack/arranger-components';
+import { useArrangerData, useArrangerTheme } from '@overture-stack/arranger-components';
 import { RangeAgg } from '@overture-stack/arranger-components/dist/aggregations';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { useRef } from 'react';
@@ -83,8 +83,8 @@ const currentFieldValue = ({ sqon, dotFieldName, op }) => {
 };
 
 const getSQONValues = ({ filters, fieldName }) => {
-  if (Array.isArray(filters.content) && filters.content.length === 0) {
-    return { min: 0, max: 100 };
+  if (filters && Array.isArray(filters.content) && filters.content.length === 0) {
+    return { min: 1, max: 100 };
   }
   return {
     min: currentFieldValue({ sqon: filters, dotFieldName: fieldName, op: '>=' }),
@@ -97,13 +97,13 @@ const getSQONValues = ({ filters, fieldName }) => {
  * Arranger v3 uses fieldName not field
  */
 export const RangeFacet = ({ displayName, fieldName, stats }) => {
+  const { setSQON } = useArrangerData();
   // set styles side effect
   useArrangerTheme(aggregationsStyles);
 
   // current SQON
   const { filters, replaceAllFilters } = useFiltersContext();
-
-  const currentSQON = getSQONValues({ filters, fieldName });
+  const currentValue = getSQONValues({ filters, fieldName });
 
   /**
    * keep the range data across renders,
@@ -119,15 +119,21 @@ export const RangeFacet = ({ displayName, fieldName, stats }) => {
     <RangeAgg
       fieldName={fieldName}
       displayName={displayName}
-      sqonValues={currentSQON}
-      handleChange={({ generateNextSQON }) => {
+      sqonValues={currentValue}
+      handleChange={({ generateNextSQON, max, min, value }) => {
         /**
          * SQON from RangeAgg uses "fieldName"
          * SQONViewer component in platform-ui uses v2 Arranger code that uses "field"
+         *
+         * generateNextSQON is how we surface the filters from the component
          */
         const newSQON = generateNextSQON(filterToArrangerV3(filters));
+
         const newFiltersArrangerV2 = filterToArrangerV2(newSQON);
         replaceAllFilters(newFiltersArrangerV2);
+
+        // set sqon for Arranger v3 charts
+        setSQON(newSQON);
       }}
       stats={statsRef.current}
       WrapperComponent={({ children, displayName }) => (

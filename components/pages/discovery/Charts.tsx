@@ -28,6 +28,39 @@ import DoughnutChart from './charts/Doughnut';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 
+const getAgeAtDiagnosisFilter = (key, field) => {
+  // ranges from query are less than 18, 18 => 65, 65+
+  // { key: Less than 18, to: 18 },{ key: 8 to 65, from: 18, to: 66 },{ key: 65 and above, from: 65 }
+  switch (key) {
+    case 'Less than 18':
+      return {
+        op: 'and',
+        content: [{ op: '<=', content: { field, value: 17 } }],
+      };
+      break;
+
+    case '18 to 65':
+      return {
+        op: 'and',
+        content: [
+          { op: '>=', content: { field, value: 18 } },
+          { op: '<=', content: { field, value: 65 } },
+        ],
+      };
+      break;
+
+    case '65 and above':
+      return {
+        op: 'and',
+        content: [{ op: '>=', content: { field, value: 65 } }],
+      };
+      break;
+
+    default:
+      return {};
+  }
+};
+
 const ChartContainer = ({ children }) => (
   <div
     css={css([
@@ -52,9 +85,9 @@ const ChartContainer = ({ children }) => (
 
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
+  const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
 
   const chartFilter = (esDocumentField: string) => {
-    const { setFilterFromFieldAndValue } = useFiltersContext();
     return (filterValue) => {
       const value = { field: esDocumentField, value: filterValue };
       const filter = setFilterFromFieldAndValue(value);
@@ -66,7 +99,6 @@ const ChartsLayout = () => {
   const chartFilters = {
     gender: chartFilter('gender'),
     study_id: chartFilter('study_id'),
-    age_at_diagnosis: chartFilter('age_at_diagnosis'),
     primary_site: chartFilter('primary_site'),
     vital_status: chartFilter('vital_status'),
     analyses__experiment__experimental_strategy: chartFilter(
@@ -91,10 +123,18 @@ const ChartsLayout = () => {
 
       <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
         <Barchart
-          fieldName="analyses__repositories__code"
+          fieldName="study_id"
           theme={{
             axisLeft: { legend: 'Cities' },
             axisBottom: { legend: 'Donors' },
+            onDataLoad: (data) => {
+              // Arranger Charts currently only supports aggregations, so we have to total the buckets for a total count
+              // fieldName doesn't matter as the totals add up in any aggregation
+              const totalCount = data.reduce((acc, current) => {
+                return acc + current.doc_count;
+              }, 0);
+              return [{ doc_count: totalCount, key: 'Toronto' }];
+            },
           }}
         />
       </Card>
@@ -103,7 +143,16 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="primary_diagnosis__age_at_diagnosis"
           theme={{
-            onClick: (config) => chartFilters.age_at_diagnosis(config.data.key),
+            onClick: (config) => {
+              const field = 'primary_diagnosis.age_at_diagnosis';
+              const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
+
+              // fieldname, new query, current query
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+              replaceAllFilters(sqonFilter);
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+              setSQON(toArrangerV3Filter(sqonFilter));
+            },
             axisLeft: { legend: 'Age' },
             axisBottom: { legend: 'Donors' },
           }}
