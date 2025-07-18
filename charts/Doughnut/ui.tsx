@@ -66,12 +66,19 @@ export const DoughnutChart = ({ data, config }) => {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     const beautifyLoading = async () => {
       // gives time for loader comp to show, better visual
       await delay(1800);
-      setShowContent(true);
+      if (mounted) {
+        setShowContent(true);
+      }
     };
     beautifyLoading();
+
+    return () => {
+      mounted = false;
+    };
   });
 
   return showContent ? (
