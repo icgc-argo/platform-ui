@@ -50,7 +50,7 @@ import {
 
 const newsItems: NewsItem[] = [
   {
-    title: 'July 15, 2025',
+    title: 'July 21, 2025',
     text: (
       <>
         <Link
