@@ -88,6 +88,12 @@ export const DoughnutChart = ({ data, config }) => {
         flexDirection: 'row',
         width: '100%',
         height: '100%',
+        pointerEvents: 'none',
+
+        // prevent overlapping of elements from obstructing "path:hover"
+        path: {
+          pointerEvents: 'auto',
+        },
       })}
     >
       <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
