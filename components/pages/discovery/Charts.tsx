@@ -154,6 +154,10 @@ const ChartsLayout = () => {
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
               setSQON(toArrangerV3Filter(sqonFilter));
             },
+            onDataLoad: (data) => {
+              // order data, range query so there won't be "no data"
+              return data.toReversed();
+            },
           }}
         />
       </Card>
@@ -192,6 +196,9 @@ const ChartsLayout = () => {
           theme={{
             ...commonTheme,
             onClick: (config) => chartFilters.gender(config.data.key),
+            onDataLoad: (data) => {
+              return data.toReversed();
+            },
           }}
         />
       </Card>
