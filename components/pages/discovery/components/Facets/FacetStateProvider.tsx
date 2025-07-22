@@ -33,6 +33,7 @@ type TContext = {
   isFolderExpanded: (path: string) => boolean;
   isExpanded: boolean;
   setVisiblePanels: (action: Actions) => void;
+  staticFacetOptions: FacetPanelOptions;
 };
 
 type TState = { folders: string[]; facets: string[] };
@@ -146,6 +147,7 @@ export const FacetStateProvider = ({
     isFolderExpanded,
     isExpanded,
     setVisiblePanels,
+    staticFacetOptions,
   };
 
   return <FacetContext.Provider value={props}>{children}</FacetContext.Provider>;

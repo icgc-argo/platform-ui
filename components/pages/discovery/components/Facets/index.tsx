@@ -33,11 +33,7 @@ import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
-import {
-  FacetStateProvider,
-  FACET_VISIBILITY_TOGGLE_ACTIONS,
-  useFacetState,
-} from './FacetStateProvider';
+import { FACET_VISIBILITY_TOGGLE_ACTIONS, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
 import { RangeFacet } from './RangeFacet';
 import { FiltersSearchBox } from './Search';
@@ -166,6 +162,8 @@ const Facets = ({ options }) => {
     variables: { filters },
   });
 
+  //TODO:  get from context
+
   const aggregations = get(responseData, 'file.aggregations', {});
 
   const { setVisiblePanels, isExpanded } = useFacetState();
@@ -192,15 +190,9 @@ const Facets = ({ options }) => {
  *
  * Facets panel wrapped in a state provider
  *
- * @param staticFacetOptions - hardcoded facet options
  * @returns Facets panel components
  */
-const FacetsPanel = ({ staticFacetOptions }: { staticFacetOptions: FacetPanelOptions }) => {
-  return (
-    <FacetStateProvider staticFacetOptions={staticFacetOptions}>
-      <Facets options={staticFacetOptions} />
-    </FacetStateProvider>
-  );
+export const FacetsPanel = () => {
+  const { staticFacetOptions } = useFacetState();
+  return <Facets options={staticFacetOptions} />;
 };
-
-export default FacetsPanel;
