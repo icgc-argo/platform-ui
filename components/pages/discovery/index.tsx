@@ -37,7 +37,7 @@ import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { useCallback, useMemo, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
-import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
+import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
 import ChartsLayout from './Charts';
@@ -63,8 +63,8 @@ const DiscoveryQueryBar = () => {
   const { setSQON } = useArrangerData();
   return (
     <QueryBarContainer
-      onClear={() => {
-        setSQON(toArrangerV3Filter(defaultFilters) as SQONType);
+      updateSQON={(newSQON) => {
+        setSQON(toArrangerV3Filter(newSQON) as SQONType);
       }}
       text="Explore data by selecting filters."
       css={css([commonStyles.block, { boxShadow: 'none' }])}
