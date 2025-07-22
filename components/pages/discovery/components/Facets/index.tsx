@@ -75,6 +75,13 @@ const FacetCollection = ({
             key={`name_${index}`}
           >
             {contents.map((facet, index) => {
+              // sets facet ui state in sidebar
+              const setVisibleFacetPanel = () =>
+                setVisiblePanels({
+                  type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
+                  facetPath: facet.facetPath,
+                });
+
               if (facet.variant === 'NumericAggregation') {
                 const stats = aggregations[facet.facetPath]?.stats;
 
@@ -84,6 +91,8 @@ const FacetCollection = ({
                     fieldName={facet.esDocumentField}
                     stats={stats}
                     key={index}
+                    onClickFacet={setVisibleFacetPanel}
+                    isExpanded={isFacetExpanded(facet.facetPath)}
                   />
                 );
               } else {
@@ -123,11 +132,7 @@ const FacetCollection = ({
                     onOptionToggle,
                     onSelectAllOptions,
                     isExpanded: isFacetExpanded(facet.facetPath),
-                    onClick: () =>
-                      setVisiblePanels({
-                        type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
-                        facetPath: facet.facetPath,
-                      }),
+                    onClick: setVisibleFacetPanel,
                   },
                 };
 
@@ -161,8 +166,6 @@ const Facets = ({ options }) => {
   } = useQuery(DISCOVERY_FACETS_QUERY, {
     variables: { filters },
   });
-
-  //TODO:  get from context
 
   const aggregations = get(responseData, 'file.aggregations', {});
 
