@@ -35,9 +35,12 @@ const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
         '> div': { marginTop: '16px' },
       })}
     >
-      {data.map((legend) => {
+      {data.map((legend, index) => {
         return (
-          <div css={css({ display: 'flex', flexDirection: 'row', alignItems: 'center' })}>
+          <div
+            css={css({ display: 'flex', flexDirection: 'row', alignItems: 'center' })}
+            key={index}
+          >
             <div
               css={css({
                 width: '12px',

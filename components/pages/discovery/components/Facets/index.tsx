@@ -68,7 +68,7 @@ const FacetCollection = ({
 
   return (
     <>
-      {staticFacets.map(({ name, contents }, idx) => {
+      {staticFacets.map(({ name, contents }, index) => {
         return (
           <FacetFolder
             title={name}
@@ -76,9 +76,9 @@ const FacetCollection = ({
               setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
             }
             isExpanded={isFolderExpanded(name)}
-            key={`name_${idx}`}
+            key={`name_${index}`}
           >
-            {contents.map((facet) => {
+            {contents.map((facet, index) => {
               if (facet.variant === 'NumericAggregation') {
                 const stats = aggregations[facet.facetPath]?.stats;
 
@@ -87,6 +87,7 @@ const FacetCollection = ({
                     displayName={facet.name}
                     fieldName={facet.esDocumentField}
                     stats={stats}
+                    key={index}
                   />
                 );
               } else {
