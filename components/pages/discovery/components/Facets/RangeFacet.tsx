@@ -158,7 +158,12 @@ export const RangeFacet = ({
           `}
           chevronOnLeftSide
           isFacetVariant
-          onClick={onClickFacet}
+          onClick={(e) => {
+            // range selection event bubbles, only target facet folder UI state for button
+            if (e.target instanceof HTMLButtonElement) {
+              onClickFacet();
+            }
+          }}
         >
           {children}
         </MenuItem>
