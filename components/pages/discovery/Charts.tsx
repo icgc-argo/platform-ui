@@ -116,7 +116,7 @@ const ChartsLayout = () => {
           theme={{
             ...commonTheme,
             onClick: (config) => {
-              chartFilters.study_id(config.data.key);
+              return chartFilters.study_id(config.data.key);
             },
           }}
         />
@@ -186,7 +186,9 @@ const ChartsLayout = () => {
           fieldName="primary_site"
           theme={{
             ...commonTheme,
-            onClick: (config) => chartFilters.primary_site(config.data.key),
+            onClick: (config) => {
+              return chartFilters.primary_site(config.data.key);
+            },
           }}
         />
       </Card>
@@ -195,7 +197,9 @@ const ChartsLayout = () => {
           fieldName="gender"
           theme={{
             ...commonTheme,
-            onClick: (config) => chartFilters.gender(config.data.key),
+            onClick: (config) => {
+              return chartFilters.gender(config.data.key);
+            },
             onDataLoad: (data) => {
               return data.toReversed();
             },
@@ -207,7 +211,9 @@ const ChartsLayout = () => {
           fieldName="vital_status"
           theme={{
             ...commonTheme,
-            onClick: (config) => chartFilters.vital_status(config.data.key),
+            onClick: (config) => {
+              return chartFilters.vital_status(config.data.key);
+            },
           }}
         />
       </Card>
@@ -216,8 +222,9 @@ const ChartsLayout = () => {
           fieldName="analyses__experiment__experimental_strategy"
           theme={{
             ...commonTheme,
-            onClick: (config) =>
-              chartFilters.analyses__experiment__experimental_strategy(config.data.key),
+            onClick: (config) => {
+              return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+            },
           }}
         />
       </Card>

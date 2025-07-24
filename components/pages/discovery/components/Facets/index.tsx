@@ -72,7 +72,7 @@ const FacetCollection = ({
               setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
             }
             isExpanded={isFolderExpanded(name)}
-            key={`name_${index}`}
+            key={`${name}_${index}`}
           >
             {contents.map((facet, index) => {
               // sets facet ui state in sidebar

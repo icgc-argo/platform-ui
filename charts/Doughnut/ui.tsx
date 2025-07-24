@@ -39,7 +39,7 @@ const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
         return (
           <div
             css={css({ display: 'flex', flexDirection: 'row', alignItems: 'center' })}
-            key={index}
+            key={`${legend.label}_${index}`}
           >
             <div
               css={css({
