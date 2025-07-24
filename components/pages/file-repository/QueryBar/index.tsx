@@ -22,7 +22,7 @@ import isEmpty from 'lodash/isEmpty';
 import { FunctionComponent } from 'react';
 import SQONView, { Value } from '../../../SQONView';
 import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import useFiltersContext from '../hooks/useFiltersContext';
+import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
 import { FileCentricDocumentField } from '../types';
 import { toDisplayValue } from '../utils';
 import { FileRepoFiltersType } from '../utils/types';
@@ -169,7 +169,13 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
   );
 };
 
-const QueryBar = ({ filters, onClear }: { filters: FileRepoFiltersType; onClear?: () => void }) => {
+const QueryBar = ({
+  filters,
+  updateSQON,
+}: {
+  filters: FileRepoFiltersType;
+  updateSQON?: (sqon) => void;
+}) => {
   const { clearFilters, replaceAllFilters } = useFiltersContext();
   return (
     <Content>
@@ -180,7 +186,7 @@ const QueryBar = ({ filters, onClear }: { filters: FileRepoFiltersType; onClear?
             className="sqon-bubble sqon-clear"
             onClick={() => {
               clearFilters();
-              onClear && onClear();
+              updateSQON && updateSQON(defaultFilters);
             }}
           >
             Clear
@@ -194,8 +200,12 @@ const QueryBar = ({ filters, onClear }: { filters: FileRepoFiltersType; onClear?
               // deleting the last value listed returns nextSQON = null, so check if empty to reset to defaultFilters
               if (isEmpty(nextSQON)) {
                 clearFilters();
+                updateSQON && updateSQON(defaultFilters);
               } else {
+                // ARGO
                 replaceAllFilters(nextSQON);
+                // Arranger v3
+                updateSQON && updateSQON(nextSQON);
               }
             }}
             {...props}

@@ -83,6 +83,8 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
+const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
+
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
@@ -112,11 +114,10 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="study_id"
           theme={{
+            ...commonTheme,
             onClick: (config) => {
-              chartFilters.study_id(config.data.key);
+              return chartFilters.study_id(config.data.key);
             },
-            axisLeft: { legend: 'ID' },
-            axisBottom: { legend: 'Donors' },
           }}
         />
       </Card>
@@ -125,8 +126,7 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="study_id"
           theme={{
-            axisLeft: { legend: 'Cities' },
-            axisBottom: { legend: 'Donors' },
+            ...commonTheme,
             onDataLoad: (data) => {
               // Arranger Charts currently only supports aggregations, so we have to total the buckets for a total count
               // fieldName doesn't matter as the totals add up in any aggregation
@@ -143,6 +143,7 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="primary_diagnosis__age_at_diagnosis"
           theme={{
+            ...commonTheme,
             onClick: (config) => {
               const field = 'primary_diagnosis.age_at_diagnosis';
               const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
@@ -153,8 +154,10 @@ const ChartsLayout = () => {
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
               setSQON(toArrangerV3Filter(sqonFilter));
             },
-            axisLeft: { legend: 'Age' },
-            axisBottom: { legend: 'Donors' },
+            onDataLoad: (data) => {
+              // order data, range query so there won't be "no data"
+              return data.toReversed();
+            },
           }}
         />
       </Card>
@@ -182,9 +185,10 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="primary_site"
           theme={{
-            onClick: (config) => chartFilters.primary_site(config.data.key),
-            axisLeft: { legend: 'Primary Site' },
-            axisBottom: { legend: 'Donors' },
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.primary_site(config.data.key);
+            },
           }}
         />
       </Card>
@@ -192,9 +196,13 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="gender"
           theme={{
-            onClick: (config) => chartFilters.gender(config.data.key),
-            axisLeft: { legend: 'Genders' },
-            axisBottom: { legend: 'Donors' },
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.gender(config.data.key);
+            },
+            onDataLoad: (data) => {
+              return data.toReversed();
+            },
           }}
         />
       </Card>
@@ -202,9 +210,10 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="vital_status"
           theme={{
-            onClick: (config) => chartFilters.vital_status(config.data.key),
-            axisLeft: { legend: 'Status' },
-            axisBottom: { legend: 'Donors' },
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.vital_status(config.data.key);
+            },
           }}
         />
       </Card>
@@ -212,10 +221,10 @@ const ChartsLayout = () => {
         <Barchart
           fieldName="analyses__experiment__experimental_strategy"
           theme={{
-            onClick: (config) =>
-              chartFilters.analyses__experiment__experimental_strategy(config.data.key),
-            axisLeft: { legend: 'Stategy' },
-            axisBottom: { legend: 'Donors' },
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+            },
           }}
         />
       </Card>

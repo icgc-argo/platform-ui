@@ -35,9 +35,12 @@ const Legend = ({ data }: { data: { label: string; color: string }[] }) => {
         '> div': { marginTop: '16px' },
       })}
     >
-      {data.map((legend) => {
+      {data.map((legend, index) => {
         return (
-          <div css={css({ display: 'flex', flexDirection: 'row', alignItems: 'center' })}>
+          <div
+            css={css({ display: 'flex', flexDirection: 'row', alignItems: 'center' })}
+            key={`${legend.label}_${index}`}
+          >
             <div
               css={css({
                 width: '12px',
@@ -88,6 +91,12 @@ export const DoughnutChart = ({ data, config }) => {
         flexDirection: 'row',
         width: '100%',
         height: '100%',
+        pointerEvents: 'none',
+
+        // prevent overlapping of elements from obstructing "path:hover"
+        path: {
+          pointerEvents: 'auto',
+        },
       })}
     >
       <div css={css({ height: '100%', width: '70%', position: 'relative' })}>

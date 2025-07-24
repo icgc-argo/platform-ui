@@ -33,11 +33,7 @@ import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
-import {
-  FacetStateProvider,
-  FACET_VISIBILITY_TOGGLE_ACTIONS,
-  useFacetState,
-} from './FacetStateProvider';
+import { FACET_VISIBILITY_TOGGLE_ACTIONS, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
 import { RangeFacet } from './RangeFacet';
 import { FiltersSearchBox } from './Search';
@@ -68,7 +64,7 @@ const FacetCollection = ({
 
   return (
     <>
-      {staticFacets.map(({ name, contents }, idx) => {
+      {staticFacets.map(({ name, contents }, index) => {
         return (
           <FacetFolder
             title={name}
@@ -76,9 +72,16 @@ const FacetCollection = ({
               setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
             }
             isExpanded={isFolderExpanded(name)}
-            key={`name_${idx}`}
+            key={`${name}_${index}`}
           >
-            {contents.map((facet) => {
+            {contents.map((facet, index) => {
+              // sets facet ui state in sidebar
+              const setVisibleFacetPanel = () =>
+                setVisiblePanels({
+                  type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
+                  facetPath: facet.facetPath,
+                });
+
               if (facet.variant === 'NumericAggregation') {
                 const stats = aggregations[facet.facetPath]?.stats;
 
@@ -87,6 +90,9 @@ const FacetCollection = ({
                     displayName={facet.name}
                     fieldName={facet.esDocumentField}
                     stats={stats}
+                    key={index}
+                    onClickFacet={setVisibleFacetPanel}
+                    isExpanded={isFacetExpanded(facet.facetPath)}
                   />
                 );
               } else {
@@ -126,11 +132,7 @@ const FacetCollection = ({
                     onOptionToggle,
                     onSelectAllOptions,
                     isExpanded: isFacetExpanded(facet.facetPath),
-                    onClick: () =>
-                      setVisiblePanels({
-                        type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
-                        facetPath: facet.facetPath,
-                      }),
+                    onClick: setVisibleFacetPanel,
                   },
                 };
 
@@ -191,15 +193,9 @@ const Facets = ({ options }) => {
  *
  * Facets panel wrapped in a state provider
  *
- * @param staticFacetOptions - hardcoded facet options
  * @returns Facets panel components
  */
-const FacetsPanel = ({ staticFacetOptions }: { staticFacetOptions: FacetPanelOptions }) => {
-  return (
-    <FacetStateProvider staticFacetOptions={staticFacetOptions}>
-      <Facets options={staticFacetOptions} />
-    </FacetStateProvider>
-  );
+export const FacetsPanel = () => {
+  const { staticFacetOptions } = useFacetState();
+  return <Facets options={staticFacetOptions} />;
 };
-
-export default FacetsPanel;

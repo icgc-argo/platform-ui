@@ -37,12 +37,13 @@ import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { useCallback, useMemo, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
-import { defaultFilters, FiltersProvider } from '../file-repository/hooks/useFiltersContext';
+import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
 import Head from '../head';
 import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
-import Facets from './components/Facets';
+import { FacetsPanel } from './components/Facets';
+import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { FACET_OPTIONS } from './data/facet';
@@ -63,8 +64,8 @@ const DiscoveryQueryBar = () => {
   const { setSQON } = useArrangerData();
   return (
     <QueryBarContainer
-      onClear={() => {
-        setSQON(toArrangerV3Filter(defaultFilters) as SQONType);
+      updateSQON={(newSQON) => {
+        setSQON(toArrangerV3Filter(newSQON) as SQONType);
       }}
       text="Explore data by selecting filters."
       css={css([commonStyles.block, { boxShadow: 'none' }])}
@@ -157,66 +158,68 @@ const DiscoveryPage = () => {
   );
 
   return (
-    <ArrangerDataProvider
-      documentType="file"
-      apiUrl={discoveryApiUrl}
-      // This is mandatory, no default fetcher
-      customFetcher={arrangerFetchWithEgoToken}
-    >
-      <ChartsProvider
-        theme={{
-          components: {
-            EmptyData: ChartEmptyData,
-            Loader: ChartLoader,
-          },
-          dataFetcher: arrangerFetchWithEgoToken,
-          colors: chartColors,
-        }}
+    <FacetStateProvider staticFacetOptions={FACET_OPTIONS}>
+      <ArrangerDataProvider
+        documentType="file"
+        apiUrl={discoveryApiUrl}
+        // This is mandatory, no default fetcher
+        customFetcher={arrangerFetchWithEgoToken}
       >
-        <ApolloProvider client={arrangerV3client}>
-          <FiltersProvider>
-            <div
-              css={css({
-                display: 'grid',
-                gridTemplateRows: '58px 1fr 58px',
-                minHeight: '100vh',
-                background: `${theme.colors.grey_4}`,
-                overflow: 'hidden',
-              })}
-            >
-              <>
-                <Head subtitle={'Data Discovery'} />
-                <NavBar />
+        <ChartsProvider
+          theme={{
+            components: {
+              EmptyData: ChartEmptyData,
+              Loader: ChartLoader,
+            },
+            dataFetcher: arrangerFetchWithEgoToken,
+            colors: chartColors,
+          }}
+        >
+          <ApolloProvider client={arrangerV3client}>
+            <FiltersProvider>
+              <div
+                css={css({
+                  display: 'grid',
+                  gridTemplateRows: '58px 1fr 58px',
+                  minHeight: '100vh',
+                  background: `${theme.colors.grey_4}`,
+                  overflow: 'hidden',
+                })}
+              >
+                <>
+                  <Head subtitle={'Data Discovery'} />
+                  <NavBar />
 
-                <div
-                  css={css({
-                    display: 'grid',
-                    gridTemplateColumns: isSidebarOpen
-                      ? '248px minmax(0, 1fr)'
-                      : '20px minmax(0, 1fr)',
-                    gridTemplateRows: 'calc(100vh - 116px)',
-                    minHeight: 0,
-                    overflow: 'hidden',
-                  })}
-                >
-                  <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-                    <Facets staticFacetOptions={FACET_OPTIONS} />
-                  </Sidebar>
+                  <div
+                    css={css({
+                      display: 'grid',
+                      gridTemplateColumns: isSidebarOpen
+                        ? '248px minmax(0, 1fr)'
+                        : '20px minmax(0, 1fr)',
+                      gridTemplateRows: 'calc(100vh - 116px)',
+                      minHeight: 0,
+                      overflow: 'hidden',
+                    })}
+                  >
+                    <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+                      <FacetsPanel />
+                    </Sidebar>
 
-                  <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
-                    <DiscoveryQueryBar />
-                    <StatsCard />
-                    <ChartsLayout />
+                    <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
+                      <DiscoveryQueryBar />
+                      <StatsCard />
+                      <ChartsLayout />
+                    </div>
                   </div>
-                </div>
 
-                <Footer />
-              </>
-            </div>
-          </FiltersProvider>
-        </ApolloProvider>
-      </ChartsProvider>
-    </ArrangerDataProvider>
+                  <Footer />
+                </>
+              </div>
+            </FiltersProvider>
+          </ApolloProvider>
+        </ChartsProvider>
+      </ArrangerDataProvider>
+    </FacetStateProvider>
   );
 };
 

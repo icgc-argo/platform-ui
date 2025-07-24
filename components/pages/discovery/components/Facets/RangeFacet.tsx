@@ -96,7 +96,19 @@ const getSQONValues = ({ filters, fieldName }) => {
  * !important
  * Arranger v3 uses fieldName not field
  */
-export const RangeFacet = ({ displayName, fieldName, stats }) => {
+export const RangeFacet = ({
+  displayName,
+  fieldName,
+  stats,
+  onClickFacet,
+  isExpanded,
+}: {
+  displayName: string;
+  fieldName: string;
+  stats: { min: number; max: number };
+  onClickFacet?: () => void;
+  isExpanded: boolean;
+}) => {
   const { setSQON } = useArrangerData();
   // set styles side effect
   useArrangerTheme(aggregationsStyles);
@@ -120,7 +132,7 @@ export const RangeFacet = ({ displayName, fieldName, stats }) => {
       fieldName={fieldName}
       displayName={displayName}
       sqonValues={currentValue}
-      handleChange={({ generateNextSQON, max, min, value }) => {
+      handleChange={({ generateNextSQON }) => {
         /**
          * SQON from RangeAgg uses "fieldName"
          * SQONViewer component in platform-ui uses v2 Arranger code that uses "field"
@@ -138,6 +150,7 @@ export const RangeFacet = ({ displayName, fieldName, stats }) => {
       stats={statsRef.current}
       WrapperComponent={({ children, displayName }) => (
         <MenuItem
+          selected={isExpanded}
           className="FacetMenu"
           content={displayName}
           css={css`
@@ -145,6 +158,12 @@ export const RangeFacet = ({ displayName, fieldName, stats }) => {
           `}
           chevronOnLeftSide
           isFacetVariant
+          onClick={(e) => {
+            // range selection event bubbles, only target facet folder UI state for button
+            if (e.target instanceof HTMLButtonElement) {
+              onClickFacet();
+            }
+          }}
         >
           {children}
         </MenuItem>
