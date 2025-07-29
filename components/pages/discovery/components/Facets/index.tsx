@@ -68,9 +68,9 @@ const FacetCollection = ({
         return (
           <FacetFolder
             title={name}
-            onClick={() =>
-              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
-            }
+            onClick={() => {
+              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name });
+            }}
             isExpanded={isFolderExpanded(name)}
             key={`${name}_${index}`}
           >

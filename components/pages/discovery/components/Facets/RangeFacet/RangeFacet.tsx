@@ -22,7 +22,9 @@ import { useArrangerData, useArrangerTheme } from '@overture-stack/arranger-comp
 import { RangeAgg } from '@overture-stack/arranger-components/dist/aggregations';
 import { useRef } from 'react';
 
-import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import useFiltersContext, {
+  defaultFilters,
+} from 'components/pages/file-repository/hooks/useFiltersContext';
 import { FacetMenuItem } from './FacetMenuItem';
 
 /**
@@ -130,29 +132,36 @@ export const RangeFacet = ({
   }
 
   return (
-    <RangeAgg
-      fieldName={fieldName}
-      displayName={displayName}
-      sqonValues={currentValue}
-      handleChange={({ generateNextSQON }) => {
-        /**
-         * SQON from RangeAgg uses "fieldName"
-         * SQONViewer component in platform-ui uses v2 Arranger code that uses "field"
-         *
-         * generateNextSQON is how we surface the filters from the component
-         */
-        const newSQON = generateNextSQON(filterToArrangerV3(filters));
-        const newFiltersArrangerV2 = filterToArrangerV2(newSQON);
-        replaceAllFilters(newFiltersArrangerV2);
-        // set sqon for Arranger v3 charts
-        setSQON(newSQON);
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
       }}
-      stats={statsRef.current}
-      WrapperComponent={({ children, displayName }) => (
-        <FacetMenuItem isExpanded={isExpanded} displayName={displayName} onClick={onClickFacet}>
-          {children}
-        </FacetMenuItem>
-      )}
-    />
+    >
+      <RangeAgg
+        fieldName={fieldName}
+        displayName={displayName}
+        sqonValues={currentValue}
+        handleChange={({ generateNextSQON, ...props }) => {
+          /**
+           * SQON from RangeAgg uses "fieldName"
+           * SQONViewer component in platform-ui uses v2 Arranger code that uses "field"
+           *
+           * generateNextSQON is how we surface the filters from the component
+           */
+          const generatedNextSQON = generateNextSQON(filterToArrangerV3(filters));
+
+          const newFiltersArrangerV2 = filterToArrangerV2(generatedNextSQON || defaultFilters);
+          replaceAllFilters(newFiltersArrangerV2);
+          // set sqon for Arranger v3 charts
+          setSQON(generatedNextSQON || defaultFilters);
+        }}
+        stats={statsRef.current}
+        WrapperComponent={({ children, displayName }) => (
+          <FacetMenuItem isExpanded={isExpanded} displayName={displayName} onClick={onClickFacet}>
+            {children}
+          </FacetMenuItem>
+        )}
+      />
+    </div>
   );
 };
