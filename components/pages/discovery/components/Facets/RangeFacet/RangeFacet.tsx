@@ -17,11 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, MenuItem } from '@icgc-argo/uikit';
+import { css } from '@icgc-argo/uikit';
 import { useArrangerData, useArrangerTheme } from '@overture-stack/arranger-components';
 import { RangeAgg } from '@overture-stack/arranger-components/dist/aggregations';
-import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { useRef } from 'react';
+
+import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { FacetMenuItem } from './FacetMenuItem';
 
 /**
  * Using custom wrapper component for facets so only some overrides are applicable
@@ -106,7 +108,7 @@ export const RangeFacet = ({
   displayName: string;
   fieldName: string;
   stats: { min: number; max: number };
-  onClickFacet?: () => void;
+  onClickFacet?: (e: Event) => void;
   isExpanded: boolean;
 }) => {
   const { setSQON } = useArrangerData();
@@ -140,33 +142,16 @@ export const RangeFacet = ({
          * generateNextSQON is how we surface the filters from the component
          */
         const newSQON = generateNextSQON(filterToArrangerV3(filters));
-
         const newFiltersArrangerV2 = filterToArrangerV2(newSQON);
         replaceAllFilters(newFiltersArrangerV2);
-
         // set sqon for Arranger v3 charts
         setSQON(newSQON);
       }}
       stats={statsRef.current}
       WrapperComponent={({ children, displayName }) => (
-        <MenuItem
-          selected={isExpanded}
-          className="FacetMenu"
-          content={displayName}
-          css={css`
-            width: 100%;
-          `}
-          chevronOnLeftSide
-          isFacetVariant
-          onClick={(e) => {
-            // range selection event bubbles, only target facet folder UI state for button
-            if (e.target instanceof HTMLButtonElement) {
-              onClickFacet();
-            }
-          }}
-        >
+        <FacetMenuItem isExpanded={isExpanded} displayName={displayName} onClick={onClickFacet}>
           {children}
-        </MenuItem>
+        </FacetMenuItem>
       )}
     />
   );
