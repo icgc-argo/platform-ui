@@ -122,7 +122,9 @@ const ChartsLayout = () => {
         />
       </Card>
 
-      <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}></Card>
+      <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
+        <></>
+      </Card>
 
       <Card title="Age at Diagnosis">
         <Barchart
