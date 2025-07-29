@@ -32,14 +32,14 @@ const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
   // { key: Less than 18, to: 18 },{ key: 8 to 65, from: 18, to: 66 },{ key: 65 and above, from: 65 }
   switch (key) {
-    case 'Less than 18':
+    case '< 18':
       return {
         op: 'and',
         content: [{ op: '<=', content: { field, value: 17 } }],
       };
       break;
 
-    case '18 to 65':
+    case '18 - 65':
       return {
         op: 'and',
         content: [
@@ -49,7 +49,7 @@ const getAgeAtDiagnosisFilter = (key, field) => {
       };
       break;
 
-    case '65 and above':
+    case '>= 65':
       return {
         op: 'and',
         content: [{ op: '>=', content: { field, value: 65 } }],
