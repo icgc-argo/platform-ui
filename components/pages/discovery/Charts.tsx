@@ -18,8 +18,7 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-// @ts-expect-error no type info from lib yet
-import { Barchart } from '@overture-stack/arranger-charts';
+import { BarChart } from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
@@ -111,7 +110,7 @@ const ChartsLayout = () => {
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <Barchart
+        <BarChart
           fieldName="study_id"
           theme={{
             ...commonTheme,
@@ -127,8 +126,21 @@ const ChartsLayout = () => {
       </Card>
 
       <Card title="Age at Diagnosis">
-        <Barchart
+        <BarChart
           fieldName="primary_diagnosis__age_at_diagnosis"
+          query={{
+            variables: {
+              ranges: [
+                { key: '< 18', to: 18 },
+                { key: '18 - 65', from: 18, to: 66 },
+                { key: '>= 65', from: 65 },
+              ],
+            },
+            transformData: (data) => {
+              // order data, range query so there won't be "no data"
+              return data.toReversed();
+            },
+          }}
           theme={{
             ...commonTheme,
             onClick: (config) => {
@@ -140,10 +152,6 @@ const ChartsLayout = () => {
               replaceAllFilters(sqonFilter);
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
               setSQON(toArrangerV3Filter(sqonFilter));
-            },
-            onDataLoad: (data) => {
-              // order data, range query so there won't be "no data"
-              return data.toReversed();
             },
           }}
         />
@@ -169,7 +177,7 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <Barchart
+        <BarChart
           fieldName="primary_site"
           theme={{
             ...commonTheme,
@@ -180,7 +188,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Gender">
-        <Barchart
+        <BarChart
           fieldName="gender"
           theme={{
             ...commonTheme,
@@ -194,7 +202,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Vital Status">
-        <Barchart
+        <BarChart
           fieldName="vital_status"
           theme={{
             ...commonTheme,
@@ -205,7 +213,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Experimental Strategy">
-        <Barchart
+        <BarChart
           fieldName="analyses__experiment__experimental_strategy"
           theme={{
             ...commonTheme,
