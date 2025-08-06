@@ -16,7 +16,8 @@
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+// tslint:disable:ordered-imports - need for tests
+import React from 'react';
 import { expect } from 'chai';
 import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
 import { toArrangerV3Filter } from '.';
