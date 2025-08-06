@@ -108,6 +108,7 @@ export const DoughnutChart = ({ data, config, onClick }) => {
         <ResponsivePie
           onClick={(config) => {
             const allCodes = data.outer
+              // @ts-ignore augmented it
               .filter((outerRing) => outerRing.parentId === config.data.parentId)
               .map((code) => code.id);
             onClick && onClick({ ...config, allCodes });

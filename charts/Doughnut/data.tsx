@@ -198,6 +198,8 @@ type Segment = {
   label: string;
   value: number | string;
   color: string;
+  parentId?: string;
+  children?: string[];
 };
 
 /**

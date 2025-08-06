@@ -20,7 +20,7 @@
 import { DocumentNode } from 'graphql';
 import { ReactElement, useEffect } from 'react';
 import { useArrangerCharts } from './arranger';
-import { Chart, ChartComponent } from './types';
+import { Chart } from './types';
 
 export type Options = {
   query: DocumentNode;
@@ -51,7 +51,7 @@ const generateChartComponent =
     options,
     internalConfig,
   }: {
-    Component: ChartComponent;
+    Component: any;
     options: Options;
     internalConfig?: Record<string, unknown>;
   }) =>
@@ -70,6 +70,7 @@ const generateChartComponent =
       return (onError && onError(error)) || null;
     } else {
       const resolvedConsumerConfig =
+        // @ts-ignore checking for typeof function before calling
         typeof consumerConfig === 'function' ? consumerConfig({ data }) : consumerConfig;
 
       return <Component {...{ data, ...internalConfig, ...resolvedConsumerConfig }} />;
