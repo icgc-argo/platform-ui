@@ -82,6 +82,15 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
+const getCancerCodes = (chartConfig): string[] => {
+  // either inner ring with codes, or outer ring with parentId of inner ring
+  if (chartConfig.data?.parentId) {
+    return [chartConfig.data.id];
+  } else {
+    return chartConfig.data?.children || [];
+  }
+};
+
 const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
 const ChartsLayout = () => {
@@ -103,7 +112,7 @@ const ChartsLayout = () => {
     primary_site: chartFilter('primary_site'),
     vital_status: chartFilter('vital_status'),
     analyses__experiment__experimental_strategy: chartFilter(
-      'analyses__experiment__experimental_strategy',
+      'analyses.experiment.experimental_strategy',
     ),
   };
 
@@ -166,7 +175,19 @@ const ChartsLayout = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart fieldName="primary_diagnosis__cancer_type_code" />
+        <DoughnutChart
+          fieldName="primary_diagnosis__cancer_type_code"
+          theme={{
+            onClick: (config) => {
+              console.log(config);
+              const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+              const cancerCodes = getCancerCodes(config);
+              console.log('cancer codes', cancerCodes);
+              const res = setFilter(cancerCodes);
+              console.log('res', res);
+            },
+          }}
+        />
       </Card>
       <Card
         title="Primary Site"

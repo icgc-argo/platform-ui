@@ -22,13 +22,14 @@ import Charts from 'charts';
 import { ChartContainer } from './Chart';
 import { Error, Loader } from './common';
 
-const DoughnutChart = ({ fieldName }) => {
+const DoughnutChart = ({ fieldName, theme }) => {
   return (
     <ChartContainer css={css({ margin: '16px 0' })}>
       <Charts.Doughnut
         fieldName={fieldName}
         onLoading={() => <Loader />}
         onError={() => <Error />}
+        onClick={theme.onClick}
       />
     </ChartContainer>
   );
