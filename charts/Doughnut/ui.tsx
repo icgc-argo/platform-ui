@@ -19,6 +19,7 @@
 
 import { css } from '@emotion/react';
 import { ResponsivePie } from '@nivo/pie';
+import { NoData } from 'charts/NoData';
 import { Loader } from 'components/pages/discovery/charts/common';
 import { useEffect, useState } from 'react';
 
@@ -65,8 +66,10 @@ const onMouseEnterHandler = (_, e) => {
   e.target.style.cursor = 'pointer';
 };
 
-export const DoughnutChart = ({ data, config }) => {
+export const DoughnutChart = ({ data, config, onClick }) => {
   const [showContent, setShowContent] = useState(false);
+
+  const noData = data.inner.length === 0 || data.outer.length === 0;
 
   useEffect(() => {
     let mounted = true;
@@ -84,7 +87,9 @@ export const DoughnutChart = ({ data, config }) => {
     };
   });
 
-  return showContent ? (
+  return noData ? (
+    <NoData />
+  ) : showContent ? (
     <div
       css={css({
         display: 'flex',
@@ -101,6 +106,12 @@ export const DoughnutChart = ({ data, config }) => {
     >
       <div css={css({ height: '100%', width: '70%', position: 'relative' })}>
         <ResponsivePie
+          onClick={(config) => {
+            const allCodes = data.outer
+              .filter((outerRing) => outerRing.parentId === config.data.parentId)
+              .map((code) => code.id);
+            onClick && onClick({ ...config, allCodes });
+          }}
           colors={{ datum: 'data.color' }}
           data={data.outer}
           isInteractive={true}
@@ -132,6 +143,9 @@ export const DoughnutChart = ({ data, config }) => {
           })}
         >
           <ResponsivePie
+            onClick={(config) => {
+              onClick && onClick(config);
+            }}
             colors={{ datum: 'data.color' }}
             data={data.inner}
             isInteractive={true}
