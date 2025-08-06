@@ -28,7 +28,10 @@ import DoughnutChart from './ui';
 const generateQuery = ({ fieldName }) => gql`
   query ChartsFileCentricAgg($filters:JSON) {
     file {
-      aggregations(filters: $filters) {
+      aggregations(
+        filters: $filters 
+        aggregations_filter_themselves: true
+      ) {
         ${fieldName} {
           bucket_count
           buckets {
@@ -51,7 +54,8 @@ const transformToBarData =
     return chartInput;
   };
 
-const Doughnut = (consumerProps: Chart & { fieldName: string }) => {
+// uses filters context
+const Doughnut = (consumerProps: Chart & { fieldName: string; onClick: (e) => void }) => {
   const { fieldName } = consumerProps;
   return generateChartComponent({
     Component: DoughnutChart,

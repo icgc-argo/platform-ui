@@ -55,12 +55,7 @@ const generateChartComponent =
     options: Options;
     internalConfig?: Record<string, unknown>;
   }) =>
-  ({
-    // consumer
-    consumerConfig,
-    onLoading,
-    onError,
-  }: Chart): ReactElement => {
+  ({ onLoading, onError, ...consumerConfig }: Chart): ReactElement => {
     const { data, loading, error } = useArrangerCharts(options);
 
     useEffect(() => {

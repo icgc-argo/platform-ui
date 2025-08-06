@@ -18,8 +18,7 @@
  */
 
 import { css } from '@icgc-argo/uikit';
-// @ts-expect-error no type info from lib yet
-import { Barchart } from '@overture-stack/arranger-charts';
+import { BarChart } from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
@@ -83,6 +82,15 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
+const getCancerCodes = (chartConfig): string[] => {
+  // either inner ring with codes, or outer ring with parentId of inner ring
+  if (chartConfig.data?.parentId) {
+    return [chartConfig.data.id];
+  } else {
+    return chartConfig.data?.children || [];
+  }
+};
+
 const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
 const ChartsLayout = () => {
@@ -104,14 +112,14 @@ const ChartsLayout = () => {
     primary_site: chartFilter('primary_site'),
     vital_status: chartFilter('vital_status'),
     analyses__experiment__experimental_strategy: chartFilter(
-      'analyses__experiment__experimental_strategy',
+      'analyses.experiment.experimental_strategy',
     ),
   };
 
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <Barchart
+        <BarChart
           fieldName="study_id"
           theme={{
             ...commonTheme,
@@ -127,8 +135,21 @@ const ChartsLayout = () => {
       </Card>
 
       <Card title="Age at Diagnosis">
-        <Barchart
+        <BarChart
           fieldName="primary_diagnosis__age_at_diagnosis"
+          query={{
+            variables: {
+              ranges: [
+                { key: '< 18', to: 18 },
+                { key: '18 - 65', from: 18, to: 66 },
+                { key: '>= 65', from: 65 },
+              ],
+            },
+            transformData: (data) => {
+              // order data, range query so there won't be "no data"
+              return data.toReversed();
+            },
+          }}
           theme={{
             ...commonTheme,
             onClick: (config) => {
@@ -140,10 +161,6 @@ const ChartsLayout = () => {
               replaceAllFilters(sqonFilter);
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
               setSQON(toArrangerV3Filter(sqonFilter));
-            },
-            onDataLoad: (data) => {
-              // order data, range query so there won't be "no data"
-              return data.toReversed();
             },
           }}
         />
@@ -158,7 +175,19 @@ const ChartsLayout = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart fieldName="primary_diagnosis__cancer_type_code" />
+        <DoughnutChart
+          fieldName="primary_diagnosis__cancer_type_code"
+          theme={{
+            onClick: (config) => {
+              console.log(config);
+              const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+              const cancerCodes = getCancerCodes(config);
+              console.log('cancer codes', cancerCodes);
+              const res = setFilter(cancerCodes);
+              console.log('res', res);
+            },
+          }}
+        />
       </Card>
       <Card
         title="Primary Site"
@@ -169,7 +198,7 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <Barchart
+        <BarChart
           fieldName="primary_site"
           theme={{
             ...commonTheme,
@@ -180,7 +209,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Gender">
-        <Barchart
+        <BarChart
           fieldName="gender"
           theme={{
             ...commonTheme,
@@ -194,7 +223,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Vital Status">
-        <Barchart
+        <BarChart
           fieldName="vital_status"
           theme={{
             ...commonTheme,
@@ -205,7 +234,7 @@ const ChartsLayout = () => {
         />
       </Card>
       <Card title="Experimental Strategy">
-        <Barchart
+        <BarChart
           fieldName="analyses__experiment__experimental_strategy"
           theme={{
             ...commonTheme,
