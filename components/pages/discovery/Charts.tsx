@@ -48,10 +48,10 @@ const getAgeAtDiagnosisFilter = (key, field) => {
       };
       break;
 
-    case '>= 65':
+    case '> 65':
       return {
         op: 'and',
-        content: [{ op: '>=', content: { field, value: 65 } }],
+        content: [{ op: '>', content: { field, value: 65 } }],
       };
       break;
 
@@ -142,7 +142,7 @@ const ChartsLayout = () => {
               ranges: [
                 { key: '< 18', to: 18 },
                 { key: '18 - 65', from: 18, to: 66 },
-                { key: '>= 65', from: 65 },
+                { key: '> 65', from: 66 },
               ],
             },
             transformData: (data) => {
