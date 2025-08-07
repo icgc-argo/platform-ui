@@ -77,6 +77,7 @@ const FacetCollection = ({
             {contents.map((facet, index) => {
               // sets facet ui state in sidebar
               const setVisibleFacetPanel = (e: Event) => {
+                // stop propagation that would toggle the entire "facet folder" grouping
                 e.stopPropagation();
                 setVisiblePanels({
                   type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
