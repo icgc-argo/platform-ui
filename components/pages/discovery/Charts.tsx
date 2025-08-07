@@ -145,9 +145,10 @@ const ChartsLayout = () => {
                 { key: '> 65', from: 66 },
               ],
             },
-            transformData: (data) => {
+            transformData: (data: unknown[]) => {
               // order data, range query so there won't be "no data"
-              return data.toReversed();
+              data.reverse();
+              return data;
             },
           }}
           theme={{
