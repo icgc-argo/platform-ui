@@ -20,7 +20,6 @@
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { DnaLoader, styled } from '@icgc-argo/uikit';
-// @ts-expect-error lib no TS support
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
