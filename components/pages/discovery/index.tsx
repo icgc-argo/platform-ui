@@ -165,7 +165,9 @@ const DiscoveryPage = () => {
       <ChartsProvider
         theme={{
           components: {
+            // @ts-ignore needs fix in lib
             EmptyData: ChartEmptyData,
+            // @ts-ignore needs fix in lib
             Loader: ChartLoader,
           },
           dataFetcher: arrangerFetchWithEgoToken,
