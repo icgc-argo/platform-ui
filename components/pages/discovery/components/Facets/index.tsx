@@ -35,7 +35,7 @@ import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
 import { FACET_VISIBILITY_TOGGLE_ACTIONS, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
-import { RangeFacet } from './RangeFacet';
+import { RangeFacet } from './RangeFacet/RangeFacet';
 import { FiltersSearchBox } from './Search';
 
 /**
@@ -68,19 +68,22 @@ const FacetCollection = ({
         return (
           <FacetFolder
             title={name}
-            onClick={() =>
-              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
-            }
+            onClick={() => {
+              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name });
+            }}
             isExpanded={isFolderExpanded(name)}
             key={`${name}_${index}`}
           >
             {contents.map((facet, index) => {
               // sets facet ui state in sidebar
-              const setVisibleFacetPanel = () =>
+              const setVisibleFacetPanel = (e: Event) => {
+                // stop propagation that would toggle the entire "facet folder" grouping
+                e.stopPropagation();
                 setVisiblePanels({
                   type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
                   facetPath: facet.facetPath,
                 });
+              };
 
               if (facet.variant === 'NumericAggregation') {
                 const stats = aggregations[facet.facetPath]?.stats;
@@ -158,7 +161,8 @@ const FacetCollection = ({
  */
 
 const Facets = ({ options }) => {
-  const { filters } = useFiltersContext();
+  const { filters: rawFilters } = useFiltersContext();
+  const filters = toArrangerV3Filter(rawFilters);
   const {
     data: responseData,
     loading: isLoading,

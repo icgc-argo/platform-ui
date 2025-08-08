@@ -1,3 +1,6 @@
+// Set up global React if needed
+global.React = require('react');
+
 const noop = () => 1;
 
 require.extensions['.css'] = noop;

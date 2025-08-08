@@ -20,7 +20,6 @@
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { DnaLoader, styled } from '@icgc-argo/uikit';
-// @ts-expect-error lib no TS support
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
@@ -158,25 +157,26 @@ const DiscoveryPage = () => {
   );
 
   return (
-    <FacetStateProvider staticFacetOptions={FACET_OPTIONS}>
-      <ArrangerDataProvider
-        documentType="file"
-        apiUrl={discoveryApiUrl}
-        // This is mandatory, no default fetcher
-        customFetcher={arrangerFetchWithEgoToken}
+    <ArrangerDataProvider
+      documentType="file"
+      apiUrl={discoveryApiUrl}
+      customFetcher={arrangerFetchWithEgoToken}
+    >
+      <ChartsProvider
+        theme={{
+          components: {
+            // @ts-ignore needs fix in lib
+            EmptyData: ChartEmptyData,
+            // @ts-ignore needs fix in lib
+            Loader: ChartLoader,
+          },
+          dataFetcher: arrangerFetchWithEgoToken,
+          colors: chartColors,
+        }}
       >
-        <ChartsProvider
-          theme={{
-            components: {
-              EmptyData: ChartEmptyData,
-              Loader: ChartLoader,
-            },
-            dataFetcher: arrangerFetchWithEgoToken,
-            colors: chartColors,
-          }}
-        >
-          <ApolloProvider client={arrangerV3client}>
-            <FiltersProvider>
+        <ApolloProvider client={arrangerV3client}>
+          <FiltersProvider>
+            <FacetStateProvider staticFacetOptions={FACET_OPTIONS}>
               <div
                 css={css({
                   display: 'grid',
@@ -215,11 +215,11 @@ const DiscoveryPage = () => {
                   <Footer />
                 </>
               </div>
-            </FiltersProvider>
-          </ApolloProvider>
-        </ChartsProvider>
-      </ArrangerDataProvider>
-    </FacetStateProvider>
+            </FacetStateProvider>
+          </FiltersProvider>
+        </ApolloProvider>
+      </ChartsProvider>
+    </ArrangerDataProvider>
   );
 };
 

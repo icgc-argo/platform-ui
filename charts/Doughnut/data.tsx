@@ -19,6 +19,14 @@
 
 import { chartColors } from 'components/pages/discovery';
 
+/**
+ * map
+ * inner => outer
+ * clicking inner ring filters with outer values
+ *
+ * our dynamic data from api is the property key
+ */
+
 export const cancerTypeCodeMapping = {
   C00: 'Lip, Oral Cavity & Pharynx',
   C01: 'Lip, Oral Cavity & Pharynx',
@@ -160,33 +168,28 @@ export const cancerTypeCodeMapping = {
 };
 
 /**
- * Combine data of cancer codes with cancer type groups and
- * Resolves two data sources, not intended for chart input
- * Filter out undefined
- *
- * @param cancerCodes
- * @param cancerTypeCodeMapping
- * @returns
+ * formats the data dynamic data with a mapping
  */
-export const createCategoryMap = (cancerCodes, cancerTypeCodeMapping) => {
+export const createCategoryMap = (dynamicData, mapping) => {
   const categoryMap = new Map();
   // put in order to line up
-  cancerCodes.forEach((code) => {
-    const cancerType = cancerTypeCodeMapping[code.key];
+  dynamicData.forEach((code) => {
+    const parentId = mapping[code.key];
 
     // no cancer type mapping, skip
-    if (!cancerType) {
+    if (!parentId) {
       return;
     }
 
-    if (!categoryMap.has(cancerType)) {
-      categoryMap.set(cancerType, { total: code.doc_count, codes: [code] });
+    if (!categoryMap.has(parentId)) {
+      categoryMap.set(parentId, { total: code.doc_count, codes: [{ ...code, parentId }] });
     } else {
-      const { total, codes: existingCodes } = categoryMap.get(cancerType);
+      const { total, codes: existingCodes } = categoryMap.get(parentId);
       const updatedCodes = existingCodes.concat([code]);
-      categoryMap.set(cancerType, { total: total + code.doc_count, codes: updatedCodes });
+      categoryMap.set(parentId, { total: total + code.doc_count, codes: updatedCodes });
     }
   });
+
   return categoryMap;
 };
 
@@ -195,7 +198,10 @@ type Segment = {
   label: string;
   value: number | string;
   color: string;
+  parentId?: string;
+  children?: string[];
 };
+
 /**
  * Format for input into chart
  *
@@ -223,17 +229,21 @@ export const createChartInput = (categoryMap) => {
         id: name,
         label: name,
         value: total,
+        children: codes.map((code) => code.key),
         color,
       });
+
       const outer = acc.outer.concat(
         codes.map((code) => ({
           id: code.key,
           label: code.key,
           value: code.doc_count,
+          parentId: code.parentId,
           color,
         })),
       );
       const legend = acc.legend.concat({ label: name, color });
+
       return { outer, inner, legend };
     },
     {

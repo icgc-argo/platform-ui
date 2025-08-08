@@ -17,16 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ResponsiveBar } from '@nivo/bar';
-import { ResponsiveLine } from '@nivo/line';
-
 // TODO: chart configs are different for different charts
-export type ChartConfig = {};
+export type ChartConfig = {} | (({ data }: { data: unknown }) => Record<string, any>);
 
 export type Chart = {
   consumerConfig?: ChartConfig;
   onLoading?: () => any;
   onError?: (error) => any;
 };
-
-export type ChartComponent = typeof ResponsiveLine | typeof ResponsiveBar;

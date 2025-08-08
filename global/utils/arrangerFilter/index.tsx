@@ -21,6 +21,7 @@ import {
   CombinationKeys,
   FieldOperator,
 } from '@overture-stack/arranger-components/dist/SQONViewer/types';
+import { defaultFilters } from 'components/pages/file-repository/hooks/useFiltersContext';
 import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
 import isEmpty from 'lodash/isEmpty';
 
@@ -37,9 +38,9 @@ export type FacetFilter = {
  * This is a quick fix to make it work with Arranger v3
  */
 export const toArrangerV3Filter = (inputFilter: FileRepoFiltersType) => {
-  if (isEmpty(inputFilter.content)) {
+  if (isEmpty(inputFilter?.content)) {
     // empty filter SQON object
-    return inputFilter;
+    return defaultFilters;
   }
   const content = inputFilter.content.map((filter) => {
     // ignore FilterField fields property as is
