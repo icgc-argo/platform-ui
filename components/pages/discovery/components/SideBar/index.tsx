@@ -27,6 +27,7 @@ const SidebarComp = ({ children }: PropsWithChildren<{}>) => {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#04518C',
+        boxShadow: '0px 3px 8px 0px rgba(0, 0, 0, 0.10), 0px 3px 8px 0px rgba(0, 0, 0, 0.10)',
       })}
     >
       {children}
@@ -99,11 +100,12 @@ const Sidebar = ({
       {open ? (
         <>
           {children}
-          <Toggle onClick={toggle} size="10px" />
+          <Toggle onClick={toggle} size="10px" direction="left" />
         </>
       ) : (
         <Toggle
           onClick={toggle}
+          direction="right"
           size="10px"
           css={css({
             height: '80px',

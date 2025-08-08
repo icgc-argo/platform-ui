@@ -23,7 +23,7 @@ import { PropsWithChildren } from 'react';
 import { ArrowToggle, commonStyle } from './common';
 
 const facetFolderStyles = {
-  container: css({ ':hover': { cursor: 'pointer' } }),
+  container: css({ ':hover': { cursor: 'pointer' }, borderTop: '1px solid #F8F8FB' }),
   folder: css([
     {
       height: '36px',

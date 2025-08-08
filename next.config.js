@@ -65,7 +65,7 @@ const nextConfig = withPlugins([withImages, withTM], {
     // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
     // start react configs
     if (options.isServer) {
-      config.externals = ['react', ...config.externals];
+      config.externals = ['react', 'react-dom', ...config.externals];
     }
 
     // end react configs

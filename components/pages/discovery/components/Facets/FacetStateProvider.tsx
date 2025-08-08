@@ -17,7 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { createContext, PropsWithChildren, useContext, useReducer, useState } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+} from 'react';
 
 import { FacetPanelOptions } from '../../data/facet';
 
@@ -26,6 +33,7 @@ type TContext = {
   isFolderExpanded: (path: string) => boolean;
   isExpanded: boolean;
   setVisiblePanels: (action: Actions) => void;
+  staticFacetOptions: FacetPanelOptions;
 };
 
 type TState = { folders: string[]; facets: string[] };
@@ -68,70 +76,78 @@ const toggleArray = (source, test) => {
   return source.includes(test) ? source.filter((element) => element !== test) : source.concat(test);
 };
 
-/**
- * Handles toggling facet folders and facet groups
- */
-const visibilityReducer =
-  (staticFacetOptions) =>
-  (visiblePanels: TState, action: Actions): TState => {
-    const allFacetPaths = staticFacetOptions.flatMap((folder) =>
-      folder.contents.map((facet) => facet.facetPath),
-    );
-
-    const allFolderPaths = staticFacetOptions.map(({ name }) => name);
-
-    switch (action.type) {
-      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL: {
-        const isExpanded = visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0;
-        if (isExpanded) {
-          return {
-            facets: [],
-            folders: [],
-          };
-        } else {
-          return {
-            facets: allFacetPaths,
-            folders: allFolderPaths,
-          };
-        }
-      }
-      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH: {
-        const facetPath = action.facetPath;
-        const facets = toggleArray(visiblePanels.facets, facetPath);
-        return { ...visiblePanels, facets };
-      }
-      case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER: {
-        const name = action.name;
-        const folders = toggleArray(visiblePanels.folders, name);
-        return { ...visiblePanels, folders };
-      }
-      default: {
-        console.error('unknown action');
-      }
-    }
-  };
-
 const initialState: TState = { folders: [], facets: [] };
 export const FacetStateProvider = ({
   staticFacetOptions,
   children,
 }: PropsWithChildren<{ staticFacetOptions: FacetPanelOptions }>) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  /**
+   * Handles toggling facet folders and facet groups
+   */
+  const visibilityReducer = useMemo(
+    () =>
+      (visiblePanels: TState, action: Actions): TState => {
+        const allFacetPaths = staticFacetOptions.flatMap((folder) =>
+          folder.contents.map((facet) => facet.facetPath),
+        );
 
-  const [visiblePanels, setVisiblePanels] = useReducer(
-    visibilityReducer(staticFacetOptions),
-    initialState,
+        const allFolderPaths = staticFacetOptions.map(({ name }) => name);
+
+        switch (action.type) {
+          case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL: {
+            const isExpanded = visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0;
+            if (isExpanded) {
+              return {
+                facets: [],
+                folders: [],
+              };
+            } else {
+              return {
+                facets: allFacetPaths,
+                folders: allFolderPaths,
+              };
+            }
+          }
+          case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH: {
+            const facetPath = action.facetPath;
+            const facets = toggleArray(visiblePanels.facets, facetPath);
+            return { ...visiblePanels, facets };
+          }
+          case FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER: {
+            const name = action.name;
+            const folders = toggleArray(visiblePanels.folders, name);
+            return { ...visiblePanels, folders };
+          }
+          default: {
+            console.error('unknown action');
+          }
+        }
+      },
+    [staticFacetOptions],
   );
 
-  const isFacetExpanded = (path: string) => visiblePanels.facets.includes(path);
-  const isFolderExpanded = (folder: string) => visiblePanels.folders.includes(folder);
-  const isExpanded = visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0;
+  const [visiblePanels, setVisiblePanels] = useReducer(visibilityReducer, initialState);
+
+  const isFacetExpanded = useCallback(
+    (path: string) => visiblePanels.facets.includes(path),
+    [visiblePanels.facets],
+  );
+  const isFolderExpanded = useCallback(
+    (folder: string) => visiblePanels.folders.includes(folder),
+    [visiblePanels.folders],
+  );
+
+  const isExpanded = useMemo(
+    () => visiblePanels.facets.length > 0 || visiblePanels.folders.length > 0,
+    [visiblePanels.facets.length, visiblePanels.folders.length],
+  );
 
   const props = {
     isFacetExpanded,
     isFolderExpanded,
     isExpanded,
     setVisiblePanels,
+    staticFacetOptions,
   };
 
   return <FacetContext.Provider value={props}>{children}</FacetContext.Provider>;

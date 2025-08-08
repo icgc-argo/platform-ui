@@ -18,18 +18,47 @@
  */
 
 import { css } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import { Icon } from '@icgc-argo/uikit';
 
-export const ChartContainer = ({
-  children,
-  height,
-  className,
-}: PropsWithChildren<{ height?: any; className?: string }>) => (
-  <div css={css({ flex: 1, position: 'relative' })} className={className}>
-    <div
-      css={css({ position: 'absolute', top: 0, left: 0, width: '100%', height: height || '100%' })}
-    >
-      {children}
+/**
+ * Minimal version of UIKit MenuItem component, stripped down to essentials
+ * Need full control over events, UIKit MenuItem stops propagation
+ */
+export const FacetMenuItem = ({ displayName, isExpanded, onClick, children }) => {
+  return (
+    <div css={css({ background: 'white' })}>
+      <div
+        onClick={onClick}
+        css={css({
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          background: isExpanded ? 'inherit' : '#f8f8fb',
+          padding: '8px 12px',
+          color: '#151c3d',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          borderColor: '#dcdde1',
+          lineHeight: '1.71',
+
+          '&:hover': {
+            backgroundColor: '#f2f2f8',
+          },
+        })}
+      >
+        <Icon
+          name={`chevron_${isExpanded ? 'down' : 'right'}`}
+          fill={'#151c3d'}
+          css={css({ marginRight: '7px' })}
+        />
+        <div>{displayName}</div>
+      </div>
+
+      {isExpanded ? (
+        <div css={css({ borderBottom: '1px solid #dcdde1', borderTop: '1px solid #dcdde1' })}>
+          {children}
+        </div>
+      ) : null}
     </div>
-  </div>
-);
+  );
+};

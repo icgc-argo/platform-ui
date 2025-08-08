@@ -27,7 +27,7 @@ import { Chart } from './types';
 const generateQuery = ({ field }: { field: string }) => gql`
   query ChartsFileCentricAgg($filters:JSON) {
     file {
-      aggregations(filters: $filters) {
+      aggregations(filters: $filters, aggregations_filter_themselves: true) {
         ${field} {
           bucket_count
           buckets {

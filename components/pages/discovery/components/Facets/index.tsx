@@ -20,22 +20,22 @@
 import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 
+import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 import {
   getOptions,
   useFacetOptionToggle,
   useFacetSelectAllOptionsToggle,
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
-import { get } from 'lodash';
+import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
 import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
-import {
-  FacetStateProvider,
-  FACET_VISIBILITY_TOGGLE_ACTIONS,
-  useFacetState,
-} from './FacetStateProvider';
+import { FACET_VISIBILITY_TOGGLE_ACTIONS, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
+import { RangeFacet } from './RangeFacet/RangeFacet';
 import { FiltersSearchBox } from './Search';
 
 /**
@@ -59,44 +59,92 @@ const FacetCollection = ({
   staticFacets: FacetPanelOptions;
 }) => {
   const { filters } = useFiltersContext();
+  const { setSQON } = useArrangerData();
   const { isFacetExpanded, isFolderExpanded, setVisiblePanels } = useFacetState();
 
   return (
     <>
-      {staticFacets.map(({ name, contents }, idx) => {
+      {staticFacets.map(({ name, contents }, index) => {
         return (
           <FacetFolder
             title={name}
-            onClick={() =>
-              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name })
-            }
+            onClick={() => {
+              setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_FOLDER, name });
+            }}
             isExpanded={isFolderExpanded(name)}
-            key={`name_${idx}`}
+            key={`${name}_${index}`}
           >
-            {contents.map((facet) => {
-              const options = getOptions(facet, filters, aggregations);
-              const onOptionToggle = useFacetOptionToggle(facet);
-              const onSelectAllOptions = useFacetSelectAllOptionsToggle(facet, aggregations);
-
-              const facetProps = {
-                ...facet,
-                ...{
-                  options,
-                  onOptionToggle,
-                  onSelectAllOptions,
-                  isExpanded: isFacetExpanded(facet.facetPath),
-                  onClick: () =>
-                    setVisiblePanels({
-                      type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
-                      facetPath: facet.facetPath,
-                    }),
-                },
+            {contents.map((facet, index) => {
+              // sets facet ui state in sidebar
+              const setVisibleFacetPanel = (e: Event) => {
+                // stop propagation that would toggle the entire "facet folder" grouping
+                e.stopPropagation();
+                setVisiblePanels({
+                  type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_PATH,
+                  facetPath: facet.facetPath,
+                });
               };
-              return (
-                <FacetRow key={facet.facetPath}>
-                  <Facet facet={facetProps} aggregations={aggregations} />
-                </FacetRow>
-              );
+
+              if (facet.variant === 'NumericAggregation') {
+                const stats = aggregations[facet.facetPath]?.stats;
+
+                return (
+                  <RangeFacet
+                    displayName={facet.name}
+                    fieldName={facet.esDocumentField}
+                    stats={stats}
+                    key={index}
+                    onClickFacet={setVisibleFacetPanel}
+                    isExpanded={isFacetExpanded(facet.facetPath)}
+                  />
+                );
+              } else {
+                // default to "Aggregation" type
+                const options = getOptions(facet, filters, aggregations);
+
+                /**
+                 * toggle facet panel and ArrangerDataProvider state for charts
+                 */
+                const facetToggle = useFacetOptionToggle(facet);
+                const onOptionToggle = (facetValue) => {
+                  // set ARGO url filters (not using Arranger v3)
+                  const filter = facetToggle(facetValue);
+                  // set SQON for Arranger v3 features in use
+                  setSQON(toArrangerV3Filter(filter) as SQONType);
+                };
+
+                const facetAllToggle = useFacetSelectAllOptionsToggle(facet, aggregations);
+                const onSelectAllOptions = (facetValue) => {
+                  // set ARGO url filters (not using Arranger v3)
+                  const filter = facetAllToggle(facetValue) as FileRepoFiltersType;
+                  // set SQON for Arranger v3 features in use
+                  setSQON(toArrangerV3Filter(filter) as SQONType);
+                };
+
+                const facetProps = {
+                  ...facet,
+                  ...{
+                    parseDisplayValue: (value) => {
+                      const IS_MISSING = '__missing__';
+                      if (value === IS_MISSING) {
+                        return 'No Data';
+                      }
+                      return value;
+                    },
+                    options,
+                    onOptionToggle,
+                    onSelectAllOptions,
+                    isExpanded: isFacetExpanded(facet.facetPath),
+                    onClick: setVisibleFacetPanel,
+                  },
+                };
+
+                return isEmpty(options) ? null : (
+                  <FacetRow key={facet.facetPath}>
+                    <Facet {...facetProps} />
+                  </FacetRow>
+                );
+              }
             })}
           </FacetFolder>
         );
@@ -111,8 +159,10 @@ const FacetCollection = ({
  *
  * @param options - hardcoded facet options
  */
+
 const Facets = ({ options }) => {
-  const { filters } = useFiltersContext();
+  const { filters: rawFilters } = useFiltersContext();
+  const filters = toArrangerV3Filter(rawFilters);
   const {
     data: responseData,
     loading: isLoading,
@@ -125,6 +175,10 @@ const Facets = ({ options }) => {
 
   const { setVisiblePanels, isExpanded } = useFacetState();
 
+  /**
+   * response aggregations + static facet options
+   * this is inbuilt functionality in Arranger v3
+   */
   return (
     <>
       <FiltersSearchBox
@@ -132,7 +186,7 @@ const Facets = ({ options }) => {
         isExpanded={isExpanded}
         onClick={() => setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL })}
       />
-      <div css={css({ flex: 1, overflow: 'scroll' })}>
+      <div css={css([{ flex: 1, overflow: 'scroll' }])}>
         <FacetCollection aggregations={aggregations} staticFacets={options} isLoading={isLoading} />
       </div>
     </>
@@ -143,15 +197,9 @@ const Facets = ({ options }) => {
  *
  * Facets panel wrapped in a state provider
  *
- * @param staticFacetOptions - hardcoded facet options
  * @returns Facets panel components
  */
-const FacetsPanel = ({ staticFacetOptions }: { staticFacetOptions: FacetPanelOptions }) => {
-  return (
-    <FacetStateProvider staticFacetOptions={staticFacetOptions}>
-      <Facets options={staticFacetOptions} />
-    </FacetStateProvider>
-  );
+export const FacetsPanel = () => {
+  const { staticFacetOptions } = useFacetState();
+  return <Facets options={staticFacetOptions} />;
 };
-
-export default FacetsPanel;

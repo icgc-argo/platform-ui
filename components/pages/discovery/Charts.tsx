@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- *  If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -18,32 +18,47 @@
  */
 
 import { css } from '@icgc-argo/uikit';
+import { BarChart } from '@overture-stack/arranger-charts';
+import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
-import BarChart from './charts/Bar';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import DoughnutChart from './charts/Doughnut';
-import LineChart from './charts/Line';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
-import RangeSelector from './components/Selector';
 
-const colors = [
-  '#78BB71',
-  '#045093',
-  '#7F55CC',
-  '#4BCEE5',
-  '#F95D31',
-  '#24DBB4',
-  '#DF1B42',
-  '#FEA430',
-  '#9BC7ED',
-  '#A1A4B1',
-  '#CBBBEA',
-  '#FA8564',
-  '#B7EBF4',
-  '#A7F0E1',
-  '#FCBEAC',
-  '#FEE8CB',
-];
+const getAgeAtDiagnosisFilter = (key, field) => {
+  // ranges from query are less than 18, 18 => 65, 65+
+  // { key: Less than 18, to: 18 },{ key: 8 to 65, from: 18, to: 66 },{ key: 65 and above, from: 65 }
+  switch (key) {
+    case '< 18':
+      return {
+        op: 'and',
+        content: [{ op: '<=', content: { field, value: 17 } }],
+      };
+      break;
+
+    case '18 - 65':
+      return {
+        op: 'and',
+        content: [
+          { op: '>=', content: { field, value: 18 } },
+          { op: '<=', content: { field, value: 65 } },
+        ],
+      };
+      break;
+
+    case '> 65':
+      return {
+        op: 'and',
+        content: [{ op: '>', content: { field, value: 65 } }],
+      };
+      break;
+
+    default:
+      return {};
+  }
+};
 
 const ChartContainer = ({ children }) => (
   <div
@@ -67,34 +82,88 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
+const getCancerCodes = (chartConfig): string[] => {
+  // either inner ring with codes, or outer ring with parentId of inner ring
+  if (chartConfig.data?.parentId) {
+    return [chartConfig.data.id];
+  } else {
+    return chartConfig.data?.children || [];
+  }
+};
+
+const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
+
 const ChartsLayout = () => {
+  const { setSQON } = useArrangerData();
+  const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  const chartFilter = (esDocumentField: string) => {
+    return (filterValue) => {
+      const value = { field: esDocumentField, value: filterValue };
+      const filter = setFilterFromFieldAndValue(value);
+      setSQON(toArrangerV3Filter(filter) as SQONType);
+    };
+  };
+
+  // field name: filter for field
+  const chartFilters = {
+    gender: chartFilter('gender'),
+    study_id: chartFilter('study_id'),
+    primary_site: chartFilter('primary_site'),
+    vital_status: chartFilter('vital_status'),
+    analyses__experiment__experimental_strategy: chartFilter(
+      'analyses.experiment.experimental_strategy',
+    ),
+  };
+
   return (
     <ChartContainer>
       <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart field="study_id" />
+        <BarChart
+          fieldName="study_id"
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.study_id(config.data.key);
+            },
+          }}
+        />
       </Card>
 
-      <Card title="RDPC Node" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <BarChart field="study_id" />
+      <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
+        <></>
       </Card>
 
-      <Card
-        title="Track Embargo State"
-        Selector={
-          <RangeSelector
-            data={[{ label: '3M' }, { label: '6M' }]}
-            activeIndex={0}
-            onClick={() => console.log('click')}
-          />
-        }
-        css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}
-      >
-        <LineChart
-          fields={[
-            'analysis__analysis_version',
-            'clinical__specimens__specimen_acquisition_interval',
-          ]}
-          interval={2}
+      <Card title="Age at Diagnosis">
+        <BarChart
+          fieldName="primary_diagnosis__age_at_diagnosis"
+          query={{
+            variables: {
+              ranges: [
+                { key: '< 18', to: 18 },
+                { key: '18 - 65', from: 18, to: 66 },
+                { key: '> 65', from: 66 },
+              ],
+            },
+            transformData: (data: unknown[]) => {
+              // order data, range query so there won't be "no data"
+              data.reverse();
+              return data;
+            },
+          }}
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              const field = 'primary_diagnosis.age_at_diagnosis';
+              const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
+
+              // fieldname, new query, current query
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+              replaceAllFilters(sqonFilter);
+              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+              setSQON(toArrangerV3Filter(sqonFilter));
+            },
+          }}
         />
       </Card>
 
@@ -107,9 +176,20 @@ const ChartsLayout = () => {
           gridRowEnd: 3,
         })}
       >
-        <DoughnutChart field={undefined} />
+        <DoughnutChart
+          fieldName="primary_diagnosis__cancer_type_code"
+          theme={{
+            onClick: (config) => {
+              console.log(config);
+              const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+              const cancerCodes = getCancerCodes(config);
+              console.log('cancer codes', cancerCodes);
+              const res = setFilter(cancerCodes);
+              console.log('res', res);
+            },
+          }}
+        />
       </Card>
-
       <Card
         title="Primary Site"
         css={css({
@@ -119,20 +199,51 @@ const ChartsLayout = () => {
           gridRowEnd: 5,
         })}
       >
-        <BarChart field="studyx_id" />
-      </Card>
-
-      <Card title="Age at Diagnosis">
-        <BarChart field="study_id" />
+        <BarChart
+          fieldName="primary_site"
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.primary_site(config.data.key);
+            },
+          }}
+        />
       </Card>
       <Card title="Gender">
-        <BarChart field="study_id" />
+        <BarChart
+          fieldName="gender"
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.gender(config.data.key);
+            },
+            onDataLoad: (data) => {
+              return data.toReversed();
+            },
+          }}
+        />
       </Card>
       <Card title="Vital Status">
-        <BarChart field="study_id" />
+        <BarChart
+          fieldName="vital_status"
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.vital_status(config.data.key);
+            },
+          }}
+        />
       </Card>
       <Card title="Experimental Strategy">
-        <BarChart field="study_id" />
+        <BarChart
+          fieldName="analyses__experiment__experimental_strategy"
+          theme={{
+            ...commonTheme,
+            onClick: (config) => {
+              return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+            },
+          }}
+        />
       </Card>
     </ChartContainer>
   );

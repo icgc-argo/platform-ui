@@ -30,9 +30,9 @@ const filtersSearchBoxStyles = {
 
 export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
   return (
-    <div css={css([css({ height: '100px', margin: '10px 8px 8px 8px' })])}>
+    <div css={css([css({ height: '20px', margin: '10px 8px 8px 8px' })])}>
       <div css={css([commonStyle.header, filtersSearchBoxStyles.folder])}>
-        <h2>{title}</h2>
+        {/* <h2>{title}</h2> */}
         <div
           onClick={() => onClick()}
           css={css({
@@ -49,7 +49,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
         </div>
       </div>
 
-      <Input
+      {/* <Input
         size="sm"
         aria-label="search-for-files"
         placeholder={'try searcing for a filter'}
@@ -59,7 +59,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
           console.log(e.target.value);
         }}
         css={css({ marginTop: '12px' })}
-      />
+      /> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 {
   "name": "argo-platform-ui",
-  "version": "1.129.0",
+  "version": "1.130.0",
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
@@ -27,7 +27,7 @@
     "babel": "./node_modules/@babel/cli/bin/babel.js"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.8",
+    "@apollo/client": "^3.13.8",
     "@emotion/react": "^11.10.4",
     "@graphql-codegen/cli": "^2.12.0",
     "@graphql-codegen/introspection": "^2.1.1",
@@ -38,7 +38,8 @@
     "@nivo/core": "^0.88.0",
     "@nivo/line": "^0.88.0",
     "@nivo/pie": "^0.88.0",
-    "@overture-stack/arranger-components": "3.0.0-beta.11",
+    "@overture-stack/arranger-charts": "^0.0.1-beta.5",
+    "@overture-stack/arranger-components": "^3.0.0-rc.1",
     "apollo-upload-client": "^11.0.0",
     "browser-fs-access": "^0.31.1",
     "clsx": "^1.1.1",
@@ -62,6 +63,7 @@
     "next-images": "^1.8.4",
     "npm-force-resolutions": "^0.0.10",
     "pluralize": "^8.0.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "promise-queue": "^2.2.5",
     "prop-types": "^15.8.1",
     "query-string": "^8.1.0",
@@ -103,7 +105,6 @@
     "next-transpile-modules": "^9.0.0",
     "plop": "^3.1.0",
     "prettier": "^2.0.5",
-    "prettier-plugin-organize-imports": "^4.1.0",
     "pretty-quick": "^2.0.1",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.8.1",
@@ -124,6 +125,8 @@
     "tar": "6.1.11",
     "underscore": "1.13.3",
     "y18n": "5.0.8",
-    "@tanstack/react-table": "8.0.0-beta.3"
+    "@tanstack/react-table": "8.0.0-beta.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
