@@ -18,7 +18,7 @@ export type FacetPanelOptions = FacetFolder[];
  * facetPath - used for UI visibility
  * esDocumentField - used for SQON filtering
  */
-export const FACET_OPTIONS: FacetPanelOptions = [
+export const discoveryFacets: FacetPanelOptions = [
   {
     name: 'General',
     contents: [
@@ -289,6 +289,53 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         facetPath: 'follow_ups__anatomic_site_progression_or_recurrences',
         esDocumentField: 'follow_ups.anatomic_site_progression_or_recurrences',
         variant: 'Aggregation',
+      },
+    ],
+  },
+  {
+    name: 'Molecular',
+    contents: [
+      {
+        name: 'Program ID',
+        facetPath: 'study_id',
+        variant: 'Aggregation',
+        esDocumentField: 'study_id',
+      },
+      {
+        name: 'Experimental Strategy',
+        facetPath: 'analyses__experiment__experimental_strategy',
+        variant: 'Aggregation',
+        esDocumentField: 'analysis.experiment.experimental_strategy',
+      },
+      {
+        name: 'Data Category',
+        facetPath: 'analyses__files__data_category',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.data_category',
+      },
+      {
+        name: 'File Type',
+        facetPath: 'analyses__files__file_type',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.file_type',
+      },
+      {
+        name: 'File Access',
+        facetPath: 'analyses__file_access',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.file_access',
+      },
+      {
+        name: 'Workflow Name',
+        facetPath: 'analyses__workflow__workflow_name',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.workflow.workflow_name',
+      },
+      {
+        name: 'Analysis Tools',
+        facetPath: 'analyses__files__analysis_tools',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.analysis_tools',
       },
     ],
   },

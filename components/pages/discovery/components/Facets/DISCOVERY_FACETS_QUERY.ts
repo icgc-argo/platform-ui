@@ -191,6 +191,30 @@ const DISCOVERY_FACETS_QUERY = gql`
         follow_ups__anatomic_site_progression_or_recurrences{
           ${aggBucketProps}
         }
+        
+        # File filters
+        study_id {
+         ${aggBucketProps}
+        }
+        analyses__experiment__experimental_strategy {
+          ${aggBucketProps}
+        }
+        analyses__files__data_category {
+          ${aggBucketProps}
+        }
+        analyses__files__file_type {
+         ${aggBucketProps}
+        }
+        analyses__file_access {
+         ${aggBucketProps}
+        }
+        analyses__workflow__workflow_name {
+          ${aggBucketProps}
+        }
+        analyses__files__analysis_tools {
+         ${aggBucketProps}
+        }
+  
       }
     } 
   }
