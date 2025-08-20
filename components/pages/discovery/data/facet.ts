@@ -23,6 +23,12 @@ export const discoveryFacets: FacetPanelOptions = [
     name: 'General',
     contents: [
       {
+        name: 'Program ID',
+        facetPath: 'study_id',
+        variant: 'Aggregation',
+        esDocumentField: 'study_id',
+      },
+      {
         name: 'Gender',
         facetPath: 'gender',
         esDocumentField: 'gender',
@@ -44,7 +50,7 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Survival Time',
         facetPath: 'survival_time',
         esDocumentField: 'survival_time',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Primary Site',
@@ -121,7 +127,7 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Specimen Acquisition Interval',
         facetPath: 'specimens__specimen_acquisition_interval',
         esDocumentField: 'specimens.specimen_acquisition_interval',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Tumour Histological Type',
@@ -157,13 +163,13 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Percent Tumour Cells',
         facetPath: 'specimens__percent_tumour_cells',
         esDocumentField: 'specimens.percent_tumour_cells',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Percent Tumour Cells Measurement Method',
         facetPath: 'specimens__percent_tumour_cells_measurement_method',
         esDocumentField: 'specimens.percent_tumour_cells_measurement_method',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
     ],
   },
@@ -184,6 +190,12 @@ export const discoveryFacets: FacetPanelOptions = [
         variant: 'Aggregation',
       },
       {
+        name: 'Clinical T Category',
+        facetPath: 'primary_diagnosis__clinical_t_category',
+        esDocumentField: 'primary_diagnosis.clinical_t_category',
+        variant: 'Aggregation',
+      },
+      {
         name: 'Clinical N Category',
         facetPath: 'primary_diagnosis__clinical_n_category',
         esDocumentField: 'primary_diagnosis.clinical_n_category',
@@ -195,12 +207,7 @@ export const discoveryFacets: FacetPanelOptions = [
         esDocumentField: 'primary_diagnosis.clinical_m_category',
         variant: 'Aggregation',
       },
-      {
-        name: 'Clinical T Category',
-        facetPath: 'primary_diagnosis__clinical_t_category',
-        esDocumentField: 'primary_diagnosis.clinical_t_category',
-        variant: 'Aggregation',
-      },
+
       {
         name: 'Clinical Stage Group',
         facetPath: 'primary_diagnosis__clinical_stage_group',
@@ -257,7 +264,7 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Interval Of Followup',
         facetPath: 'follow_ups__interval_of_followup',
         esDocumentField: 'follow_ups.interval_of_followup',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Disease Status at Followup',
@@ -269,13 +276,13 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Relapse Type',
         facetPath: 'follow_ups__relapse_type',
         esDocumentField: 'follow_ups.relapse_type',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Relapse Interval',
         facetPath: 'follow_ups__relapse_interval',
         esDocumentField: 'follow_ups.relapse_interval',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Method of Progression Status',
