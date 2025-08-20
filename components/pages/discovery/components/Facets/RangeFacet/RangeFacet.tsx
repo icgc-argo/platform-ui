@@ -136,6 +136,12 @@ export const RangeFacet = ({
       onClick={(e) => {
         e.stopPropagation();
       }}
+      css={css`
+        .no-data {
+          color: inherit;
+          padding: 7px 12px;
+        }
+      `}
     >
       <RangeAgg
         fieldName={fieldName}
