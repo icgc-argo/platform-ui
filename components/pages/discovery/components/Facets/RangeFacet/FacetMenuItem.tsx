@@ -40,6 +40,7 @@ export const FacetMenuItem = ({ displayName, isExpanded, onClick, children }) =>
           fontWeight: 'bold',
           borderColor: '#dcdde1',
           lineHeight: '1.71',
+          borderBottom: '1px solid #dcdde1',
 
           '&:hover': {
             backgroundColor: '#f2f2f8',
@@ -54,11 +55,7 @@ export const FacetMenuItem = ({ displayName, isExpanded, onClick, children }) =>
         <div>{displayName}</div>
       </div>
 
-      {isExpanded ? (
-        <div css={css({ borderBottom: '1px solid #dcdde1', borderTop: '1px solid #dcdde1' })}>
-          {children}
-        </div>
-      ) : null}
+      {isExpanded ? <div>{children}</div> : null}
     </div>
   );
 };

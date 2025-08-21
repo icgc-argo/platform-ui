@@ -45,7 +45,7 @@ import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
-import { FACET_OPTIONS } from './data/facet';
+import { discoveryFacets } from './data/facet';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -174,9 +174,9 @@ const DiscoveryPage = () => {
           colors: chartColors,
         }}
       >
-        <ApolloProvider client={arrangerV3client}>
-          <FiltersProvider>
-            <FacetStateProvider staticFacetOptions={FACET_OPTIONS}>
+        <FacetStateProvider staticFacetOptions={discoveryFacets}>
+          <ApolloProvider client={arrangerV3client}>
+            <FiltersProvider>
               <div
                 css={css({
                   display: 'grid',
@@ -215,9 +215,9 @@ const DiscoveryPage = () => {
                   <Footer />
                 </>
               </div>
-            </FacetStateProvider>
-          </FiltersProvider>
-        </ApolloProvider>
+            </FiltersProvider>
+          </ApolloProvider>
+        </FacetStateProvider>
       </ChartsProvider>
     </ArrangerDataProvider>
   );

@@ -47,19 +47,19 @@ const DISCOVERY_FACETS_QUERY = gql`
         gender {
           ${aggBucketProps}
         }
-        # TODO: Missing
-        # vital_status {
-        #  {aggBucketProps}
-        #}
+
+        vital_status {
+         ${aggBucketProps}
+        }
         
         cause_of_death {
           ${aggBucketProps}
         }
 
-        # TODO Numeric
-        # survival_time {
-        #   {
-        # }
+       
+        survival_time {
+          ${numericProps}
+        }
 
         primary_site {
           ${aggBucketProps}
@@ -97,10 +97,9 @@ const DISCOVERY_FACETS_QUERY = gql`
         specimens__pathological_stage_group{
           ${aggBucketProps}
         }
-        # TODO Numeric
-        #specimens__specimen_acquisition_interval{
-        #  {aggBucketProps}
-        #}
+        specimens__specimen_acquisition_interval{
+         ${numericProps}
+        }
         specimens__tumour_histological_type{
           ${aggBucketProps}
         }
@@ -117,15 +116,13 @@ const DISCOVERY_FACETS_QUERY = gql`
           ${aggBucketProps}
         }
 
-        # TODO Numeric
-        #specimens__percent_tumour_cells{
-        #  {aggBucketProps}
-        #}
+        specimens__percent_tumour_cells{
+         ${numericProps}
+        }
 
-        # TODO Numeric
-        #specimens__percent_tumour_cells_measurement_method{
-        #  {aggBucketProps}
-        #}
+        specimens__percent_tumour_cells_measurement_method{
+         ${numericProps}
+        }
 
         # --- Diagnosis
         primary_diagnosis__age_at_diagnosis{
@@ -134,13 +131,13 @@ const DISCOVERY_FACETS_QUERY = gql`
         primary_diagnosis__clinical_tumour_staging_system{
           ${aggBucketProps}
         }
+        primary_diagnosis__clinical_t_category{
+          ${aggBucketProps}
+        }
         primary_diagnosis__clinical_n_category{
           ${aggBucketProps}
         }
         primary_diagnosis__clinical_m_category{
-          ${aggBucketProps}
-        }
-        primary_diagnosis__clinical_t_category{
           ${aggBucketProps}
         }
         primary_diagnosis__clinical_stage_group{
@@ -169,27 +166,46 @@ const DISCOVERY_FACETS_QUERY = gql`
         }
 
         # --- Assessment
-        # TODO Numeric
-        #follow_ups__interval_of_followup{
-        #  {aggBucketProps}
-        #}
+        follow_ups__interval_of_followup{
+          ${numericProps}
+        }
         follow_ups__disease_status_at_followup{
           ${aggBucketProps}
         }
-       
         follow_ups__relapse_type{
           ${aggBucketProps}
         }
-        
-        # TODO Numeric
-        #follow_ups__relapse_interval{
-        #  {aggBucketProps}
-        #}
+        follow_ups__relapse_interval{
+          ${numericProps}
+        }
         follow_ups__method_of_progression_status{
           ${aggBucketProps}
         }
         follow_ups__anatomic_site_progression_or_recurrences{
           ${aggBucketProps}
+        }
+        
+        # --- Molecular (File filters)
+        study_id {
+         ${aggBucketProps}
+        }
+        analyses__experiment__experimental_strategy {
+          ${aggBucketProps}
+        }
+        analyses__files__data_category {
+          ${aggBucketProps}
+        }
+        analyses__files__file_type {
+         ${aggBucketProps}
+        }
+        analyses__file_access {
+         ${aggBucketProps}
+        }
+        analyses__workflow__workflow_name {
+          ${aggBucketProps}
+        }
+        analyses__files__analysis_tools {
+         ${aggBucketProps}
         }
       }
     } 

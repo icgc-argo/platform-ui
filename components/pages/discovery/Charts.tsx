@@ -23,6 +23,7 @@ import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
+import { addInFilters } from '../file-repository/utils';
 import DoughnutChart from './charts/Doughnut';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
@@ -155,13 +156,12 @@ const ChartsLayout = () => {
             ...commonTheme,
             onClick: (config) => {
               const field = 'primary_diagnosis.age_at_diagnosis';
-              const sqonFilter = getAgeAtDiagnosisFilter(config.data.key, field);
-
-              // fieldname, new query, current query
+              const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-              replaceAllFilters(sqonFilter);
+              const newFilters = addInFilters(sqonFilterForChart, filters);
+              replaceAllFilters(newFilters);
               // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-              setSQON(toArrangerV3Filter(sqonFilter));
+              setSQON(toArrangerV3Filter(newFilters));
             },
           }}
         />
@@ -180,12 +180,9 @@ const ChartsLayout = () => {
           fieldName="primary_diagnosis__cancer_type_code"
           theme={{
             onClick: (config) => {
-              console.log(config);
               const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
               const cancerCodes = getCancerCodes(config);
-              console.log('cancer codes', cancerCodes);
-              const res = setFilter(cancerCodes);
-              console.log('res', res);
+              setFilter(cancerCodes);
             },
           }}
         />
