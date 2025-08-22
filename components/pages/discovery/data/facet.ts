@@ -18,10 +18,16 @@ export type FacetPanelOptions = FacetFolder[];
  * facetPath - used for UI visibility
  * esDocumentField - used for SQON filtering
  */
-export const FACET_OPTIONS: FacetPanelOptions = [
+export const discoveryFacets: FacetPanelOptions = [
   {
     name: 'General',
     contents: [
+      {
+        name: 'Program ID',
+        facetPath: 'study_id',
+        variant: 'Aggregation',
+        esDocumentField: 'study_id',
+      },
       {
         name: 'Gender',
         facetPath: 'gender',
@@ -44,7 +50,7 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         name: 'Survival Time',
         facetPath: 'survival_time',
         esDocumentField: 'survival_time',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Primary Site',
@@ -121,7 +127,7 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         name: 'Specimen Acquisition Interval',
         facetPath: 'specimens__specimen_acquisition_interval',
         esDocumentField: 'specimens.specimen_acquisition_interval',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Tumour Histological Type',
@@ -157,13 +163,13 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         name: 'Percent Tumour Cells',
         facetPath: 'specimens__percent_tumour_cells',
         esDocumentField: 'specimens.percent_tumour_cells',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Percent Tumour Cells Measurement Method',
         facetPath: 'specimens__percent_tumour_cells_measurement_method',
         esDocumentField: 'specimens.percent_tumour_cells_measurement_method',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
     ],
   },
@@ -184,6 +190,12 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         variant: 'Aggregation',
       },
       {
+        name: 'Clinical T Category',
+        facetPath: 'primary_diagnosis__clinical_t_category',
+        esDocumentField: 'primary_diagnosis.clinical_t_category',
+        variant: 'Aggregation',
+      },
+      {
         name: 'Clinical N Category',
         facetPath: 'primary_diagnosis__clinical_n_category',
         esDocumentField: 'primary_diagnosis.clinical_n_category',
@@ -195,12 +207,7 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         esDocumentField: 'primary_diagnosis.clinical_m_category',
         variant: 'Aggregation',
       },
-      {
-        name: 'Clinical T Category',
-        facetPath: 'primary_diagnosis__clinical_t_category',
-        esDocumentField: 'primary_diagnosis.clinical_t_category',
-        variant: 'Aggregation',
-      },
+
       {
         name: 'Clinical Stage Group',
         facetPath: 'primary_diagnosis__clinical_stage_group',
@@ -257,7 +264,7 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         name: 'Interval Of Followup',
         facetPath: 'follow_ups__interval_of_followup',
         esDocumentField: 'follow_ups.interval_of_followup',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Disease Status at Followup',
@@ -269,13 +276,13 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         name: 'Relapse Type',
         facetPath: 'follow_ups__relapse_type',
         esDocumentField: 'follow_ups.relapse_type',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Relapse Interval',
         facetPath: 'follow_ups__relapse_interval',
         esDocumentField: 'follow_ups.relapse_interval',
-        variant: 'Aggregation',
+        variant: 'NumericAggregation',
       },
       {
         name: 'Method of Progression Status',
@@ -289,6 +296,53 @@ export const FACET_OPTIONS: FacetPanelOptions = [
         facetPath: 'follow_ups__anatomic_site_progression_or_recurrences',
         esDocumentField: 'follow_ups.anatomic_site_progression_or_recurrences',
         variant: 'Aggregation',
+      },
+    ],
+  },
+  {
+    name: 'Molecular',
+    contents: [
+      {
+        name: 'Program ID',
+        facetPath: 'study_id',
+        variant: 'Aggregation',
+        esDocumentField: 'study_id',
+      },
+      {
+        name: 'Experimental Strategy',
+        facetPath: 'analyses__experiment__experimental_strategy',
+        variant: 'Aggregation',
+        esDocumentField: 'analysis.experiment.experimental_strategy',
+      },
+      {
+        name: 'Data Category',
+        facetPath: 'analyses__files__data_category',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.data_category',
+      },
+      {
+        name: 'File Type',
+        facetPath: 'analyses__files__file_type',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.file_type',
+      },
+      {
+        name: 'File Access',
+        facetPath: 'analyses__file_access',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.file_access',
+      },
+      {
+        name: 'Workflow Name',
+        facetPath: 'analyses__workflow__workflow_name',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.workflow.workflow_name',
+      },
+      {
+        name: 'Analysis Tools',
+        facetPath: 'analyses__files__analysis_tools',
+        variant: 'Aggregation',
+        esDocumentField: 'analyses.files.analysis_tools',
       },
     ],
   },
