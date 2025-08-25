@@ -19,7 +19,7 @@
 
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
-import { DnaLoader, styled } from '@icgc-argo/uikit';
+import { styled } from '@icgc-argo/uikit';
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
@@ -72,49 +72,6 @@ const DiscoveryQueryBar = () => {
   );
 };
 
-// https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
-export const chartColors = [
-  '#a6cee3',
-  '#1f78b4',
-  '#b2df8a',
-  '#33a02c',
-  '#fb9a99',
-  '#e31a1c',
-  '#fdbf6f',
-  '#ff7f00',
-  '#cab2d6',
-  '#6a3d9a',
-  '#ffff99',
-  '#b15928',
-];
-
-const ChartLoader = () => (
-  <div
-    css={css({
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100%',
-    })}
-  >
-    <DnaLoader />
-  </div>
-);
-const ChartEmptyData = () => (
-  <div
-    css={css({
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100%',
-      fontSize: '13px',
-      color: '#525767',
-    })}
-  >
-    No Donor data is available for display
-  </div>
-);
-
 const DiscoveryPage = () => {
   const theme = useTheme();
   const [isSidebarOpen, setSetbarView] = useState(true);
@@ -164,15 +121,9 @@ const DiscoveryPage = () => {
     >
       <ChartsProvider
         theme={{
-          components: {
-            // @ts-ignore needs fix in lib
-            EmptyData: ChartEmptyData,
-            // @ts-ignore needs fix in lib
-            Loader: ChartLoader,
-          },
           dataFetcher: arrangerFetchWithEgoToken,
-          colors: chartColors,
         }}
+        debugMode
       >
         <FacetStateProvider staticFacetOptions={discoveryFacets}>
           <ApolloProvider client={arrangerV3client}>
