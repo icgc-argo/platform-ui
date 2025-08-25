@@ -1,3 +1,0 @@
-- target Arranger v3 (field vs fieldName for example)
-- `aggregations_filter_themselves: true` hardcoded for current use case
-- uses ARGO project filter context functionality, this should be replaced with Arranger context provider
