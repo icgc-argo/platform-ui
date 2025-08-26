@@ -123,7 +123,6 @@ const DiscoveryPage = () => {
         theme={{
           dataFetcher: arrangerFetchWithEgoToken,
         }}
-        debugMode
       >
         <FacetStateProvider staticFacetOptions={discoveryFacets}>
           <ApolloProvider client={arrangerV3client}>

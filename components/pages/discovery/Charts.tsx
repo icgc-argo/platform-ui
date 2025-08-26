@@ -22,6 +22,7 @@ import { BarChart, ChartsThemeProvider, SunburstChart } from '@overture-stack/ar
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { useMemo } from 'react';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import { addInFilters } from '../file-repository/utils';
 import Card from './components/Card';
@@ -288,6 +289,11 @@ const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } }
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  // catch all for any filters changes to sync with Arranger context eg. on page refresh
+  useMemo(() => {
+    setSQON(toArrangerV3Filter(filters) as SQONType);
+  }, [filters]);
 
   const chartFilter = (esDocumentField: string) => {
     return (filterValue) => {
