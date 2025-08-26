@@ -227,6 +227,7 @@ export const chartColors = [
 const ChartLoader = () => (
   <div
     css={css({
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
