@@ -62,7 +62,7 @@ const Card = ({
       >
         {title}
       </h2>
-      <div css={css({ marginLeft: 'auto' })}> {Selector}</div>
+      <div css={css({ marginLeft: 'auto' })}>{Selector}</div>
     </div>
     {children}
   </div>
