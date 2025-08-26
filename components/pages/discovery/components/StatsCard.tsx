@@ -109,11 +109,7 @@ const STATS_QUERY = gql`
       hits(filters: $filters) {
         total
       }
-      aggregations(
-        filters: $filters
-        include_missing: true
-        aggregations_filter_themselves: false
-      ) {
+      aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
         study_id {
           bucket_count
           buckets {
