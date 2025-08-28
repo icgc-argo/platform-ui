@@ -295,7 +295,7 @@ const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } }
 const VisibleBars = ({ maxBars, fieldName }) => {
   const { getChartData } = useChartsContext();
   const { isLoading, isError, data } = getChartData(fieldName);
-  return isLoading || isError ? null : (
+  return isLoading || isError || data?.length === 0 ? null : (
     <div>{`Top ${Math.min(maxBars, data.length)} of ${data.length}`}</div>
   );
 };
