@@ -351,9 +351,7 @@ const ChartsLayout = () => {
                 return chartFilters.study_id(config.data.key);
               },
             }}
-            theme={{
-              ...commonTheme,
-            }}
+            theme={{ ...commonTheme }}
           />
         </Card>
 
