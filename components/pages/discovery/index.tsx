@@ -119,11 +119,8 @@ const DiscoveryPage = () => {
       apiUrl={discoveryApiUrl}
       customFetcher={arrangerFetchWithEgoToken}
     >
-      <ChartsProvider
-        theme={{
-          dataFetcher: arrangerFetchWithEgoToken,
-        }}
-      >
+      {/* @ts-expect-error prop types need work in lib */}
+      <ChartsProvider>
         <FacetStateProvider staticFacetOptions={discoveryFacets}>
           <ApolloProvider client={arrangerV3client}>
             <FiltersProvider>
