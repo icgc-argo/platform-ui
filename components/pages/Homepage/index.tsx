@@ -50,6 +50,30 @@ import {
 
 const newsItems: NewsItem[] = [
   {
+    title: 'August 29, 2025',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-121"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 12.1
+        </Link>{' '}
+        includes updates to 134 existing donors in the Pancreatic Cancer Harmonized "Omics" analysis
+        for Personalized Treatment - Canada{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/96/paca-ca"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (PACA-CA)
+        </Link>{' '}
+        program.
+      </>
+    ),
+  },
+  {
     title: 'July 21, 2025',
     text: (
       <>
