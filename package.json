@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "concurrently -n w: npm:watch-*",
     "start": "npm run dev",
-    "watch-gql": "npm run graphql-codegen -- --watch",
     "watch-next": "next -p 8080",
     "graphql-codegen": "graphql-codegen -r dotenv/config",
     "serve": "npm run build && next start",
@@ -38,7 +37,7 @@
     "@nivo/core": "^0.88.0",
     "@nivo/line": "^0.88.0",
     "@nivo/pie": "^0.88.0",
-    "@overture-stack/arranger-charts": "^0.0.1-beta.5",
+    "@overture-stack/arranger-charts": "^0.0.1-beta.6",
     "@overture-stack/arranger-components": "^3.0.0-rc.1",
     "apollo-upload-client": "^11.0.0",
     "browser-fs-access": "^0.31.1",
