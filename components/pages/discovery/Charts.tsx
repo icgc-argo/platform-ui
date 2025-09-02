@@ -192,7 +192,6 @@ const ChartsLayout = () => {
                 return chartFilters.study_id(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{ ...commonTheme }}
           />
         </Card>
@@ -229,7 +228,6 @@ const ChartsLayout = () => {
                 setSQON(toArrangerV3Filter(newFilters));
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
               ...commonTheme,
@@ -284,7 +282,6 @@ const ChartsLayout = () => {
                 return chartFilters.primary_site(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               ...commonTheme,
             }}
@@ -302,7 +299,6 @@ const ChartsLayout = () => {
                 return chartFilters.gender(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               sortByKey: ['__missing__', 'Other', 'Female', 'Male'],
               ...commonTheme,
@@ -323,7 +319,6 @@ const ChartsLayout = () => {
                 return chartFilters.vital_status(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               sortByKey: ['__missing__', 'Deceased', 'Alive'],
               ...commonTheme,
@@ -347,7 +342,6 @@ const ChartsLayout = () => {
                 return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               ...commonTheme,
             }}
