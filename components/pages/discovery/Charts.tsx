@@ -325,6 +325,7 @@ const ChartsLayout = () => {
             }}
             // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
+              sortByKey: ['__missing__', 'Deceased', 'Alive'],
               ...commonTheme,
             }}
           />
