@@ -18,12 +18,7 @@
  */
 
 import { css, DnaLoader } from '@icgc-argo/uikit';
-import {
-  BarChart,
-  ChartsThemeProvider,
-  SunburstChart,
-  useChartsContext,
-} from '@overture-stack/arranger-charts';
+import { BarChart, ChartsThemeProvider, SunburstChart } from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
@@ -33,6 +28,7 @@ import { addInFilters } from '../file-repository/utils';
 import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
+import { VisibleElements } from './components/VisibleElements';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -144,15 +140,7 @@ const getCancerCodes = (chartConfig): string[] => {
 
 const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
-// Chart visible vars
-const VisibleBars = ({ maxBars, fieldName }) => {
-  const { getChartData } = useChartsContext();
-  const { isLoading, isError, data } = getChartData(fieldName);
-  return isLoading || isError || data?.length === 0 ? null : (
-    <div>{`Top ${Math.min(maxBars, data.length)} of ${data.length}`}</div>
-  );
-};
-const defaultVisibleBars = 12;
+const defaultVisibleElements = 12;
 
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
@@ -193,12 +181,12 @@ const ChartsLayout = () => {
       >
         <Card
           title="Program ID"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="study_id" />}
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="study_id" />}
           css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
         >
           <BarChart
             fieldName="study_id"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.study_id(config.data.key);
@@ -216,15 +204,15 @@ const ChartsLayout = () => {
         <Card
           title="Age at Diagnosis"
           Selector={
-            <VisibleBars
-              maxBars={defaultVisibleBars}
+            <VisibleElements
+              maxElements={defaultVisibleElements}
               fieldName="primary_diagnosis__age_at_diagnosis"
             />
           }
         >
           <BarChart
             fieldName="primary_diagnosis__age_at_diagnosis"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             ranges={[
               { key: '< 18', to: 18 },
               { key: '18 - 65', from: 18, to: 66 },
@@ -257,22 +245,30 @@ const ChartsLayout = () => {
             gridRowStart: 1,
             gridRowEnd: 3,
           })}
+          Selector={
+            <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
+          }
         >
-          <SunburstChart
-            fieldName="primary_diagnosis__cancer_type_code"
-            mapping={mapFromCodeToCancerType}
-            handlers={{
-              onClick: (config) => {
-                const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                const cancerCodes = getCancerCodes(config);
-                setFilter(cancerCodes);
-              },
-            }}
-          />
+          <div css={css({ height: '100%', paddingTop: '16px' })}>
+            <SunburstChart
+              fieldName="primary_diagnosis__cancer_type_code"
+              mapper={mapFromCodeToCancerType}
+              maxSegments={10}
+              handlers={{
+                onClick: (config) => {
+                  const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+                  const cancerCodes = getCancerCodes(config);
+                  setFilter(cancerCodes);
+                },
+              }}
+            />
+          </div>
         </Card>
         <Card
           title="Primary Site"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="primary_site" />}
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="primary_site" />
+          }
           css={css({
             gridColumnStart: 1,
             gridColumnEnd: 3,
@@ -282,7 +278,7 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="primary_site"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.primary_site(config.data.key);
@@ -296,11 +292,11 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Gender"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="gender" />}
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="gender" />}
         >
           <BarChart
             fieldName="gender"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.gender(config.data.key);
@@ -315,11 +311,13 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Vital Status"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="vital_status" />}
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+          }
         >
           <BarChart
             fieldName="vital_status"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.vital_status(config.data.key);
@@ -334,15 +332,15 @@ const ChartsLayout = () => {
         <Card
           title="Experimental Strategy"
           Selector={
-            <VisibleBars
-              maxBars={defaultVisibleBars}
+            <VisibleElements
+              maxElements={defaultVisibleElements}
               fieldName="analyses__experiment__experimental_strategy"
             />
           }
         >
           <BarChart
             fieldName="analyses__experiment__experimental_strategy"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
