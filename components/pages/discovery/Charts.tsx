@@ -249,7 +249,7 @@ const ChartsLayout = () => {
             <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
           }
         >
-          <div css={css({ height: '100%', paddingTop: '16px' })}>
+          <div css={css({ height: '100%', padding: '16px 0' })}>
             <SunburstChart
               fieldName="primary_diagnosis__cancer_type_code"
               mapper={mapFromCodeToCancerType}
