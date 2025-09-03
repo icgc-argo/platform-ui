@@ -19,53 +19,23 @@
  *
  */
 
-import { css } from '@emotion/react';
-import { ReactNode } from 'react';
-import { commonStyles } from './common';
+import { useChartsContext } from '@overture-stack/arranger-charts';
 
-const Card = ({
-  title,
-  children,
-  className,
-  Selector,
-}: {
-  title: string;
-  children: ReactNode;
-  className?: string;
-  Selector?: ReactNode;
-}): JSX.Element => (
-  <div
-    className={className}
-    css={css([
-      commonStyles.block,
-      {
-        display: 'flex',
-        flexDirection: 'column',
-      },
-    ])}
-  >
-    <div
-      css={css({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: '7px 7px 16px 7px',
-      })}
-    >
-      <h2
-        css={css({
-          margin: 0,
-          color: '#0774D3',
-          fontSize: '16px',
-          fontWeight: 600,
-        })}
-      >
-        {title}
-      </h2>
-      <div css={css({ marginLeft: 'auto' })}>{Selector}</div>
-    </div>
-    {children}
-  </div>
-);
+/**
+ * Text to display the visible amount of elements for a chart out of total data
+ *
+ * @param maxElements - Max number of chart data elements to show (covers bars and segments)
+ * @param fieldName - Field name of data
+ * @returns Text showing "x of y"
+ */
+export const VisibleElements = ({ maxElements, fieldName }) => {
+  const { getChartData } = useChartsContext();
+  const { isLoading, isError, data } = getChartData(fieldName);
 
-export default Card;
+  const noData = isLoading || isError || (data && data?.length === 0);
+  const totalWithinMax = !noData && data.length <= maxElements;
+
+  return noData || totalWithinMax ? null : (
+    <div>{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
+  );
+};

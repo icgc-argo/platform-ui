@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- * If not, see <http://www.gnu.org/licenses/>.
+ *  If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -17,16 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { chartColors } from 'components/pages/discovery';
+import { SunburstMappingFn } from '@overture-stack/arranger-charts';
 
-/**
- * map
- * inner => outer
- * clicking inner ring filters with outer values
- *
- * our dynamic data from api is the property key
- */
-
+// prefix + decimal: cancer type name, not complete sequential
 export const cancerTypeCodeMapping = {
   C00: 'Lip, Oral Cavity & Pharynx',
   C01: 'Lip, Oral Cavity & Pharynx',
@@ -168,88 +161,14 @@ export const cancerTypeCodeMapping = {
 };
 
 /**
- * formats the data dynamic data with a mapping
- */
-export const createCategoryMap = (dynamicData, mapping) => {
-  const categoryMap = new Map();
-  // put in order to line up
-  dynamicData.forEach((code) => {
-    const parentId = mapping[code.key];
-
-    // no cancer type mapping, skip
-    if (!parentId) {
-      return;
-    }
-
-    if (!categoryMap.has(parentId)) {
-      categoryMap.set(parentId, { total: code.doc_count, codes: [{ ...code, parentId }] });
-    } else {
-      const { total, codes: existingCodes } = categoryMap.get(parentId);
-      const updatedCodes = existingCodes.concat([code]);
-      categoryMap.set(parentId, { total: total + code.doc_count, codes: updatedCodes });
-    }
-  });
-
-  return categoryMap;
-};
-
-type Segment = {
-  id: string;
-  label: string;
-  value: number | string;
-  color: string;
-  parentId?: string;
-  children?: string[];
-};
-
-/**
- * Format for input into chart
+ * Maps cancer code to cancer type
  *
- * @param categoryMap
- * @returns
+ * @param key - GQL key
+ * @returns mapped string
  */
-export const createChartInput = (categoryMap) => {
-  return Array.from(categoryMap).reduce<{
-    inner: Segment[];
-    outer: Segment[];
-    legend: { label: string; color: string }[];
-  }>(
-    (acc, category, index) => {
-      // @ts-ignore TS doesn't like tuple
-      const [name, { codes, total }] = category;
-
-      // don't show undefined values
-      if (name === undefined) {
-        return acc;
-      }
-
-      const color = chartColors[index];
-
-      const inner = acc.inner.concat({
-        id: name,
-        label: name,
-        value: total,
-        children: codes.map((code) => code.key),
-        color,
-      });
-
-      const outer = acc.outer.concat(
-        codes.map((code) => ({
-          id: code.key,
-          label: code.key,
-          value: code.doc_count,
-          parentId: code.parentId,
-          color,
-        })),
-      );
-      const legend = acc.legend.concat({ label: name, color });
-
-      return { outer, inner, legend };
-    },
-    {
-      legend: [],
-      outer: [],
-      inner: [],
-    },
-  );
+export const mapFromCodeToCancerType: SunburstMappingFn = (key) => {
+  // decimal codes belong to integer codes eg.C25.2 or C25.7 should map to C25
+  // trim to integer part
+  const normalizedKey = key.split('.')[0];
+  return cancerTypeCodeMapping[normalizedKey] || '';
 };

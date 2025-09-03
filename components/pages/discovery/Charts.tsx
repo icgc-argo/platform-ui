@@ -17,16 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@icgc-argo/uikit';
-import { BarChart } from '@overture-stack/arranger-charts';
+import { css, DnaLoader } from '@icgc-argo/uikit';
+import { BarChart, ChartsThemeProvider, SunburstChart } from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { useMemo } from 'react';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import { addInFilters } from '../file-repository/utils';
-import DoughnutChart from './charts/Doughnut';
+import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
+import { VisibleElements } from './components/VisibleElements';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -61,6 +63,50 @@ const getAgeAtDiagnosisFilter = (key, field) => {
   }
 };
 
+// https://observablehq.com/@d3/color-schemes?collection=@d3/d3-scale-chromatic
+export const chartColors = [
+  '#a6cee3',
+  '#1f78b4',
+  '#b2df8a',
+  '#33a02c',
+  '#fb9a99',
+  '#e31a1c',
+  '#fdbf6f',
+  '#ff7f00',
+  '#cab2d6',
+  '#6a3d9a',
+  '#ffff99',
+  '#b15928',
+];
+
+const ChartLoader = () => (
+  <div
+    css={css({
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+    })}
+  >
+    <DnaLoader />
+  </div>
+);
+const ChartEmptyData = () => (
+  <div
+    css={css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      fontSize: '13px',
+      color: '#525767',
+    })}
+  >
+    No Donor data is available for display
+  </div>
+);
+
 const ChartContainer = ({ children }) => (
   <div
     css={css([
@@ -94,9 +140,16 @@ const getCancerCodes = (chartConfig): string[] => {
 
 const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
+const defaultVisibleElements = 12;
+
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  // catch all for any filters changes to sync with Arranger context eg. on page refresh
+  useMemo(() => {
+    setSQON(toArrangerV3Filter(filters) as SQONType);
+  }, [filters]);
 
   const chartFilter = (esDocumentField: string) => {
     return (filterValue) => {
@@ -119,129 +172,182 @@ const ChartsLayout = () => {
 
   return (
     <ChartContainer>
-      <Card title="Program ID" css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}>
-        <BarChart
-          fieldName="study_id"
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              return chartFilters.study_id(config.data.key);
-            },
-          }}
-        />
-      </Card>
-
-      <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-        <></>
-      </Card>
-
-      <Card title="Age at Diagnosis">
-        <BarChart
-          fieldName="primary_diagnosis__age_at_diagnosis"
-          query={{
-            variables: {
-              ranges: [
-                { key: '< 18', to: 18 },
-                { key: '18 - 65', from: 18, to: 66 },
-                { key: '> 65', from: 66 },
-              ],
-            },
-            transformData: (data: unknown[]) => {
-              // order data, range query so there won't be "no data"
-              data.reverse();
-              return data;
-            },
-          }}
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              const field = 'primary_diagnosis.age_at_diagnosis';
-              const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
-              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-              const newFilters = addInFilters(sqonFilterForChart, filters);
-              replaceAllFilters(newFilters);
-              // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-              setSQON(toArrangerV3Filter(newFilters));
-            },
-          }}
-        />
-      </Card>
-
-      <Card
-        title="Cancer Type and Code"
-        css={css({
-          gridColumnStart: 3,
-          gridColumnEnd: 5,
-          gridRowStart: 1,
-          gridRowEnd: 3,
-        })}
+      <ChartsThemeProvider
+        colors={chartColors}
+        components={{
+          EmptyData: ChartEmptyData,
+          Loader: ChartLoader,
+        }}
       >
-        <DoughnutChart
-          fieldName="primary_diagnosis__cancer_type_code"
-          theme={{
-            onClick: (config) => {
-              const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-              const cancerCodes = getCancerCodes(config);
-              setFilter(cancerCodes);
-            },
-          }}
-        />
-      </Card>
-      <Card
-        title="Primary Site"
-        css={css({
-          gridColumnStart: 1,
-          gridColumnEnd: 3,
-          gridRowStart: 3,
-          gridRowEnd: 5,
-        })}
-      >
-        <BarChart
-          fieldName="primary_site"
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              return chartFilters.primary_site(config.data.key);
-            },
-          }}
-        />
-      </Card>
-      <Card title="Gender">
-        <BarChart
-          fieldName="gender"
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              return chartFilters.gender(config.data.key);
-            },
-            onDataLoad: (data) => {
-              return data.toReversed();
-            },
-          }}
-        />
-      </Card>
-      <Card title="Vital Status">
-        <BarChart
-          fieldName="vital_status"
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              return chartFilters.vital_status(config.data.key);
-            },
-          }}
-        />
-      </Card>
-      <Card title="Experimental Strategy">
-        <BarChart
-          fieldName="analyses__experiment__experimental_strategy"
-          theme={{
-            ...commonTheme,
-            onClick: (config) => {
-              return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
-            },
-          }}
-        />
-      </Card>
+        <Card
+          title="Program ID"
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="study_id" />}
+          css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
+        >
+          <BarChart
+            fieldName="study_id"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.study_id(config.data.key);
+              },
+            }}
+            theme={{ ...commonTheme }}
+          />
+        </Card>
+
+        <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
+          <></>
+        </Card>
+
+        <Card
+          title="Age at Diagnosis"
+          Selector={
+            <VisibleElements
+              maxElements={defaultVisibleElements}
+              fieldName="primary_diagnosis__age_at_diagnosis"
+            />
+          }
+        >
+          <BarChart
+            fieldName="primary_diagnosis__age_at_diagnosis"
+            maxBars={defaultVisibleElements}
+            ranges={[
+              { key: '< 18', to: 18 },
+              { key: '18 - 65', from: 18, to: 66 },
+              { key: '> 65', from: 66 },
+            ]}
+            handlers={{
+              onClick: (config) => {
+                const field = 'primary_diagnosis.age_at_diagnosis';
+                const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
+                // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                const newFilters = addInFilters(sqonFilterForChart, filters);
+                replaceAllFilters(newFilters);
+                // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                setSQON(toArrangerV3Filter(newFilters));
+              },
+            }}
+            theme={{
+              sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
+              ...commonTheme,
+            }}
+          />
+        </Card>
+
+        <Card
+          title="Cancer Type and Code"
+          css={css({
+            gridColumnStart: 3,
+            gridColumnEnd: 5,
+            gridRowStart: 1,
+            gridRowEnd: 3,
+          })}
+          Selector={
+            <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
+          }
+        >
+          <div css={css({ height: '100%', padding: '16px 0' })}>
+            <SunburstChart
+              fieldName="primary_diagnosis__cancer_type_code"
+              mapper={mapFromCodeToCancerType}
+              maxSegments={10}
+              handlers={{
+                onClick: (config) => {
+                  const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+                  const cancerCodes = getCancerCodes(config);
+                  setFilter(cancerCodes);
+                },
+              }}
+            />
+          </div>
+        </Card>
+        <Card
+          title="Primary Site"
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="primary_site" />
+          }
+          css={css({
+            gridColumnStart: 1,
+            gridColumnEnd: 3,
+            gridRowStart: 3,
+            gridRowEnd: 5,
+          })}
+        >
+          <BarChart
+            fieldName="primary_site"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.primary_site(config.data.key);
+              },
+            }}
+            theme={{
+              ...commonTheme,
+            }}
+          />
+        </Card>
+        <Card
+          title="Gender"
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="gender" />}
+        >
+          <BarChart
+            fieldName="gender"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.gender(config.data.key);
+              },
+            }}
+            theme={{
+              sortByKey: ['__missing__', 'Other', 'Female', 'Male'],
+              ...commonTheme,
+            }}
+          />
+        </Card>
+        <Card
+          title="Vital Status"
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+          }
+        >
+          <BarChart
+            fieldName="vital_status"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.vital_status(config.data.key);
+              },
+            }}
+            theme={{
+              sortByKey: ['__missing__', 'Deceased', 'Alive'],
+              ...commonTheme,
+            }}
+          />
+        </Card>
+        <Card
+          title="Experimental Strategy"
+          Selector={
+            <VisibleElements
+              maxElements={defaultVisibleElements}
+              fieldName="analyses__experiment__experimental_strategy"
+            />
+          }
+        >
+          <BarChart
+            fieldName="analyses__experiment__experimental_strategy"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+              },
+            }}
+            theme={{
+              ...commonTheme,
+            }}
+          />
+        </Card>
+      </ChartsThemeProvider>
     </ChartContainer>
   );
 };

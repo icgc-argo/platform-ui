@@ -106,21 +106,14 @@ const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoad
 const STATS_QUERY = gql`
   query DiscoveryStats($filters: JSON) {
     file {
-      hits(filters: $filters) {
-        total
-      }
-      aggregations(
-        filters: $filters
-        include_missing: true
-        aggregations_filter_themselves: false
-      ) {
-        study_id {
+      aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
+        analyses__files__file_id {
           bucket_count
-          buckets {
-            doc_count
-          }
         }
-        analyses__repositories__code {
+        donor_id {
+          bucket_count
+        }
+        study_id {
           bucket_count
         }
       }
@@ -139,12 +132,9 @@ const StatsCard = () => {
   });
 
   const data = {
-    files: get(statsCardResponse, 'file.hits.total', 0),
+    files: get(statsCardResponse, 'file.aggregations.analyses__files__file_id.bucket_count', 0),
     repositories: 1,
-    donors: get(statsCardResponse, 'file.aggregations.study_id.buckets', []).reduce(
-      (total, bucket) => total + bucket.doc_count,
-      0,
-    ),
+    donors: get(statsCardResponse, 'file.aggregations.donor_id.bucket_count', []),
     programs: get(statsCardResponse, 'file.aggregations.study_id.bucket_count', 0),
   };
 
