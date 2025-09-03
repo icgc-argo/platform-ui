@@ -18,168 +18,17 @@
  */
 
 import { css, DnaLoader } from '@icgc-argo/uikit';
-import {
-  BarChart,
-  ChartsThemeProvider,
-  SunburstChart,
-  useChartsContext,
-} from '@overture-stack/arranger-charts';
+import { BarChart, ChartsThemeProvider, SunburstChart } from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { useMemo } from 'react';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import { addInFilters } from '../file-repository/utils';
+import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
-
-/**
- * map
- * inner => outer
- * clicking inner ring filters with outer values
- *
- * our dynamic data from api is the property key
- */
-
-export const cancerTypeCodeMapping = {
-  C00: 'Lip, Oral Cavity & Pharynx',
-  C01: 'Lip, Oral Cavity & Pharynx',
-  C02: 'Lip, Oral Cavity & Pharynx',
-  C03: 'Lip, Oral Cavity & Pharynx',
-  C04: 'Lip, Oral Cavity & Pharynx',
-  C05: 'Lip, Oral Cavity & Pharynx',
-  C06: 'Lip, Oral Cavity & Pharynx',
-  C07: 'Lip, Oral Cavity & Pharynx',
-  C08: 'Lip, Oral Cavity & Pharynx',
-  C09: 'Lip, Oral Cavity & Pharynx',
-  C10: 'Lip, Oral Cavity & Pharynx',
-  C11: 'Lip, Oral Cavity & Pharynx',
-  C12: 'Lip, Oral Cavity & Pharynx',
-  C13: 'Lip, Oral Cavity & Pharynx',
-  C14: 'Lip, Oral Cavity & Pharynx',
-  C15: 'Esophagus',
-  C16: 'Stomach',
-  C17: 'Small Intestine',
-  C18: 'Colorectal',
-  C19: 'Colorectal',
-  C20: 'Colorectal',
-  C21: 'Colorectal',
-  C22: 'Liver & Intrahepatic Bile Duct',
-  C23: 'Gallbladder & Other Biliary',
-  C24: 'Gallbladder & Other Biliary',
-  C25: 'Pancreas',
-  C26: 'Other Digestive Organs',
-  C30: 'Nasal Cavity & Sinuses',
-  C31: 'Nasal Cavity & Sinuses',
-  C32: 'Larynx',
-  C33: 'Lung & Bronchus',
-  C34: 'Lung & Bronchus',
-  C37: 'Thymus, Heart, Mediastinum & Pleura',
-  C38: 'Thymus, Heart, Mediastinum & Pleura',
-  C39: 'Other Respiratory Organs',
-  C40: 'Bone & Articular Cartilage',
-  C41: 'Bone & Articular Cartilage',
-  C43: 'Melanoma of Skin',
-  C44: 'Other Skin',
-  C45: 'Mesothelioma',
-  C46: "Kaposi's Sarcoma",
-  C47: 'Soft Tissue Sarcomas',
-  C49: 'Soft Tissue Sarcomas',
-  C50: 'Breast',
-  C51: 'Vulva & Vagina',
-  C52: 'Vulva & Vagina',
-  C53: 'Cervix Uteri',
-  C54: 'Corpus Uteri & Uterus NOS',
-  C55: 'Corpus Uteri & Uterus NOS',
-  C56: 'Ovary',
-  C57: 'Other Female Genital Organs',
-  C58: 'Placenta',
-  C60: 'Penis',
-  C61: 'Prostate',
-  C62: 'Testis',
-  C63: 'Other Male Genital Organs',
-  C64: 'Kidney & Other Urinary Organs',
-  C65: 'Kidney & Other Urinary Organs',
-  C66: 'Kidney & Other Urinary Organs',
-  C67: 'Bladder',
-  C68: 'Other Urinary Organs',
-  C69: 'Eye & Adnexa',
-  C70: 'Brain & Other CNS',
-  C71: 'Brain & Other CNS',
-  C72: 'Brain & Other CNS',
-  C73: 'Thyroid',
-  C74: 'Other Endocrine Glands',
-  C75: 'Other Endocrine Glands',
-  C76: 'Other Ill-Defined Sites',
-  C77: 'Lymph Nodes',
-  C78: 'Secondary Malignant Neoplasms',
-  C79: 'Secondary Malignant Neoplasms',
-  C80: 'Malignant Neoplasm, Unknown Primary',
-  C81: 'Hodgkin Lymphoma',
-  C82: 'Non-Hodgkin Lymphoma',
-  C83: 'Non-Hodgkin Lymphoma',
-  C84: 'Non-Hodgkin Lymphoma',
-  C85: 'Non-Hodgkin Lymphoma',
-  C86: 'Non-Hodgkin Lymphoma',
-  C88: 'Malignant Immunoproliferative Diseases',
-  C90: 'Multiple Myeloma & Plasmacytoma',
-  C91: 'Leukemias',
-  C92: 'Leukemias',
-  C93: 'Leukemias',
-  C94: 'Leukemias',
-  C95: 'Leukemias',
-  C96: 'Other & Unspecified Lymphoid, Hematopoietic & Related Tissue',
-  C97: 'Multiple Independent Primary Sites',
-  D00: 'Carcinoma in Situ',
-  D01: 'Carcinoma in Situ',
-  D02: 'Carcinoma in Situ',
-  D03: 'Carcinoma in Situ',
-  D04: 'Carcinoma in Situ',
-  D05: 'Carcinoma in Situ',
-  D06: 'Carcinoma in Situ',
-  D07: 'Carcinoma in Situ',
-  D08: 'Carcinoma in Situ',
-  D09: 'Carcinoma in Situ',
-  D10: 'Benign Neoplasms',
-  D11: 'Benign Neoplasms',
-  D12: 'Benign Neoplasms',
-  D13: 'Benign Neoplasms',
-  D14: 'Benign Neoplasms',
-  D15: 'Benign Neoplasms',
-  D16: 'Benign Neoplasms',
-  D17: 'Benign Neoplasms',
-  D18: 'Benign Neoplasms',
-  D19: 'Benign Neoplasms',
-  D20: 'Benign Neoplasms',
-  D21: 'Benign Neoplasms',
-  D22: 'Benign Neoplasms',
-  D23: 'Benign Neoplasms',
-  D24: 'Benign Neoplasms',
-  D25: 'Benign Neoplasms',
-  D26: 'Benign Neoplasms',
-  D27: 'Benign Neoplasms',
-  D28: 'Benign Neoplasms',
-  D29: 'Benign Neoplasms',
-  D30: 'Benign Neoplasms',
-  D31: 'Benign Neoplasms',
-  D32: 'Benign Neoplasms',
-  D33: 'Benign Neoplasms',
-  D34: 'Benign Neoplasms',
-  D35: 'Benign Neoplasms',
-  D36: 'Benign Neoplasms',
-  D37: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D38: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D39: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D40: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D41: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D42: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D43: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D44: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D45: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D46: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D47: 'Neoplasms of Uncertain or Unknown Behaviour',
-  D48: 'Neoplasms of Uncertain or Unknown Behaviour',
-};
+import { VisibleElements } from './components/VisibleElements';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -291,15 +140,7 @@ const getCancerCodes = (chartConfig): string[] => {
 
 const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
-// Chart visible vars
-const VisibleBars = ({ maxBars, fieldName }) => {
-  const { getChartData } = useChartsContext();
-  const { isLoading, isError, data } = getChartData(fieldName);
-  return isLoading || isError || data?.length === 0 ? null : (
-    <div>{`Top ${Math.min(maxBars, data.length)} of ${data.length}`}</div>
-  );
-};
-const defaultVisibleBars = 12;
+const defaultVisibleElements = 12;
 
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
@@ -340,18 +181,17 @@ const ChartsLayout = () => {
       >
         <Card
           title="Program ID"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="study_id" />}
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="study_id" />}
           css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
         >
           <BarChart
             fieldName="study_id"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.study_id(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{ ...commonTheme }}
           />
         </Card>
@@ -363,15 +203,15 @@ const ChartsLayout = () => {
         <Card
           title="Age at Diagnosis"
           Selector={
-            <VisibleBars
-              maxBars={defaultVisibleBars}
+            <VisibleElements
+              maxElements={defaultVisibleElements}
               fieldName="primary_diagnosis__age_at_diagnosis"
             />
           }
         >
           <BarChart
             fieldName="primary_diagnosis__age_at_diagnosis"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             ranges={[
               { key: '< 18', to: 18 },
               { key: '18 - 65', from: 18, to: 66 },
@@ -388,7 +228,6 @@ const ChartsLayout = () => {
                 setSQON(toArrangerV3Filter(newFilters));
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
               ...commonTheme,
@@ -404,22 +243,30 @@ const ChartsLayout = () => {
             gridRowStart: 1,
             gridRowEnd: 3,
           })}
+          Selector={
+            <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
+          }
         >
-          <SunburstChart
-            fieldName="primary_diagnosis__cancer_type_code"
-            mapping={cancerTypeCodeMapping}
-            handlers={{
-              onClick: (config) => {
-                const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                const cancerCodes = getCancerCodes(config);
-                setFilter(cancerCodes);
-              },
-            }}
-          />
+          <div css={css({ height: '100%', padding: '16px 0' })}>
+            <SunburstChart
+              fieldName="primary_diagnosis__cancer_type_code"
+              mapper={mapFromCodeToCancerType}
+              maxSegments={10}
+              handlers={{
+                onClick: (config) => {
+                  const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+                  const cancerCodes = getCancerCodes(config);
+                  setFilter(cancerCodes);
+                },
+              }}
+            />
+          </div>
         </Card>
         <Card
           title="Primary Site"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="primary_site" />}
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="primary_site" />
+          }
           css={css({
             gridColumnStart: 1,
             gridColumnEnd: 3,
@@ -429,13 +276,12 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="primary_site"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.primary_site(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               ...commonTheme,
             }}
@@ -443,17 +289,16 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Gender"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="gender" />}
+          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="gender" />}
         >
           <BarChart
             fieldName="gender"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.gender(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               sortByKey: ['__missing__', 'Other', 'Female', 'Male'],
               ...commonTheme,
@@ -462,18 +307,20 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Vital Status"
-          Selector={<VisibleBars maxBars={defaultVisibleBars} fieldName="vital_status" />}
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+          }
         >
           <BarChart
             fieldName="vital_status"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.vital_status(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
+              sortByKey: ['__missing__', 'Deceased', 'Alive'],
               ...commonTheme,
             }}
           />
@@ -481,21 +328,20 @@ const ChartsLayout = () => {
         <Card
           title="Experimental Strategy"
           Selector={
-            <VisibleBars
-              maxBars={defaultVisibleBars}
+            <VisibleElements
+              maxElements={defaultVisibleElements}
               fieldName="analyses__experiment__experimental_strategy"
             />
           }
         >
           <BarChart
             fieldName="analyses__experiment__experimental_strategy"
-            maxBars={defaultVisibleBars}
+            maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
               },
             }}
-            // @ts-expect-error "nivo" prop not properly spread in lib
             theme={{
               ...commonTheme,
             }}

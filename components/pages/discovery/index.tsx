@@ -141,7 +141,7 @@ const DiscoveryPage = () => {
                     css={css({
                       display: 'grid',
                       gridTemplateColumns: isSidebarOpen
-                        ? '248px minmax(0, 1fr)'
+                        ? '280px minmax(0, 1fr)'
                         : '20px minmax(0, 1fr)',
                       gridTemplateRows: 'calc(100vh - 116px)',
                       minHeight: 0,
