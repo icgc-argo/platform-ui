@@ -31,11 +31,11 @@ import { useChartsContext } from '@overture-stack/arranger-charts';
 export const VisibleElements = ({ maxElements, fieldName }) => {
   const { getChartData } = useChartsContext();
   const { isLoading, isError, data } = getChartData(fieldName);
+  console.log('d', data);
 
-  const noData = isLoading || isError || (data && data?.length === 0);
-  const totalWithinMax = !noData && data.length <= maxElements;
-
-  return noData || totalWithinMax ? null : (
+  const hasData = !isLoading && !isError && data && data.length > 0;
+  const hasMoreThanMaxElements = hasData && data.length >= maxElements;
+  return hasMoreThanMaxElements ? (
     <div>{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
-  );
+  ) : null;
 };
