@@ -19,6 +19,7 @@
  *
  */
 
+import { css } from '@emotion/react';
 import { useChartsContext } from '@overture-stack/arranger-charts';
 
 /**
@@ -26,16 +27,17 @@ import { useChartsContext } from '@overture-stack/arranger-charts';
  *
  * @param maxElements - Max number of chart data elements to show (covers bars and segments)
  * @param fieldName - Field name of data
- * @returns Text showing "x of y"
+ * @returns Text showing
  */
 export const VisibleElements = ({ maxElements, fieldName }) => {
   const { getChartData } = useChartsContext();
   const { isLoading, isError, data } = getChartData(fieldName);
-  console.log('d', data);
 
   const hasData = !isLoading && !isError && data && data.length > 0;
   const hasMoreThanMaxElements = hasData && data.length >= maxElements;
   return hasMoreThanMaxElements ? (
-    <div>{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
+    <div
+      css={css({ backgroundColor: 'E8F1F9', padding: '3px 6px', fontSize: '11px' })}
+    >{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
   ) : null;
 };
