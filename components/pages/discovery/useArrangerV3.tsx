@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,22 +17,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+import { createContext, useContext } from 'react';
 
-export const FILE_CENTRIC_EXTENDED_MAPPING_QUERY = gql`
-  query FileCentricExtendedMapping {
-    file {
-      extended
-    }
-  }
-`;
+const ArrangerV3Context = createContext<{ enabled: boolean }>({
+  enabled: false,
+});
 
-export const FILE_CENTRIC_EXTENDED_MAPPING_QUERY_ARRANGER_V3 = gql`
-  query FileCentricExtendedMapping {
-    file {
-      configs {
-        extended
-      }
-    }
-  }
-`;
+export const ArrangerV3 = ({ children, enabled = false }) => {
+  return <ArrangerV3Context.Provider value={{ enabled }}>{children}</ArrangerV3Context.Provider>;
+};
+
+export const useArrangerV3 = () => {
+  return useContext(ArrangerV3Context);
+};
