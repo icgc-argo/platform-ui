@@ -37,7 +37,13 @@ export const VisibleElements = ({ maxElements, fieldName }) => {
   const hasMoreThanMaxElements = hasData && data.length >= maxElements;
   return hasMoreThanMaxElements ? (
     <div
-      css={css({ backgroundColor: 'E8F1F9', padding: '3px 6px', fontSize: '11px' })}
+      css={css({
+        backgroundColor: '#E8F1F9',
+        borderRadius: '2px',
+        padding: '3px 6px',
+        fontSize: '11px',
+        fontWeight: 500,
+      })}
     >{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
   ) : null;
 };
