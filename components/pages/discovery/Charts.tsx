@@ -129,15 +129,6 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
-const getCancerCodes = (chartConfig): string[] => {
-  // either inner ring with codes, or outer ring with parentId of inner ring
-  if (chartConfig.data?.parentId) {
-    return [chartConfig.data.id];
-  } else {
-    return chartConfig.data?.children || [];
-  }
-};
-
 const commonTheme = {
   axisLeft: { legend: null },
   axisBottom: { legend: null, format: (e) => (Number.isInteger(e) ? e : '') },
@@ -169,7 +160,7 @@ const ChartsLayout = () => {
     primary_site: chartFilter('primary_site'),
     vital_status: chartFilter('vital_status'),
     analyses__experiment__experimental_strategy: chartFilter(
-      'analyses.experiment.experimental_strategy',
+      'analyses.exper`iment.experimental_strategy',
     ),
     analyses__files__data_category: chartFilter('analyses.files.data_category'),
     analyses__workflow__workflow_name: chartFilter('analyses.workflow.workflow_name'),
@@ -277,7 +268,7 @@ const ChartsLayout = () => {
               handlers={{
                 onClick: (config) => {
                   const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                  const cancerCodes = getCancerCodes(config);
+                  const cancerCodes = config.ids;
                   setFilter(cancerCodes);
                 },
               }}
