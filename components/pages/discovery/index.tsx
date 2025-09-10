@@ -46,6 +46,7 @@ import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { discoveryFacets } from './data/facet';
+import { ArrangerV3 } from './useArrangerV3';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -114,59 +115,61 @@ const DiscoveryPage = () => {
   );
 
   return (
-    <ArrangerDataProvider
-      documentType="file"
-      apiUrl={discoveryApiUrl}
-      customFetcher={arrangerFetchWithEgoToken}
-    >
-      {/* @ts-expect-error prop types need work in lib */}
-      <ChartsProvider>
-        <FacetStateProvider staticFacetOptions={discoveryFacets}>
-          <ApolloProvider client={arrangerV3client}>
-            <FiltersProvider>
-              <div
-                css={css({
-                  display: 'grid',
-                  gridTemplateRows: '58px 1fr 58px',
-                  minHeight: '100vh',
-                  background: `${theme.colors.grey_4}`,
-                  overflow: 'hidden',
-                })}
-              >
-                <>
-                  <Head subtitle={'Data Discovery'} />
-                  <NavBar />
+    <ArrangerV3 enabled>
+      <ArrangerDataProvider
+        documentType="file"
+        apiUrl={discoveryApiUrl}
+        customFetcher={arrangerFetchWithEgoToken}
+      >
+        {/* @ts-expect-error prop types need work in lib */}
+        <ChartsProvider>
+          <FacetStateProvider staticFacetOptions={discoveryFacets}>
+            <ApolloProvider client={arrangerV3client}>
+              <FiltersProvider>
+                <div
+                  css={css({
+                    display: 'grid',
+                    gridTemplateRows: '58px 1fr 58px',
+                    minHeight: '100vh',
+                    background: `${theme.colors.grey_4}`,
+                    overflow: 'hidden',
+                  })}
+                >
+                  <>
+                    <Head subtitle={'Data Discovery'} />
+                    <NavBar />
 
-                  <div
-                    css={css({
-                      display: 'grid',
-                      gridTemplateColumns: isSidebarOpen
-                        ? '280px minmax(0, 1fr)'
-                        : '20px minmax(0, 1fr)',
-                      gridTemplateRows: 'calc(100vh - 116px)',
-                      minHeight: 0,
-                      overflow: 'hidden',
-                    })}
-                  >
-                    <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
-                      <FacetsPanel />
-                    </Sidebar>
+                    <div
+                      css={css({
+                        display: 'grid',
+                        gridTemplateColumns: isSidebarOpen
+                          ? '280px minmax(0, 1fr)'
+                          : '20px minmax(0, 1fr)',
+                        gridTemplateRows: 'calc(100vh - 116px)',
+                        minHeight: 0,
+                        overflow: 'hidden',
+                      })}
+                    >
+                      <Sidebar toggle={() => setSetbarView((view) => !view)} open={isSidebarOpen}>
+                        <FacetsPanel />
+                      </Sidebar>
 
-                    <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
-                      <DiscoveryQueryBar />
-                      <StatsCard />
-                      <ChartsLayout />
+                      <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
+                        <DiscoveryQueryBar />
+                        <StatsCard />
+                        <ChartsLayout />
+                      </div>
                     </div>
-                  </div>
 
-                  <Footer />
-                </>
-              </div>
-            </FiltersProvider>
-          </ApolloProvider>
-        </FacetStateProvider>
-      </ChartsProvider>
-    </ArrangerDataProvider>
+                    <Footer />
+                  </>
+                </div>
+              </FiltersProvider>
+            </ApolloProvider>
+          </FacetStateProvider>
+        </ChartsProvider>
+      </ArrangerDataProvider>
+    </ArrangerV3>
   );
 };
 

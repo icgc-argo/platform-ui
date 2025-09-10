@@ -129,16 +129,10 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
-const getCancerCodes = (chartConfig): string[] => {
-  // either inner ring with codes, or outer ring with parentId of inner ring
-  if (chartConfig.data?.parentId) {
-    return [chartConfig.data.id];
-  } else {
-    return chartConfig.data?.children || [];
-  }
+const commonTheme = {
+  axisLeft: { legend: null },
+  axisBottom: { legend: null, format: (e) => (Number.isInteger(e) ? e : '') },
 };
-
-const commonTheme = { axisLeft: { legend: null }, axisBottom: { legend: null } };
 
 const defaultVisibleElements = 12;
 
@@ -168,6 +162,8 @@ const ChartsLayout = () => {
     analyses__experiment__experimental_strategy: chartFilter(
       'analyses.experiment.experimental_strategy',
     ),
+    analyses__files__data_category: chartFilter('analyses.files.data_category'),
+    analyses__workflow__workflow_name: chartFilter('analyses.workflow.workflow_name'),
   };
 
   return (
@@ -196,8 +192,25 @@ const ChartsLayout = () => {
           />
         </Card>
 
-        <Card title="TBD" css={css({ gridColumnStart: 2, gridRowEnd: 'span 1' })}>
-          <></>
+        <Card
+          title="Vital Status"
+          Selector={
+            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+          }
+        >
+          <BarChart
+            fieldName="vital_status"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.vital_status(config.data.key);
+              },
+            }}
+            theme={{
+              sortByKey: ['__missing__', 'Deceased', 'Alive'],
+              ...commonTheme,
+            }}
+          />
         </Card>
 
         <Card
@@ -255,7 +268,7 @@ const ChartsLayout = () => {
               handlers={{
                 onClick: (config) => {
                   const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                  const cancerCodes = getCancerCodes(config);
+                  const cancerCodes = config.ids;
                   setFilter(cancerCodes);
                 },
               }}
@@ -306,21 +319,23 @@ const ChartsLayout = () => {
           />
         </Card>
         <Card
-          title="Vital Status"
+          title="Data Category"
           Selector={
-            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+            <VisibleElements
+              maxElements={defaultVisibleElements}
+              fieldName="analyses__files__data_category"
+            />
           }
         >
           <BarChart
-            fieldName="vital_status"
+            fieldName="analyses__files__data_category"
             maxBars={defaultVisibleElements}
             handlers={{
               onClick: (config) => {
-                return chartFilters.vital_status(config.data.key);
+                return chartFilters.analyses__files__data_category(config.data.key);
               },
             }}
             theme={{
-              sortByKey: ['__missing__', 'Deceased', 'Alive'],
               ...commonTheme,
             }}
           />
@@ -340,6 +355,28 @@ const ChartsLayout = () => {
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+              },
+            }}
+            theme={{
+              ...commonTheme,
+            }}
+          />
+        </Card>
+        <Card
+          title="Workflow Name"
+          Selector={
+            <VisibleElements
+              maxElements={defaultVisibleElements}
+              fieldName="analyses__workflow__workflow_name"
+            />
+          }
+        >
+          <BarChart
+            fieldName="analyses__workflow__workflow_name"
+            maxBars={defaultVisibleElements}
+            handlers={{
+              onClick: (config) => {
+                return chartFilters.analyses__workflow__workflow_name(config.data.key);
               },
             }}
             theme={{
