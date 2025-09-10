@@ -160,7 +160,7 @@ const ChartsLayout = () => {
     primary_site: chartFilter('primary_site'),
     vital_status: chartFilter('vital_status'),
     analyses__experiment__experimental_strategy: chartFilter(
-      'analyses.exper`iment.experimental_strategy',
+      'analyses.experiment.experimental_strategy',
     ),
     analyses__files__data_category: chartFilter('analyses.files.data_category'),
     analyses__workflow__workflow_name: chartFilter('analyses.workflow.workflow_name'),
