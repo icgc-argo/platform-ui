@@ -129,15 +129,6 @@ const ChartContainer = ({ children }) => (
   </div>
 );
 
-const getCancerCodes = (chartConfig): string[] => {
-  // either inner ring with codes, or outer ring with parentId of inner ring
-  if (chartConfig.data?.parentId) {
-    return [chartConfig.data.id];
-  } else {
-    return chartConfig.data?.children || [];
-  }
-};
-
 const commonTheme = {
   axisLeft: { legend: null },
   axisBottom: { legend: null, format: (e) => (Number.isInteger(e) ? e : '') },
@@ -277,7 +268,7 @@ const ChartsLayout = () => {
               handlers={{
                 onClick: (config) => {
                   const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                  const cancerCodes = getCancerCodes(config);
+                  const cancerCodes = config.ids;
                   setFilter(cancerCodes);
                 },
               }}
