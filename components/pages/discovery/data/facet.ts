@@ -169,7 +169,7 @@ export const discoveryFacets: FacetPanelOptions = [
         name: 'Percent Tumour Cells Measurement Method',
         facetPath: 'specimens__percent_tumour_cells_measurement_method',
         esDocumentField: 'specimens.percent_tumour_cells_measurement_method',
-        variant: 'NumericAggregation',
+        variant: 'Aggregation',
       },
     ],
   },

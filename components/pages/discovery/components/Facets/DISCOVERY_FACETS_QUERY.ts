@@ -121,7 +121,7 @@ const DISCOVERY_FACETS_QUERY = gql`
         }
 
         specimens__percent_tumour_cells_measurement_method{
-         ${numericProps}
+         ${aggBucketProps}
         }
 
         # --- Diagnosis
