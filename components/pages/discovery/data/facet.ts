@@ -293,8 +293,8 @@ export const discoveryFacets: FacetPanelOptions = [
       ,
       {
         name: 'Atatomic Site Progression or Recurrences',
-        facetPath: 'follow_ups__anatomic_site_progression_or_recurrences',
-        esDocumentField: 'follow_ups.anatomic_site_progression_or_recurrences',
+        facetPath: 'follow_ups__anatomic_site_progression_or_recurrence',
+        esDocumentField: 'follow_ups.anatomic_site_progression_or_recurrence',
         variant: 'Aggregation',
       },
     ],
