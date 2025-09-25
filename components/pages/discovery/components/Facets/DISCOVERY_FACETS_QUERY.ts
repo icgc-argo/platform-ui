@@ -121,7 +121,7 @@ const DISCOVERY_FACETS_QUERY = gql`
         }
 
         specimens__percent_tumour_cells_measurement_method{
-         ${numericProps}
+         ${aggBucketProps}
         }
 
         # --- Diagnosis
@@ -181,7 +181,7 @@ const DISCOVERY_FACETS_QUERY = gql`
         follow_ups__method_of_progression_status{
           ${aggBucketProps}
         }
-        follow_ups__anatomic_site_progression_or_recurrences{
+        follow_ups__anatomic_site_progression_or_recurrence{
           ${aggBucketProps}
         }
         
