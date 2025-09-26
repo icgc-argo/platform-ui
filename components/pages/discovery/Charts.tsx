@@ -134,7 +134,8 @@ const commonTheme = {
   axisBottom: { legend: null, format: (e) => (Number.isInteger(e) ? e : '') },
 };
 
-const defaultVisibleElements = 12;
+const MAX_BARS_DEFAULT = 12;
+const MAX_BARS_DEFAULT_SHORT_CARD = 6;
 
 const ChartsLayout = () => {
   const { setSQON } = useArrangerData();
@@ -177,12 +178,12 @@ const ChartsLayout = () => {
       >
         <Card
           title="Program ID"
-          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="study_id" />}
+          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="study_id" />}
           css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
         >
           <BarChart
             fieldName="study_id"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             handlers={{
               onClick: (config) => {
                 return chartFilters.study_id(config.data.key);
@@ -195,12 +196,12 @@ const ChartsLayout = () => {
         <Card
           title="Vital Status"
           Selector={
-            <VisibleElements maxElements={defaultVisibleElements} fieldName="vital_status" />
+            <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="vital_status" />
           }
         >
           <BarChart
             fieldName="vital_status"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             handlers={{
               onClick: (config) => {
                 return chartFilters.vital_status(config.data.key);
@@ -217,14 +218,14 @@ const ChartsLayout = () => {
           title="Age at Diagnosis"
           Selector={
             <VisibleElements
-              maxElements={defaultVisibleElements}
+              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
               fieldName="primary_diagnosis__age_at_diagnosis"
             />
           }
         >
           <BarChart
             fieldName="primary_diagnosis__age_at_diagnosis"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             ranges={[
               { key: '< 18', to: 18 },
               { key: '18 - 65', from: 18, to: 66 },
@@ -277,9 +278,7 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Primary Site"
-          Selector={
-            <VisibleElements maxElements={defaultVisibleElements} fieldName="primary_site" />
-          }
+          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="primary_site" />}
           css={css({
             gridColumnStart: 1,
             gridColumnEnd: 3,
@@ -289,7 +288,7 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="primary_site"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             handlers={{
               onClick: (config) => {
                 return chartFilters.primary_site(config.data.key);
@@ -302,11 +301,11 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Gender"
-          Selector={<VisibleElements maxElements={defaultVisibleElements} fieldName="gender" />}
+          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="gender" />}
         >
           <BarChart
             fieldName="gender"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             handlers={{
               onClick: (config) => {
                 return chartFilters.gender(config.data.key);
@@ -322,14 +321,14 @@ const ChartsLayout = () => {
           title="Data Category"
           Selector={
             <VisibleElements
-              maxElements={defaultVisibleElements}
+              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
               fieldName="analyses__files__data_category"
             />
           }
         >
           <BarChart
             fieldName="analyses__files__data_category"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__files__data_category(config.data.key);
@@ -344,14 +343,14 @@ const ChartsLayout = () => {
           title="Experimental Strategy"
           Selector={
             <VisibleElements
-              maxElements={defaultVisibleElements}
+              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
               fieldName="analyses__experiment__experimental_strategy"
             />
           }
         >
           <BarChart
             fieldName="analyses__experiment__experimental_strategy"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
@@ -366,14 +365,14 @@ const ChartsLayout = () => {
           title="Workflow Name"
           Selector={
             <VisibleElements
-              maxElements={defaultVisibleElements}
+              maxElements={MAX_BARS_DEFAULT}
               fieldName="analyses__workflow__workflow_name"
             />
           }
         >
           <BarChart
             fieldName="analyses__workflow__workflow_name"
-            maxBars={defaultVisibleElements}
+            maxBars={MAX_BARS_DEFAULT}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__workflow__workflow_name(config.data.key);
