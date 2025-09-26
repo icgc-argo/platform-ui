@@ -365,14 +365,14 @@ const ChartsLayout = () => {
           title="Workflow Name"
           Selector={
             <VisibleElements
-              maxElements={MAX_BARS_DEFAULT}
+              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
               fieldName="analyses__workflow__workflow_name"
             />
           }
         >
           <BarChart
             fieldName="analyses__workflow__workflow_name"
-            maxBars={MAX_BARS_DEFAULT}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__workflow__workflow_name(config.data.key);
