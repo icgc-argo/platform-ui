@@ -201,7 +201,7 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="vital_status"
-            maxBars={MAX_BARS_DEFAULT}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             handlers={{
               onClick: (config) => {
                 return chartFilters.vital_status(config.data.key);
@@ -225,7 +225,7 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="primary_diagnosis__age_at_diagnosis"
-            maxBars={MAX_BARS_DEFAULT}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             ranges={[
               { key: '< 18', to: 18 },
               { key: '18 - 65', from: 18, to: 66 },
@@ -301,7 +301,9 @@ const ChartsLayout = () => {
         </Card>
         <Card
           title="Gender"
-          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="gender" />}
+          Selector={
+            <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="gender" />
+          }
         >
           <BarChart
             fieldName="gender"
@@ -328,7 +330,7 @@ const ChartsLayout = () => {
         >
           <BarChart
             fieldName="analyses__files__data_category"
-            maxBars={MAX_BARS_DEFAULT}
+            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
             handlers={{
               onClick: (config) => {
                 return chartFilters.analyses__files__data_category(config.data.key);
