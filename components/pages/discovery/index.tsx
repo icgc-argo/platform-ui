@@ -44,7 +44,6 @@ import { commonStyles } from './components/common';
 import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
-import StatsCard from './components/StatsCard';
 import { discoveryFacets } from './data/facet';
 import { ArrangerV3 } from './useArrangerV3';
 
@@ -156,7 +155,6 @@ const DiscoveryPage = () => {
 
                       <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
                         <DiscoveryQueryBar />
-                        <StatsCard />
                         <ChartsLayout />
                       </div>
                     </div>
