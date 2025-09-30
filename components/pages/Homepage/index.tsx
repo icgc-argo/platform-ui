@@ -50,6 +50,74 @@ import {
 
 const newsItems: NewsItem[] = [
   {
+    title: 'September 29, 2025',
+    text: (
+      <>
+        A new Data Discovery section is available on the ARGO platform portal, which allows users to
+        explore donor data in the ICGC-ARGO through interactive charts, using clinical and file
+        filters.{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/data-access/daco/applying"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          DACO approval
+        </Link>{' '}
+        is required to access this feature.
+      </>
+    ),
+  },
+  {
+    title: 'September 26, 2025',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 13.0
+        </Link>{' '}
+        adds 366 new donors and 7825 molecular files and clinical data. This includes updates from
+        BC Cancer Personalized OncoGenomics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA){' '}
+        </Link>
+        , CRUK Grand Challenge—Autographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>
+        , Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>{' '}
+        programs, and Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in
+        Circulating Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan
+        MONSTAR-SCREEN{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/130/scrum-monstar"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MONSTAR-JP)
+        </Link>{' '}
+        program.
+      </>
+    ),
+  },
+  {
     title: 'August 29, 2025',
     text: (
       <>
@@ -96,86 +164,6 @@ const newsItems: NewsItem[] = [
           (MONSTAR-JP)
         </Link>{' '}
         program.
-      </>
-    ),
-  },
-  {
-    title: 'December 3, 2024',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 11.0
-        </Link>{' '}
-        adds 37 new donors and 6,069 molecular files and clinical data. This includes updates from
-        BC Cancer Personalized OncoGenomics Program{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/97/bc-pogp"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (POG-CA)
-        </Link>
-        , CRUK Grand Challenge—Autographs{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MUTO-INTL)
-        </Link>
-        , and Polyethnic-1000{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (P1000-US)
-        </Link>{' '}
-        programs.
-      </>
-    ),
-  },
-  {
-    title: 'September 25, 2024',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 10.0
-        </Link>{' '}
-        adds 296 new donors and 18,419 molecular files and clinical data. This includes updates from
-        BC Cancer Personalized OncoGenomics Program{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/97/bc-pogp"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (POG-CA)
-        </Link>
-        , CRUK Grand Challenge—Autographs{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MUTO-INTL)
-        </Link>
-        , and Polyethnic-1000{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (P1000-US)
-        </Link>{' '}
-        programs.
       </>
     ),
   },
