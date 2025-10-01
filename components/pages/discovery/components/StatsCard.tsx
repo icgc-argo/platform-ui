@@ -29,6 +29,9 @@ import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
 import { commonStyles } from './common';
 
+const MAX_ES_PRECISION_THRESHOLD = 40000;
+const ROUND_TO = 1000;
+
 const StatItem = ({ iconName, value }) => {
   const theme = useTheme();
 
@@ -99,8 +102,6 @@ const StatsCardComp = ({ files, donors, programs, repositories, isLoading }) => 
   );
 };
 
-const MAX_ES_PRECISION_THRESHOLD = 40000;
-
 const STATS_QUERY = gql`
   query DiscoveryStats($filters: JSON) {
     file {
@@ -119,12 +120,8 @@ const STATS_QUERY = gql`
   }
 `;
 
-const formatCardinality = (
-  value: number,
-  threshold: number,
-): { value: number; formattedValue: string } => {
-  if (value > threshold) {
-    const ROUND_TO = 1000;
+const formatCardinality = (value: number): { value: number; formattedValue: string } => {
+  if (value > MAX_ES_PRECISION_THRESHOLD) {
     const roundedValue = Math.round(value / ROUND_TO) * ROUND_TO;
     return {
       value: roundedValue,
@@ -155,24 +152,16 @@ const StatsCard = () => {
   const repositoriesData = 1;
 
   // files
-  const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(
-    filesData,
-    MAX_ES_PRECISION_THRESHOLD,
-  );
+  const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(filesData);
   const files = `${filesCountDisplay} File${filesCount === 1 ? '' : 's'}`;
 
   // donors
-  const { value: donorsCount, formattedValue: donorsCountDisplay } = formatCardinality(
-    donorsData,
-    MAX_ES_PRECISION_THRESHOLD,
-  );
+  const { value: donorsCount, formattedValue: donorsCountDisplay } = formatCardinality(donorsData);
   const donors = `${donorsCountDisplay} Donor${donorsCount === 1 ? '' : 's'}`;
 
   // programs
-  const { value: programsCount, formattedValue: programsCountDisplay } = formatCardinality(
-    programsData,
-    MAX_ES_PRECISION_THRESHOLD,
-  );
+  const { value: programsCount, formattedValue: programsCountDisplay } =
+    formatCardinality(programsData);
   const programs = `${programsCountDisplay} Program${programsCount === 1 ? '' : 's'}`;
 
   // repositories
