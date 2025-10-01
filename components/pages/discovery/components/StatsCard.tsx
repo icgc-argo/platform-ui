@@ -29,6 +29,9 @@ import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
 import { commonStyles } from './common';
 
+const MAX_ES_PRECISION_THRESHOLD = 40000;
+const ROUND_TO = 1000;
+
 const StatItem = ({ iconName, value }) => {
   const theme = useTheme();
 
@@ -55,12 +58,8 @@ const StatItem = ({ iconName, value }) => {
   );
 };
 
-const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoading }) => {
+const StatsCardComp = ({ files, donors, programs, repositories, isLoading }) => {
   const theme = useTheme();
-  const filesValue = `${files} File${files === 1 ? '' : 's'}`;
-  const donorsValue = `${donors} Donor${donors === 1 ? '' : 's'}`;
-  const programsValue = `${programs} Program${programs === 1 ? '' : 's'}`;
-  const repositoriesValue = `${repositories} ${repositories === 1 ? 'Repository' : 'Repositories'}`;
 
   return (
     <div
@@ -84,17 +83,17 @@ const StatsCardComp = ({ data: { files, donors, programs, repositories }, isLoad
         ) : (
           <>
             <Col md={3} sm={6}>
-              <StatItem iconName="file" value={filesValue} />
+              <StatItem iconName="file" value={files} />
             </Col>
             <Col md={3} sm={6}>
-              <StatItem iconName="user" value={donorsValue} />
+              <StatItem iconName="user" value={donors} />
             </Col>
 
             <Col md={3} sm={6}>
-              <StatItem iconName="programs" value={programsValue} />
+              <StatItem iconName="programs" value={programs} />
             </Col>
             <Col md={3} sm={6}>
-              <StatItem iconName="filesize" value={repositoriesValue} />
+              <StatItem iconName="filesize" value={repositories} />
             </Col>
           </>
         )}
@@ -108,37 +107,69 @@ const STATS_QUERY = gql`
     file {
       aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
         analyses__files__file_id {
-          bucket_count
+          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
         }
         donor_id {
-          bucket_count
+          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
         }
         study_id {
-          bucket_count
+          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
         }
       }
     }
   }
 `;
 
+const formatCardinality = (value: number): { value: number; formattedValue: string } => {
+  if (value > MAX_ES_PRECISION_THRESHOLD) {
+    const roundedValue = Math.round(value / ROUND_TO) * ROUND_TO;
+    return {
+      value: roundedValue,
+      formattedValue: roundedValue > 0 ? `~ ${roundedValue}` : `${roundedValue}`,
+    };
+  } else {
+    return {
+      value,
+      formattedValue: `${value}`,
+    };
+  }
+};
+
 const StatsCard = () => {
   const { filters } = useFiltersContext();
-  const {
-    data: statsCardResponse,
-    loading: isLoading,
-    error,
-  } = useQuery(STATS_QUERY, {
+  const { data: statsCardResponse, loading: isLoading } = useQuery(STATS_QUERY, {
     variables: { filters: toArrangerV3Filter(filters) },
   });
 
-  const data = {
-    files: get(statsCardResponse, 'file.aggregations.analyses__files__file_id.bucket_count', 0),
-    repositories: 1,
-    donors: get(statsCardResponse, 'file.aggregations.donor_id.bucket_count', []),
-    programs: get(statsCardResponse, 'file.aggregations.study_id.bucket_count', 0),
-  };
+  // data from GQL response
+  const filesData = get(
+    statsCardResponse,
+    'file.aggregations.analyses__files__file_id.cardinality',
+    0,
+  );
+  const donorsData = get(statsCardResponse, 'file.aggregations.donor_id.cardinality', 0);
+  const programsData = get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
+  const repositoriesData = 1;
 
-  return <StatsCardComp {...{ data, isLoading }} />;
+  // files
+  const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(filesData);
+  const files = `${filesCountDisplay} File${filesCount === 1 ? '' : 's'}`;
+
+  // donors
+  const { value: donorsCount, formattedValue: donorsCountDisplay } = formatCardinality(donorsData);
+  const donors = `${donorsCountDisplay} Donor${donorsCount === 1 ? '' : 's'}`;
+
+  // programs
+  const { value: programsCount, formattedValue: programsCountDisplay } =
+    formatCardinality(programsData);
+  const programs = `${programsCountDisplay} Program${programsCount === 1 ? '' : 's'}`;
+
+  // repositories
+  const repositories = `${repositoriesData} ${
+    repositoriesData === 1 ? 'Repository' : 'Repositories'
+  }`;
+
+  return <StatsCardComp {...{ files, donors, programs, repositories, isLoading }} />;
 };
 
 export default StatsCard;
