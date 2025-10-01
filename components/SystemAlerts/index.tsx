@@ -32,9 +32,15 @@ type SystemAlert = {
   title: string;
 };
 
-const getLocalStorage = () =>
-  JSON.parse(localStorage.getItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY)) || [];
-
+const getLocalStorage = () => {
+  const systemAlertsString = localStorage.getItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY);
+  try {
+    const parsed = JSON.parse(systemAlertsString);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 const setLocalStorage = (ids: string[]) => {
   localStorage.setItem(LOCAL_STORAGE_SYSTEM_ALERTS_KEY, JSON.stringify(ids));
 };
