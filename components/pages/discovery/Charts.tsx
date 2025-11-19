@@ -29,6 +29,7 @@ import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import { VisibleElements } from './components/VisibleElements';
+import { Download } from './Download';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -110,7 +111,6 @@ const ChartEmptyData = () => (
 const ChartContainer = ({ children }) => (
   <div
     css={css([
-      commonStyles.block,
       {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
@@ -118,6 +118,7 @@ const ChartContainer = ({ children }) => (
         gap: '10px',
 
         padding: '20px',
+        paddingTop: 0,
 
         '> div': {
           minWidth: '255px',
@@ -168,225 +169,242 @@ const ChartsLayout = () => {
   };
 
   return (
-    <ChartContainer>
-      <ChartsThemeProvider
-        colors={chartColors}
-        components={{
-          EmptyData: ChartEmptyData,
-          Loader: ChartLoader,
-        }}
+    <div
+      css={css`
+        ${commonStyles.block}
+      `}
+    >
+      <div
+        css={css`
+          display: flex;
+          justify-content: flex-end;
+          margin-right: 10px;
+          margin-top: 13px;
+          margin-bottom: 13px;
+        `}
       >
-        <Card
-          title="Program ID"
-          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="study_id" />}
-          css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
+        <Download>Download</Download>
+      </div>
+      <ChartContainer>
+        <ChartsThemeProvider
+          colors={chartColors}
+          components={{
+            EmptyData: ChartEmptyData,
+            Loader: ChartLoader,
+          }}
         >
-          <BarChart
-            fieldName="study_id"
-            maxBars={MAX_BARS_DEFAULT}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.study_id(config.data.key);
-              },
-            }}
-            theme={{ ...commonTheme }}
-          />
-        </Card>
-
-        <Card
-          title="Vital Status"
-          Selector={
-            <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="vital_status" />
-          }
-        >
-          <BarChart
-            fieldName="vital_status"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.vital_status(config.data.key);
-              },
-            }}
-            theme={{
-              sortByKey: ['__missing__', 'Deceased', 'Alive'],
-              ...commonTheme,
-            }}
-          />
-        </Card>
-
-        <Card
-          title="Age at Diagnosis"
-          Selector={
-            <VisibleElements
-              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
-              fieldName="primary_diagnosis__age_at_diagnosis"
-            />
-          }
-        >
-          <BarChart
-            fieldName="primary_diagnosis__age_at_diagnosis"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            ranges={[
-              { key: '< 18', to: 18 },
-              { key: '18 - 65', from: 18, to: 66 },
-              { key: '> 65', from: 66 },
-            ]}
-            handlers={{
-              onClick: (config) => {
-                const field = 'primary_diagnosis.age_at_diagnosis';
-                const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
-                // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-                const newFilters = addInFilters(sqonFilterForChart, filters);
-                replaceAllFilters(newFilters);
-                // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-                setSQON(toArrangerV3Filter(newFilters));
-              },
-            }}
-            theme={{
-              sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
-              ...commonTheme,
-            }}
-          />
-        </Card>
-
-        <Card
-          title="Cancer Type and Code"
-          css={css({
-            gridColumnStart: 3,
-            gridColumnEnd: 5,
-            gridRowStart: 1,
-            gridRowEnd: 3,
-          })}
-          Selector={
-            <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
-          }
-        >
-          <div css={css({ height: '100%', padding: '16px 0' })}>
-            <SunburstChart
-              fieldName="primary_diagnosis__cancer_type_code"
-              mapper={mapFromCodeToCancerType}
-              maxSegments={10}
+          <Card
+            title="Program ID"
+            Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="study_id" />}
+            css={css({ gridColumnStart: 1, gridRowEnd: 'span 2' })}
+          >
+            <BarChart
+              fieldName="study_id"
+              maxBars={MAX_BARS_DEFAULT}
               handlers={{
                 onClick: (config) => {
-                  const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
-                  const cancerCodes = config.ids;
-                  setFilter(cancerCodes);
+                  return chartFilters.study_id(config.data.key);
                 },
               }}
+              theme={{ ...commonTheme }}
             />
-          </div>
-        </Card>
-        <Card
-          title="Primary Site"
-          Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="primary_site" />}
-          css={css({
-            gridColumnStart: 1,
-            gridColumnEnd: 3,
-            gridRowStart: 3,
-            gridRowEnd: 5,
-          })}
-        >
-          <BarChart
-            fieldName="primary_site"
-            maxBars={MAX_BARS_DEFAULT}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.primary_site(config.data.key);
-              },
-            }}
-            theme={{
-              ...commonTheme,
-            }}
-          />
-        </Card>
-        <Card
-          title="Gender"
-          Selector={
-            <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="gender" />
-          }
-        >
-          <BarChart
-            fieldName="gender"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.gender(config.data.key);
-              },
-            }}
-            theme={{
-              sortByKey: ['__missing__', 'Other', 'Female', 'Male'],
-              ...commonTheme,
-            }}
-          />
-        </Card>
-        <Card
-          title="Data Category"
-          Selector={
-            <VisibleElements
-              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+          </Card>
+
+          <Card
+            title="Vital Status"
+            Selector={
+              <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="vital_status" />
+            }
+          >
+            <BarChart
+              fieldName="vital_status"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.vital_status(config.data.key);
+                },
+              }}
+              theme={{
+                sortByKey: ['__missing__', 'Deceased', 'Alive'],
+                ...commonTheme,
+              }}
+            />
+          </Card>
+
+          <Card
+            title="Age at Diagnosis"
+            Selector={
+              <VisibleElements
+                maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                fieldName="primary_diagnosis__age_at_diagnosis"
+              />
+            }
+          >
+            <BarChart
+              fieldName="primary_diagnosis__age_at_diagnosis"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              ranges={[
+                { key: '< 18', to: 18 },
+                { key: '18 - 65', from: 18, to: 66 },
+                { key: '> 65', from: 66 },
+              ]}
+              handlers={{
+                onClick: (config) => {
+                  const field = 'primary_diagnosis.age_at_diagnosis';
+                  const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
+                  // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                  const newFilters = addInFilters(sqonFilterForChart, filters);
+                  replaceAllFilters(newFilters);
+                  // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                  setSQON(toArrangerV3Filter(newFilters));
+                },
+              }}
+              theme={{
+                sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
+                ...commonTheme,
+              }}
+            />
+          </Card>
+
+          <Card
+            title="Cancer Type and Code"
+            css={css({
+              gridColumnStart: 3,
+              gridColumnEnd: 5,
+              gridRowStart: 1,
+              gridRowEnd: 3,
+            })}
+            Selector={
+              <VisibleElements maxElements={10} fieldName="primary_diagnosis__cancer_type_code" />
+            }
+          >
+            <div css={css({ height: '100%', padding: '16px 0' })}>
+              <SunburstChart
+                fieldName="primary_diagnosis__cancer_type_code"
+                mapper={mapFromCodeToCancerType}
+                maxSegments={10}
+                handlers={{
+                  onClick: (config) => {
+                    const setFilter = chartFilter('primary_diagnosis.cancer_type_code');
+                    const cancerCodes = config.ids;
+                    setFilter(cancerCodes);
+                  },
+                }}
+              />
+            </div>
+          </Card>
+          <Card
+            title="Primary Site"
+            Selector={<VisibleElements maxElements={MAX_BARS_DEFAULT} fieldName="primary_site" />}
+            css={css({
+              gridColumnStart: 1,
+              gridColumnEnd: 3,
+              gridRowStart: 3,
+              gridRowEnd: 5,
+            })}
+          >
+            <BarChart
+              fieldName="primary_site"
+              maxBars={MAX_BARS_DEFAULT}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.primary_site(config.data.key);
+                },
+              }}
+              theme={{
+                ...commonTheme,
+              }}
+            />
+          </Card>
+          <Card
+            title="Gender"
+            Selector={
+              <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="gender" />
+            }
+          >
+            <BarChart
+              fieldName="gender"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.gender(config.data.key);
+                },
+              }}
+              theme={{
+                sortByKey: ['__missing__', 'Other', 'Female', 'Male'],
+                ...commonTheme,
+              }}
+            />
+          </Card>
+          <Card
+            title="Data Category"
+            Selector={
+              <VisibleElements
+                maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                fieldName="analyses__files__data_category"
+              />
+            }
+          >
+            <BarChart
               fieldName="analyses__files__data_category"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.analyses__files__data_category(config.data.key);
+                },
+              }}
+              theme={{
+                ...commonTheme,
+              }}
             />
-          }
-        >
-          <BarChart
-            fieldName="analyses__files__data_category"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.analyses__files__data_category(config.data.key);
-              },
-            }}
-            theme={{
-              ...commonTheme,
-            }}
-          />
-        </Card>
-        <Card
-          title="Experimental Strategy"
-          Selector={
-            <VisibleElements
-              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+          </Card>
+          <Card
+            title="Experimental Strategy"
+            Selector={
+              <VisibleElements
+                maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                fieldName="analyses__experiment__experimental_strategy"
+              />
+            }
+          >
+            <BarChart
               fieldName="analyses__experiment__experimental_strategy"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
+                },
+              }}
+              theme={{
+                ...commonTheme,
+              }}
             />
-          }
-        >
-          <BarChart
-            fieldName="analyses__experiment__experimental_strategy"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.analyses__experiment__experimental_strategy(config.data.key);
-              },
-            }}
-            theme={{
-              ...commonTheme,
-            }}
-          />
-        </Card>
-        <Card
-          title="Workflow Name"
-          Selector={
-            <VisibleElements
-              maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+          </Card>
+          <Card
+            title="Workflow Name"
+            Selector={
+              <VisibleElements
+                maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                fieldName="analyses__workflow__workflow_name"
+              />
+            }
+          >
+            <BarChart
               fieldName="analyses__workflow__workflow_name"
+              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+              handlers={{
+                onClick: (config) => {
+                  return chartFilters.analyses__workflow__workflow_name(config.data.key);
+                },
+              }}
+              theme={{
+                ...commonTheme,
+              }}
             />
-          }
-        >
-          <BarChart
-            fieldName="analyses__workflow__workflow_name"
-            maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-            handlers={{
-              onClick: (config) => {
-                return chartFilters.analyses__workflow__workflow_name(config.data.key);
-              },
-            }}
-            theme={{
-              ...commonTheme,
-            }}
-          />
-        </Card>
-      </ChartsThemeProvider>
-    </ChartContainer>
+          </Card>
+        </ChartsThemeProvider>
+      </ChartContainer>
+    </div>
   );
 };
 
