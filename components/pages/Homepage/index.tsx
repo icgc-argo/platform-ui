@@ -50,6 +50,24 @@ import {
 
 const newsItems: NewsItem[] = [
   {
+    title: 'December 4, 2025',
+    text: (
+      <>
+        The Data Discovery page now includes a Download option. DACO-approved users can now download
+        clinical data or molecular file manifests or both for all donors within their selected
+        cohort.{' '}
+        <Link
+          href="https://docs.icgc-argo.org/docs/data-access/daco/applying"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          DACO approval
+        </Link>{' '}
+        is required to access this feature.
+      </>
+    ),
+  },
+  {
     title: 'September 29, 2025',
     text: (
       <>
@@ -136,32 +154,6 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (PACA-CA)
-        </Link>{' '}
-        program.
-      </>
-    ),
-  },
-  {
-    title: 'July 21, 2025',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-120"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 12.0
-        </Link>{' '}
-        adds 2060 new donors and 5863 molecular files and clinical data. This includes the first
-        release of data from the Multicenter Study to Profile and Monitor Cancer-related Genomic
-        Alterations in Circulating Tumor DNA and Gut Microbiome in Advanced Solid Malignancies -
-        SCRUM-Japan MONSTAR-SCREEN{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/130/scrum-monstar"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MONSTAR-JP)
         </Link>{' '}
         program.
       </>
