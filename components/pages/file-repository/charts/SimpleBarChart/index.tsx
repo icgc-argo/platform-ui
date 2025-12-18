@@ -30,7 +30,7 @@ import {
 import { capitalize } from 'global/utils/stringUtils';
 import { maxBy, orderBy } from 'lodash';
 import pluralize from 'pluralize';
-import { CSSProperties, ComponentType } from 'react';
+import { ComponentType, CSSProperties } from 'react';
 
 export type FileRepoDataType = 'data type' | 'program' | 'primary site';
 type SimpleBarChartProps = {
@@ -148,115 +148,117 @@ const SimpleBarChart: ComponentType<SimpleBarChartProps> = ({
   const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
-    <ContentBox
-      style={containerStyle as any}
-      css={css`
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 3px 10px 8px 3px;
-      `}
-    >
-      <FlexRow style={{ justifyContent: 'flex-end', position: 'relative' }}>
-        <Typography
-          css={css`
-            margin: 0;
-            margin-bottom: -8px;
-            font-size: 12px;
-            color: ${theme.colors.primary};
-          `}
-        >
-          Files by {capitalize(type)}
-        </Typography>
-      </FlexRow>
-      <div
+    <div role="group" aria-label={`${capitalize(type)} simple bar chart`}>
+      <ContentBox
+        style={containerStyle as any}
         css={css`
           display: flex;
-          padding-top: 12px;
-          flex-grow: 1;
+          flex-direction: column;
           justify-content: space-between;
+          padding: 3px 10px 8px 3px;
         `}
       >
-        <YAxis max={maxValue} theme={theme} />
-        <div
-          css={css`
-            flex-grow: 1;
-          `}
-        >
-          <FlexRow
-            css={css`
-              position: relative;
-              align-items: baseline;
-              margin-left: 6px;
-              height: ${chartHeight}px;
-              border-bottom: 1px solid ${theme.colors.grey_2};
-            `}
-          >
-            <Bar
-              style={{
-                width: 1,
-                height: chartHeight,
-                backgroundColor: theme.colors.grey_2,
-              }}
-            />
-            {orderBy(data, 'count', 'desc').map(({ category, count }) => (
-              <Tooltip
-                style={{ flexGrow: 1 }}
-                key={`bar-${category}`}
-                unmountHTMLWhenHide
-                position="bottom"
-                interactive
-                html={
-                  <div>
-                    <span>{capitalize(category)}</span>
-                    <br />
-                    <span>{`${count.toLocaleString()} ${pluralize('file', count)}`}</span>
-                  </div>
-                }
-              >
-                <Bar
-                  style={{
-                    flexGrow: 1,
-                    margin: '0 4px',
-                    height: getBarHeight(count, maxValue),
-                    backgroundColor: chartTypeMeta[type].getColor(theme),
-                    cursor: 'pointer',
-                  }}
-                  onClick={handleBarClick(category)}
-                />
-              </Tooltip>
-            ))}
-            <div
-              css={css`
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                position: absolute;
-                height: 100%;
-                width: 100%;
-                pointer-events: none;
-                background: ${loading
-                  ? `${theme.colors.white}90` //this is alpha hex
-                  : 'none'};
-              `}
-            >
-              {loading && <DnaLoader />}
-            </div>
-          </FlexRow>
+        <FlexRow style={{ justifyContent: 'flex-end', position: 'relative' }}>
           <Typography
             css={css`
-              padding-top: 5px;
-              font-size: 10px;
-              color: ${theme.colors.grey};
-              text-align: center;
+              margin: 0;
+              margin-bottom: -8px;
+              font-size: 12px;
+              color: ${theme.colors.primary};
             `}
-            component="div"
           >
-            {`${capitalize(type)}s`}
+            Files by {capitalize(type)}
           </Typography>
+        </FlexRow>
+        <div
+          css={css`
+            display: flex;
+            padding-top: 12px;
+            flex-grow: 1;
+            justify-content: space-between;
+          `}
+        >
+          <YAxis max={maxValue} theme={theme} />
+          <div
+            css={css`
+              flex-grow: 1;
+            `}
+          >
+            <FlexRow
+              css={css`
+                position: relative;
+                align-items: baseline;
+                margin-left: 6px;
+                height: ${chartHeight}px;
+                border-bottom: 1px solid ${theme.colors.grey_2};
+              `}
+            >
+              <Bar
+                style={{
+                  width: 1,
+                  height: chartHeight,
+                  backgroundColor: theme.colors.grey_2,
+                }}
+              />
+              {orderBy(data, 'count', 'desc').map(({ category, count }) => (
+                <Tooltip
+                  style={{ flexGrow: 1 }}
+                  key={`bar-${category}`}
+                  unmountHTMLWhenHide
+                  position="bottom"
+                  interactive
+                  html={
+                    <div>
+                      <span>{capitalize(category)}</span>
+                      <br />
+                      <span>{`${count.toLocaleString()} ${pluralize('file', count)}`}</span>
+                    </div>
+                  }
+                >
+                  <Bar
+                    style={{
+                      flexGrow: 1,
+                      margin: '0 4px',
+                      height: getBarHeight(count, maxValue),
+                      backgroundColor: chartTypeMeta[type].getColor(theme),
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleBarClick(category)}
+                  />
+                </Tooltip>
+              ))}
+              <div
+                css={css`
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  pointer-events: none;
+                  background: ${loading
+                    ? `${theme.colors.white}90` //this is alpha hex
+                    : 'none'};
+                `}
+              >
+                {loading && <DnaLoader />}
+              </div>
+            </FlexRow>
+            <Typography
+              css={css`
+                padding-top: 5px;
+                font-size: 10px;
+                color: ${theme.colors.grey};
+                text-align: center;
+              `}
+              component="div"
+            >
+              {`${capitalize(type)}s`}
+            </Typography>
+          </div>
         </div>
-      </div>
-    </ContentBox>
+      </ContentBox>
+    </div>
   );
 };
 
