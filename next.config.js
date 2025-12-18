@@ -96,6 +96,10 @@ const nextConfig = withPlugins([withImages, withTM], {
     FEATURE_SUBMISSION_BANNER_ENABLED: process.env.FEATURE_SUBMISSION_BANNER_ENABLED,
     FEATURE_DATA_DISCOVERY_ENABLED: process.env.FEATURE_DATA_DISCOVERY_ENABLED,
   },
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en',
+  },
 });
 
 module.exports = nextConfig;
