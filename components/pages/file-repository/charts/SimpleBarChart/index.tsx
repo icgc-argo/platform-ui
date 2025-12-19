@@ -40,6 +40,7 @@ type SimpleBarChartProps = {
   chartHeight?: number;
   loading?: boolean;
   onClick?: (value: string, event: any) => void;
+  ariaLabel;
 };
 
 const defaultChartHeight = 100;
@@ -142,13 +143,14 @@ const SimpleBarChart: ComponentType<SimpleBarChartProps> = ({
   chartHeight = defaultChartHeight,
   loading = false,
   onClick = (value, event) => {},
+  ariaLabel,
 }: SimpleBarChartProps) => {
   const theme = useTheme();
   const maxValue = data.length ? maxBy(data, 'count').count : 0;
   const handleBarClick = (value: string) => (event) => onClick(value, event);
 
   return (
-    <div role="group" aria-label={`${capitalize(type)} simple bar chart`}>
+    <div role="group" aria-label={ariaLabel}>
       <ContentBox
         style={containerStyle as any}
         css={css`
