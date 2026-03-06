@@ -168,7 +168,7 @@ const newsItems: NewsItem[] = [
           rel="noopener noreferrer"
           target="_blank"
         >
-          (POG-CA){' '}
+          (POG-CA)
         </Link>
         , CRUK Grand Challenge - Mutographs{' '}
         <Link
