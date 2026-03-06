@@ -50,6 +50,71 @@ import {
 
 const newsItems: NewsItem[] = [
   {
+    title: 'March 9, 2026',
+    text: (
+      <>
+        <Link
+          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Data Release 14.0
+        </Link>{' '}
+        adds 1528 new donors and updates to 419 existing donors from these programs: CRUK Grand
+        Challenge — Mutographs{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/99/mutographs"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MUTO-INTL)
+        </Link>
+        , BC Cancer Personalized OncoGenomics Program{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/97/bc-pogp"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (POG-CA)
+        </Link>
+        , Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in Circulating
+        Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan MONSTAR-SCREEN{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/130/scrum-monstar"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (MONSTAR-JP)
+        </Link>
+        , Polyethnic-1000{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/115/p-1000"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (P1000-US)
+        </Link>
+        , The Australian Pancreatic Genome Initiative{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/145/apgi-au"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (APGI-AU)
+        </Link>
+        , Pancreatic Cancer Harmonized "Omics" analysis for Personalized Treatment{' '}
+        <Link
+          href="https://www.icgc-argo.org/page/96/paca-ca"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          (PACA-CA)
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
     title: 'December 4, 2025',
     text: (
       <>
@@ -103,9 +168,9 @@ const newsItems: NewsItem[] = [
           rel="noopener noreferrer"
           target="_blank"
         >
-          (POG-CA){' '}
+          (POG-CA)
         </Link>
-        , CRUK Grand Challenge—Autographs{' '}
+        , CRUK Grand Challenge - Mutographs{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
           rel="noopener noreferrer"
@@ -130,30 +195,6 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (MONSTAR-JP)
-        </Link>{' '}
-        program.
-      </>
-    ),
-  },
-  {
-    title: 'August 29, 2025',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases#data-release-121"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 12.1
-        </Link>{' '}
-        includes updates to 134 existing donors in the Pancreatic Cancer Harmonized "Omics" analysis
-        for Personalized Treatment - Canada{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/96/paca-ca"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (PACA-CA)
         </Link>{' '}
         program.
       </>
