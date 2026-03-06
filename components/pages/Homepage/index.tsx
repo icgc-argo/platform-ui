@@ -60,14 +60,14 @@ const newsItems: NewsItem[] = [
         >
           Data Release 14.0
         </Link>{' '}
-        adds 1528 new donors and updates to 419 existing donors from these programs: 
-        CRUK Grand Challenge — Mutographs{' '}
+        adds 1528 new donors and updates to 419 existing donors from these programs: CRUK Grand
+        Challenge — Mutographs{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
           rel="noopener noreferrer"
           target="_blank"
         >
-          (MUTO-INTL){' '}
+          (MUTO-INTL)
         </Link>
         , BC Cancer Personalized OncoGenomics Program{' '}
         <Link
@@ -77,16 +77,15 @@ const newsItems: NewsItem[] = [
         >
           (POG-CA)
         </Link>
-        , Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in
-        Circulating Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan
-        MONSTAR-SCREEN{' '}
+        , Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in Circulating
+        Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan MONSTAR-SCREEN{' '}
         <Link
           href="https://www.icgc-argo.org/page/130/scrum-monstar"
           rel="noopener noreferrer"
           target="_blank"
         >
           (MONSTAR-JP)
-        </Link>{' '}
+        </Link>
         , Polyethnic-1000{' '}
         <Link
           href="https://www.icgc-argo.org/page/115/p-1000"
@@ -94,7 +93,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (P1000-US)
-        </Link>{' '}
+        </Link>
         , The Australian Pancreatic Genome Initiative{' '}
         <Link
           href="https://www.icgc-argo.org/page/145/apgi-au"
@@ -102,7 +101,7 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (APGI-AU)
-        </Link>{' '}
+        </Link>
         , Pancreatic Cancer Harmonized "Omics" analysis for Personalized Treatment{' '}
         <Link
           href="https://www.icgc-argo.org/page/96/paca-ca"
@@ -110,7 +109,8 @@ const newsItems: NewsItem[] = [
           target="_blank"
         >
           (PACA-CA)
-        </Link>.
+        </Link>
+        .
       </>
     ),
   },
