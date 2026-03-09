@@ -60,7 +60,7 @@ const newsItems: NewsItem[] = [
         >
           Data Release 14.0
         </Link>{' '}
-        adds 1528 new donors and updates to 419 existing donors from these programs: CRUK Grand
+        adds 1528 new donors and updates to 495 existing donors from these programs: CRUK Grand
         Challenge — Mutographs{' '}
         <Link
           href="https://www.icgc-argo.org/page/99/mutographs"
