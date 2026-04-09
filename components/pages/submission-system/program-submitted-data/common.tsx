@@ -88,7 +88,12 @@ export type ClinicalErrorData = {
   }[];
 };
 
+export type ClinicalConfigsData = {
+  idPrefix: string;
+};
+
 export type ClinicalEntityQueryResponse = {
+  clinicalConfigs: ClinicalConfigsData;
   clinicalData: {
     programShortName?: string;
     clinicalEntities: Array<ClinicalEntity>;
@@ -97,6 +102,7 @@ export type ClinicalEntityQueryResponse = {
 };
 
 export type ClinicalEntitySearchResultResponse = {
+  clinicalConfigs: ClinicalConfigsData;
   clinicalSearchResults: {
     programShortName?: string;
     totalResults: number;
@@ -168,8 +174,20 @@ export const reverseLookUpEntityAlias = (selectedClinicalEntity: string) => {
   return findAlias ? findAlias[0] : 'donor';
 };
 
-export const parseDonorIdString = (donorId: string) =>
-  donorId.match(/do/i) ? parseInt(donorId.split('DO')[1]) : parseInt(donorId);
+/**
+ * This will remove the prefix before a donor ID and return the numeric part of the ID, parse as an integer.
+ * If the provided ID does not have a valid numeric component, this will return `NaN`.
+ *
+ * Donor IDs will be formatted as `DO123`, or with an arbitrary prefix such as `ABC-DO123`.
+ * This function works with IDs of either form.
+ *
+ * As a last resort, if the string provided does not have an expected prefix, this will attempt
+ * to parse the value as an integer anyways, likely returning `NaN`.
+ * @param donorId
+ * @returns
+ */
+export const parseDonorIdString = (donorId): number =>
+  donorId.match(/do/i) ? parseInt(donorId.toLowerCase().split('do')[1]) : parseInt(donorId);
 
 export const aliasSortNames = {
   donor_id: 'donorId',
@@ -217,6 +235,9 @@ export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
 };
 
 export const emptySearchResponse: ClinicalEntitySearchResultResponse = {
+  clinicalConfigs: {
+    idPrefix: '',
+  },
   clinicalSearchResults: {
     searchResults: [],
     totalResults: 0,

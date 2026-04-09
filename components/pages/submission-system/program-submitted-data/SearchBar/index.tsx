@@ -17,7 +17,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import ClinicalDownloadButton from '../DownloadButtons';
 import {
   Button,
   Container,
@@ -30,15 +29,16 @@ import {
   useTheme,
 } from '@icgc-argo/uikit';
 import SearchResultsMenu from 'components/pages/file-repository/FacetPanel/SearchResultsMenu';
-import { Dispatch, SetStateAction, useState, createRef, RefObject, useEffect } from 'react';
-import FilterModal from './FilterModal';
+import { createRef, Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
 import {
+  clinicalEntityFields,
   ClinicalEntitySearchResultResponse,
   CompletionStates,
   emptySearchResponse,
-  clinicalEntityFields,
   TsvDownloadIds,
 } from '../common';
+import ClinicalDownloadButton from '../DownloadButtons';
+import FilterModal from './FilterModal';
 import {
   searchBackgroundStyle,
   searchBarParentStyle,
@@ -92,6 +92,7 @@ export default function SearchBar({
   donorSearchResults,
   tsvDownloadIds,
   modalVisible,
+  clinicalIdPrefix,
 }: {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   noData: boolean;
@@ -107,6 +108,7 @@ export default function SearchBar({
   donorSearchResults: ClinicalEntitySearchResultResponse;
   tsvDownloadIds: TsvDownloadIds;
   modalVisible: boolean;
+  clinicalIdPrefix: string;
 }) {
   const theme = useTheme();
   const [displayText, setDisplayText] = useState('- Select an option -');
@@ -130,7 +132,7 @@ export default function SearchBar({
 
   const titleText =
     currentDonors.length === 1
-      ? `DO${currentDonors[0]}`
+      ? `${clinicalIdPrefix}DO${currentDonors[0]}`
       : currentDonors.length > 1
       ? `${currentDonors.length} Donors`
       : keyword
@@ -141,7 +143,9 @@ export default function SearchBar({
     searchResults
       .map((result) => {
         const { donorId, submitterDonorId } = result;
-        return donorId ? { resultId: `DO${donorId}`, secondaryText: submitterDonorId } : null;
+        return donorId
+          ? { resultId: `${clinicalIdPrefix}DO${donorId}`, secondaryText: submitterDonorId }
+          : null;
       })
       .filter((result) => !!result)
       .slice(0, 20) || [];
