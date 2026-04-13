@@ -25,7 +25,7 @@ import DonorAggregationSummary from './DonorAggregationSummary';
 const DccDashboard = () => {
   return (
     <SubmissionLayout
-      subtitle="DCC Dashboard"
+      subtitle="RDPC Dashboard"
       contentHeader={
         <div
           css={css`
@@ -42,7 +42,7 @@ const DccDashboard = () => {
               margin: 0px;
             `}
           >
-            DCC Dashboard
+            RDPC Dashboard
           </Typography>
         </div>
       }

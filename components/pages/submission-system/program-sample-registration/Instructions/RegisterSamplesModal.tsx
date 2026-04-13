@@ -88,7 +88,7 @@ export default function RegisterSamplesModal({
               You will see the updates on your dashboard shortly. If you have any changes to this
               registered sample data, please{' '}
               <NextLink href={CONTACT_PAGE_PATH}>
-                <Link>contact the DCC.</Link>
+                <Link>contact the RDPC.</Link>
               </NextLink>
             </Typography>
           ),
