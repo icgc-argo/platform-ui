@@ -228,6 +228,9 @@ export const hasClinicalErrors = (
   ).length > 0;
 
 export const emptyClinicalDataResponse: ClinicalEntityQueryResponse = {
+	clinicalConfigs: {
+		idPrefix: '',
+	},
   clinicalData: {
     clinicalEntities: [],
     clinicalErrors: [],
