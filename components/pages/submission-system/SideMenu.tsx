@@ -32,7 +32,7 @@ import SIDE_MENU_PROGRAM_LIST_QUERY from './gql/SIDE_MENU_PROGRAM_LIST_QUERY';
 import SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY from './gql/SIDE_MENU_SAMPLE_REGISTRATION_STATE_QUERY';
 
 import {
-  DCC_DASHBOARD_PATH,
+  PROGRAMS_LIST_PATH,
   PROGRAM_CLINICAL_DATA_PATH,
   PROGRAM_CLINICAL_SUBMISSION_PATH,
   PROGRAM_DASHBOARD_PATH,
@@ -40,7 +40,7 @@ import {
   PROGRAM_SAMPLE_REGISTRATION_PATH,
   PROGRAM_SHORT_NAME_PATH,
   PROGRAM_SUBMIT_CLINICAL_PATH,
-  PROGRAMS_LIST_PATH,
+  RDPC_DASHBOARD_PATH,
 } from 'global/constants/pages';
 import usePageContext from 'global/hooks/usePageContext';
 import { useMemo, useState } from 'react';
@@ -319,6 +319,8 @@ const LinksToProgram = (props: { program: SideMenuProgram; isCurrentlyViewed: bo
 };
 
 const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }) => {
+  const { RDPC_REGION_DISPLAY_NAME } = getConfig();
+
   const [programNameSearch, setProgramNameSearch] = usePersistentState('programNameSearch', '');
   const orderedPrograms = orderBy(programs, 'shortName');
   const filteredPrograms = orderedPrograms.filter(
@@ -361,7 +363,7 @@ const MultiProgramsSection = ({ programs }: { programs: Array<SideMenuProgram> }
         <NextLink as={PROGRAMS_LIST_PATH} href={PROGRAMS_LIST_PATH}>
           <MenuItem
             level={2}
-            content={'All Programs'}
+            content={`All Programs`}
             selected={pageContext.pathname === PROGRAMS_LIST_PATH}
           />
         </NextLink>
@@ -394,6 +396,7 @@ export default function SideMenu() {
   const { data: egoTokenData, egoJwt, permissions } = useAuthContext();
   const isDcc = useMemo(() => (egoJwt ? isDccMember(permissions) : false), [egoJwt]);
   const isRdpc = useMemo(() => (egoJwt ? isRdpcMember(permissions) : false), [egoJwt]);
+  const isAdmin = isDcc || isRdpc;
 
   const canOnlyAccessOneProgram = programs && programs.length === 1 && !isDcc;
 
@@ -417,9 +420,9 @@ export default function SideMenu() {
         )
       ) : (
         <>
-          {isDcc && (
-            <NextLink href={DCC_DASHBOARD_PATH}>
-              <MenuItem icon={<Icon name="dashboard" />} content={'DCC Dashboard'} />
+          {isAdmin && (
+            <NextLink href={RDPC_DASHBOARD_PATH}>
+              <MenuItem icon={<Icon name="dashboard" />} content={'RDPC Dashboard'} />
             </NextLink>
           )}
 
@@ -428,9 +431,9 @@ export default function SideMenu() {
             content={'My Programs'}
             selected={activeItem === 1}
             onClick={() => {
-              if (isDcc || isRdpc) toggleItem(1);
+              if (isAdmin) toggleItem(1);
             }}
-            noChevron={!isDcc && !isRdpc}
+            noChevron={!isAdmin}
           >
             {loading ? <Loader /> : <MultiProgramsSection programs={programs} />}
           </MenuItem>

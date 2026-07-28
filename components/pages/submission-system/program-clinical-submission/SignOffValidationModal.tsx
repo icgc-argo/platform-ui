@@ -60,7 +60,7 @@ const SignOffValidationModal = ({
     >
       <div>
         {hasUpdate
-          ? 'The DCC will be notified of the following updates to previously released data and your submission will be locked until approval.'
+          ? 'The RDPC will be notified of the following updates to previously released data and your submission will be locked until approval.'
           : 'The following clinical data will be submitted.'}
       </div>
       <div

@@ -19,17 +19,21 @@
  *
  */
 
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
+import { useArrangerData } from '@overture-stack/arranger-components';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
+import { getConfig } from 'global/config';
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get } from 'lodash';
 import { Col } from 'react-grid-system';
 import { PaddedRow } from '..';
 import { commonStyles } from './common';
+import DISCOVERY_LOCAL_STATS_QUERY from './DISCOVERY_LOCAL_STATS_QUERY';
+import DISCOVERY_NETWORK_STATS_QUERY from './DISCOVERY_NETWORK_STATS_QUERY';
+import { ES_CARDINALITY_MAX_PRECISION_THRESHOLD } from './Facets/facetsQueryProps';
 
-const MAX_ES_PRECISION_THRESHOLD = 40000;
 const ROUND_TO = 1000;
 
 const StatItem = ({ iconName, value }) => {
@@ -102,26 +106,8 @@ const StatsCardComp = ({ files, donors, programs, repositories, isLoading }) => 
   );
 };
 
-const STATS_QUERY = gql`
-  query DiscoveryStats($filters: JSON) {
-    file {
-      aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
-        analyses__files__file_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-        donor_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-        study_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-      }
-    }
-  }
-`;
-
 const formatCardinality = (value: number): { value: number; formattedValue: string } => {
-  if (value > MAX_ES_PRECISION_THRESHOLD) {
+  if (value > ES_CARDINALITY_MAX_PRECISION_THRESHOLD) {
     const roundedValue = Math.round(value / ROUND_TO) * ROUND_TO;
     return {
       value: roundedValue,
@@ -136,20 +122,30 @@ const formatCardinality = (value: number): { value: number; formattedValue: stri
 };
 
 const StatsCard = () => {
+  const { FEATURE_DISCOVERY_NETWORK_SEARCH: useNetworkSearch } = getConfig();
   const { filters } = useFiltersContext();
-  const { data: statsCardResponse, loading: isLoading } = useQuery(STATS_QUERY, {
-    variables: { filters: toArrangerV3Filter(filters) },
+  const { networkNodesFilter } = useArrangerData();
+  const statsQuery = useNetworkSearch ? DISCOVERY_NETWORK_STATS_QUERY : DISCOVERY_LOCAL_STATS_QUERY;
+  const { data: statsCardResponse, loading: isLoading } = useQuery(statsQuery, {
+    variables: {
+      filters: toArrangerV3Filter(filters),
+      nodesFilter: useNetworkSearch ? networkNodesFilter : undefined,
+    },
   });
+
+  const responseRoot = useNetworkSearch ? 'network' : 'file';
 
   // data from GQL response
   const filesData = get(
     statsCardResponse,
-    'file.aggregations.analyses__files__file_id.cardinality',
+    `${responseRoot}.aggregations.analyses__files__file_id.cardinality`,
     0,
   );
-  const donorsData = get(statsCardResponse, 'file.aggregations.donor_id.cardinality', 0);
-  const programsData = get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
-  const repositoriesData = 1;
+  const donorsData = get(statsCardResponse, `${responseRoot}.aggregations.donor_id.cardinality`, 0);
+  const programsData = useNetworkSearch
+    ? get(statsCardResponse, 'network.aggregations.study_id.bucket_count', 0)
+    : get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
+  const repositoriesData = useNetworkSearch ? get(statsCardResponse, 'network.nodes.length', 1) : 1;
 
   // files
   const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(filesData);

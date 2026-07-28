@@ -17,11 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import TeamPage from 'components/pages/team';
-import { createPage } from 'global/utils/pages';
+import { css, Typography } from '@icgc-argo/uikit';
+import SubmissionLayout from '../layout';
 
-export default createPage({
-  isPublic: true,
-})(() => {
-  return <TeamPage />;
-});
+import DonorAggregationSummary from './DonorAggregationSummary';
+
+const DccDashboard = () => {
+  return (
+    <SubmissionLayout
+      subtitle="RDPC Dashboard"
+      contentHeader={
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+          `}
+        >
+          <Typography
+            as="h1"
+            variant="title"
+            color="primary"
+            css={css`
+              margin: 0px;
+            `}
+          >
+            RDPC Dashboard
+          </Typography>
+        </div>
+      }
+    >
+      <DonorAggregationSummary />
+    </SubmissionLayout>
+  );
+};
+
+export default DccDashboard;

@@ -40,6 +40,7 @@ export const getConfig = () => {
     RDPC_PORTAL_URL: publicConfig.RDPC_PORTAL_URL || 'http://localhost:3000',
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
+    RDPC_REGION_DISPLAY_NAME: publicConfig.RDPC_REGION_DISPLAY_NAME || '',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
     FEATURE_DONOR_ENTITY_ENABLED: publicConfig.FEATURE_DONOR_ENTITY_ENABLED === 'true',
     FEATURE_PROGRAM_ENTITY_ENABLED: publicConfig.FEATURE_PROGRAM_ENTITY_ENABLED === 'true',
@@ -55,6 +56,7 @@ export const getConfig = () => {
     FEATURE_CLINICAL_DOWNLOAD: publicConfig.FEATURE_CLINICAL_DOWNLOAD === 'true',
     FEATURE_SUBMISSION_BANNER_ENABLED: publicConfig.FEATURE_SUBMISSION_BANNER_ENABLED === 'true',
     FEATURE_DATA_DISCOVERY_ENABLED: publicConfig.FEATURE_DATA_DISCOVERY_ENABLED === 'true',
+    FEATURE_DISCOVERY_NETWORK_SEARCH: publicConfig.FEATURE_DISCOVERY_NETWORK_SEARCH === 'true',
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -67,6 +69,7 @@ export const getConfig = () => {
     DACO_URL: string;
     RDPC_PORTAL_URL: string;
     RECAPTCHA_SITE_KEY: string;
+    RDPC_REGION_DISPLAY_NAME: string;
     MAINTENANCE_MODE_ON: boolean;
     FEATURE_DONOR_ENTITY_ENABLED: boolean;
     FEATURE_PROGRAM_ENTITY_ENABLED: boolean;
@@ -80,5 +83,6 @@ export const getConfig = () => {
     FEATURE_CLINICAL_DOWNLOAD: boolean;
     FEATURE_SUBMISSION_BANNER_ENABLED: boolean;
     FEATURE_DATA_DISCOVERY_ENABLED: boolean;
+    FEATURE_DISCOVERY_NETWORK_SEARCH: boolean;
   };
 };

@@ -73,6 +73,8 @@ const DiscoveryQueryBar = () => {
   );
 };
 
+const { GATEWAY_API_ROOT } = getConfig();
+const DISCOVERY_API = urljoin(GATEWAY_API_ROOT, 'discovery');
 const DiscoveryPage = () => {
   const theme = useTheme();
   const [isSidebarOpen, setSetbarView] = useState(true);
@@ -80,11 +82,10 @@ const DiscoveryPage = () => {
   /**
    * Query donor-centric Arranger instance gateway endpoint for this page
    */
-  const { GATEWAY_API_ROOT } = getConfig();
   const { fetchWithEgoToken } = useAuthContext();
   const arrangerV3client = useMemo(() => {
     const uploadLink = createUploadLink({
-      uri: urljoin(GATEWAY_API_ROOT, 'discovery'),
+      uri: DISCOVERY_API,
       fetch: fetchWithEgoToken,
     });
     return new ApolloClient({
@@ -94,9 +95,6 @@ const DiscoveryPage = () => {
     });
   }, [fetchWithEgoToken]);
 
-  // proxies to Arranger with /graphql
-  const discoveryApiUrl = urljoin(GATEWAY_API_ROOT, 'discovery');
-
   const arrangerFetchWithEgoToken = useCallback(
     async (args) => {
       const options = {
@@ -105,23 +103,22 @@ const DiscoveryPage = () => {
         body: JSON.stringify({ ...args.body }),
       };
       try {
-        const response = await fetchWithEgoToken(discoveryApiUrl, options);
+        const response = await fetchWithEgoToken(DISCOVERY_API, options);
         return response.json();
       } catch (error) {
         console.log('Arranger Charts error', error);
       }
     },
-    [fetchWithEgoToken, discoveryApiUrl],
+    [fetchWithEgoToken, DISCOVERY_API],
   );
 
   return (
     <ArrangerV3 enabled>
       <ArrangerDataProvider
         documentType="file"
-        apiUrl={discoveryApiUrl}
+        apiUrl={DISCOVERY_API}
         customFetcher={arrangerFetchWithEgoToken}
       >
-        {/* @ts-expect-error prop types need work in lib */}
         <ChartsProvider>
           <FacetStateProvider staticFacetOptions={discoveryFacets}>
             <ApolloProvider client={arrangerV3client}>
