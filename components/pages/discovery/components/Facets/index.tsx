@@ -28,10 +28,12 @@ import {
 } from 'components/pages/file-repository/FacetPanel';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
+import { getConfig } from 'global/config';
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get, isEmpty } from 'lodash';
 import { FacetPanelOptions } from '../../data/facet';
-import DISCOVERY_FACETS_QUERY from './DISCOVERY_FACETS_QUERY';
+import DISCOVERY_LOCAL_FACETS_QUERY from './DISCOVERY_LOCAL_FACETS_QUERY';
+import DISCOVERY_NETWORK_FACETS_QUERY from './DISCOVERY_NETWORK_FACETS_QUERY';
 import { Facet, FacetRow } from './Facet';
 import { FACET_VISIBILITY_TOGGLE_ACTIONS, useFacetState } from './FacetStateProvider';
 import { FacetFolder } from './Folder';
@@ -53,10 +55,12 @@ const FacetCollection = ({
   aggregations,
   isLoading,
   staticFacets,
+  useNetworkSearch,
 }: {
   aggregations: any;
   isLoading: boolean;
   staticFacets: FacetPanelOptions;
+  useNetworkSearch: boolean;
 }) => {
   const { filters } = useFiltersContext();
   const { setSQON } = useArrangerData();
@@ -88,7 +92,7 @@ const FacetCollection = ({
               if (facet.variant === 'NumericAggregation') {
                 const stats = aggregations[facet.facetPath]?.stats;
 
-                return (
+                return useNetworkSearch ? null : (
                   <RangeFacet
                     displayName={facet.name}
                     fieldName={facet.esDocumentField}
@@ -161,17 +165,26 @@ const FacetCollection = ({
  */
 
 const Facets = ({ options }) => {
+  const { FEATURE_DISCOVERY_NETWORK_SEARCH: useNetworkSearch } = getConfig();
   const { filters: rawFilters } = useFiltersContext();
+  const { networkNodesFilter } = useArrangerData();
   const filters = toArrangerV3Filter(rawFilters);
+  const facetsQuery = useNetworkSearch
+    ? DISCOVERY_NETWORK_FACETS_QUERY
+    : DISCOVERY_LOCAL_FACETS_QUERY;
   const {
     data: responseData,
     loading: isLoading,
     error,
-  } = useQuery(DISCOVERY_FACETS_QUERY, {
-    variables: { filters },
+  } = useQuery(facetsQuery, {
+    variables: {
+      filters,
+      ...(useNetworkSearch && { nodesFilter: networkNodesFilter }),
+    },
   });
 
-  const aggregations = get(responseData, 'file.aggregations', {});
+  const aggregationsRoot = useNetworkSearch ? 'network' : 'file';
+  const aggregations = get(responseData, `${aggregationsRoot}.aggregations`, {});
 
   const { setVisiblePanels, isExpanded } = useFacetState();
 
@@ -187,7 +200,12 @@ const Facets = ({ options }) => {
         onClick={() => setVisiblePanels({ type: FACET_VISIBILITY_TOGGLE_ACTIONS.TOGGLE_ALL })}
       />
       <div css={css([{ flex: 1, overflow: 'scroll' }])}>
-        <FacetCollection aggregations={aggregations} staticFacets={options} isLoading={isLoading} />
+        <FacetCollection
+          aggregations={aggregations}
+          staticFacets={options}
+          isLoading={isLoading}
+          useNetworkSearch={useNetworkSearch}
+        />
       </div>
     </>
   );

@@ -22,7 +22,16 @@ import memoize from 'lodash/memoize';
 import createEgoUtils from '@icgc-argo/ego-token-utils';
 import { getConfig } from 'global/config';
 
-const TokenUtils = createEgoUtils(getConfig().EGO_PUBLIC_KEY);
+const rawPublicKey = getConfig().EGO_PUBLIC_KEY;
+// PEM format requires \n after the BEGIN header and before the END footer.
+// Environment variables often lose these newlines; normalize defensively.
+const egoPublicKey = rawPublicKey.includes('\n')
+  ? rawPublicKey
+  : rawPublicKey
+      .replace('-----BEGIN PUBLIC KEY-----', '-----BEGIN PUBLIC KEY-----\n')
+      .replace('-----END PUBLIC KEY-----', '\n-----END PUBLIC KEY-----');
+
+const TokenUtils = createEgoUtils(egoPublicKey);
 
 type PermissionScopeObj = {
   policy: string;

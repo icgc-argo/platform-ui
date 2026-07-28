@@ -19,23 +19,24 @@
 
 import { css } from '@icgc-argo/uikit';
 import { useArrangerData, useArrangerTheme } from '@overture-stack/arranger-components';
-import { RangeAgg } from '@overture-stack/arranger-components/dist/aggregations';
+import { RangeAggs } from '@overture-stack/arranger-components/dist/aggregations';
 import { useRef } from 'react';
 
+import type { UseThemeContextProps } from '@overture-stack/arranger-components';
 import useFiltersContext, {
   defaultFilters,
-} from 'components/pages/file-repository/hooks/useFiltersContext';
+} from '../../../../file-repository/hooks/useFiltersContext';
 import { FacetMenuItem } from './FacetMenuItem';
 
 /**
  * Using custom wrapper component for facets so only some overrides are applicable
  * Mostly from "buckets" section of the code, which are the children passed to WrapperComponent
  */
-const aggregationsStyles = {
+const aggregationsStyles: UseThemeContextProps = {
   callerName: 'Discovery-Facets',
   components: {
     Aggregations: {
-      RangeAgg: {
+      RangeAggs: {
         RangeLabel: {
           // each of the labels with values
           borderRadius: '3px',
@@ -143,7 +144,7 @@ export const RangeFacet = ({
         }
       `}
     >
-      <RangeAgg
+      <RangeAggs
         fieldName={fieldName}
         displayName={displayName}
         sqonValues={currentValue}

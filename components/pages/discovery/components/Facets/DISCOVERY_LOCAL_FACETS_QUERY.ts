@@ -18,26 +18,11 @@
  */
 
 import { gql } from '@apollo/client';
+import { aggBucketProps, numericProps } from './facetsQueryProps';
 
-const aggBucketProps = `
-  buckets {
-    key
-    key_as_string
-    doc_count
-  }`;
-
-const numericProps = `
-  histogram {${aggBucketProps}} 
-  stats {
-    max 
-    min
-  }`;
-
-const DISCOVERY_FACETS_QUERY = gql`
+const DISCOVERY_LOCAL_FACETS_QUERY = gql`
   query DiscoveryFacets($filters: JSON) {
     file {
-      # only place we have field => display name mapping
-      # example: "analysis.experiment.platform" => "Platform"
       aggregations(
         filters: $filters
         include_missing: true
@@ -51,12 +36,11 @@ const DISCOVERY_FACETS_QUERY = gql`
         vital_status {
          ${aggBucketProps}
         }
-        
+
         cause_of_death {
           ${aggBucketProps}
         }
 
-       
         survival_time {
           ${numericProps}
         }
@@ -160,7 +144,7 @@ const DISCOVERY_FACETS_QUERY = gql`
         treatments__response_to_treatment{
           ${aggBucketProps}
         }
-       
+
         treatments__response_to_treatment_criteria_method{
           ${aggBucketProps}
         }
@@ -184,7 +168,7 @@ const DISCOVERY_FACETS_QUERY = gql`
         follow_ups__anatomic_site_progression_or_recurrence{
           ${aggBucketProps}
         }
-        
+
         # --- Molecular (File filters)
         study_id {
          ${aggBucketProps}
@@ -208,8 +192,8 @@ const DISCOVERY_FACETS_QUERY = gql`
          ${aggBucketProps}
         }
       }
-    } 
+    }
   }
 `;
 
-export default DISCOVERY_FACETS_QUERY;
+export default DISCOVERY_LOCAL_FACETS_QUERY;
