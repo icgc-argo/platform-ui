@@ -1,4 +1,4 @@
-# Argo Platform client
+# Argo Platform UI
 
 [![TypeScript](https://img.shields.io/badge/types-%20TypeScript-blue)](https://www.typescriptlang.org/)
 [![Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://prettier.io/)
@@ -21,12 +21,17 @@ Navigate to `/compose` (`cd ./compose`) and Follow the instructions found in [`c
 
 ### Setup
 
+**Requires Node v 20.**
+
 - Install dependencies: `npm ci`
 - Set up environment: copy `.env.schema` to `.env` and update environment accordingly. Out-of-the-box values are meant for local development.
 - Dev commands:
   - `npm run dev` starts local dev server
   - `npm run build` creates a production build.
   - `npm run force-resolutions` fixes vulnerable dependencies listed in `package.json > resolutions`
+
+> [!Note]
+> Incompatible with Node >=22 due to `jsonwebtokens` dependency in `@icgc-argo/ego-token-utils`
 
 ### Writing commits
 

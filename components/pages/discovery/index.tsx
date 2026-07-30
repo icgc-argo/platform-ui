@@ -19,7 +19,7 @@
 
 import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
-import { styled } from '@icgc-argo/uikit';
+import { styled, Typography } from '@icgc-argo/uikit';
 import { ChartsProvider } from '@overture-stack/arranger-charts';
 import { createUploadLink } from 'apollo-upload-client';
 
@@ -33,11 +33,13 @@ import NavBar from 'components/NavBar';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Row, setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
+import QueryBar from 'components/QueryBar';
+import useQueryParam from 'global/hooks/useQueryParam';
 import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
-import QueryBarContainer from '../file-repository/QueryBar/QueryBarContainer';
+import { Value, Op } from '../../SQONView';
 import Head from '../head';
 import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
@@ -53,6 +55,16 @@ export const PaddedRow = styled(Row)`
 `;
 setConfiguration({ gutterWidth: 9 });
 
+const REPOSITORIES_PARAM = 'repositories';
+const defaultRepositories: string[] = [];
+
+const useRepositoriesUrlParam = () => {
+  return useQueryParam(REPOSITORIES_PARAM, defaultRepositories, {
+    serialize: (repositories) => repositories.join(','),
+    deserialize: (raw): string[] => raw.split(',').filter(Boolean),
+  });
+};
+
 export const PageContainer = styled('div')`
   display: grid;
   grid-template-rows: 58px 1fr;
@@ -61,14 +73,70 @@ export const PageContainer = styled('div')`
 `;
 
 const DiscoveryQueryBar = () => {
-  const { setSQON } = useArrangerData();
+  const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
+  const [repositoriesFromUrl, setUrlRepositories] = useRepositoriesUrlParam();
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    setNetworkNodesFilter(repositoriesFromUrl);
+    hasMounted.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      return;
+    }
+    setUrlRepositories(networkNodesFilter.length > 0 ? networkNodesFilter : undefined);
+  }, [networkNodesFilter]);
+
+  const repositoryFilterContent =
+    networkNodesFilter.length > 0 ? (
+      <div
+        key="repositories"
+        className="sqon-group"
+        style={{ display: 'flex', alignItems: 'center' }}
+      >
+        <Typography
+          bold
+          css={css`
+            margin: 0px;
+            margin-right: 0.3rem;
+            text-transform: uppercase;
+            font-size: 12px;
+          `}
+        >
+          Repositories
+        </Typography>
+        <Op>{networkNodesFilter.length === 1 ? 'is' : 'in'}</Op>
+        {networkNodesFilter.length > 1 && (
+          <span className="sqon-value-group sqon-value-group-start">(</span>
+        )}
+        {networkNodesFilter.map((nodeId) => (
+          <Value
+            key={nodeId}
+            className={networkNodesFilter.length === 1 ? 'sqon-value-single' : ''}
+            onClick={() =>
+              setNetworkNodesFilter((current) => current.filter((id) => id !== nodeId))
+            }
+          >
+            {nodeId}
+          </Value>
+        ))}
+        {networkNodesFilter.length > 1 && (
+          <span className="sqon-value-group sqon-value-group-end">)</span>
+        )}
+      </div>
+    ) : undefined;
+
   return (
-    <QueryBarContainer
+    <QueryBar
       updateSQON={(newSQON) => {
         setSQON(toArrangerV3Filter(newSQON) as SQONType);
       }}
       text="Explore data by selecting filters."
       css={css([commonStyles.block, { boxShadow: 'none' }])}
+      prefixContent={repositoryFilterContent}
+      onClear={() => setNetworkNodesFilter([])}
     />
   );
 };

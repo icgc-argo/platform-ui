@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,31 +17,24 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, styled, Typography } from '@icgc-argo/uikit';
+import { Button, Container, css, Icon, styled, Typography, useTheme } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
-import { FunctionComponent } from 'react';
-import SQONView, { Value } from '../../../SQONView';
-import useFileCentricFieldDisplayName from '../hooks/useFileCentricFieldDisplayName';
-import useFiltersContext, { defaultFilters } from '../hooks/useFiltersContext';
-import { FileCentricDocumentField } from '../types';
-import { toDisplayValue } from '../utils';
-import { FileRepoFiltersType } from '../utils/types';
+import { ReactElement, ReactNode } from 'react';
+import { Col, Row } from 'react-grid-system';
+import useFileCentricFieldDisplayName from '../pages/file-repository/hooks/useFileCentricFieldDisplayName';
+import useFiltersContext, {
+  defaultFilters,
+} from '../pages/file-repository/hooks/useFiltersContext';
+import { FileCentricDocumentField } from '../pages/file-repository/types';
+import { toDisplayValue } from '../pages/file-repository/utils';
+import { FileRepoFiltersType } from '../pages/file-repository/utils/types';
+import SQONView, { Value } from '../SQONView';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const SQONRow: any = require('../SQONView/Row').default;
 
-type ValueNode = FunctionComponent<{
-  onClick?: () => void;
-}>;
-
-type FieldNode = FunctionComponent<{
-  onClick?: () => void;
-}>;
-type Filter = FunctionComponent<{
-  sqon: FileRepoFiltersType | {};
-  setSQON: ({ field, value }: { field: string; value: string }) => void;
-  onClear?: () => void;
-  Clear?: FunctionComponent<{}>;
-  ValueCrumb?: ValueNode;
-  FieldCrumb?: FieldNode;
-}>;
+export const PaddedRow = styled(Row)`
+  padding-bottom: 8px;
+`;
 
 const Content = styled('div')`
   & .sqon-view {
@@ -93,9 +86,6 @@ const Content = styled('div')`
     & .sqon-value {
       background-color: ${({ theme }) => theme.colors.secondary};
       color: ${({ theme }) => theme.colors.white};
-      padding: 0 7px 0 12px;
-      margin-right: 4px;
-      cursor: pointer;
       padding: 0 7px;
       margin-right: 6px;
       font-weight: bold;
@@ -109,7 +99,6 @@ const Content = styled('div')`
       text-transform: uppercase;
       cursor: pointer;
       margin-right: 6px;
-      cursor: pointer;
       justify-content: center;
       display: flex;
       align-items: center;
@@ -145,7 +134,6 @@ const Content = styled('div')`
       content: url(data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%228%22%20stroke%3D%22white%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Cline%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%228%22%20y2%3D%228%22%20/%3E%0A%20%20%3Cline%20x1%3D%228%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%228%22%20/%3E%0A%3C/svg%3E);
       margin-left: 9px;
     }
-
     & .sqon-value-single {
       margin-right: 10px;
     }
@@ -170,51 +158,105 @@ const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
 };
 
 const QueryBar = ({
-  filters,
   updateSQON,
+  text = 'Search the file repository by selecting filters',
+  className,
+  prefixContent,
+  onClear,
 }: {
-  filters: FileRepoFiltersType;
   updateSQON?: (sqon) => void;
-}) => {
-  const { clearFilters, replaceAllFilters } = useFiltersContext();
+  text?: string;
+  className?: string;
+  prefixContent?: ReactNode;
+  onClear?: () => void;
+}): ReactElement => {
+  const theme = useTheme();
+  const { filters, clearFilters, replaceAllFilters } = useFiltersContext();
+  const hasFilters = !isEmpty(filters) && (filters as FileRepoFiltersType).content.length > 0;
+  const showQueryBar = hasFilters || !!prefixContent;
+
+  const handleClear = () => {
+    clearFilters();
+    if (updateSQON) {
+      updateSQON(defaultFilters);
+    }
+    if (onClear) {
+      onClear();
+    }
+  };
+
   return (
-    <Content>
-      <SQONView
-        sqon={filters}
-        Clear={() => (
-          <Button
-            className="sqon-bubble sqon-clear"
-            onClick={() => {
-              clearFilters();
-              updateSQON && updateSQON(defaultFilters);
-            }}
-          >
-            Clear
-          </Button>
-        )}
-        // @ts-ignore types from arranger is just wrong here, it isn't even ts
-        FieldCrumb={({ field }) => <FieldCrumb field={field} />}
-        ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
-          <Value
-            onClick={() => {
-              // deleting the last value listed returns nextSQON = null, so check if empty to reset to defaultFilters
-              if (isEmpty(nextSQON)) {
-                clearFilters();
-                updateSQON && updateSQON(defaultFilters);
-              } else {
-                // ARGO
-                replaceAllFilters(nextSQON);
-                // Arranger v3
-                updateSQON && updateSQON(nextSQON);
-              }
-            }}
-            {...props}
-          >
-            {toDisplayValue(value, field)}
-          </Value>
-        )}
-      />
-    </Content>
+    <PaddedRow justify="around">
+      <Col xl={12}>
+        <Container
+          className={className}
+          css={css`
+            margin-bottom: 8px;
+            justify-content: start;
+            padding: 2px 10px;
+            border-radius: 0px;
+            background-color: ${theme.colors.grey_4};
+            min-height: 50px;
+          `}
+        >
+          {showQueryBar ? (
+            <Content>
+              <div className="sqon-view">
+                <SQONRow wrap>
+                  <SQONRow className="sqon-group" key="clear" style={{ alignItems: 'center' }}>
+                    <Button className="sqon-bubble sqon-clear" onClick={handleClear}>
+                      Clear
+                    </Button>
+                  </SQONRow>
+                  {prefixContent}
+                  <SQONView
+                    sqon={filters}
+                    // @ts-ignore types from arranger is just wrong here, it isn't even ts
+                    FieldCrumb={({ field }) => <FieldCrumb field={field} />}
+                    ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
+                      <Value
+                        onClick={() => {
+                          if (isEmpty(nextSQON)) {
+                            clearFilters();
+                            if (updateSQON) {
+                              updateSQON(defaultFilters);
+                            }
+                          } else {
+                            replaceAllFilters(nextSQON);
+                            if (updateSQON) {
+                              updateSQON(nextSQON);
+                            }
+                          }
+                        }}
+                        {...props}
+                      >
+                        {toDisplayValue(value, field)}
+                      </Value>
+                    )}
+                  />
+                </SQONRow>
+              </div>
+            </Content>
+          ) : (
+            <Typography
+              css={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <Icon
+                css={css`
+                  vertical-align: middle;
+                  margin-right: 10px;
+                `}
+                name="arrow_left"
+              />
+              <span>{text}</span>
+            </Typography>
+          )}
+        </Container>
+      </Col>
+    </PaddedRow>
   );
 };
 

@@ -28,8 +28,8 @@ import FacetPanel from './FacetPanel';
 import FileTable from './FileTable';
 import StatsCard from './StatsCard';
 
+import QueryBar from 'components/QueryBar';
 import { FiltersProvider } from './hooks/useFiltersContext';
-import QueryBarContainer from './QueryBar/QueryBarContainer';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -50,7 +50,7 @@ const RepositoryPage = () => {
           <FacetPanel />
           <PageContent>
             <ContentBody>
-              <QueryBarContainer />
+              <QueryBar />
               <StatsCard />
               <PaddedRow justify="between">
                 <PaddedColumn xl={6} lg={6} md={12}>
