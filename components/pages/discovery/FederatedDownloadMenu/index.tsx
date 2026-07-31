@@ -17,12 +17,33 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, DropdownButtonMenuItem, Icon, useTheme } from '@icgc-argo/uikit';
-import { useEffect, useRef, useState } from 'react';
+import { Button, css, DropdownButtonMenuItem, Icon, styled, useTheme } from '@icgc-argo/uikit';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from 'components/pages/submission-system/common';
+import { useEffect, useRef, useState } from 'react';
+import LocalNodeDownloadModal from '../LocalNodeDownload/LocalNodeDownloadModal';
+
+const MenuSectionHeader = styled(DropdownButtonMenuItem)`
+  padding: 5px;
+  color: #4f546d;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: default;
+  &:hover {
+    background: unset;
+  }
+`;
+
+const MenuOption = styled(DropdownButtonMenuItem)`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+`;
 
 const STATIC_CURRENT_NODE = 'Toronto';
 const STATIC_EXTERNAL_NODES = ['Barcelona', 'Tokyo'];
@@ -30,6 +51,7 @@ const STATIC_EXTERNAL_NODES = ['Barcelona', 'Tokyo'];
 const FederatedDownloadMenu = (): React.ReactElement => {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,44 +124,21 @@ const FederatedDownloadMenu = (): React.ReactElement => {
             color: theme.colors.black,
           })}
         >
-          <DropdownButtonMenuItem
-            css={css({
-              padding: '5px',
-              color: '#4F546D',
-              fontSize: '11px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              cursor: 'default',
-              ':hover': { background: 'unset' },
-            })}
-          >
-            Current Node
-          </DropdownButtonMenuItem>
+          <MenuSectionHeader>Current Node</MenuSectionHeader>
 
-          <DropdownButtonMenuItem onClick={() => {}}>
+          <MenuOption
+            onClick={() => {
+              setIsOpen(false);
+              setIsModalOpen(true);
+            }}
+          >
             {STATIC_CURRENT_NODE}
-          </DropdownButtonMenuItem>
+          </MenuOption>
 
-          <DropdownButtonMenuItem
-            css={css({
-              padding: '5px',
-              color: '#4F546D',
-              fontSize: '11px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              cursor: 'default',
-              ':hover': { background: 'unset' },
-            })}
-          >
-            External Nodes
-          </DropdownButtonMenuItem>
+          <MenuSectionHeader>External Nodes</MenuSectionHeader>
 
           {STATIC_EXTERNAL_NODES.map((nodeName) => (
-            <DropdownButtonMenuItem
-              key={nodeName}
-              css={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}
-              onClick={() => {}}
-            >
+            <MenuOption key={nodeName} onClick={() => {}}>
               {nodeName}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -151,16 +150,18 @@ const FederatedDownloadMenu = (): React.ReactElement => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                css={css({ marginLeft: '6px', flexShrink: 0, color: theme.colors.accent2 })}
+                css={css({ flexShrink: 0 })}
               >
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-            </DropdownButtonMenuItem>
+            </MenuOption>
           ))}
         </div>
       )}
+
+      {isModalOpen && <LocalNodeDownloadModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
