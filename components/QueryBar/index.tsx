@@ -17,10 +17,9 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, Container, css, Icon, styled, Typography, useTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, styled, Typography } from '@icgc-argo/uikit';
 import isEmpty from 'lodash/isEmpty';
 import { ReactElement, ReactNode } from 'react';
-import { Col, Row } from 'react-grid-system';
 import useFileCentricFieldDisplayName from '../pages/file-repository/hooks/useFileCentricFieldDisplayName';
 import useFiltersContext, {
   defaultFilters,
@@ -32,9 +31,6 @@ import SQONView, { Value } from '../SQONView';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const SQONRow: any = require('../SQONView/Row').default;
 
-export const PaddedRow = styled(Row)`
-  padding-bottom: 8px;
-`;
 
 const Content = styled('div')`
   & .sqon-view {
@@ -170,7 +166,6 @@ const QueryBar = ({
   prefixContent?: ReactNode;
   onClear?: () => void;
 }): ReactElement => {
-  const theme = useTheme();
   const { filters, clearFilters, replaceAllFilters } = useFiltersContext();
   const hasFilters = !isEmpty(filters) && (filters as FileRepoFiltersType).content.length > 0;
   const showQueryBar = hasFilters || !!prefixContent;
@@ -186,77 +181,72 @@ const QueryBar = ({
   };
 
   return (
-    <PaddedRow justify="around">
-      <Col xl={12}>
-        <Container
-          className={className}
+    <div
+      className={className}
+      css={css`
+        flex: 1;
+        padding: 2px 10px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+      `}
+    >
+      {showQueryBar ? (
+        <Content>
+          <div className="sqon-view">
+            <SQONRow wrap>
+              <SQONRow className="sqon-group" key="clear" style={{ alignItems: 'center' }}>
+                <Button className="sqon-bubble sqon-clear" onClick={handleClear}>
+                  Clear
+                </Button>
+              </SQONRow>
+              {prefixContent}
+              <SQONView
+                sqon={filters}
+                // @ts-ignore types from arranger is just wrong here, it isn't even ts
+                FieldCrumb={({ field }) => <FieldCrumb field={field} />}
+                ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
+                  <Value
+                    onClick={() => {
+                      if (isEmpty(nextSQON)) {
+                        clearFilters();
+                        if (updateSQON) {
+                          updateSQON(defaultFilters);
+                        }
+                      } else {
+                        replaceAllFilters(nextSQON);
+                        if (updateSQON) {
+                          updateSQON(nextSQON);
+                        }
+                      }
+                    }}
+                    {...props}
+                  >
+                    {toDisplayValue(value, field)}
+                  </Value>
+                )}
+              />
+            </SQONRow>
+          </div>
+        </Content>
+      ) : (
+        <Typography
           css={css`
-            margin-bottom: 8px;
-            justify-content: start;
-            padding: 2px 10px;
-            border-radius: 0px;
-            background-color: ${theme.colors.grey_4};
-            min-height: 50px;
+            display: flex;
+            align-items: center;
           `}
         >
-          {showQueryBar ? (
-            <Content>
-              <div className="sqon-view">
-                <SQONRow wrap>
-                  <SQONRow className="sqon-group" key="clear" style={{ alignItems: 'center' }}>
-                    <Button className="sqon-bubble sqon-clear" onClick={handleClear}>
-                      Clear
-                    </Button>
-                  </SQONRow>
-                  {prefixContent}
-                  <SQONView
-                    sqon={filters}
-                    // @ts-ignore types from arranger is just wrong here, it isn't even ts
-                    FieldCrumb={({ field }) => <FieldCrumb field={field} />}
-                    ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
-                      <Value
-                        onClick={() => {
-                          if (isEmpty(nextSQON)) {
-                            clearFilters();
-                            if (updateSQON) {
-                              updateSQON(defaultFilters);
-                            }
-                          } else {
-                            replaceAllFilters(nextSQON);
-                            if (updateSQON) {
-                              updateSQON(nextSQON);
-                            }
-                          }
-                        }}
-                        {...props}
-                      >
-                        {toDisplayValue(value, field)}
-                      </Value>
-                    )}
-                  />
-                </SQONRow>
-              </div>
-            </Content>
-          ) : (
-            <Typography
-              css={css`
-                display: flex;
-                align-items: center;
-              `}
-            >
-              <Icon
-                css={css`
-                  vertical-align: middle;
-                  margin-right: 10px;
-                `}
-                name="arrow_left"
-              />
-              <span>{text}</span>
-            </Typography>
-          )}
-        </Container>
-      </Col>
-    </PaddedRow>
+          <Icon
+            css={css`
+              vertical-align: middle;
+              margin-right: 10px;
+            `}
+            name="arrow_left"
+          />
+          <span>{text}</span>
+        </Typography>
+      )}
+    </div>
   );
 };
 

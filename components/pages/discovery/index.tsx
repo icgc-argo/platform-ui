@@ -42,6 +42,8 @@ import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import { Value, Op } from '../../SQONView';
 import Head from '../head';
 import ChartsLayout from './Charts';
+import { Download } from './Download';
+import FederatedDownloadMenu from './FederatedDownloadMenu';
 import { commonStyles } from './components/common';
 import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
@@ -71,6 +73,8 @@ export const PageContainer = styled('div')`
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.grey_4};
 `;
+
+const { FEATURE_DISCOVERY_NETWORK_SEARCH } = getConfig();
 
 const DiscoveryQueryBar = () => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
@@ -129,15 +133,26 @@ const DiscoveryQueryBar = () => {
     ) : undefined;
 
   return (
-    <QueryBar
-      updateSQON={(newSQON) => {
-        setSQON(toArrangerV3Filter(newSQON) as SQONType);
-      }}
-      text="Explore data by selecting filters."
-      css={css([commonStyles.block, { boxShadow: 'none' }])}
-      prefixContent={repositoryFilterContent}
-      onClear={() => setNetworkNodesFilter([])}
-    />
+    <div
+      css={css([
+        commonStyles.block,
+        { display: 'flex', alignItems: 'center', marginBottom: '16px' },
+      ])}
+    >
+      <QueryBar
+        updateSQON={(newSQON) => {
+          setSQON(toArrangerV3Filter(newSQON) as SQONType);
+        }}
+        text="Explore data by selecting filters."
+        prefixContent={repositoryFilterContent}
+        onClear={() => setNetworkNodesFilter([])}
+      />
+      {FEATURE_DISCOVERY_NETWORK_SEARCH ? (
+        <FederatedDownloadMenu />
+      ) : (
+        <Download>Download</Download>
+      )}
+    </div>
   );
 };
 

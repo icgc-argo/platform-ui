@@ -35,7 +35,6 @@ import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import { VisibleElements } from './components/VisibleElements';
-import { Download } from './Download';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -124,7 +123,6 @@ const ChartContainer = ({ children }) => (
         gap: '10px',
 
         padding: '20px',
-        paddingTop: 0,
 
         '> div': {
           minWidth: '255px',
@@ -187,17 +185,6 @@ const ChartsLayout = () => {
         ${commonStyles.block}
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          justify-content: flex-end;
-          margin-right: 10px;
-          margin-top: 13px;
-          margin-bottom: 13px;
-        `}
-      >
-        <Download>Download</Download>
-      </div>
       <ChartContainer>
         <ChartsThemeProvider
           colors={chartColors}
@@ -269,7 +256,10 @@ const ChartsLayout = () => {
             <Card
               title="Vital Status"
               Selector={
-                <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="vital_status" />
+                <VisibleElements
+                  maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                  fieldName="vital_status"
+                />
               }
             >
               <BarChart

@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentBody, PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
+import { Container, ContentBody, PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import { Col, Row, setConfiguration } from 'react-grid-system';
 import Footer from '../../Footer';
@@ -50,7 +50,13 @@ const RepositoryPage = () => {
           <FacetPanel />
           <PageContent>
             <ContentBody>
-              <QueryBar />
+              <PaddedRow>
+                <Col xl={12}>
+                  <Container>
+                    <QueryBar />
+                  </Container>
+                </Col>
+              </PaddedRow>
               <StatsCard />
               <PaddedRow justify="between">
                 <PaddedColumn xl={6} lg={6} md={12}>
