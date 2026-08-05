@@ -39,7 +39,7 @@ export const FiltersSearchBox = ({ title, onClick, isExpanded }) => {
             display: 'flex',
             alignItems: 'center',
             userSelect: 'none',
-            ':hover': { cursor: 'pointer' },
+            ':hover': { cursor: 'pointer', color: 'rgba(255, 255, 255, 0.7)' },
             svg: {
               marginLeft: '3px',
             },
