@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
  * GNU Affero General Public License along with this program.
- * If not, see <http://www.gnu.org/licenses/>.
+ *  If not, see <http://www.gnu.org/licenses/>.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -17,43 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import DownloadPage from 'components/pages/discovery/DownloadPage';
+import { getConfig } from 'global/config';
+import { createPage } from 'global/utils/pages';
 
-import { ArrowToggle, commonStyle } from './common';
+const DiscoveryDownloadPage = createPage<{ egoJwt: string }>({
+  isPublic: true,
+})(() => {
+  const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
+  return FEATURE_DATA_DISCOVERY_ENABLED ? <DownloadPage /> : null;
+});
 
-const facetFolderStyles = {
-  container: css({
-    ':hover': { cursor: 'pointer', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-    borderTop: '1px solid #F8F8FB',
-  }),
-  folder: css([
-    {
-      height: '36px',
-      padding: '9px',
-      h2: { margin: 0, fontSize: '14px', fontWeight: 400, color: 'white' },
-    },
-  ]),
-  content: (isExpanded) => ({ display: isExpanded ? 'block' : 'none' }),
-};
-
-export const FacetFolder = ({
-  title,
-  children,
-  onClick,
-  isExpanded,
-}: PropsWithChildren<{
-  title: string;
-  onClick;
-  isExpanded: boolean;
-}>) => {
-  return (
-    <div css={css([facetFolderStyles.container])} onClick={onClick}>
-      <div css={css([commonStyle.header, facetFolderStyles.folder])}>
-        <h2>{title}</h2>
-        <ArrowToggle isOpen={isExpanded} />
-      </div>
-      <div css={facetFolderStyles.content(isExpanded)}>{children}</div>
-    </div>
-  );
-};
+export default DiscoveryDownloadPage;

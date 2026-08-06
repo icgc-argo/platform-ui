@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -97,6 +97,7 @@ const nextConfig = withPlugins([withImages, withTM], {
     FEATURE_SUBMISSION_BANNER_ENABLED: process.env.FEATURE_SUBMISSION_BANNER_ENABLED,
     FEATURE_DATA_DISCOVERY_ENABLED: process.env.FEATURE_DATA_DISCOVERY_ENABLED,
     FEATURE_DISCOVERY_NETWORK_SEARCH: process.env.FEATURE_DISCOVERY_NETWORK_SEARCH,
+    NETWORK_SEARCH_LOCAL_NODE_ID: process.env.NETWORK_SEARCH_LOCAL_NODE_ID,
   },
   i18n: {
     locales: ['en'],

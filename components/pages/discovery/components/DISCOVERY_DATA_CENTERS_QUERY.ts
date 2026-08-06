@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,46 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Children, cloneElement } from 'react';
+import { gql } from '@apollo/client';
 
-/*----------------------------------------------------------------------------*/
+const DISCOVERY_DATA_CENTERS_QUERY = gql`
+  query DiscoveryDataCenters {
+    programOptions {
+      dataCenters {
+        shortName
+        name
+        uiUrl
+      }
+    }
+  }
+`;
 
-const baseStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  boxSizing: 'border-box',
-  position: 'relative',
-  outline: 'none',
-};
-
-const Row = ({ flex, wrap, style, spacing, children, ...props }) => (
-  <div
-    style={{
-      ...baseStyle,
-      flex,
-      ...(wrap ? { flexWrap: 'wrap' } : {}),
-      ...style,
-    }}
-    {...props}
-  >
-    {!spacing && children}
-    {spacing &&
-      Children.map(
-        children,
-        (child, i) =>
-          child &&
-          cloneElement(child, {
-            ...child.props,
-            key: i,
-            style: {
-              ...(i ? { marginLeft: spacing } : {}),
-              ...(child.props.style ? child.props.style : {}),
-            },
-          }),
-      )}
-  </div>
-);
-
-/*----------------------------------------------------------------------------*/
-
-export default Row;
+export default DISCOVERY_DATA_CENTERS_QUERY;
