@@ -17,11 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Children, cloneElement } from 'react';
+import { Children, cloneElement, CSSProperties, HTMLAttributes, ReactElement, ReactNode } from 'react';
 
 /*----------------------------------------------------------------------------*/
 
-const baseStyle = {
+type RowProps = HTMLAttributes<HTMLDivElement> & {
+  flex?: CSSProperties['flex'];
+  wrap?: boolean;
+  style?: CSSProperties;
+  spacing?: number;
+  children?: ReactNode;
+};
+
+const baseStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   boxSizing: 'border-box',
@@ -29,7 +37,7 @@ const baseStyle = {
   outline: 'none',
 };
 
-const Row = ({ flex, wrap, style, spacing, children, ...props }) => (
+const Row = ({ flex, wrap, style, spacing, children, ...props }: RowProps): ReactElement => (
   <div
     style={{
       ...baseStyle,
@@ -43,14 +51,14 @@ const Row = ({ flex, wrap, style, spacing, children, ...props }) => (
     {spacing &&
       Children.map(
         children,
-        (child, i) =>
+        (child, index) =>
           child &&
-          cloneElement(child, {
-            ...child.props,
-            key: i,
+          cloneElement(child as ReactElement, {
+            ...(child as ReactElement).props,
+            key: index,
             style: {
-              ...(i ? { marginLeft: spacing } : {}),
-              ...(child.props.style ? child.props.style : {}),
+              ...(index ? { marginLeft: spacing } : {}),
+              ...((child as ReactElement).props.style ?? {}),
             },
           }),
       )}
