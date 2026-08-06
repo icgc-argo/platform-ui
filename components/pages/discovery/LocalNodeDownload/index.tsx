@@ -17,18 +17,13 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, Icon, styled, Typography, useTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, Typography, useTheme } from '@icgc-argo/uikit';
 import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
-import useFileCentricFieldDisplayName from 'components/pages/file-repository/hooks/useFileCentricFieldDisplayName';
-import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
-import { FileCentricDocumentField } from 'components/pages/file-repository/types';
-import { toDisplayValue } from 'components/pages/file-repository/utils';
-import { FileRepoFiltersType } from 'components/pages/file-repository/utils/types';
-import SQONView, { Value } from 'components/SQONView';
+import QueryBar from '../../../QueryBar';
 import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import isEmpty from 'lodash/isEmpty';
+import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { useState } from 'react';
 import urljoin from 'url-join';
 import {
@@ -37,128 +32,8 @@ import {
 } from '../../submission-system/common';
 import { commonStyles } from '../components/common';
 
-// Duplicated from QueryBar with read-only overrides (no cursor, no × icon on values)
-const ReadOnlySQONContent = styled('div')`
-  flex: 1;
-  align-self: center;
-  border: 1px solid #babcc2;
-  border-radius: 8px;
-  padding: 4px 8px;
-  & .sqon-view {
-    background-color: transparent;
-    display: flex;
-    flex: 1;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    & .sqon-group {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-    & .sqon-group > * {
-      margin-top: 6px;
-    }
-    & .sqon-view-empty {
-      display: none;
-    }
-    & .sqon-bubble {
-      display: flex;
-      align-items: center;
-      height: 22px;
-      border-radius: 8px;
-      font-family: Work Sans, sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 0.2px;
-      margin-right: 10px;
-      flex: none;
-    }
-    & .sqon-op {
-      color: inherit;
-      font-weight: normal;
-      margin-right: 5px;
-    }
-    & .sqon-value {
-      background-color: ${({ theme }) => theme.colors.secondary};
-      color: ${({ theme }) => theme.colors.white};
-      padding: 0 7px;
-      margin-right: 6px;
-      font-weight: bold;
-      cursor: default;
-    }
-    & .sqon-value:after {
-      content: none;
-    }
-    & .sqon-less,
-    .sqon-more {
-      background-color: ${({ theme }) => theme.colors.secondary_1};
-      color: ${({ theme }) => theme.colors.white};
-      padding: 0 12px;
-      text-transform: uppercase;
-      cursor: pointer;
-      margin-right: 6px;
-      justify-content: center;
-      display: flex;
-      align-items: center;
-      height: 22px;
-      border-radius: 8px;
-      font-size: 11px;
-      letter-spacing: 0.2px;
-      flex: none;
-      font-weight: 500;
-      font-family: Work Sans, sans-serif;
-    }
-    & .sqon-more {
-      width: 20px;
-      padding: 0 5px;
-      justify-content: center;
-    }
-    & .sqon-less {
-      padding: 0 10px;
-    }
-    & .sqon-value-group {
-      font-size: 22px;
-      line-height: 22px;
-      color: ${({ theme }) => theme.colors.secondary};
-    }
-    & .sqon-value-group-start {
-      margin-right: 6px;
-      margin-left: 2px;
-    }
-    & .sqon-value-group-end {
-      margin-right: 10px;
-    }
-    & .sqon-value-single {
-      margin-right: 10px;
-    }
-  }
-`;
-
-const FieldCrumb = ({ field }: { field: FileCentricDocumentField }) => {
-  const { data: fieldDisplayName } = useFileCentricFieldDisplayName();
-  return (
-    <Typography
-      bold
-      css={css`
-        margin: 0px;
-        margin-right: 0.3rem;
-        text-transform: uppercase;
-        font-size: 12px;
-      `}
-    >
-      {fieldDisplayName[field] || field}
-    </Typography>
-  );
-};
-
 const FilterSummary = (): React.ReactElement => {
   const theme = useTheme();
-  const { filters } = useFiltersContext();
-  const hasFilters = !isEmpty(filters) && (filters as FileRepoFiltersType).content.length > 0;
-
   return (
     <div
       css={css({
@@ -185,33 +60,7 @@ const FilterSummary = (): React.ReactElement => {
       >
         Search Query:
       </Typography>
-      <ReadOnlySQONContent>
-        {hasFilters ? (
-          <div className="sqon-view">
-            <SQONView
-              sqon={filters}
-              // @ts-ignore arranger types
-              FieldCrumb={({ field }) => <FieldCrumb field={field} />}
-              ValueCrumb={({ field, value, ...props }: any) => (
-                <Value onClick={() => {}} {...props}>
-                  {toDisplayValue(value, field)}
-                </Value>
-              )}
-            />
-          </div>
-        ) : (
-          <Typography
-            css={css({
-              margin: 0,
-              color: theme.colors.grey_1,
-              fontSize: '13px',
-              fontStyle: 'italic',
-            })}
-          >
-            No filters applied
-          </Typography>
-        )}
-      </ReadOnlySQONContent>
+      <QueryBar readOnly />
     </div>
   );
 };

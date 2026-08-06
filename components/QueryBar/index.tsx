@@ -31,14 +31,13 @@ import SQONView, { Value } from '../SQONView';
 import SQONRowComponent from '../SQONView/Row';
 const SQONRow = SQONRowComponent;
 
-const Content = styled('div')`
+const sharedSqonStyles = (theme: any) => `
   & .sqon-view {
     background-color: transparent;
     display: flex;
     flex: 1;
     align-items: center;
     padding: 0;
-    margin: 3px 0 12px;
     & .sqon-group {
       flex-wrap: wrap;
     }
@@ -60,36 +59,22 @@ const Content = styled('div')`
       margin-right: 10px;
       flex: none;
     }
-    & .sqon-bubble.sqon-clear {
-      border: ${({ theme }) => `1px solid ${theme.colors.primary_4}`};
-      background-color: ${({ theme }) => theme.colors.white};
-      color: ${({ theme }) => theme.colors.accent2_dark};
-      &:hover {
-        background-color: ${({ theme }) => theme.button.colors.secondary.hover};
-      }
-      padding: 0 12px;
-      text-transform: uppercase;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 20px;
-    }
     & .sqon-op {
       color: inherit;
       font-weight: normal;
       margin-right: 5px;
     }
     & .sqon-value {
-      background-color: ${({ theme }) => theme.colors.secondary};
-      color: ${({ theme }) => theme.colors.white};
+      background-color: ${theme.colors.secondary};
+      color: ${theme.colors.white};
       padding: 0 7px;
       margin-right: 6px;
       font-weight: bold;
-      cursor: pointer;
     }
     & .sqon-less,
     .sqon-more {
-      background-color: ${({ theme }) => theme.colors.secondary_1};
-      color: ${({ theme }) => theme.colors.white};
+      background-color: ${theme.colors.secondary_1};
+      color: ${theme.colors.white};
       padding: 0 12px;
       text-transform: uppercase;
       cursor: pointer;
@@ -116,7 +101,7 @@ const Content = styled('div')`
     & .sqon-value-group {
       font-size: 22px;
       line-height: 22px;
-      color: ${({ theme }) => theme.colors.secondary};
+      color: ${theme.colors.secondary};
     }
     & .sqon-value-group-start {
       margin-right: 6px;
@@ -125,12 +110,63 @@ const Content = styled('div')`
     & .sqon-value-group-end {
       margin-right: 10px;
     }
+    & .sqon-value-single {
+      margin-right: 10px;
+    }
+  }
+`;
+
+const Content = styled('div')`
+  ${({ theme }) => sharedSqonStyles(theme)}
+  & .sqon-view {
+    margin: 3px 0 12px;
+    & .sqon-bubble.sqon-clear {
+      border: ${({ theme }) => `1px solid ${theme.colors.primary_4}`};
+      background-color: ${({ theme }) => theme.colors.white};
+      color: ${({ theme }) => theme.colors.accent2_dark};
+      &:hover {
+        background-color: ${({ theme }) => theme.button.colors.secondary.hover};
+      }
+      padding: 0 12px;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 20px;
+    }
+    & .sqon-value {
+      cursor: pointer;
+    }
     & .sqon-value:after {
       content: url(data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%228%22%20stroke%3D%22white%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%3Cline%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%228%22%20y2%3D%228%22%20/%3E%0A%20%20%3Cline%20x1%3D%228%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%228%22%20/%3E%0A%3C/svg%3E);
       margin-left: 9px;
     }
-    & .sqon-value-single {
-      margin-right: 10px;
+  }
+`;
+
+export const ReadOnlyContent = styled('div')`
+  ${({ theme }) => sharedSqonStyles(theme)}
+  flex: 1;
+  align-self: center;
+  border: 1px solid #babcc2;
+  border-radius: 8px;
+  padding: 4px 8px;
+  & .sqon-view {
+    flex-wrap: wrap;
+    margin: 0;
+    & .sqon-group {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    & .sqon-group > * {
+      margin-top: 6px;
+    }
+    & .sqon-value {
+      cursor: default;
+    }
+    & .sqon-value:after {
+      content: none;
     }
   }
 `;
@@ -158,12 +194,14 @@ const QueryBar = ({
   className,
   prefixContent,
   onClear,
+  readOnly = false,
 }: {
   updateSQON?: (sqon) => void;
   text?: string;
   className?: string;
   prefixContent?: ReactNode;
   onClear?: () => void;
+  readOnly?: boolean;
 }): ReactElement => {
   const { filters, clearFilters, replaceAllFilters } = useFiltersContext();
   const hasFilters = !isEmpty(filters) && (filters as FileRepoFiltersType).content.length > 0;
@@ -178,6 +216,38 @@ const QueryBar = ({
       onClear();
     }
   };
+
+  if (readOnly) {
+    return (
+      <ReadOnlyContent>
+        {hasFilters ? (
+          <div className="sqon-view">
+            <SQONView
+              sqon={filters}
+              // @ts-ignore types from arranger is just wrong here, it isn't even ts
+              FieldCrumb={({ field }) => <FieldCrumb field={field} />}
+              ValueCrumb={({ field, value, ...props }: any) => (
+                <Value onClick={() => {}} {...props}>
+                  {toDisplayValue(value, field)}
+                </Value>
+              )}
+            />
+          </div>
+        ) : (
+          <Typography
+            css={css({
+              margin: 0,
+              color: '#a7a9b2',
+              fontSize: '13px',
+              fontStyle: 'italic',
+            })}
+          >
+            No filters applied
+          </Typography>
+        )}
+      </ReadOnlyContent>
+    );
+  }
 
   return (
     <div
