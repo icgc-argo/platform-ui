@@ -20,6 +20,12 @@
  */
 
 import { css } from '@emotion/react';
+import { styled } from '@icgc-argo/uikit';
+import { Row } from 'react-grid-system';
+
+export const PaddedRow = styled(Row)`
+  padding-bottom: 8px;
+`;
 
 export const commonStyles = {
   block: css({

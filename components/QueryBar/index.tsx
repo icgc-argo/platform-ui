@@ -28,9 +28,8 @@ import { FileCentricDocumentField } from '../pages/file-repository/types';
 import { toDisplayValue } from '../pages/file-repository/utils';
 import { FileRepoFiltersType } from '../pages/file-repository/utils/types';
 import SQONView, { Value } from '../SQONView';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const SQONRow: any = require('../SQONView/Row').default;
-
+import SQONRowComponent from '../SQONView/Row';
+const SQONRow = SQONRowComponent;
 
 const Content = styled('div')`
   & .sqon-view {
@@ -205,7 +204,7 @@ const QueryBar = ({
                 sqon={filters}
                 // @ts-ignore types from arranger is just wrong here, it isn't even ts
                 FieldCrumb={({ field }) => <FieldCrumb field={field} />}
-                ValueCrumb={({ field, value, nextSQON, ...props }: any) => (
+                ValueCrumb={({ field, value, nextSQON, ...props }) => (
                   <Value
                     onClick={() => {
                       if (isEmpty(nextSQON)) {

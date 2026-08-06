@@ -19,19 +19,12 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
-import { useArrangerData } from '@overture-stack/arranger-components';
-import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { getConfig } from 'global/config';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get } from 'lodash';
 import { Col } from 'react-grid-system';
-import { PaddedRow } from '..';
-import { commonStyles } from './common';
-import DISCOVERY_LOCAL_STATS_QUERY from './DISCOVERY_LOCAL_STATS_QUERY';
-import DISCOVERY_NETWORK_STATS_QUERY from './DISCOVERY_NETWORK_STATS_QUERY';
+import { commonStyles, PaddedRow } from './common';
 import { ES_CARDINALITY_MAX_PRECISION_THRESHOLD } from './Facets/facetsQueryProps';
 
 const ROUND_TO = 1000;
@@ -121,21 +114,17 @@ const formatCardinality = (value: number): { value: number; formattedValue: stri
   }
 };
 
-const StatsCard = () => {
+type StatsCardData = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+  loading: boolean;
+};
+
+const StatsCard = ({ data: statsCardResponse, loading: isLoading }: StatsCardData): React.ReactElement => {
   const { FEATURE_DISCOVERY_NETWORK_SEARCH: useNetworkSearch } = getConfig();
-  const { filters } = useFiltersContext();
-  const { networkNodesFilter } = useArrangerData();
-  const statsQuery = useNetworkSearch ? DISCOVERY_NETWORK_STATS_QUERY : DISCOVERY_LOCAL_STATS_QUERY;
-  const { data: statsCardResponse, loading: isLoading } = useQuery(statsQuery, {
-    variables: {
-      filters: toArrangerV3Filter(filters),
-      nodesFilter: useNetworkSearch ? networkNodesFilter : undefined,
-    },
-  });
 
   const responseRoot = useNetworkSearch ? 'network' : 'file';
 
-  // data from GQL response
   const filesData = get(
     statsCardResponse,
     `${responseRoot}.aggregations.analyses__files__file_id.cardinality`,
@@ -147,20 +136,16 @@ const StatsCard = () => {
     : get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
   const repositoriesData = useNetworkSearch ? get(statsCardResponse, 'network.nodes.length', 1) : 1;
 
-  // files
   const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(filesData);
   const files = `${filesCountDisplay} File${filesCount === 1 ? '' : 's'}`;
 
-  // donors
   const { value: donorsCount, formattedValue: donorsCountDisplay } = formatCardinality(donorsData);
   const donors = `${donorsCountDisplay} Donor${donorsCount === 1 ? '' : 's'}`;
 
-  // programs
   const { value: programsCount, formattedValue: programsCountDisplay } =
     formatCardinality(programsData);
   const programs = `${programsCountDisplay} Program${programsCount === 1 ? '' : 's'}`;
 
-  // repositories
   const repositories = `${repositoriesData} ${
     repositoriesData === 1 ? 'Repository' : 'Repositories'
   }`;

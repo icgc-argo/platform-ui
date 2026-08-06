@@ -17,13 +17,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Button, css, DropdownButtonMenuItem, Icon, styled, useTheme } from '@icgc-argo/uikit';
+import { Button, css, Icon, styled, useTheme } from '@icgc-argo/uikit';
+import { DropdownButtonMenuItem } from '@icgc-argo/uikit/DropdownButton';
 import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from 'components/pages/submission-system/common';
 import { useEffect, useRef, useState } from 'react';
 import LocalNodeDownloadModal from '../LocalNodeDownload/LocalNodeDownloadModal';
+
+export type DiscoveryNode = {
+  nodeId: string;
+  name: string;
+};
 
 const MenuSectionHeader = styled(DropdownButtonMenuItem)`
   padding: 5px;
@@ -45,10 +51,36 @@ const MenuOption = styled(DropdownButtonMenuItem)`
   cursor: pointer;
 `;
 
-const STATIC_CURRENT_NODE = 'Toronto';
-const STATIC_EXTERNAL_NODES = ['Barcelona', 'Tokyo'];
+const ExternalLinkIcon = (): React.ReactElement => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    css={css({ flexShrink: 0 })}
+  >
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
 
-const FederatedDownloadMenu = (): React.ReactElement => {
+type FederatedDownloadMenuProps = {
+  localNode: DiscoveryNode | undefined;
+  externalNodes: DiscoveryNode[];
+  nodesLoading: boolean;
+};
+
+const FederatedDownloadMenu = ({
+  localNode,
+  externalNodes,
+  nodesLoading,
+}: FederatedDownloadMenuProps): React.ReactElement => {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,6 +113,7 @@ const FederatedDownloadMenu = (): React.ReactElement => {
       <Button
         variant="secondary"
         size="sm"
+        disabled={nodesLoading}
         onClick={() => setIsOpen((open) => !open)}
         css={css`
           width: 160px;
@@ -124,44 +157,37 @@ const FederatedDownloadMenu = (): React.ReactElement => {
             color: theme.colors.black,
           })}
         >
-          <MenuSectionHeader>Current Node</MenuSectionHeader>
-
-          <MenuOption
-            onClick={() => {
-              setIsOpen(false);
-              setIsModalOpen(true);
-            }}
-          >
-            {STATIC_CURRENT_NODE}
-          </MenuOption>
-
-          <MenuSectionHeader>External Nodes</MenuSectionHeader>
-
-          {STATIC_EXTERNAL_NODES.map((nodeName) => (
-            <MenuOption key={nodeName} onClick={() => {}}>
-              {nodeName}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                css={css({ flexShrink: 0 })}
+          {localNode !== undefined && (
+            <>
+              <MenuSectionHeader>Current Node</MenuSectionHeader>
+              <MenuOption
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsModalOpen(true);
+                }}
               >
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </MenuOption>
-          ))}
+                {localNode.name}
+              </MenuOption>
+            </>
+          )}
+
+          {externalNodes.length > 0 && (
+            <>
+              <MenuSectionHeader>External Nodes</MenuSectionHeader>
+              {externalNodes.map((node) => (
+                <MenuOption key={node.nodeId} onClick={() => {}}>
+                  {node.name}
+                  <ExternalLinkIcon />
+                </MenuOption>
+              ))}
+            </>
+          )}
         </div>
       )}
 
-      {isModalOpen && <LocalNodeDownloadModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && localNode !== undefined && (
+        <LocalNodeDownloadModal nodeName={localNode.name} onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 };

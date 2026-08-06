@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache, useQuery } from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { styled, Typography } from '@icgc-argo/uikit';
 import { ChartsProvider } from '@overture-stack/arranger-charts';
@@ -30,31 +30,34 @@ import {
 } from '@overture-stack/arranger-components';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
+import QueryBar from 'components/QueryBar';
+import DISCOVERY_LOCAL_STATS_QUERY from './components/DISCOVERY_LOCAL_STATS_QUERY';
+import DISCOVERY_NETWORK_STATS_QUERY from './components/DISCOVERY_NETWORK_STATS_QUERY';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Row, setConfiguration } from 'react-grid-system';
-import urljoin from 'url-join';
-import QueryBar from 'components/QueryBar';
 import useQueryParam from 'global/hooks/useQueryParam';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { get } from 'lodash';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { setConfiguration } from 'react-grid-system';
+import urljoin from 'url-join';
+import { Op, Value } from '../../SQONView';
 import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
-import { Value, Op } from '../../SQONView';
+import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import Head from '../head';
 import ChartsLayout from './Charts';
-import { Download } from './Download';
-import FederatedDownloadMenu from './FederatedDownloadMenu';
 import { commonStyles } from './components/common';
 import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { discoveryFacets } from './data/facet';
+import { Download } from './Download';
+import { DiscoveryNode } from './FederatedDownloadMenu';
+import FederatedDownloadMenu from './FederatedDownloadMenu';
 import { ArrangerV3 } from './useArrangerV3';
 
-export const PaddedRow = styled(Row)`
-  padding-bottom: 8px;
-`;
+export { PaddedRow } from './components/common';
 setConfiguration({ gutterWidth: 9 });
 
 const REPOSITORIES_PARAM = 'repositories';
@@ -74,9 +77,19 @@ export const PageContainer = styled('div')`
   background: ${({ theme }) => theme.colors.grey_4};
 `;
 
-const { FEATURE_DISCOVERY_NETWORK_SEARCH } = getConfig();
+const { FEATURE_DISCOVERY_NETWORK_SEARCH, NETWORK_SEARCH_LOCAL_NODE_ID } = getConfig();
 
-const DiscoveryQueryBar = () => {
+type DiscoveryQueryBarProps = {
+  localNode: DiscoveryNode | undefined;
+  externalNodes: DiscoveryNode[];
+  nodesLoading: boolean;
+};
+
+const DiscoveryQueryBar = ({
+  localNode,
+  externalNodes,
+  nodesLoading,
+}: DiscoveryQueryBarProps): React.ReactElement => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
   const [repositoriesFromUrl, setUrlRepositories] = useRepositoriesUrlParam();
   const hasMounted = useRef(false);
@@ -148,11 +161,46 @@ const DiscoveryQueryBar = () => {
         onClear={() => setNetworkNodesFilter([])}
       />
       {FEATURE_DISCOVERY_NETWORK_SEARCH ? (
-        <FederatedDownloadMenu />
+        <FederatedDownloadMenu
+          localNode={localNode}
+          externalNodes={externalNodes}
+          nodesLoading={nodesLoading}
+        />
       ) : (
         <Download>Download</Download>
       )}
     </div>
+  );
+};
+
+const DiscoveryContent = (): React.ReactElement => {
+  const { filters } = useFiltersContext();
+  const { networkNodesFilter } = useArrangerData();
+  const statsQuery = FEATURE_DISCOVERY_NETWORK_SEARCH
+    ? DISCOVERY_NETWORK_STATS_QUERY
+    : DISCOVERY_LOCAL_STATS_QUERY;
+
+  const { data: statsData, loading: statsLoading } = useQuery(statsQuery, {
+    variables: {
+      filters: toArrangerV3Filter(filters),
+      nodesFilter: FEATURE_DISCOVERY_NETWORK_SEARCH ? networkNodesFilter : undefined,
+    },
+  });
+
+  const rawNodes: DiscoveryNode[] = get(statsData, 'network.nodes', []);
+  const localNode = rawNodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID);
+  const externalNodes = rawNodes.filter((node) => node.nodeId !== NETWORK_SEARCH_LOCAL_NODE_ID);
+
+  return (
+    <>
+      <DiscoveryQueryBar
+        localNode={localNode}
+        externalNodes={externalNodes}
+        nodesLoading={statsLoading}
+      />
+      <StatsCard data={statsData} loading={statsLoading} />
+      <ChartsLayout />
+    </>
   );
 };
 
@@ -224,7 +272,7 @@ const DiscoveryPage = () => {
                         display: 'grid',
                         gridTemplateColumns: isSidebarOpen
                           ? '280px minmax(0, 1fr)'
-                          : '20px minmax(0, 1fr)',
+                          : '24px minmax(0, 1fr)',
                         gridTemplateRows: 'calc(100vh - 116px)',
                         minHeight: 0,
                         overflow: 'hidden',
@@ -235,9 +283,7 @@ const DiscoveryPage = () => {
                       </Sidebar>
 
                       <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
-                        <DiscoveryQueryBar />
-                        <StatsCard />
-                        <ChartsLayout />
+                        <DiscoveryContent />
                       </div>
                     </div>
 

@@ -17,8 +17,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
 import { Button, css, Icon, styled, Typography, useTheme } from '@icgc-argo/uikit';
 import { UikitIconNames } from '@icgc-argo/uikit/Icon/icons';
+import DISCOVERY_NETWORK_STATS_QUERY from 'components/pages/discovery/components/DISCOVERY_NETWORK_STATS_QUERY';
 import useFileCentricFieldDisplayName from 'components/pages/file-repository/hooks/useFileCentricFieldDisplayName';
 import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
 import { FileCentricDocumentField } from 'components/pages/file-repository/types';
@@ -28,6 +30,8 @@ import SQONView, { Value } from 'components/SQONView';
 import useCommonToasters from 'components/useCommonToasters';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { get } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import { useState } from 'react';
 import urljoin from 'url-join';
@@ -292,7 +296,7 @@ const DownloadCard = ({
   );
 };
 
-const { GATEWAY_API_ROOT } = getConfig();
+const { GATEWAY_API_ROOT, NETWORK_SEARCH_LOCAL_NODE_ID } = getConfig();
 
 const LocalNodeDownload = (): React.ReactElement => {
   const { downloadFileWithEgoToken } = useAuthContext();
@@ -302,6 +306,23 @@ const LocalNodeDownload = (): React.ReactElement => {
   const [manifestLoading, setManifestLoading] = useState(false);
   const [clinicalLoading, setClinicalLoading] = useState(false);
   const anyLoading = manifestLoading || clinicalLoading;
+
+  const { data: statsData, loading: statsLoading } = useQuery(DISCOVERY_NETWORK_STATS_QUERY, {
+    variables: {
+      filters: toArrangerV3Filter(filters),
+      nodesFilter: NETWORK_SEARCH_LOCAL_NODE_ID ? [NETWORK_SEARCH_LOCAL_NODE_ID] : undefined,
+    },
+  });
+
+  const filesCount: number = get(
+    statsData,
+    'network.aggregations.analyses__files__file_id.cardinality',
+    0,
+  );
+  const donorsCount: number = get(statsData, 'network.aggregations.donor_id.cardinality', 0);
+
+  const fileSubtitle = statsLoading ? '' : `${filesCount.toLocaleString()} files`;
+  const donorSubtitle = statsLoading ? '' : `${donorsCount.toLocaleString()} donors`;
 
   const manifestUrl = urljoin(
     GATEWAY_API_ROOT,
@@ -338,7 +359,7 @@ const LocalNodeDownload = (): React.ReactElement => {
       })}
     >
       <FilterSummary />
-      <Typography css={css({ margin: 0, fontSize: '18px' })}>
+      <Typography css={css({ margin: 0, fontSize: '16px' })}>
         Please select type of data you would like to download:
       </Typography>
       <div
@@ -347,7 +368,7 @@ const LocalNodeDownload = (): React.ReactElement => {
         <DownloadCard
           iconName="filesize"
           title="File Manifest"
-          subtitle="1,221 files | 22.12 GB"
+          subtitle={fileSubtitle}
           isLoading={manifestLoading}
           disabled={anyLoading}
           onDownload={makeDownloadHandler(manifestUrl, setManifestLoading)}
@@ -355,7 +376,7 @@ const LocalNodeDownload = (): React.ReactElement => {
         <DownloadCard
           iconName="testtube"
           title="Clinical Data"
-          subtitle="3,980 donors | 22.12 GB"
+          subtitle={donorSubtitle}
           isLoading={clinicalLoading}
           disabled={anyLoading}
           onDownload={makeDownloadHandler(clinicalUrl, setClinicalLoading)}

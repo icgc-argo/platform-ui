@@ -22,14 +22,18 @@ import ModalPortal from 'components/Modal';
 import LocalNodeDownload from './index';
 
 type LocalNodeDownloadModalProps = {
+  nodeName: string;
   onClose: () => void;
 };
 
-const LocalNodeDownloadModal = ({ onClose }: LocalNodeDownloadModalProps): React.ReactElement => {
+const LocalNodeDownloadModal = ({
+  nodeName,
+  onClose,
+}: LocalNodeDownloadModalProps): React.ReactElement => {
   return (
     <ModalPortal>
       <Modal
-        title="Download Data from Toronto Node"
+        title={`Download Data from ${nodeName} Node`}
         actionVisible={false}
         cancelText="Close"
         onCancelClick={onClose}
