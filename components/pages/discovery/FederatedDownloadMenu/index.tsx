@@ -36,6 +36,14 @@ export type DiscoveryNode = {
 
 const { NETWORK_SEARCH_LOCAL_NODE_ID } = getConfig();
 
+const buildExternalNodeHref = (uiUrl: string, filters: unknown): string => {
+  const encodedFilters = encodeURIComponent(JSON.stringify(filters));
+  const originParam = NETWORK_SEARCH_LOCAL_NODE_ID
+    ? `&originNode=${encodeURIComponent(NETWORK_SEARCH_LOCAL_NODE_ID)}`
+    : '';
+  return `${uiUrl}/discovery/download?filters=${encodedFilters}${originParam}`;
+};
+
 const MenuSectionHeader = styled(DropdownButtonMenuItem)`
   padding: 5px;
   color: #4f546d;
@@ -215,10 +223,7 @@ const FederatedDownloadMenu = ({
                 if (node.uiUrl === undefined) {
                   return <DisabledMenuOption key={node.nodeId}>{node.name}</DisabledMenuOption>;
                 }
-                const originParam = NETWORK_SEARCH_LOCAL_NODE_ID
-                  ? `&originNode=${NETWORK_SEARCH_LOCAL_NODE_ID}`
-                  : '';
-                const href = `${node.uiUrl}/discovery/download?filters=${JSON.stringify(filters)}${originParam}`;
+                const href = buildExternalNodeHref(node.uiUrl, filters);
                 return (
                   <ExternalMenuOption
                     key={node.nodeId}

@@ -67,10 +67,9 @@ export { PaddedRow } from './components/common';
 setConfiguration({ gutterWidth: 9 });
 
 const REPOSITORIES_PARAM = 'repositories';
-const defaultRepositories: string[] = [];
 
 const useRepositoriesUrlParam = () => {
-  return useQueryParam(REPOSITORIES_PARAM, defaultRepositories, {
+  return useQueryParam(REPOSITORIES_PARAM, [], {
     serialize: (repositories) => repositories.join(','),
     deserialize: (raw): string[] => raw.split(',').filter(Boolean),
   });

@@ -28,8 +28,7 @@ import { FileCentricDocumentField } from '../pages/file-repository/types';
 import { toDisplayValue } from '../pages/file-repository/utils';
 import { FileRepoFiltersType } from '../pages/file-repository/utils/types';
 import SQONView, { Value } from '../SQONView';
-import SQONRowComponent from '../SQONView/Row';
-const SQONRow = SQONRowComponent;
+import SQONRow from '../SQONView/Row';
 
 const sharedSqonStyles = (theme: any) => `
   & .sqon-view {

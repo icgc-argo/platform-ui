@@ -230,7 +230,7 @@ const DownloadPage = (): React.ReactElement => {
         const response = await fetchWithEgoToken(DISCOVERY_API, options);
         return response.json();
       } catch (error) {
-        console.log('Arranger fetch error', error);
+        console.error('Arranger fetch error', error);
       }
     },
     [fetchWithEgoToken],
