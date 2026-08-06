@@ -110,15 +110,13 @@ const DiscoveryQueryBar = ({
 }: DiscoveryQueryBarProps): React.ReactElement => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
   const [repositoriesFromUrl, setUrlRepositories] = useRepositoriesUrlParam();
-  const hasMounted = useRef(false);
+  const initializedFromUrl = useRef(false);
 
+  // On first run: seed filter state from URL. On subsequent runs: write filter state back to URL.
   useEffect(() => {
-    setNetworkNodesFilter(repositoriesFromUrl);
-    hasMounted.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (!hasMounted.current) {
+    if (!initializedFromUrl.current) {
+      initializedFromUrl.current = true;
+      setNetworkNodesFilter(repositoriesFromUrl);
       return;
     }
     setUrlRepositories(networkNodesFilter.length > 0 ? networkNodesFilter : undefined);
