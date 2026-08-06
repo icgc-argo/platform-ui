@@ -66,7 +66,7 @@ export const getConfig = () => {
 
     // -- Network Search for Data Discovery
     FEATURE_DISCOVERY_NETWORK_SEARCH: publicConfig.FEATURE_DISCOVERY_NETWORK_SEARCH === 'true',
-    NETWORK_SEARCH_LOCAL_NODE_ID: publicConfig.NETWORK_SEARCH_LOCAL_NODE_ID || '',
+    NETWORK_SEARCH_LOCAL_NODE_ID: publicConfig.NETWORK_SEARCH_LOCAL_NODE_ID || undefined,
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -94,6 +94,6 @@ export const getConfig = () => {
     FEATURE_SUBMISSION_BANNER_ENABLED: boolean;
     FEATURE_DATA_DISCOVERY_ENABLED: boolean;
     FEATURE_DISCOVERY_NETWORK_SEARCH: boolean;
-    NETWORK_SEARCH_LOCAL_NODE_ID: string;
+    NETWORK_SEARCH_LOCAL_NODE_ID: string | undefined;
   };
 };

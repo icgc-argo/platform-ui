@@ -215,7 +215,10 @@ const FederatedDownloadMenu = ({
                 if (node.uiUrl === undefined) {
                   return <DisabledMenuOption key={node.nodeId}>{node.name}</DisabledMenuOption>;
                 }
-                const href = `${node.uiUrl}/discovery/download?filters=${JSON.stringify(filters)}&originNode=${NETWORK_SEARCH_LOCAL_NODE_ID}`;
+                const originParam = NETWORK_SEARCH_LOCAL_NODE_ID
+                  ? `&originNode=${NETWORK_SEARCH_LOCAL_NODE_ID}`
+                  : '';
+                const href = `${node.uiUrl}/discovery/download?filters=${JSON.stringify(filters)}${originParam}`;
                 return (
                   <ExternalMenuOption
                     key={node.nodeId}

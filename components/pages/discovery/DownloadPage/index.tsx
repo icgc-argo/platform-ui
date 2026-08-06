@@ -145,8 +145,7 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
 
   const nodes: { nodeId: string; name: string }[] = get(statsData, 'network.nodes', []);
   const localNodeName =
-    nodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID)?.name ??
-    NETWORK_SEARCH_LOCAL_NODE_ID;
+    nodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID)?.name ?? 'Local';
   const originNodeName = originNodeId
     ? nodes.find((node) => node.nodeId === originNodeId)?.name
     : undefined;
