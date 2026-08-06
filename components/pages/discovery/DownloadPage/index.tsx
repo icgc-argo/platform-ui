@@ -35,9 +35,9 @@ import useFiltersContext, {
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import useQueryParam from 'global/hooks/useQueryParam';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { createRedirectURL } from 'global/utils/common';
 import { hasDacoAccess } from 'global/utils/egoJwt';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { get } from 'lodash';
 import LocalNodeDownload from '../LocalNodeDownload';
 import { ArrangerV3 } from '../useArrangerV3';
@@ -49,11 +49,7 @@ const ThreeRowPage = styled(PageContainer)`
   grid-template-rows: 58px 1fr 59px;
 `;
 
-const CardContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}): React.ReactElement => {
+const CardContainer = ({ children }: { children: React.ReactNode }): React.ReactElement => {
   const theme = useTheme();
   return (
     <div
@@ -81,11 +77,7 @@ const CardContainer = ({
   );
 };
 
-type LoginPromptProps = {
-  originNodeName: string | undefined;
-};
-
-const LoginPrompt = ({ originNodeName }: LoginPromptProps): React.ReactElement => {
+const LoginPrompt = (): React.ReactElement => {
   const [loginPath, setLoginPath] = useState('');
 
   useEffect(() => {
@@ -99,15 +91,13 @@ const LoginPrompt = ({ originNodeName }: LoginPromptProps): React.ReactElement =
     setLoginPath(urlJoin(EGO_URL, redirectFragment));
   }, []);
 
-  const nodeName = originNodeName ?? 'this';
-
   return (
     <CardContainer>
       <Typography variant="title" css={css({ marginBottom: '12px' })}>
         Login to view this page.
       </Typography>
       <Typography css={css({ marginBottom: '32px' })}>
-        To continue with your download please login to the {nodeName} data centre.
+        To continue with your download please login.
       </Typography>
       <div css={css({ display: 'flex', justifyContent: 'flex-end' })}>
         <a href={loginPath} css={css({ textDecoration: 'none' })}>
@@ -158,7 +148,7 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
     nodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID)?.name ??
     NETWORK_SEARCH_LOCAL_NODE_ID;
   const originNodeName = originNodeId
-    ? (nodes.find((node) => node.nodeId === originNodeId)?.name ?? originNodeId)
+    ? nodes.find((node) => node.nodeId === originNodeId)?.name
     : undefined;
 
   return (
@@ -173,8 +163,8 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
             color: theme.colors.grey,
           })}
         >
-          You're downloading files from the {localNodeName} data centre portal. To manage your
-          query please go back to the {originNodeName} node.
+          You're downloading files from the {localNodeName} data centre portal. To manage your query
+          please go back to the {originNodeName} node.
         </Typography>
       )}
       <LocalNodeDownload />
@@ -183,26 +173,26 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
 };
 
 type DownloadPageContentProps = {
-  originNodeName: string | undefined;
+  originNodeId: string | undefined;
 };
 
-const DownloadPageContent = ({ originNodeName }: DownloadPageContentProps): React.ReactElement => {
+const DownloadPageContent = ({ originNodeId }: DownloadPageContentProps): React.ReactElement => {
   const { egoJwt, permissions } = useAuthContext();
 
   if (!egoJwt) {
-    return <LoginPrompt originNodeName={originNodeName} />;
+    return <LoginPrompt />;
   }
 
   if (!hasDacoAccess(permissions)) {
     return <NotAuthorizedCard />;
   }
 
-  return <DownloadContent originNodeId={originNodeName} />;
+  return <DownloadContent originNodeId={originNodeId} />;
 };
 
 const DownloadPage = (): React.ReactElement => {
   const { fetchWithEgoToken } = useAuthContext();
-  const [originNodeName] = useQueryParam<string | undefined>('originNode', undefined, {
+  const [originNodeId] = useQueryParam<string | undefined>('originNode', undefined, {
     serialize: (value) => value ?? '',
     deserialize: (raw) => (raw.length > 0 ? raw : undefined),
   });
@@ -247,7 +237,7 @@ const DownloadPage = (): React.ReactElement => {
         >
           <ApolloProvider client={arrangerV3client}>
             <FiltersProvider>
-              <DownloadPageContent originNodeName={originNodeName} />
+              <DownloadPageContent originNodeId={originNodeId} />
             </FiltersProvider>
           </ApolloProvider>
         </ArrangerDataProvider>
