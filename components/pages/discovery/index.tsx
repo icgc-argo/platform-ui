@@ -17,7 +17,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ApolloClient, ApolloLink, ApolloProvider, InMemoryCache, useQuery } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  InMemoryCache,
+  useApolloClient,
+  useQuery,
+} from '@apollo/client';
 import { css, useTheme } from '@emotion/react';
 import { styled, Typography } from '@icgc-argo/uikit';
 import { ChartsProvider } from '@overture-stack/arranger-charts';
@@ -31,8 +38,6 @@ import {
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
 import QueryBar from 'components/QueryBar';
-import DISCOVERY_LOCAL_STATS_QUERY from './components/DISCOVERY_LOCAL_STATS_QUERY';
-import DISCOVERY_NETWORK_STATS_QUERY from './components/DISCOVERY_NETWORK_STATS_QUERY';
 import { getConfig } from 'global/config';
 import useAuthContext from 'global/hooks/useAuthContext';
 import useQueryParam from 'global/hooks/useQueryParam';
@@ -42,19 +47,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { setConfiguration } from 'react-grid-system';
 import urljoin from 'url-join';
 import { Op, Value } from '../../SQONView';
-import { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
-import useFiltersContext from '../file-repository/hooks/useFiltersContext';
+import useFiltersContext, { FiltersProvider } from '../file-repository/hooks/useFiltersContext';
 import Head from '../head';
 import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
+import DISCOVERY_DATA_CENTERS_QUERY from './components/DISCOVERY_DATA_CENTERS_QUERY';
+import DISCOVERY_LOCAL_STATS_QUERY from './components/DISCOVERY_LOCAL_STATS_QUERY';
+import DISCOVERY_NETWORK_STATS_QUERY from './components/DISCOVERY_NETWORK_STATS_QUERY';
 import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
 import Sidebar from './components/SideBar';
 import StatsCard from './components/StatsCard';
 import { discoveryFacets } from './data/facet';
 import { Download } from './Download';
-import { DiscoveryNode } from './FederatedDownloadMenu';
-import FederatedDownloadMenu from './FederatedDownloadMenu';
+import FederatedDownloadMenu, { DiscoveryNode } from './FederatedDownloadMenu';
 import { ArrangerV3 } from './useArrangerV3';
 
 export { PaddedRow } from './components/common';
@@ -173,7 +179,17 @@ const DiscoveryQueryBar = ({
   );
 };
 
-const DiscoveryContent = (): React.ReactElement => {
+type DataCenter = {
+  shortName: string;
+  name: string;
+  uiUrl: string;
+};
+
+type DiscoveryContentProps = {
+  gatewayClient: ApolloClient<object>;
+};
+
+const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.ReactElement => {
   const { filters } = useFiltersContext();
   const { networkNodesFilter } = useArrangerData();
   const statsQuery = FEATURE_DISCOVERY_NETWORK_SEARCH
@@ -187,9 +203,21 @@ const DiscoveryContent = (): React.ReactElement => {
     },
   });
 
+  const { data: dataCentersData } = useQuery(DISCOVERY_DATA_CENTERS_QUERY, {
+    client: gatewayClient,
+    skip: !FEATURE_DISCOVERY_NETWORK_SEARCH,
+  });
+  const dataCenters: DataCenter[] = get(dataCentersData, 'programOptions.dataCenters', []);
+
   const rawNodes: DiscoveryNode[] = get(statsData, 'network.nodes', []);
   const localNode = rawNodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID);
-  const externalNodes = rawNodes.filter((node) => node.nodeId !== NETWORK_SEARCH_LOCAL_NODE_ID);
+  const externalNodes = rawNodes
+    .filter((node) => node.nodeId !== NETWORK_SEARCH_LOCAL_NODE_ID)
+    .map((node) => {
+      const dataCenter = dataCenters.find((dc) => dc.shortName === node.nodeId);
+      return { ...node, uiUrl: dataCenter?.uiUrl };
+    })
+    .filter((node): node is DiscoveryNode & { uiUrl: string } => node.uiUrl !== undefined);
 
   return (
     <>
@@ -209,6 +237,7 @@ const DISCOVERY_API = urljoin(GATEWAY_API_ROOT, 'discovery');
 const DiscoveryPage = () => {
   const theme = useTheme();
   const [isSidebarOpen, setSetbarView] = useState(true);
+  const gatewayApolloClient = useApolloClient();
 
   /**
    * Query donor-centric Arranger instance gateway endpoint for this page
@@ -283,7 +312,7 @@ const DiscoveryPage = () => {
                       </Sidebar>
 
                       <div css={css({ overflowY: 'auto', padding: '18px 25px 10px 25px' })}>
-                        <DiscoveryContent />
+                        <DiscoveryContent gatewayClient={gatewayApolloClient} />
                       </div>
                     </div>
 

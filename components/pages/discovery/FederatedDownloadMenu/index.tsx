@@ -23,13 +23,18 @@ import {
   instructionBoxButtonContentStyle,
   instructionBoxButtonIconStyle,
 } from 'components/pages/submission-system/common';
+import { getConfig } from 'global/config';
 import { useEffect, useRef, useState } from 'react';
+import useFiltersContext from '../../file-repository/hooks/useFiltersContext';
 import LocalNodeDownloadModal from '../LocalNodeDownload/LocalNodeDownloadModal';
 
 export type DiscoveryNode = {
   nodeId: string;
   name: string;
+  uiUrl?: string;
 };
+
+const { NETWORK_SEARCH_LOCAL_NODE_ID } = getConfig();
 
 const MenuSectionHeader = styled(DropdownButtonMenuItem)`
   padding: 5px;
@@ -49,6 +54,21 @@ const MenuOption = styled(DropdownButtonMenuItem)`
   gap: 6px;
   font-size: 12px;
   cursor: pointer;
+`;
+
+const ExternalMenuOption = styled('a')`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 5px;
+  color: inherit;
+  text-decoration: none;
+  font-family: Work Sans, sans-serif;
+  &:hover {
+    background: ${({ theme }) => theme.colors.secondary_4};
+  }
 `;
 
 const ExternalLinkIcon = (): React.ReactElement => (
@@ -82,6 +102,7 @@ const FederatedDownloadMenu = ({
   nodesLoading,
 }: FederatedDownloadMenuProps): React.ReactElement => {
   const theme = useTheme();
+  const { filters } = useFiltersContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -174,12 +195,21 @@ const FederatedDownloadMenu = ({
           {externalNodes.length > 0 && (
             <>
               <MenuSectionHeader>External Nodes</MenuSectionHeader>
-              {externalNodes.map((node) => (
-                <MenuOption key={node.nodeId} onClick={() => {}}>
-                  {node.name}
-                  <ExternalLinkIcon />
-                </MenuOption>
-              ))}
+              {externalNodes.map((node) => {
+                const href = `${node.uiUrl}/discovery/download?filters=${JSON.stringify(filters)}&originNode=${NETWORK_SEARCH_LOCAL_NODE_ID}`;
+                return (
+                  <ExternalMenuOption
+                    key={node.nodeId}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {node.name}
+                    <ExternalLinkIcon />
+                  </ExternalMenuOption>
+                );
+              })}
             </>
           )}
         </div>
