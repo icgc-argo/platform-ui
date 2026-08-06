@@ -89,12 +89,24 @@ type DiscoveryQueryBarProps = {
   localNode: DiscoveryNode | undefined;
   externalNodes: DiscoveryNode[];
   nodesLoading: boolean;
+  filesCount: number;
+  donorsCount: number;
 };
 
+/**
+ * Provides layout that includes the search filters view and download interactions.
+ *
+ * Filter data is read from the arranger context.
+ *
+ * Download menu state relies on props passed from the parent, since the node data
+ * reuses fetched data shared with the discovery Stats Bar.
+ */
 const DiscoveryQueryBar = ({
   localNode,
   externalNodes,
   nodesLoading,
+  filesCount,
+  donorsCount,
 }: DiscoveryQueryBarProps): React.ReactElement => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
   const [repositoriesFromUrl, setUrlRepositories] = useRepositoriesUrlParam();
@@ -171,6 +183,8 @@ const DiscoveryQueryBar = ({
           localNode={localNode}
           externalNodes={externalNodes}
           nodesLoading={nodesLoading}
+          filesCount={filesCount}
+          donorsCount={donorsCount}
         />
       ) : (
         <Download>Download</Download>
@@ -219,12 +233,21 @@ const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.React
     })
     .filter((node): node is DiscoveryNode & { uiUrl: string } => node.uiUrl !== undefined);
 
+  const filesCount: number = get(
+    statsData,
+    'network.aggregations.analyses__files__file_id.cardinality',
+    0,
+  );
+  const donorsCount: number = get(statsData, 'network.aggregations.donor_id.cardinality', 0);
+
   return (
     <>
       <DiscoveryQueryBar
         localNode={localNode}
         externalNodes={externalNodes}
         nodesLoading={statsLoading}
+        filesCount={filesCount}
+        donorsCount={donorsCount}
       />
       <StatsCard data={statsData} loading={statsLoading} />
       <ChartsLayout />

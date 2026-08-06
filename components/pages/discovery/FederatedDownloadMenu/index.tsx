@@ -94,12 +94,16 @@ type FederatedDownloadMenuProps = {
   localNode: DiscoveryNode | undefined;
   externalNodes: DiscoveryNode[];
   nodesLoading: boolean;
+  filesCount: number;
+  donorsCount: number;
 };
 
 const FederatedDownloadMenu = ({
   localNode,
   externalNodes,
   nodesLoading,
+  filesCount,
+  donorsCount,
 }: FederatedDownloadMenuProps): React.ReactElement => {
   const theme = useTheme();
   const { filters } = useFiltersContext();
@@ -216,7 +220,12 @@ const FederatedDownloadMenu = ({
       )}
 
       {isModalOpen && localNode !== undefined && (
-        <LocalNodeDownloadModal nodeName={localNode.name} onClose={() => setIsModalOpen(false)} />
+        <LocalNodeDownloadModal
+          nodeName={localNode.name}
+          filesCount={filesCount}
+          donorsCount={donorsCount}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </div>
   );

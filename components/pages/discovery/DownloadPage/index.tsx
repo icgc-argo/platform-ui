@@ -136,7 +136,7 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
   const theme = useTheme();
   const { filters } = useFiltersContext();
 
-  const { data: statsData } = useQuery(DISCOVERY_NETWORK_STATS_QUERY, {
+  const { data: statsData, loading: statsLoading } = useQuery(DISCOVERY_NETWORK_STATS_QUERY, {
     variables: {
       filters: toArrangerV3Filter(filters),
       nodesFilter: NETWORK_SEARCH_LOCAL_NODE_ID ? [NETWORK_SEARCH_LOCAL_NODE_ID] : undefined,
@@ -150,6 +150,13 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
   const originNodeName = originNodeId
     ? nodes.find((node) => node.nodeId === originNodeId)?.name
     : undefined;
+
+  const filesCount: number = get(
+    statsData,
+    'network.aggregations.analyses__files__file_id.cardinality',
+    0,
+  );
+  const donorsCount: number = get(statsData, 'network.aggregations.donor_id.cardinality', 0);
 
   return (
     <CardContainer>
@@ -167,7 +174,11 @@ const DownloadContent = ({ originNodeId }: DownloadContentProps): React.ReactEle
           please go back to the {originNodeName} node.
         </Typography>
       )}
-      <LocalNodeDownload />
+      <LocalNodeDownload
+        filesCount={filesCount}
+        donorsCount={donorsCount}
+        statsLoading={statsLoading}
+      />
     </CardContainer>
   );
 };

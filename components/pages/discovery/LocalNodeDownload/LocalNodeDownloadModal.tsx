@@ -23,11 +23,15 @@ import LocalNodeDownload from './index';
 
 type LocalNodeDownloadModalProps = {
   nodeName: string;
+  filesCount: number;
+  donorsCount: number;
   onClose: () => void;
 };
 
 const LocalNodeDownloadModal = ({
   nodeName,
+  filesCount,
+  donorsCount,
   onClose,
 }: LocalNodeDownloadModalProps): React.ReactElement => {
   return (
@@ -39,7 +43,7 @@ const LocalNodeDownloadModal = ({
         onCancelClick={onClose}
         onCloseClick={onClose}
       >
-        <LocalNodeDownload />
+        <LocalNodeDownload filesCount={filesCount} donorsCount={donorsCount} statsLoading={false} />
       </Modal>
     </ModalPortal>
   );
