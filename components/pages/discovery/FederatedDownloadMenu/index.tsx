@@ -71,6 +71,18 @@ const ExternalMenuOption = styled('a')`
   }
 `;
 
+const DisabledMenuOption = styled(DropdownButtonMenuItem)`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: default;
+  color: ${({ theme }) => theme.colors.grey_1};
+  &:hover {
+    background: unset;
+  }
+`;
+
 const ExternalLinkIcon = (): React.ReactElement => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -200,6 +212,9 @@ const FederatedDownloadMenu = ({
             <>
               <MenuSectionHeader>External Nodes</MenuSectionHeader>
               {externalNodes.map((node) => {
+                if (node.uiUrl === undefined) {
+                  return <DisabledMenuOption key={node.nodeId}>{node.name}</DisabledMenuOption>;
+                }
                 const href = `${node.uiUrl}/discovery/download?filters=${JSON.stringify(filters)}&originNode=${NETWORK_SEARCH_LOCAL_NODE_ID}`;
                 return (
                   <ExternalMenuOption

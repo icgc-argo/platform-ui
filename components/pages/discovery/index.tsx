@@ -230,8 +230,7 @@ const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.React
     .map((node) => {
       const dataCenter = dataCenters.find((dc) => dc.shortName === node.nodeId);
       return { ...node, uiUrl: dataCenter?.uiUrl };
-    })
-    .filter((node): node is DiscoveryNode & { uiUrl: string } => node.uiUrl !== undefined);
+    });
 
   const filesCount: number = get(
     statsData,
