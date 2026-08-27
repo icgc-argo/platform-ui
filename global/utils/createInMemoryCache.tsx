@@ -32,6 +32,17 @@ const createInMemoryCache = () =>
       ClinicalSubmissionData: {
         keyFields: ['programShortName'],
       },
+      file: {
+        fields: {
+          // cache requests for each unique sqon filter
+          aggregations: {
+            keyArgs: ['filters'],
+          },
+          hits: {
+            keyArgs: ['filters'],
+          },
+        },
+      },
     },
   });
 
