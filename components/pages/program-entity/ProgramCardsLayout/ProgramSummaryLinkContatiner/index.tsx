@@ -47,7 +47,7 @@ const ProgramSummaryLinkContainer = ({ programId }: { programId: string }) => {
         circleFill={'secondary_3'}
         iconName={'testtube'}
         iconFill={'secondary'}
-        totalNum={loading ? 'loading' : file?.aggregations.donors__donor_id.bucket_count}
+        totalNum={loading ? 'loading' : file?.aggregations.donors__donor_id.cardinality}
         subtitle={'Total Donors'}
       />
 
@@ -55,7 +55,7 @@ const ProgramSummaryLinkContainer = ({ programId }: { programId: string }) => {
         circleFill={'accent4_3'}
         iconName={'download'}
         iconFill={'accent4_dark'}
-        totalNum={loading ? 'loading' : file?.aggregations.file_id.bucket_count}
+        totalNum={loading ? 'loading' : file?.hits.total}
         subtitle={'Total Files'}
       />
     </div>

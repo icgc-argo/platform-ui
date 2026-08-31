@@ -24,11 +24,11 @@ const PROGRAM_SUMMARY_LINK_QUERY = gql`
     file {
       aggregations(filters: $SQON) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      hits(filters: $SQON) {
+        total
       }
     }
   }
