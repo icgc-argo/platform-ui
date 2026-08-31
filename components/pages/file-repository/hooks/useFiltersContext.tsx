@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -18,7 +18,7 @@
  */
 
 import stringify from 'fast-json-stable-stringify';
-import useUrlParamState from 'global/hooks/useUrlParamState';
+import useQueryParam from 'global/hooks/useQueryParam';
 import { createContext, useContext } from 'react';
 import sqonBuilder from 'sqon-builder';
 import { addInFilters } from '../utils';
@@ -51,9 +51,9 @@ const FiltersContext = createContext<FiltersContextType>({
 
 // stringifying SQONs
 const useFilterState = () => {
-  const [currentFilters, setCurrentFilters] = useUrlParamState('filters', defaultFilters, {
-    serialize: (v) => stringify(v),
-    deSerialize: (v) => JSON.parse(v),
+  const [currentFilters, setCurrentFilters] = useQueryParam('filters', defaultFilters, {
+    serialize: (value) => stringify(value),
+    deserialize: (raw) => JSON.parse(raw),
   });
 
   return { currentFilters, setCurrentFilters };
@@ -63,7 +63,7 @@ export function FiltersProvider({ children }) {
   const { currentFilters, setCurrentFilters } = useFilterState();
 
   const clearFilters = () => {
-    setCurrentFilters(defaultFilters);
+    setCurrentFilters(undefined);
   };
 
   const replaceAllFilters = (filters) => setCurrentFilters(filters);

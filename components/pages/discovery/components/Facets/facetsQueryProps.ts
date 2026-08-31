@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,22 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { gql } from '@apollo/client';
+export const ES_CARDINALITY_MAX_PRECISION_THRESHOLD = 40000;
 
-const CLINICAL_ENTITY_SEARCH_RESULTS_QUERY = gql`
-  query ClinicalEntitySearchResults($programShortName: String!, $filters: ClinicalInput!) {
-    clinicalConfigs {
-      idPrefix
-    }
-    clinicalSearchResults(programShortName: $programShortName, filters: $filters) {
-      programShortName
-      totalResults
-      searchResults {
-        donorId
-        submitterDonorId
-      }
-    }
-  }
-`;
+export const aggBucketProps = `
+  buckets {
+    key
+    key_as_string
+    doc_count
+  }`;
 
-export default CLINICAL_ENTITY_SEARCH_RESULTS_QUERY;
+export const numericProps = `
+  histogram {${aggBucketProps}}
+  stats {
+    max
+    min
+  }`;

@@ -31,19 +31,23 @@ import { useChartsContext } from '@overture-stack/arranger-charts';
  */
 export const VisibleElements = ({ maxElements, fieldName }) => {
   const { getChartData } = useChartsContext();
-  const { isLoading, isError, data } = getChartData(fieldName);
+  const chartDataResponse = getChartData(fieldName);
 
-  const hasData = !isLoading && !isError && data && data.length > 0;
-  const hasMoreThanMaxElements = hasData && data.length >= maxElements;
-  return hasMoreThanMaxElements ? (
-    <div
-      css={css({
-        backgroundColor: '#E8F1F9',
-        borderRadius: '2px',
-        padding: '3px 6px',
-        fontSize: '11px',
-        fontWeight: 500,
-      })}
-    >{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
-  ) : null;
+  if (chartDataResponse.state === 'SUCCESS') {
+    const data = chartDataResponse.data;
+    const hasData = data && data.length > 0;
+    const hasMoreThanMaxElements = hasData && data.length >= maxElements;
+    return hasMoreThanMaxElements ? (
+      <div
+        css={css({
+          backgroundColor: '#E8F1F9',
+          borderRadius: '2px',
+          padding: '3px 6px',
+          fontSize: '11px',
+          fontWeight: 500,
+        })}
+      >{`Top ${Math.min(maxElements, data.length)} of ${data.length}`}</div>
+    ) : null;
+  }
+  return null;
 };

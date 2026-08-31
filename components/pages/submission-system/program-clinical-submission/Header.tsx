@@ -23,13 +23,13 @@ import useGlobalLoader from 'components/GlobalLoader';
 import ModalPortal from 'components/Modal';
 import useCommonToasters from 'components/useCommonToasters';
 import { DOCS_SUBMITTING_CLINICAL_DATA_PAGE } from 'global/constants/docSitePaths';
-import { DCC_DASHBOARD_PATH } from 'global/constants/pages';
+import { RDPC_DASHBOARD_PATH } from 'global/constants/pages';
 import { useToaster } from 'global/hooks/toaster';
 import useAuthContext from 'global/hooks/useAuthContext';
 import { sleep } from 'global/utils/common';
 import { isDccMember } from 'global/utils/egoJwt';
 import { useRouter } from 'next/router';
-import { useMemo, ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import { Row } from 'react-grid-system';
 import { placeholderClinicalSubmissionQueryData, useClinicalSubmissionQuery } from '.';
@@ -139,7 +139,7 @@ const Header = ({
             placeholderClinicalSubmissionQueryData(programShortName).clinicalSubmissions,
         }));
 
-        router.push(DCC_DASHBOARD_PATH);
+        router.push(RDPC_DASHBOARD_PATH);
         toaster.addToast({
           variant: 'SUCCESS',
           interactionType: 'CLOSE',

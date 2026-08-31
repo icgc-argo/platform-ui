@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,11 +17,37 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import TeamPage from 'components/pages/team';
-import { createPage } from 'global/utils/pages';
+import { gql } from '@apollo/client';
+import { ES_CARDINALITY_MAX_PRECISION_THRESHOLD } from './Facets/facetsQueryProps';
 
-export default createPage({
-  isPublic: true,
-})(() => {
-  return <TeamPage />;
-});
+const DISCOVERY_NETWORK_STATS_QUERY = gql`
+  query DiscoveryStats($filters: JSON, $nodesFilter: [String]) {
+    network(
+      filters: $filters
+      include_missing: true
+      aggregations_filter_themselves: true
+      nodesFilter: $nodesFilter
+    ) {
+      aggregations {
+        analyses__files__file_id {
+          cardinality(precision_threshold: ${ES_CARDINALITY_MAX_PRECISION_THRESHOLD})
+        }
+        donor_id {
+          cardinality(precision_threshold: ${ES_CARDINALITY_MAX_PRECISION_THRESHOLD})
+        }
+        study_id {
+          bucket_count
+        }
+      }
+      nodes {
+        nodeId
+        hits
+        name
+        errors
+        status
+      }
+    }
+  }
+`;
+
+export default DISCOVERY_NETWORK_STATS_QUERY;

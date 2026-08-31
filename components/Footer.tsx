@@ -27,7 +27,7 @@ import {
 } from 'global/constants/argoPages';
 import { STATUS_PATH } from 'global/constants/gatewayApiPaths';
 import * as internalPaths from 'global/constants/pages';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import urlJoin from 'url-join';
 
@@ -67,10 +67,6 @@ export default function GlobalFooter({ hideApiVersion = false, hideInternalPaths
           displayName: 'Documentation',
           href: DOCS_URL_ROOT,
           target: '_blank',
-        },
-        {
-          displayName: 'The Team',
-          href: internalPaths.TEAM_PATH,
         },
         {
           displayName: 'Privacy Policy',

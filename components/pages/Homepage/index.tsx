@@ -41,166 +41,11 @@ import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
 import {
   DataCallout,
   DataReleaseBar,
-  NewsContainer,
-  NewsItem,
   OvertureBanner,
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
-
-const newsItems: NewsItem[] = [
-  {
-    title: 'March 9, 2026',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 14.0
-        </Link>{' '}
-        adds 1528 new donors and updates to 495 existing donors from these programs: CRUK Grand
-        Challenge — Mutographs{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MUTO-INTL)
-        </Link>
-        , BC Cancer Personalized OncoGenomics Program{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/97/bc-pogp"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (POG-CA)
-        </Link>
-        , Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in Circulating
-        Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan MONSTAR-SCREEN{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/130/scrum-monstar"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MONSTAR-JP)
-        </Link>
-        , Polyethnic-1000{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (P1000-US)
-        </Link>
-        , The Australian Pancreatic Genome Initiative{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/145/apgi-au"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (APGI-AU)
-        </Link>
-        , Pancreatic Cancer Harmonized "Omics" analysis for Personalized Treatment{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/96/paca-ca"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (PACA-CA)
-        </Link>
-        .
-      </>
-    ),
-  },
-  {
-    title: 'December 4, 2025',
-    text: (
-      <>
-        The Data Discovery page now includes a Download option. DACO-approved users can now download
-        clinical data or molecular file manifests or both for all donors within their selected
-        cohort.{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/data-access/daco/applying"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          DACO approval
-        </Link>{' '}
-        is required to access this feature.
-      </>
-    ),
-  },
-  {
-    title: 'September 29, 2025',
-    text: (
-      <>
-        A new Data Discovery section is available on the ARGO platform portal, which allows users to
-        explore donor data in the ICGC-ARGO through interactive charts, using clinical and file
-        filters.{' '}
-        <Link
-          href="https://docs.icgc-argo.org/docs/data-access/daco/applying"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          DACO approval
-        </Link>{' '}
-        is required to access this feature.
-      </>
-    ),
-  },
-  {
-    title: 'September 26, 2025',
-    text: (
-      <>
-        <Link
-          href="https://docs.icgc-argo.org/docs/release-notes/data-releases"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Data Release 13.0
-        </Link>{' '}
-        adds 366 new donors and 7825 molecular files and clinical data. This includes updates from
-        BC Cancer Personalized OncoGenomics Program{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/97/bc-pogp"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (POG-CA)
-        </Link>
-        , CRUK Grand Challenge - Mutographs{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/99/mutographs"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MUTO-INTL)
-        </Link>
-        , Polyethnic-1000{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/115/p-1000"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (P1000-US)
-        </Link>{' '}
-        programs, and Multicenter Study to Profile and Monitor Cancer-related Genomic Alterations in
-        Circulating Tumor DNA and Gut Microbiome in Advanced Solid Malignancies - SCRUM-Japan
-        MONSTAR-SCREEN{' '}
-        <Link
-          href="https://www.icgc-argo.org/page/130/scrum-monstar"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          (MONSTAR-JP)
-        </Link>{' '}
-        program.
-      </>
-    ),
-  },
-];
+import RegionBanner from './RegionBanner';
 
 const SeparationLine: ComponentType<{}> = () => {
   const theme = useTheme();
@@ -259,9 +104,10 @@ export default function Homepage() {
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            padding-bottom: ${statsError ? '40px' : '0px'};
+            padding: 20px 15px 76px 15px;
           `}
         >
+          <RegionBanner />
           <Typography
             variant="hero"
             color="white"
@@ -272,7 +118,7 @@ export default function Homepage() {
             `}
             as="h1"
           >
-            ICGC ARGO Data Platform
+            ICGC ARGO Regional Data Center
           </Typography>
 
           <Typography
@@ -424,8 +270,6 @@ export default function Homepage() {
             </DataCallout>
           </Col>
         </Row>
-
-        <NewsContainer newsItems={newsItems} />
 
         <div
           css={css`

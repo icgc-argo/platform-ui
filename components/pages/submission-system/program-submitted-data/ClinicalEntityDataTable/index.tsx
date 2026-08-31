@@ -39,14 +39,15 @@ import {
   aliasedEntityFields,
   aliasedEntityNames,
   aliasSortNames,
+  clinicalEntityDisplayNames,
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
+  CompletionStates,
   defaultClinicalEntityFilters,
   emptyClinicalDataResponse,
   emptySearchResponse,
-  clinicalEntityDisplayNames,
-  CompletionStates,
+  parseDonorIdString,
 } from '../common';
 import CLINICAL_ENTITY_DATA_QUERY from './gql/CLINICAL_ENTITY_DATA_QUERY';
 
@@ -55,7 +56,7 @@ import { useClinicalSubmissionSchemaVersion } from 'global/hooks/useClinicalSubm
 
 import { ClinicalSearchResults } from 'generated/gql_types';
 import { PROGRAM_CLINICAL_SUBMISSION_PATH, PROGRAM_SHORT_NAME_PATH } from 'global/constants/pages';
-import { createRef, useState, useEffect } from 'react';
+import { createRef, useEffect, useState } from 'react';
 
 export type DonorEntry = {
   row: string;
@@ -296,7 +297,7 @@ const ClinicalEntityDataTable = ({
     submitterDonorIds,
   );
 
-  const { clinicalData } =
+  const { clinicalConfigs, clinicalData } =
     clinicalEntityData == undefined || loading ? emptyClinicalDataResponse : clinicalEntityData;
 
   const noTableData = noData || clinicalData.clinicalEntities.length === 0;
@@ -425,7 +426,8 @@ const ClinicalEntityDataTable = ({
         let clinicalRecord = {};
         record.forEach((r) => {
           const displayKey = r.name;
-          clinicalRecord[displayKey] = displayKey === 'donor_id' ? `DO${r.value}` : r.value || '';
+          clinicalRecord[displayKey] =
+            displayKey === 'donor_id' ? `${clinicalConfigs?.idPrefix}DO${r.value}` : r.value || '';
           if (showCompletionStats && displayKey === 'donor_id') {
             const completionRecord = completionStats.find(
               (stat) => stat.donorId === parseInt(r.value),
@@ -502,11 +504,8 @@ const ClinicalEntityDataTable = ({
         id === completionColumnHeaders.tumourSpecimens);
 
     const originalDonorId = original['donor_id'];
-    const cellDonorId = parseInt(
-      originalDonorId && originalDonorId.includes('DO')
-        ? originalDonorId.substring(2)
-        : originalDonorId,
-    );
+
+    const cellDonorId = parseDonorIdString(originalDonorId);
 
     const donorErrorData = clinicalErrors
       .filter((donor) => donor.donorId === cellDonorId)

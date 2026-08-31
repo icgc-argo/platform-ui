@@ -42,6 +42,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
+import { getConfig } from '../../../../global/config';
 import SubmissionLayout from '../layout';
 import PROGRAMS_LIST_QUERY from './gql/PROGRAMS_LIST_QUERY';
 import PROGRAMS_USERS_QUERY from './gql/PROGRAMS_USERS_QUERY';
@@ -63,6 +64,8 @@ const TableFilterInput = (props) => (
 );
 
 export default function Programs({ authorizedPrograms = [] }: any) {
+  const { RDPC_REGION_DISPLAY_NAME } = getConfig();
+
   const { data: { programs = [] } = {}, loading } = useQuery(PROGRAMS_LIST_QUERY);
   const { data: { programs: programsWithUsers = [] } = {}, loading: loadingUser } =
     useQuery(PROGRAMS_USERS_QUERY);
@@ -97,7 +100,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
   };
   return (
     <SubmissionLayout
-      subtitle="All Programs"
+      subtitle={`All Programs: ${RDPC_REGION_DISPLAY_NAME}`}
       contentHeader={
         <div
           css={css`
@@ -114,7 +117,7 @@ export default function Programs({ authorizedPrograms = [] }: any) {
               margin: 0px;
             `}
           >
-            All Programs
+            All Programs: {RDPC_REGION_DISPLAY_NAME}
           </Typography>
           {canCreate && (
             <NextLink href={CREATE_PROGRAM_PAGE_PATH}>

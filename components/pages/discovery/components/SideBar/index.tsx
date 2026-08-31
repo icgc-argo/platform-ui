@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -50,6 +50,7 @@ const Toggle = ({
 
   return (
     <div
+      onClick={onClick}
       css={css([
         {
           height: '50px',
@@ -60,16 +61,17 @@ const Toggle = ({
           '> div': {
             marginRight: '12px',
           },
+          ':hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            cursor: 'pointer',
+          },
         },
       ])}
       className={className}
     >
       <div
-        onClick={onClick}
         css={css({
-          ':hover': {
-            cursor: 'pointer',
-          },
+          display: 'flex',
         })}
       >
         <Icon
@@ -108,10 +110,10 @@ const Sidebar = ({
           direction="right"
           size="10px"
           css={css({
-            height: '80px',
-            position: 'absolute',
-            top: 'calc(50% - 40px)',
-            width: '40px',
+            height: '100%',
+            width: '100%',
+            justifyContent: 'center',
+            '> div': { marginRight: 0 },
           })}
         />
       )}

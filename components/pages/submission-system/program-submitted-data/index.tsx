@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -31,12 +31,11 @@ import {
 import useGlobalLoader from 'components/GlobalLoader';
 import { getConfig } from 'global/config';
 import { DOCS_SUBMITTED_DATA_PAGE } from 'global/constants/docSitePaths';
-import useUrlParamState from 'global/hooks/useUrlParamState';
+import useQueryParam from 'global/hooks/useQueryParam';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Row, setConfiguration } from 'react-grid-system';
-import ClinicalDownloadButton from './DownloadButtons';
 import SubmissionLayout from '../layout';
 import ClinicalEntityDataTable from './ClinicalEntityDataTable';
 import {
@@ -45,15 +44,16 @@ import {
   clinicalEntityFields,
   ClinicalEntityQueryResponse,
   ClinicalEntitySearchResultResponse,
+  CompletionStates,
   defaultClinicalEntityFilters,
   emptyClinicalDataResponse,
-  CompletionStates,
   emptySearchResponse,
   hasClinicalErrors,
   parseDonorIdString,
   reverseLookUpEntityAlias,
   TsvDownloadIds,
 } from './common';
+import ClinicalDownloadButton from './DownloadButtons';
 import SUBMITTED_DATA_SIDE_MENU_QUERY from './gql/SUBMITTED_DATA_SIDE_MENU_QUERY';
 import SearchBar from './SearchBar';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from './SearchBar/gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
@@ -70,18 +70,18 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   const { setGlobalLoading } = useGlobalLoader();
   const { FEATURE_SUBMITTED_DATA_ENABLED } = getConfig();
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useUrlParamState(
+  const [selectedClinicalEntityTab, setSelectedClinicalEntityTab] = useQueryParam(
     'tab',
     defaultClinicalEntityTab,
     {
-      serialize: (v) => v,
-      deSerialize: (v) => v,
+      serialize: (value) => value,
+      deserialize: (raw) => raw,
     },
   );
   const currentEntity: string = reverseLookUpEntityAlias(selectedClinicalEntityTab);
-  const [selectedDonors, setSelectedDonors] = useUrlParamState('donorId', donorId, {
-    serialize: (v) => v,
-    deSerialize: (v) => v,
+  const [selectedDonors, setSelectedDonors] = useQueryParam('donorId', donorId, {
+    serialize: (value) => value,
+    deserialize: (raw) => raw,
   });
 
   const urlDonorQueryStrings = selectedDonors ? selectedDonors.split(',') : [];
@@ -94,12 +94,13 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
   // Regex will match first 2 Donor IDs, but not 3rd Submitter ID or 4th case w/ random text
   const searchDonorIds =
     keyword
-      .match(/(?=DO|\d)\d+(?=,| |$)/gi)
-      ?.filter((match) => !!match)
-      .map((idString) => parseInt(idString)) || [];
+      .split(',')
+      .map((item) => item.trim())
+      .map(parseDonorIdString)
+      .filter((match) => !isNaN(match)) || [];
 
   // Matches 'D' or 'DO' exactly (case insensitive)
-  const donorPrefixSearch = keyword.match(/^(d|do)\b/gi);
+  const donorPrefixSearch = keyword.match(/(d|do)\b/gi);
 
   const searchSubmitterIds = donorPrefixSearch
     ? []
@@ -249,6 +250,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
         tsvDownloadIds={tsvDownloadIds}
         donorSearchResults={searchResultData}
         setKeyword={setKeyword}
+        clinicalIdPrefix={searchResultData?.clinicalConfigs.idPrefix ?? ''}
       />
       {searchResultsLoading ? (
         <DnaLoader />
@@ -265,7 +267,7 @@ export default function ProgramSubmittedData({ donorId = '' }: { donorId: string
                 width: 20%;
                 max-width: 170px;
                 display: inline-block;
-                border: 1px solid ${theme.colors.grey_2}; ;
+                border: 1px solid ${theme.colors.grey_2};
               `}
             >
               <VerticalTabs>{menuItems}</VerticalTabs>

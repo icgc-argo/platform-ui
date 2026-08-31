@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,7 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { ContentBody, PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
+import { Container, ContentBody, PageBody, PageContainer, PageContent, styled } from '@icgc-argo/uikit';
 import NavBar from 'components/NavBar';
 import { Col, Row, setConfiguration } from 'react-grid-system';
 import Footer from '../../Footer';
@@ -28,8 +28,8 @@ import FacetPanel from './FacetPanel';
 import FileTable from './FileTable';
 import StatsCard from './StatsCard';
 
+import QueryBar from 'components/QueryBar';
 import { FiltersProvider } from './hooks/useFiltersContext';
-import QueryBarContainer from './QueryBar/QueryBarContainer';
 
 export const PaddedRow = styled(Row)`
   padding-bottom: 8px;
@@ -50,7 +50,13 @@ const RepositoryPage = () => {
           <FacetPanel />
           <PageContent>
             <ContentBody>
-              <QueryBarContainer />
+              <PaddedRow>
+                <Col xl={12}>
+                  <Container>
+                    <QueryBar />
+                  </Container>
+                </Col>
+              </PaddedRow>
               <StatsCard />
               <PaddedRow justify="between">
                 <PaddedColumn xl={6} lg={6} md={12}>

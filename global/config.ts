@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -24,22 +24,30 @@ export const getConfig = () => {
   const publicConfig: { [k: string]: string } = getNextConfig()?.publicRuntimeConfig || {};
   return {
     GATEWAY_API_ROOT: publicConfig.GATEWAY_API_ROOT || 'http://localhost:9000',
+
+    // -- EGO Auth
     EGO_API_ROOT: publicConfig.EGO_API_ROOT || '',
     EGO_CLIENT_ID: publicConfig.EGO_CLIENT_ID || '',
     EGO_PUBLIC_KEY:
       publicConfig.EGO_PUBLIC_KEY ||
       `-----BEGIN PUBLIC KEY-----\r\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0lOqMuPLCVusc6szklNXQL1FHhSkEgR7An+8BllBqTsRHM4bRYosseGFCbYPn8r8FsWuMDtxp0CwTyMQR2PCbJ740DdpbE1KC6jAfZxqcBete7gP0tooJtbvnA6X4vNpG4ukhtUoN9DzNOO0eqMU0Rgyy5HjERdYEWkwTNB30i9I+nHFOSj4MGLBSxNlnuo3keeomCRgtimCx+L/K3HNo0QHTG1J7RzLVAchfQT0lu3pUJ8kB+UM6/6NG+fVyysJyRZ9gadsr4gvHHckw8oUBp2tHvqBEkEdY+rt1Mf5jppt7JUV7HAPLB/qR5jhALY2FX/8MN+lPLmb/nLQQichVQIDAQAB\r\n-----END PUBLIC KEY-----`,
-    AUTH_DISABLED: publicConfig.AUTH_DISABLED === 'true',
-    GA_TRACKING_ID: publicConfig.GA_TRACKING_ID || '',
     EGO_URL: urlJoin(
       publicConfig.EGO_API_ROOT || '',
       `/api/oauth/login/google?client_id=${publicConfig.EGO_CLIENT_ID || ''}`,
     ),
+    AUTH_DISABLED: publicConfig.AUTH_DISABLED === 'true',
+
+    // -- Analytics
+    GA_TRACKING_ID: publicConfig.GA_TRACKING_ID || '',
+
+    // External Links
     DACO_URL: publicConfig.DACO_URL || '',
     DOCS_URL_ROOT: publicConfig.DOCS_URL_ROOT || 'https://docs.icgc-argo.org',
     RDPC_PORTAL_URL: publicConfig.RDPC_PORTAL_URL || 'http://localhost:3000',
+
     RECAPTCHA_SITE_KEY:
       publicConfig.RECAPTCHA_SITE_KEY || '6Lebz-IUAAAAACY7eMyfK4H52Sxy9hv4FYjhFgSR',
+    RDPC_REGION_DISPLAY_NAME: publicConfig.RDPC_REGION_DISPLAY_NAME || '',
     MAINTENANCE_MODE_ON: publicConfig.MAINTENANCE_MODE_ON === 'true',
     FEATURE_DONOR_ENTITY_ENABLED: publicConfig.FEATURE_DONOR_ENTITY_ENABLED === 'true',
     FEATURE_PROGRAM_ENTITY_ENABLED: publicConfig.FEATURE_PROGRAM_ENTITY_ENABLED === 'true',
@@ -55,6 +63,10 @@ export const getConfig = () => {
     FEATURE_CLINICAL_DOWNLOAD: publicConfig.FEATURE_CLINICAL_DOWNLOAD === 'true',
     FEATURE_SUBMISSION_BANNER_ENABLED: publicConfig.FEATURE_SUBMISSION_BANNER_ENABLED === 'true',
     FEATURE_DATA_DISCOVERY_ENABLED: publicConfig.FEATURE_DATA_DISCOVERY_ENABLED === 'true',
+
+    // -- Network Search for Data Discovery
+    FEATURE_DISCOVERY_NETWORK_SEARCH: publicConfig.FEATURE_DISCOVERY_NETWORK_SEARCH === 'true',
+    NETWORK_SEARCH_LOCAL_NODE_ID: publicConfig.NETWORK_SEARCH_LOCAL_NODE_ID || undefined,
   } as {
     GATEWAY_API_ROOT: string;
     EGO_API_ROOT: string;
@@ -67,6 +79,7 @@ export const getConfig = () => {
     DACO_URL: string;
     RDPC_PORTAL_URL: string;
     RECAPTCHA_SITE_KEY: string;
+    RDPC_REGION_DISPLAY_NAME: string;
     MAINTENANCE_MODE_ON: boolean;
     FEATURE_DONOR_ENTITY_ENABLED: boolean;
     FEATURE_PROGRAM_ENTITY_ENABLED: boolean;
@@ -80,5 +93,7 @@ export const getConfig = () => {
     FEATURE_CLINICAL_DOWNLOAD: boolean;
     FEATURE_SUBMISSION_BANNER_ENABLED: boolean;
     FEATURE_DATA_DISCOVERY_ENABLED: boolean;
+    FEATURE_DISCOVERY_NETWORK_SEARCH: boolean;
+    NETWORK_SEARCH_LOCAL_NODE_ID: string | undefined;
   };
 };

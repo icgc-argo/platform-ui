@@ -33,8 +33,8 @@ export const CONTACT_PAGE_PATH = '/contact';
 
 // submission paths
 export const SUBMISSION_PATH = `/submission`;
-const DCC_PATH = `${SUBMISSION_PATH}/dcc`;
-export const DCC_DASHBOARD_PATH = `${DCC_PATH}/dashboard`;
+const RDPC_PATH = `${SUBMISSION_PATH}/rdpc`;
+export const RDPC_DASHBOARD_PATH = `${RDPC_PATH}/dashboard`;
 export const PROGRAMS_LIST_PATH = `${SUBMISSION_PATH}/program`;
 export const PROGRAM_SHORT_NAME_PATH = `[shortName]`;
 export const CREATE_PROGRAM_PAGE_PATH = `${SUBMISSION_PATH}/program/create`;
@@ -59,9 +59,6 @@ export const DONOR_ENTITY_PATH = `donor/${DONOR_ENTITY_ID_PATH}`;
 // program entity
 export const PROGRAM_ENTITY_ID_PATH = '[programId]';
 export const PROGRAM_ENTITY_PATH = `program/${PROGRAM_ENTITY_ID_PATH}`;
-
-// rdpc path
-export const RDPC_PATH = '/rdpc';
 
 // file repository paths
 export const FILE_REPOSITORY_PATH = `/repository`;
