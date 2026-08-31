@@ -33,67 +33,67 @@ export default gql`
     file {
       quality_control_metrics: aggregations(filters: $SQON_QC) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      quality_control_metrics_hits: hits(filters: $SQON_QC) {
+        total
       }
       simple_nucleotide_variation: aggregations(filters: $SQON_SN) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      simple_nucleotide_variation_hits: hits(filters: $SQON_SN) {
+        total
       }
       copy_number_variation: aggregations(filters: $SQON_CNUM) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      copy_number_variation_hits: hits(filters: $SQON_CNUM) {
+        total
       }
       structural_variation: aggregations(filters: $SQON_STRUC) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      structural_variation_hits: hits(filters: $SQON_STRUC) {
+        total
       }
       transcriptome_profiling: aggregations(filters: $SQON_TP) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      transcriptome_profiling_hits: hits(filters: $SQON_TP) {
+        total
       }
       wxs: aggregations(filters: $SQON_WXS) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      wxs_hits: hits(filters: $SQON_WXS) {
+        total
       }
       wgs: aggregations(filters: $SQON_WGS) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      wgs_hits: hits(filters: $SQON_WGS) {
+        total
       }
       rna_seq: aggregations(filters: $SQON_RSEQ) {
         donors__donor_id {
-          bucket_count
+          cardinality
         }
-        file_id {
-          bucket_count
-        }
+      }
+      rna_seq_hits: hits(filters: $SQON_RSEQ) {
+        total
       }
     }
   }

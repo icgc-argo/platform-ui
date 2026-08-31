@@ -94,28 +94,28 @@ export const createCountsByDataCategoryData = (file) => {
   return [
     {
       Category: 'Quality Control Metrics',
-      Donors: file?.quality_control_metrics?.donors__donor_id?.bucket_count,
-      Files: file?.quality_control_metrics.file_id.bucket_count,
+      Donors: file?.quality_control_metrics?.donors__donor_id?.cardinality,
+      Files: file?.quality_control_metrics_hits?.total,
     },
     {
       Category: 'Simple Nucleotide Variation',
-      Donors: file?.simple_nucleotide_variation?.donors__donor_id?.bucket_count,
-      Files: file?.simple_nucleotide_variation?.file_id?.bucket_count,
+      Donors: file?.simple_nucleotide_variation?.donors__donor_id?.cardinality,
+      Files: file?.simple_nucleotide_variation_hits?.total,
     },
     {
       Category: 'Copy Number Variation',
-      Donors: file?.copy_number_variation?.donors__donor_id?.bucket_count,
-      Files: file?.copy_number_variation?.file_id?.bucket_count,
+      Donors: file?.copy_number_variation?.donors__donor_id?.cardinality,
+      Files: file?.copy_number_variation_hits?.total,
     },
     {
       Category: 'Structural Variation',
-      Donors: file?.structural_variation?.donors__donor_id?.bucket_count,
-      Files: file?.structural_variation?.file_id?.bucket_count,
+      Donors: file?.structural_variation?.donors__donor_id?.cardinality,
+      Files: file?.structural_variation_hits?.total,
     },
     {
       Category: 'Transcriptome Profiling',
-      Donors: file?.transcriptome_profiling?.donors__donor_id?.bucket_count,
-      Files: file?.transcriptome_profiling?.file_id?.bucket_count,
+      Donors: file?.transcriptome_profiling?.donors__donor_id?.cardinality,
+      Files: file?.transcriptome_profiling_hits?.total,
     },
   ];
 };
@@ -124,18 +124,18 @@ export const createExperimentalStrategyData = (file) => {
   return [
     {
       Strategies: 'WXS',
-      Donors: file?.wxs?.donors__donor_id?.bucket_count,
-      Files: file?.wxs?.file_id?.bucket_count,
+      Donors: file?.wxs?.donors__donor_id?.cardinality,
+      Files: file?.wxs_hits?.total,
     },
     {
       Strategies: 'WGS',
-      Donors: file?.wgs?.donors__donor_id?.bucket_count,
-      Files: file?.wgs?.file_id?.bucket_count,
+      Donors: file?.wgs?.donors__donor_id?.cardinality,
+      Files: file?.wgs_hits?.total,
     },
     {
       Strategies: 'RNA-Seq',
-      Donors: file?.rna_seq?.donors__donor_id?.bucket_count,
-      Files: file?.rna_seq?.file_id?.bucket_count,
+      Donors: file?.rna_seq?.donors__donor_id?.cardinality,
+      Files: file?.rna_seq_hits?.total,
     },
   ];
 };
