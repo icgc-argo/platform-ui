@@ -17,39 +17,11 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { css, Typography } from '@icgc-argo/uikit';
-import SubmissionLayout from '../layout';
+import DccDashboard from 'components/pages/submission-system/rdpc';
+import { isDccMember } from 'global/utils/egoJwt';
+import { createPage } from 'global/utils/pages';
 
-import DonorAggregationSummary from './DonorAggregationSummary';
-
-const DccDashboard = () => {
-  return (
-    <SubmissionLayout
-      subtitle="DCC Dashboard"
-      contentHeader={
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-          `}
-        >
-          <Typography
-            as="h1"
-            variant="title"
-            color="primary"
-            css={css`
-              margin: 0px;
-            `}
-          >
-            DCC Dashboard
-          </Typography>
-        </div>
-      }
-    >
-      <DonorAggregationSummary />
-    </SubmissionLayout>
-  );
-};
-
-export default DccDashboard;
+export default createPage({
+  isPublic: false,
+  isAccessible: async ({ initialPermissions }) => isDccMember(initialPermissions),
+})(DccDashboard);

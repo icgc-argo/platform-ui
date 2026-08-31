@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -23,7 +23,10 @@ import { PropsWithChildren } from 'react';
 import { ArrowToggle, commonStyle } from './common';
 
 const facetFolderStyles = {
-  container: css({ ':hover': { cursor: 'pointer' }, borderTop: '1px solid #F8F8FB' }),
+  container: css({
+    ':hover': { cursor: 'pointer', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+    borderTop: '1px solid #F8F8FB',
+  }),
   folder: css([
     {
       height: '36px',

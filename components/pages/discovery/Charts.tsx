@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -18,18 +18,23 @@
  */
 
 import { css, DnaLoader } from '@icgc-argo/uikit';
-import { BarChart, ChartsThemeProvider, SunburstChart } from '@overture-stack/arranger-charts';
+import {
+  BarChart,
+  ChartsThemeProvider,
+  NetworkNodesChart,
+  SunburstChart,
+} from '@overture-stack/arranger-charts';
 import { SQONType, useArrangerData } from '@overture-stack/arranger-components';
 
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
 import { useMemo } from 'react';
+import { getConfig } from '../../../global/config';
+import { toArrangerV3Filter } from '../../../global/utils/arrangerFilter';
 import useFiltersContext from '../file-repository/hooks/useFiltersContext';
 import { addInFilters } from '../file-repository/utils';
 import { mapFromCodeToCancerType } from './cancerTypeMapping';
 import Card from './components/Card';
 import { commonStyles } from './components/common';
 import { VisibleElements } from './components/VisibleElements';
-import { Download } from './Download';
 
 const getAgeAtDiagnosisFilter = (key, field) => {
   // ranges from query are less than 18, 18 => 65, 65+
@@ -104,7 +109,7 @@ const ChartEmptyData = () => (
       color: '#525767',
     })}
   >
-    No Donor data is available for display
+    No donor data is available to display.
   </div>
 );
 
@@ -118,7 +123,6 @@ const ChartContainer = ({ children }) => (
         gap: '10px',
 
         padding: '20px',
-        paddingTop: 0,
 
         '> div': {
           minWidth: '255px',
@@ -139,8 +143,10 @@ const MAX_BARS_DEFAULT = 12;
 const MAX_BARS_DEFAULT_SHORT_CARD = 6;
 
 const ChartsLayout = () => {
-  const { setSQON } = useArrangerData();
+  const { setSQON, setNetworkNodesFilter } = useArrangerData();
   const { filters, setFilterFromFieldAndValue, replaceAllFilters } = useFiltersContext();
+
+  const { FEATURE_DISCOVERY_NETWORK_SEARCH: useNetworkSearch } = getConfig();
 
   // catch all for any filters changes to sync with Arranger context eg. on page refresh
   useMemo(() => {
@@ -157,6 +163,11 @@ const ChartsLayout = () => {
 
   // field name: filter for field
   const chartFilters = {
+    repositories: (nodeId: string) => {
+      setNetworkNodesFilter((currentFilter) => {
+        return Array.from(new Set([...currentFilter, nodeId]));
+      });
+    },
     gender: chartFilter('gender'),
     study_id: chartFilter('study_id'),
     primary_site: chartFilter('primary_site'),
@@ -174,17 +185,6 @@ const ChartsLayout = () => {
         ${commonStyles.block}
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          justify-content: flex-end;
-          margin-right: 10px;
-          margin-top: 13px;
-          margin-bottom: 13px;
-        `}
-      >
-        <Download>Download</Download>
-      </div>
       <ChartContainer>
         <ChartsThemeProvider
           colors={chartColors}
@@ -200,6 +200,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="study_id"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT}
               handlers={{
                 onClick: (config) => {
@@ -210,61 +211,108 @@ const ChartsLayout = () => {
             />
           </Card>
 
-          <Card
-            title="Vital Status"
-            Selector={
-              <VisibleElements maxElements={MAX_BARS_DEFAULT_SHORT_CARD} fieldName="vital_status" />
-            }
-          >
-            <BarChart
-              fieldName="vital_status"
-              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-              handlers={{
-                onClick: (config) => {
-                  return chartFilters.vital_status(config.data.key);
-                },
-              }}
-              theme={{
-                sortByKey: ['__missing__', 'Deceased', 'Alive'],
-                ...commonTheme,
-              }}
-            />
-          </Card>
-
-          <Card
-            title="Age at Diagnosis"
-            Selector={
-              <VisibleElements
-                maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
-                fieldName="primary_diagnosis__age_at_diagnosis"
+          {useNetworkSearch ? (
+            <Card title="Repositories">
+              <NetworkNodesChart
+                maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+                handlers={{
+                  onClick: (props) => {
+                    return chartFilters.repositories(props.data.key);
+                  },
+                }}
+                theme={{
+                  sortAlphabetically: true,
+                  ...commonTheme,
+                }}
               />
-            }
-          >
-            <BarChart
-              fieldName="primary_diagnosis__age_at_diagnosis"
-              maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
-              ranges={[
-                { key: '< 18', to: 18 },
-                { key: '18 - 65', from: 18, to: 66 },
-                { key: '> 65', from: 66 },
-              ]}
-              handlers={{
-                onClick: (config) => {
-                  const field = 'primary_diagnosis.age_at_diagnosis';
-                  const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
-                  // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-                  const newFilters = addInFilters(sqonFilterForChart, filters);
-                  replaceAllFilters(newFilters);
-                  // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
-                  setSQON(toArrangerV3Filter(newFilters));
-                },
-              }}
-              theme={{
-                sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
-                ...commonTheme,
-              }}
-            />
-          </Card>
+            </Card>
+          ) : (
+            <Card
+              title="Vital Status"
+              Selector={
+                <VisibleElements
+                  maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                  fieldName="vital_status"
+                />
+              }
+            >
+              <BarChart
+                fieldName="vital_status"
+                maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+                handlers={{
+                  onClick: (config) => {
+                    return chartFilters.vital_status(config.data.key);
+                  },
+                }}
+                theme={{
+                  sortByKey: ['__missing__', 'Deceased', 'Alive'],
+                  ...commonTheme,
+                }}
+              />
+            </Card>
+          )}
+
+          {useNetworkSearch ? (
+            <Card
+              title="Vital Status"
+              Selector={
+                <VisibleElements
+                  maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                  fieldName="vital_status"
+                />
+              }
+            >
+              <BarChart
+                fieldName="vital_status"
+                isNetworkAggregation={useNetworkSearch}
+                maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+                handlers={{
+                  onClick: (config) => {
+                    return chartFilters.vital_status(config.data.key);
+                  },
+                }}
+                theme={{
+                  sortByKey: ['__missing__', 'Deceased', 'Alive'],
+                  ...commonTheme,
+                }}
+              />
+            </Card>
+          ) : (
+            <Card
+              title="Age at Diagnosis"
+              Selector={
+                <VisibleElements
+                  maxElements={MAX_BARS_DEFAULT_SHORT_CARD}
+                  fieldName="primary_diagnosis__age_at_diagnosis"
+                />
+              }
+            >
+              <BarChart
+                fieldName="primary_diagnosis__age_at_diagnosis"
+                maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
+                ranges={[
+                  { key: '< 18', to: 18 },
+                  { key: '18 - 65', from: 18, to: 66 },
+                  { key: '> 65', from: 66 },
+                ]}
+                handlers={{
+                  onClick: (config) => {
+                    const field = 'primary_diagnosis.age_at_diagnosis';
+                    const sqonFilterForChart = getAgeAtDiagnosisFilter(config.data.key, field);
+                    // @ts-expect-error slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                    const newFilters = addInFilters(sqonFilterForChart, filters);
+                    replaceAllFilters(newFilters);
+                    // @ts-ignore slight difference in specificity between writing a direct SQON filter and unofficial FileRepo types
+                    setSQON(toArrangerV3Filter(newFilters));
+                  },
+                }}
+                theme={{
+                  sortByKey: ['__missing__', '> 65', '18 - 65', '< 18'],
+                  ...commonTheme,
+                }}
+              />
+            </Card>
+          )}
 
           <Card
             title="Cancer Type and Code"
@@ -281,6 +329,7 @@ const ChartsLayout = () => {
             <div css={css({ height: '100%', padding: '16px 0' })}>
               <SunburstChart
                 fieldName="primary_diagnosis__cancer_type_code"
+                isNetworkAggregation={useNetworkSearch}
                 mapper={mapFromCodeToCancerType}
                 maxSegments={10}
                 handlers={{
@@ -305,6 +354,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="primary_site"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT}
               handlers={{
                 onClick: (config) => {
@@ -324,6 +374,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="gender"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
               handlers={{
                 onClick: (config) => {
@@ -347,6 +398,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="analyses__files__data_category"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
               handlers={{
                 onClick: (config) => {
@@ -369,6 +421,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="analyses__experiment__experimental_strategy"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
               handlers={{
                 onClick: (config) => {
@@ -391,6 +444,7 @@ const ChartsLayout = () => {
           >
             <BarChart
               fieldName="analyses__workflow__workflow_name"
+              isNetworkAggregation={useNetworkSearch}
               maxBars={MAX_BARS_DEFAULT_SHORT_CARD}
               handlers={{
                 onClick: (config) => {

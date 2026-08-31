@@ -17,46 +17,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Children, cloneElement } from 'react';
+import { css, Typography } from '@icgc-argo/uikit';
+import SubmissionLayout from '../layout';
 
-/*----------------------------------------------------------------------------*/
+import DonorAggregationSummary from './DonorAggregationSummary';
 
-const baseStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  boxSizing: 'border-box',
-  position: 'relative',
-  outline: 'none',
+const DccDashboard = () => {
+  return (
+    <SubmissionLayout
+      subtitle="RDPC Dashboard"
+      contentHeader={
+        <div
+          css={css`
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+          `}
+        >
+          <Typography
+            as="h1"
+            variant="title"
+            color="primary"
+            css={css`
+              margin: 0px;
+            `}
+          >
+            RDPC Dashboard
+          </Typography>
+        </div>
+      }
+    >
+      <DonorAggregationSummary />
+    </SubmissionLayout>
+  );
 };
 
-const Row = ({ flex, wrap, style, spacing, children, ...props }) => (
-  <div
-    style={{
-      ...baseStyle,
-      flex,
-      ...(wrap ? { flexWrap: 'wrap' } : {}),
-      ...style,
-    }}
-    {...props}
-  >
-    {!spacing && children}
-    {spacing &&
-      Children.map(
-        children,
-        (child, i) =>
-          child &&
-          cloneElement(child, {
-            ...child.props,
-            key: i,
-            style: {
-              ...(i ? { marginLeft: spacing } : {}),
-              ...(child.props.style ? child.props.style : {}),
-            },
-          }),
-      )}
-  </div>
-);
-
-/*----------------------------------------------------------------------------*/
-
-export default Row;
+export default DccDashboard;

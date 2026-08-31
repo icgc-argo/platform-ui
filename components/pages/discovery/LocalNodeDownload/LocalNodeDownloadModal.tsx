@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,33 +17,36 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { InMemoryCache } from '@apollo/client';
+import { Modal } from '@icgc-argo/uikit';
+import ModalPortal from 'components/Modal';
+import LocalNodeDownload from './index';
 
-const createInMemoryCache = () =>
-  new InMemoryCache({
-    typePolicies: {
-      // define cache IDs. default is item.id
-      Program: {
-        keyFields: ['shortName'],
-      },
-      ClinicalRegistrationData: {
-        keyFields: ['programShortName'],
-      },
-      ClinicalSubmissionData: {
-        keyFields: ['programShortName'],
-      },
-      file: {
-        fields: {
-          // cache requests for each unique sqon filter
-          aggregations: {
-            keyArgs: ['filters'],
-          },
-          hits: {
-            keyArgs: ['filters'],
-          },
-        },
-      },
-    },
-  });
+type LocalNodeDownloadModalProps = {
+  nodeName: string;
+  filesCount: number;
+  donorsCount: number;
+  onClose: () => void;
+};
 
-export default createInMemoryCache;
+const LocalNodeDownloadModal = ({
+  nodeName,
+  filesCount,
+  donorsCount,
+  onClose,
+}: LocalNodeDownloadModalProps): React.ReactElement => {
+  return (
+    <ModalPortal>
+      <Modal
+        title={`Download Data from ${nodeName} Node`}
+        actionVisible={false}
+        cancelText="Close"
+        onCancelClick={onClose}
+        onCloseClick={onClose}
+      >
+        <LocalNodeDownload filesCount={filesCount} donorsCount={donorsCount} statsLoading={false} />
+      </Modal>
+    </ModalPortal>
+  );
+};
+
+export default LocalNodeDownloadModal;

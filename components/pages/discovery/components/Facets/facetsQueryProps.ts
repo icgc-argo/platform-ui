@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
  *
  * This program and the accompanying materials are made available under the terms of
  * the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -17,33 +17,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { InMemoryCache } from '@apollo/client';
+export const ES_CARDINALITY_MAX_PRECISION_THRESHOLD = 40000;
 
-const createInMemoryCache = () =>
-  new InMemoryCache({
-    typePolicies: {
-      // define cache IDs. default is item.id
-      Program: {
-        keyFields: ['shortName'],
-      },
-      ClinicalRegistrationData: {
-        keyFields: ['programShortName'],
-      },
-      ClinicalSubmissionData: {
-        keyFields: ['programShortName'],
-      },
-      file: {
-        fields: {
-          // cache requests for each unique sqon filter
-          aggregations: {
-            keyArgs: ['filters'],
-          },
-          hits: {
-            keyArgs: ['filters'],
-          },
-        },
-      },
-    },
-  });
+export const aggBucketProps = `
+  buckets {
+    key
+    key_as_string
+    doc_count
+  }`;
 
-export default createInMemoryCache;
+export const numericProps = `
+  histogram {${aggBucketProps}}
+  stats {
+    max
+    min
+  }`;

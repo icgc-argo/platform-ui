@@ -17,15 +17,15 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useEffect, useState } from 'react';
-import { Modal, css, Button } from '@icgc-argo/uikit/';
+import { useQuery } from '@apollo/client';
+import { Button, css, Modal } from '@icgc-argo/uikit/';
 import { Textarea } from '@icgc-argo/uikit/form/Textarea';
 import ModalPortal from 'components/Modal';
-import MatchResults from './MatchResults';
-import UploadButton from './UploadButton';
+import React, { useEffect, useState } from 'react';
 import { ClinicalEntitySearchResultResponse, defaultClinicalEntityFilters } from '../../common';
 import CLINICAL_ENTITY_SEARCH_RESULTS_QUERY from '../gql/CLINICAL_ENTITY_SEARCH_RESULTS_QUERY';
-import { useQuery } from '@apollo/client';
+import MatchResults from './MatchResults';
+import UploadButton from './UploadButton';
 
 declare global {
   interface Window {
@@ -33,11 +33,21 @@ declare global {
   }
 }
 
-const matchDonorIds = (text) =>
+//
+// assum
+/**
+ * From the provided text, get the numeric value of all donor IDs.
+ * This will retrieve any values of all numbers at the start of the text, or
+ * that are preceded by a comma, space, or the string `DO`.
+ *
+ * For example: "123, 456 789EX-DO1011 DO1213"
+ * will return: [123, 456, 789, 1011, 1213]
+ */
+const matchDonorIds = (text: string): number[] =>
   text
     .match(/(^\d)\d*|((?<=,| )|(?<=DO))\d*/gi)
     // Remove empty strings and duplicate matches
-    ?.filter((match, index, self) => !!match && self.indexOf(match) == index)
+    ?.filter((match, index, self) => !!match && self.indexOf(match) === index)
     .map((idString) => parseInt(idString)) || [];
 
 const matchSubmitterDonorIds = (text) =>
@@ -149,7 +159,7 @@ export default function FilterModal({
             css={css`
               height: 135px;
             `}
-            placeholder="e.g. D05490, PCSI_0467, D05499"
+            placeholder="e.g. DO5490, PCSI_0467, DO5499"
             aria-label="Donor IDs"
             id="id_list"
             value={filterTextBox}

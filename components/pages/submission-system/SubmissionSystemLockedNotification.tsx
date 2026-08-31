@@ -50,7 +50,7 @@ export const SubmissionSystemLockedNotification = ({
         padding: 8px 8px 8px 0px;
       `}
     >
-      {`The ARGO DCC has currently locked all submissions. Your workspace will be unlocked shortly.`}
+      {`This Data Center has currently locked all submissions. Your workspace will be unlocked shortly.`}
     </div>
   );
 

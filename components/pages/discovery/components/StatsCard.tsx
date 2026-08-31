@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2025 The Ontario Institute for Cancer Research. All rights reserved
+ * Copyright (c) 2026 The Ontario Institute for Cancer Research. All rights reserved
  *
  *  This program and the accompanying materials are made available under the terms of
  *  the GNU Affero General Public License v3.0. You should have received a copy of the
@@ -19,17 +19,14 @@
  *
  */
 
-import { gql, useQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { Icon, Typography, useTheme } from '@icgc-argo/uikit';
-import useFiltersContext from 'components/pages/file-repository/hooks/useFiltersContext';
-import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { getConfig } from 'global/config';
 import { get } from 'lodash';
 import { Col } from 'react-grid-system';
-import { PaddedRow } from '..';
-import { commonStyles } from './common';
+import { commonStyles, PaddedRow } from './common';
+import { ES_CARDINALITY_MAX_PRECISION_THRESHOLD } from './Facets/facetsQueryProps';
 
-const MAX_ES_PRECISION_THRESHOLD = 40000;
 const ROUND_TO = 1000;
 
 const StatItem = ({ iconName, value }) => {
@@ -102,26 +99,8 @@ const StatsCardComp = ({ files, donors, programs, repositories, isLoading }) => 
   );
 };
 
-const STATS_QUERY = gql`
-  query DiscoveryStats($filters: JSON) {
-    file {
-      aggregations(filters: $filters, include_missing: true, aggregations_filter_themselves: true) {
-        analyses__files__file_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-        donor_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-        study_id {
-          cardinality(precision_threshold: ${MAX_ES_PRECISION_THRESHOLD})
-        }
-      }
-    }
-  }
-`;
-
 const formatCardinality = (value: number): { value: number; formattedValue: string } => {
-  if (value > MAX_ES_PRECISION_THRESHOLD) {
+  if (value > ES_CARDINALITY_MAX_PRECISION_THRESHOLD) {
     const roundedValue = Math.round(value / ROUND_TO) * ROUND_TO;
     return {
       value: roundedValue,
@@ -135,36 +114,38 @@ const formatCardinality = (value: number): { value: number; formattedValue: stri
   }
 };
 
-const StatsCard = () => {
-  const { filters } = useFiltersContext();
-  const { data: statsCardResponse, loading: isLoading } = useQuery(STATS_QUERY, {
-    variables: { filters: toArrangerV3Filter(filters) },
-  });
+type StatsCardData = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+  loading: boolean;
+};
 
-  // data from GQL response
+const StatsCard = ({ data: statsCardResponse, loading: isLoading }: StatsCardData): React.ReactElement => {
+  const { FEATURE_DISCOVERY_NETWORK_SEARCH: useNetworkSearch } = getConfig();
+
+  const responseRoot = useNetworkSearch ? 'network' : 'file';
+
   const filesData = get(
     statsCardResponse,
-    'file.aggregations.analyses__files__file_id.cardinality',
+    `${responseRoot}.aggregations.analyses__files__file_id.cardinality`,
     0,
   );
-  const donorsData = get(statsCardResponse, 'file.aggregations.donor_id.cardinality', 0);
-  const programsData = get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
-  const repositoriesData = 1;
+  const donorsData = get(statsCardResponse, `${responseRoot}.aggregations.donor_id.cardinality`, 0);
+  const programsData = useNetworkSearch
+    ? get(statsCardResponse, 'network.aggregations.study_id.bucket_count', 0)
+    : get(statsCardResponse, 'file.aggregations.study_id.cardinality', 0);
+  const repositoriesData = useNetworkSearch ? get(statsCardResponse, 'network.nodes.length', 1) : 1;
 
-  // files
   const { value: filesCount, formattedValue: filesCountDisplay } = formatCardinality(filesData);
   const files = `${filesCountDisplay} File${filesCount === 1 ? '' : 's'}`;
 
-  // donors
   const { value: donorsCount, formattedValue: donorsCountDisplay } = formatCardinality(donorsData);
   const donors = `${donorsCountDisplay} Donor${donorsCount === 1 ? '' : 's'}`;
 
-  // programs
   const { value: programsCount, formattedValue: programsCountDisplay } =
     formatCardinality(programsData);
   const programs = `${programsCountDisplay} Program${programsCount === 1 ? '' : 's'}`;
 
-  // repositories
   const repositories = `${repositoriesData} ${
     repositoriesData === 1 ? 'Repository' : 'Repositories'
   }`;
