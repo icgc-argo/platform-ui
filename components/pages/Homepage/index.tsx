@@ -38,6 +38,7 @@ import {
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { ComponentType } from 'react';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
+import { getConfig } from 'global/config';
 import {
   DataCallout,
   DataReleaseBar,
@@ -45,6 +46,7 @@ import {
   ResourceBox,
   ResponsiveGridLayout,
 } from './common';
+import LatestNews from './LatestNews';
 import RegionBanner from './RegionBanner';
 
 const SeparationLine: ComponentType<{}> = () => {
@@ -90,6 +92,7 @@ const HeroDiv = styled('div')`
 
 export default function Homepage() {
   const theme = useTheme();
+  const { FEATURE_RDPC_NODE_UI } = getConfig();
 
   const { data: statsData, error: statsError, loading: statsLoading } = useFileRepoStatsBarQuery();
 
@@ -107,7 +110,7 @@ export default function Homepage() {
             padding: 20px 15px 76px 15px;
           `}
         >
-          <RegionBanner />
+          {FEATURE_RDPC_NODE_UI && <RegionBanner />}
           <Typography
             variant="hero"
             color="white"
@@ -270,6 +273,8 @@ export default function Homepage() {
             </DataCallout>
           </Col>
         </Row>
+
+        {!FEATURE_RDPC_NODE_UI && <LatestNews />}
 
         <div
           css={css`

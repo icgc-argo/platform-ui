@@ -98,6 +98,7 @@ const nextConfig = withPlugins([withImages, withTM], {
     FEATURE_DATA_DISCOVERY_ENABLED: process.env.FEATURE_DATA_DISCOVERY_ENABLED,
     FEATURE_DISCOVERY_NETWORK_SEARCH: process.env.FEATURE_DISCOVERY_NETWORK_SEARCH,
     NETWORK_SEARCH_LOCAL_NODE_ID: process.env.NETWORK_SEARCH_LOCAL_NODE_ID,
+    FEATURE_RDPC_NODE_UI: process.env.FEATURE_RDPC_NODE_UI,
   },
   i18n: {
     locales: ['en'],
