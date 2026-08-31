@@ -26,6 +26,7 @@ import DefaultLayout from '../DefaultLayout';
 import NextLink from 'next/link';
 
 import Head from 'components/pages/head';
+import { getConfig } from 'global/config';
 import {
   DOCS_DATA_ACCESS_PAGE,
   DOCS_DATA_DOWNLOAD_PAGE,
@@ -38,7 +39,6 @@ import {
 import { FILE_REPOSITORY_PATH } from 'global/constants/pages';
 import { ComponentType } from 'react';
 import { useFileRepoStatsBarQuery } from '../file-repository/StatsCard';
-import { getConfig } from 'global/config';
 import {
   DataCallout,
   DataReleaseBar,
@@ -121,7 +121,7 @@ export default function Homepage() {
             `}
             as="h1"
           >
-            ICGC ARGO Regional Data Center
+            {FEATURE_RDPC_NODE_UI ? 'ICGC ARGO Regional Data Center' : 'ICGC ARGO Data Platform'}
           </Typography>
 
           <Typography
