@@ -36,10 +36,10 @@ const createInMemoryCache = () =>
         fields: {
           // cache requests for each unique sqon filter
           aggregations: {
-            keyArgs: ['filters'],
+            keyArgs: ['filters', 'include_missing', 'aggregations_filter_themselves'],
           },
           hits: {
-            keyArgs: ['filters'],
+            keyArgs: ['filters', 'sort', 'first', 'offset'],
           },
         },
       },
