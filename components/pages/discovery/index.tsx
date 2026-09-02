@@ -89,8 +89,6 @@ type DiscoveryQueryBarProps = {
   localNode: DiscoveryNode | undefined;
   externalNodes: DiscoveryNode[];
   nodesLoading: boolean;
-  filesCount: number;
-  donorsCount: number;
   availableNodes: DiscoveryNode[];
 };
 
@@ -106,8 +104,6 @@ const DiscoveryQueryBar = ({
   localNode,
   externalNodes,
   nodesLoading,
-  filesCount,
-  donorsCount,
   availableNodes,
 }: DiscoveryQueryBarProps): React.ReactElement => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
@@ -187,8 +183,6 @@ const DiscoveryQueryBar = ({
           localNode={localNode}
           externalNodes={externalNodes}
           nodesLoading={nodesLoading}
-          filesCount={filesCount}
-          donorsCount={donorsCount}
         />
       ) : (
         <Download>Download</Download>
@@ -247,21 +241,12 @@ const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.React
       return { ...node, uiUrl: dataCenter?.uiUrl };
     });
 
-  const filesCount: number = get(
-    statsData,
-    'network.aggregations.analyses__files__file_id.cardinality',
-    0,
-  );
-  const donorsCount: number = get(statsData, 'network.aggregations.donor_id.cardinality', 0);
-
   return (
     <>
       <DiscoveryQueryBar
         localNode={localNode}
         externalNodes={externalNodes}
         nodesLoading={nodesLoading}
-        filesCount={filesCount}
-        donorsCount={donorsCount}
         availableNodes={availableNodes}
       />
       <StatsCard data={statsData} loading={statsLoading} />

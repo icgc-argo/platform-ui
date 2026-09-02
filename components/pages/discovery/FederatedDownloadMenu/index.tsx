@@ -17,6 +17,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { useQuery } from '@apollo/client';
 import { Button, css, Icon, styled, useTheme } from '@icgc-argo/uikit';
 import { DropdownButtonMenuItem } from '@icgc-argo/uikit/DropdownButton';
 import {
@@ -24,8 +25,11 @@ import {
   instructionBoxButtonIconStyle,
 } from 'components/pages/submission-system/common';
 import { getConfig } from 'global/config';
+import { toArrangerV3Filter } from 'global/utils/arrangerFilter';
+import { get } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import useFiltersContext from '../../file-repository/hooks/useFiltersContext';
+import DISCOVERY_NETWORK_STATS_QUERY from '../components/DISCOVERY_NETWORK_STATS_QUERY';
 import LocalNodeDownloadModal from '../LocalNodeDownload/LocalNodeDownloadModal';
 
 export type DiscoveryNode = {
@@ -114,21 +118,40 @@ type FederatedDownloadMenuProps = {
   localNode: DiscoveryNode | undefined;
   externalNodes: DiscoveryNode[];
   nodesLoading: boolean;
-  filesCount: number;
-  donorsCount: number;
 };
+
+const { NETWORK_SEARCH_LOCAL_NODE_ID: LOCAL_NODE_ID } = getConfig();
 
 const FederatedDownloadMenu = ({
   localNode,
   externalNodes,
   nodesLoading,
-  filesCount,
-  donorsCount,
 }: FederatedDownloadMenuProps): React.ReactElement => {
   const theme = useTheme();
   const { filters } = useFiltersContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data: localStatsData, loading: statsLoading } = useQuery(
+    DISCOVERY_NETWORK_STATS_QUERY,
+    {
+      variables: {
+        filters: toArrangerV3Filter(filters),
+        nodesFilter: LOCAL_NODE_ID ? [LOCAL_NODE_ID] : undefined,
+      },
+      skip: !isModalOpen,
+    },
+  );
+  const filesCount: number = get(
+    localStatsData,
+    'network.aggregations.analyses__files__file_id.cardinality',
+    0,
+  );
+  const donorsCount: number = get(
+    localStatsData,
+    'network.aggregations.donor_id.cardinality',
+    0,
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -247,6 +270,7 @@ const FederatedDownloadMenu = ({
           nodeName={localNode.name}
           filesCount={filesCount}
           donorsCount={donorsCount}
+          statsLoading={statsLoading}
           onClose={() => setIsModalOpen(false)}
         />
       )}
