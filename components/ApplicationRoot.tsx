@@ -30,7 +30,7 @@ import { PersistentContext } from 'global/hooks/usePersistentContext';
 import createInMemoryCache from 'global/utils/createInMemoryCache';
 import { ClientSideGetInitialPropsContext } from 'global/utils/pages/types';
 import get from 'lodash/get';
-import { ComponentType, PropsWithChildren, useMemo, useState } from 'react';
+import { ComponentType, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react';
 import urljoin from 'url-join';
 import GdprMessage from './GdprMessage';
 import { GlobalLoaderProvider, loaderPortalRef } from './GlobalLoader';
@@ -90,17 +90,24 @@ const ApolloClientProvider: ComponentType<{ apolloCache: NormalizedCacheObject }
   const { fetchWithEgoToken } = useAuthContext();
   const clientSideCache = useMemo(() => createInMemoryCache().restore(apolloCache), []);
 
+  // Store fetchWithEgoToken in a ref so the ApolloClient instance (and its cache)
+  // are never recreated when the auth token changes — only the fetch function updates.
+  const fetchRef = useRef(fetchWithEgoToken);
+  useEffect(() => {
+    fetchRef.current = fetchWithEgoToken;
+  }, [fetchWithEgoToken]);
+
   const client = useMemo(() => {
     const uploadLink = createUploadLink({
       uri: urljoin(GATEWAY_API_ROOT, GRAPHQL_PATH),
-      fetch: fetchWithEgoToken,
+      fetch: (uri, options) => fetchRef.current(uri, options),
     });
     return new ApolloClient({
       link: ApolloLink.from([uploadLink]),
       connectToDevTools: true,
       cache: clientSideCache,
     });
-  }, [fetchWithEgoToken, clientSideCache]);
+  }, [clientSideCache]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
