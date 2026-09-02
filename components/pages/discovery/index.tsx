@@ -53,6 +53,7 @@ import ChartsLayout from './Charts';
 import { commonStyles } from './components/common';
 import DISCOVERY_DATA_CENTERS_QUERY from './components/DISCOVERY_DATA_CENTERS_QUERY';
 import DISCOVERY_LOCAL_STATS_QUERY from './components/DISCOVERY_LOCAL_STATS_QUERY';
+import DISCOVERY_NETWORK_NODES_QUERY from './components/DISCOVERY_NETWORK_NODES_QUERY';
 import DISCOVERY_NETWORK_STATS_QUERY from './components/DISCOVERY_NETWORK_STATS_QUERY';
 import { FacetsPanel } from './components/Facets';
 import { FacetStateProvider } from './components/Facets/FacetStateProvider';
@@ -90,6 +91,7 @@ type DiscoveryQueryBarProps = {
   nodesLoading: boolean;
   filesCount: number;
   donorsCount: number;
+  availableNodes: DiscoveryNode[];
 };
 
 /**
@@ -106,6 +108,7 @@ const DiscoveryQueryBar = ({
   nodesLoading,
   filesCount,
   donorsCount,
+  availableNodes,
 }: DiscoveryQueryBarProps): React.ReactElement => {
   const { setSQON, networkNodesFilter, setNetworkNodesFilter } = useArrangerData();
   const [repositoriesFromUrl, setUrlRepositories] = useRepositoriesUrlParam();
@@ -122,7 +125,7 @@ const DiscoveryQueryBar = ({
   }, [networkNodesFilter]);
 
   const repositoryFilterContent =
-    networkNodesFilter.length > 0 ? (
+    networkNodesFilter.length > 0 && !nodesLoading ? (
       <div
         key="repositories"
         className="sqon-group"
@@ -143,17 +146,21 @@ const DiscoveryQueryBar = ({
         {networkNodesFilter.length > 1 && (
           <span className="sqon-value-group sqon-value-group-start">(</span>
         )}
-        {networkNodesFilter.map((nodeId) => (
-          <Value
-            key={nodeId}
-            className={networkNodesFilter.length === 1 ? 'sqon-value-single' : ''}
-            onClick={() =>
-              setNetworkNodesFilter((current) => current.filter((id) => id !== nodeId))
-            }
-          >
-            {nodeId}
-          </Value>
-        ))}
+        {networkNodesFilter.map((nodeId) => {
+          const displayName =
+            availableNodes.find((node) => node.nodeId === nodeId)?.name ?? nodeId;
+          return (
+            <Value
+              key={nodeId}
+              className={networkNodesFilter.length === 1 ? 'sqon-value-single' : ''}
+              onClick={() =>
+                setNetworkNodesFilter((current) => current.filter((id) => id !== nodeId))
+              }
+            >
+              {displayName}
+            </Value>
+          );
+        })}
         {networkNodesFilter.length > 1 && (
           <span className="sqon-value-group sqon-value-group-end">)</span>
         )}
@@ -220,9 +227,20 @@ const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.React
   });
   const dataCenters: DataCenter[] = get(dataCentersData, 'programOptions.dataCenters', []);
 
-  const rawNodes: DiscoveryNode[] = get(statsData, 'network.nodes', []);
-  const localNode = rawNodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID);
-  const externalNodes = rawNodes
+  const [availableNodes, setAvailableNodes] = useState<DiscoveryNode[]>([]);
+  const nodesLoaded = availableNodes.length > 0;
+  const { data: nodesData, loading: nodesLoading } = useQuery(DISCOVERY_NETWORK_NODES_QUERY, {
+    skip: !FEATURE_DISCOVERY_NETWORK_SEARCH || nodesLoaded,
+  });
+  useEffect(() => {
+    const nodes: DiscoveryNode[] = get(nodesData, 'network.nodes', []);
+    if (nodes.length > 0) {
+      setAvailableNodes(nodes);
+    }
+  }, [nodesData]);
+
+  const localNode = availableNodes.find((node) => node.nodeId === NETWORK_SEARCH_LOCAL_NODE_ID);
+  const externalNodes = availableNodes
     .filter((node) => node.nodeId !== NETWORK_SEARCH_LOCAL_NODE_ID)
     .map((node) => {
       const dataCenter = dataCenters.find((dc) => dc.shortName === node.nodeId);
@@ -241,9 +259,10 @@ const DiscoveryContent = ({ gatewayClient }: DiscoveryContentProps): React.React
       <DiscoveryQueryBar
         localNode={localNode}
         externalNodes={externalNodes}
-        nodesLoading={statsLoading}
+        nodesLoading={nodesLoading}
         filesCount={filesCount}
         donorsCount={donorsCount}
+        availableNodes={availableNodes}
       />
       <StatsCard data={statsData} loading={statsLoading} />
       <ChartsLayout />
