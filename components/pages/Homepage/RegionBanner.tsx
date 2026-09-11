@@ -1,7 +1,7 @@
 import { css } from '@icgc-argo/uikit';
 import { getConfig } from '../../../global/config';
 
-const RegionBanner = () => {
+const RegionBanner = ({ fontSize = '24px' }: { fontSize?: string }) => {
   const { RDPC_REGION_DISPLAY_NAME } = getConfig();
   return (
     <div
@@ -10,7 +10,7 @@ const RegionBanner = () => {
         backgroundColor: '#0774d3',
         padding: '4px 8px',
         color: 'white',
-        fontSize: '24px',
+        fontSize,
         display: 'flex',
         alignItems: 'center',
       })}

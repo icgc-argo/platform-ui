@@ -57,6 +57,7 @@ import urlJoin from 'url-join';
 import ModalPortal from './Modal';
 import useFiltersContext from './pages/file-repository/hooks/useFiltersContext';
 import ProgramServicesModal from './pages/Homepage/ProgramServicesModal';
+import RegionBanner from './pages/Homepage/RegionBanner';
 
 const NavBarLoginButton = () => {
   const { asPath: path, query } = usePageContext();
@@ -179,7 +180,7 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
     },
   ];
 
-  const { FEATURE_DATA_DISCOVERY_ENABLED } = getConfig();
+  const { FEATURE_DATA_DISCOVERY_ENABLED, FEATURE_RDPC_NODE_UI } = getConfig();
   const showDiscoveryButton = FEATURE_DATA_DISCOVERY_ENABLED && canAccessDataDiscovery;
 
   if (showDiscoveryButton) {
@@ -262,6 +263,18 @@ export default function Navbar({ hideLinks = false, disableLogoLink = false }) {
             <Image alt="ICGC ARGO" layout="fixed" src={ArgoLogo} width="208" height="60" />
           </div>
         </NextLink>
+
+        {FEATURE_RDPC_NODE_UI && (
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              padding-right: 18px;
+            `}
+          >
+            <RegionBanner fontSize="14px" />
+          </div>
+        )}
 
         {isMobileDropdownOpen && <MobileDropdown />}
 
