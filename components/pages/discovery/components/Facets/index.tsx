@@ -174,6 +174,7 @@ const Facets = ({ options }) => {
     : DISCOVERY_LOCAL_FACETS_QUERY;
   const {
     data: responseData,
+    previousData,
     loading: isLoading,
     error,
   } = useQuery(facetsQuery, {
@@ -184,7 +185,9 @@ const Facets = ({ options }) => {
   });
 
   const aggregationsRoot = useNetworkSearch ? 'network' : 'file';
-  const aggregations = get(responseData, `${aggregationsRoot}.aggregations`, {});
+  // Show the last response while a query for new filters is in flight, so facets stay mounted
+  // instead of disappearing until the new aggregations arrive.
+  const aggregations = get(responseData ?? previousData, `${aggregationsRoot}.aggregations`, {});
 
   const { setVisiblePanels, isExpanded } = useFacetState();
 

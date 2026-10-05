@@ -266,34 +266,40 @@ const DiscoveryPage = () => {
    * Query donor-centric Arranger instance gateway endpoint for this page
    */
   const { fetchWithEgoToken } = useAuthContext();
+
+  // fetchWithEgoToken is a new function on every AuthProvider render, which happens on every
+  // filter change since filters are written to the URL. Reading it through a ref keeps the
+  // ApolloClient (and its cache) and the Arranger fetcher stable across those renders.
+  const fetchRef = useRef(fetchWithEgoToken);
+  useEffect(() => {
+    fetchRef.current = fetchWithEgoToken;
+  }, [fetchWithEgoToken]);
+
   const arrangerV3client = useMemo(() => {
     const uploadLink = createUploadLink({
       uri: DISCOVERY_API,
-      fetch: fetchWithEgoToken,
+      fetch: (uri, options) => fetchRef.current(uri, options),
     });
     return new ApolloClient({
       link: ApolloLink.from([uploadLink]),
       connectToDevTools: true,
       cache: new InMemoryCache(),
     });
-  }, [fetchWithEgoToken]);
+  }, []);
 
-  const arrangerFetchWithEgoToken = useCallback(
-    async (args) => {
-      const options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...args.body }),
-      };
-      try {
-        const response = await fetchWithEgoToken(DISCOVERY_API, options);
-        return response.json();
-      } catch (error) {
-        console.log('Arranger Charts error', error);
-      }
-    },
-    [fetchWithEgoToken, DISCOVERY_API],
-  );
+  const arrangerFetchWithEgoToken = useCallback(async (args) => {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...args.body }),
+    };
+    try {
+      const response = await fetchRef.current(DISCOVERY_API, options);
+      return response.json();
+    } catch (error) {
+      console.log('Arranger Charts error', error);
+    }
+  }, []);
 
   return (
     <ArrangerV3 enabled>
